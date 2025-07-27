@@ -1,11 +1,12 @@
-// src/components/Layout.jsx
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 
 function Layout({ children }) {
   const location = useLocation()
+  const navigate = useNavigate()
+  const { user, logout } = useAuth()
 
-  // Simulamos el rol del usuario (después vendrá del context)
-  const userRole = 'profesor' // Cambiar por: 'profesor', 'admin'
+  const userRole = user?.role
 
   const getNavigationItems = () => {
     const baseItems = [
@@ -54,9 +55,15 @@ function Layout({ children }) {
             </div>
             <div className="flex items-center space-x-4">
               <span className="text-sm text-gray-500">
-                {userRole.charAt(0).toUpperCase() + userRole.slice(1)}: Juan Pérez
+                {userRole?.charAt(0).toUpperCase() + userRole?.slice(1)}: {user?.nombre}
               </span>
-              <button className="text-sm text-red-600 hover:text-red-800">
+              <button 
+                onClick={() => {
+                  logout()
+                  navigate('/login')
+                }}
+                className="text-sm text-red-600 hover:text-red-800"
+              >
                 Salir
               </button>
             </div>
