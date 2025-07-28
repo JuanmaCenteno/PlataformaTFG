@@ -9,6 +9,7 @@ import Layout from './components/Layout'
 import Login from './pages/auth/Login'
 import Dashboard from './pages/dashboard/Dashboard'
 import MisTFGs from './pages/estudiante/MisTFGs'
+import SubirTFG from './pages/estudiante/SubirTFG'
 import MiDefensa from './pages/estudiante/MiDefensa'
 import TFGsAsignados from './pages/profesor/TFGsAsignados'
 import Tribunales from './pages/profesor/Tribunales'
@@ -37,6 +38,11 @@ function App() {
           <Route path="/estudiante/mis-tfgs" element={
             <ProtectedRoute requiredRole="estudiante">
               <Layout><MisTFGs /></Layout>
+            </ProtectedRoute>
+          } />
+          <Route path="/estudiante/subir-tfg" element={
+            <ProtectedRoute requiredRole="estudiante">
+              <Layout><SubirTFG /></Layout>
             </ProtectedRoute>
           } />
           <Route path="/estudiante/defensa" element={
