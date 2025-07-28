@@ -1,4 +1,3 @@
-// src/pages/estudiante/MiDefensa.jsx
 function MiDefensa() {
   return (
     <div className="max-w-4xl mx-auto">
