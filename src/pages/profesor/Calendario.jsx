@@ -5,11 +5,34 @@ import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
 import listPlugin from '@fullcalendar/list'
 import esLocale from '@fullcalendar/core/locales/es'
+import { useCalendario } from '../../hooks/useCalendario'
+import { useNotificaciones } from '../../context/NotificacionesContext'
+import { AlertaConflicto, DisponibilidadAulas } from '../../components/calendario/EventoDefensa'
 
 function Calendario() {
+  const { mostrarNotificacion } = useNotificaciones()
+  const {
+    loading,
+    error,
+    obtenerDefensas,
+    programarDefensa,
+    modificarDefensa,
+    detectarConflictos,
+    verificarDisponibilidadAula,
+    obtenerDisponibilidadProfesor,
+    enviarNotificacionDefensa,
+    obtenerAulasDisponibles,
+    obtenerTFGsListosParaDefensa,
+    clearError
+  } = useCalendario()
+
   const [defensas, setDefensas] = useState([])
-  const [loading, setLoading] = useState(true)
   const [modalActivo, setModalActivo] = useState(null)
+  const [conflictosDetectados, setConflictosDetectados] = useState([])
+  const [mostrarAlertaConflictos, setMostrarAlertaConflictos] = useState(false)
+  const [datosDefensaTemporal, setDatosDefensaTemporal] = useState(null)
+  const [disponibilidadAulas, setDisponibilidadAulas] = useState([])
+  const [tfgsDisponibles, setTfgsDisponibles] = useState([])
   const [filtros, setFiltros] = useState({
     miRol: 'todos', // todos, presidente, vocal
     estado: 'todos', // todos, programado, completado
@@ -216,19 +239,85 @@ function Calendario() {
     setModalActivo({ tipo: 'detalle', defensa })
   }
 
-  // Manejar drag & drop de eventos
-  const handleEventDrop = (dropInfo) => {
+  // Función para resolver conflictos
+  const resolverConflicto = async (accion) => {
+    if (accion === 'cambiar-hora') {
+      const sugerencias = conflictosDetectados[0]?.recomendaciones || [
+        { hora: '14:00', disponibilidad: 'alta' },
+        { hora: '16:00', disponibilidad: 'media' }
+      ]
+      
+      const mensaje = `Horarios sugeridos:\n${sugerencias.map(s => `• ${s.hora} (${s.disponibilidad} disponibilidad)`).join('\n')}`
+      mostrarNotificacion(mensaje, 'info')
+      
+    } else if (accion === 'ignorar') {
+      // Forzar el cambio ignorando conflictos
+      if (datosDefensaTemporal.defensaId) {
+        const resultado = await modificarDefensa(datosDefensaTemporal.defensaId, {
+          fechaCompleta: datosDefensaTemporal.nuevaFecha,
+          forzar: true
+        })
+        
+        if (resultado.success) {
+          mostrarNotificacion('Defensa reprogramada (conflictos ignorados)', 'warning')
+          cargarDefensas()
+          // Enviar notificación automática
+          await enviarNotificacionDefensa(datosDefensaTemporal.defensaId, 'modificada', [])
+        } else {
+          mostrarNotificacion(resultado.error, 'error')
+          if (datosDefensaTemporal.revertir) {
+            datosDefensaTemporal.revertir()
+          }
+        }
+      }
+    }
+    
+    // Limpiar estado
+    setMostrarAlertaConflictos(false)
+    setConflictosDetectados([])
+    setDatosDefensaTemporal(null)
+  }
+
+  // Manejar drag & drop de eventos con detección de conflictos
+  const handleEventDrop = async (dropInfo) => {
     const defensa = dropInfo.event.extendedProps.defensa
     const nuevaFecha = dropInfo.event.start
     
-    // Aquí iría la lógica para actualizar en el backend
-    console.log(`Moviendo defensa ${defensa.id} a ${nuevaFecha}`)
-    
-    // Mostrar confirmación
+    // 1. Detectar conflictos antes de confirmar
+    const resultadoConflictos = await detectarConflictos(
+      nuevaFecha.toISOString(),
+      defensa.duracion || 60,
+      defensa.tribunal.id,
+      defensa.id
+    )
+
+    if (!resultadoConflictos.success) {
+      dropInfo.revert()
+      mostrarNotificacion('Error al verificar conflictos', 'error')
+      return
+    }
+
+    const conflictosGraves = resultadoConflictos.conflictos.filter(c => c.gravedad === 'alta')
+
+    // 2. Si hay conflictos graves, mostrar alerta
+    if (conflictosGraves.length > 0) {
+      setConflictosDetectados(resultadoConflictos.conflictos)
+      setDatosDefensaTemporal({ 
+        defensaId: defensa.id, 
+        nuevaFecha: nuevaFecha.toISOString(),
+        revertir: dropInfo.revert 
+      })
+      setMostrarAlertaConflictos(true)
+      dropInfo.revert() // Revertir temporalmente
+      return
+    }
+
+    // 3. Si no hay conflictos graves, mostrar confirmación normal
     setModalActivo({
       tipo: 'confirmar-movimiento',
       defensa,
       nuevaFecha,
+      conflictos: resultadoConflictos.conflictos,
       revertir: dropInfo.revert
     })
   }
@@ -413,6 +502,37 @@ function Calendario() {
           </div>
         </div>
       </div>
+
+      {/* Alerta de conflictos */}
+      {mostrarAlertaConflictos && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+          <div className="relative top-20 mx-auto p-5 border w-full max-w-md shadow-lg rounded-md bg-white">
+            <div className="mt-3">
+              <AlertaConflicto 
+                conflictos={conflictosDetectados.map(c => ({
+                  evento: c.descripcion,
+                  horaInicio: c.sugerencia || 'N/A',
+                  horaFin: 'N/A'
+                }))}
+                onResolve={resolverConflicto}
+              />
+              <div className="mt-4 flex justify-end">
+                <button
+                  onClick={() => {
+                    setMostrarAlertaConflictos(false)
+                    if (datosDefensaTemporal?.revertir) {
+                      datosDefensaTemporal.revertir()
+                    }
+                  }}
+                  className="px-4 py-2 text-gray-600 hover:text-gray-800"
+                >
+                  Cancelar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* FullCalendar */}
       <div className="bg-white shadow rounded-lg p-6">
@@ -618,9 +738,23 @@ function Calendario() {
                   Cancelar
                 </button>
                 <button
-                  onClick={() => {
-                    // Aquí iría la lógica para confirmar el cambio
-                    console.log('Confirmando cambio de fecha')
+                  onClick={async () => {
+                    const resultado = await modificarDefensa(modalActivo.defensa.id, {
+                      fechaCompleta: modalActivo.nuevaFecha.toISOString()
+                    })
+                    
+                    if (resultado.success) {
+                      mostrarNotificacion('Defensa reprogramada correctamente', 'success')
+                      // Recargar datos simulados (en una app real sería cargarDefensas())
+                      
+                      // Enviar notificación automática
+                      await enviarNotificacionDefensa(modalActivo.defensa.id, 'modificada', [
+                        modalActivo.defensa.estudiante.email
+                      ])
+                    } else {
+                      mostrarNotificacion(resultado.error, 'error')
+                      modalActivo.revertir()
+                    }
                     setModalActivo(null)
                   }}
                   className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
@@ -766,12 +900,13 @@ function Calendario() {
                 </div>
 
                 <div className="bg-blue-50 border border-blue-200 rounded-md p-4">
-                  <h4 className="font-medium text-blue-900 mb-2">Recordatorio</h4>
+                  <h4 className="font-medium text-blue-900 mb-2">🤖 Sistema Automatizado</h4>
                   <ul className="text-sm text-blue-800 space-y-1">
-                    <li>• Asegúrate de que el aula esté disponible</li>
-                    <li>• Confirma la disponibilidad de todos los miembros del tribunal</li>
-                    <li>• El estudiante será notificado automáticamente</li>
-                    <li>• Puedes arrastrar el evento después para cambiar fecha/hora</li>
+                    <li>✅ Detección automática de conflictos de horario</li>
+                    <li>✅ Verificación automática de disponibilidad de aulas</li>
+                    <li>✅ Notificaciones automáticas por email</li>
+                    <li>✅ Recordatorios 24h y 2h antes de la defensa</li>
+                    <li>• Puedes arrastrar eventos para reprogramar fácilmente</li>
                   </ul>
                 </div>
               </div>
