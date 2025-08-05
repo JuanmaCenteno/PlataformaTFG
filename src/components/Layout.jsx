@@ -52,12 +52,6 @@ function Layout({ children }) {
 				return [
 					...baseItems,
 					{ name: "Usuarios", href: "/admin/usuarios", icon: "👥" },
-					{ name: "TFGs", href: "/admin/tfgs", icon: "📋" },
-					{
-						name: "Tribunales",
-						href: "/admin/tribunales",
-						icon: "⚖️",
-					},
 					{ name: "Reportes", href: "/admin/reportes", icon: "📊" },
 				]
 			default:
