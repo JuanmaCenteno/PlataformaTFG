@@ -1,11 +1,31 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { useTribunales } from '../../hooks/useTribunales'
+import { useNotificaciones } from '../../context/NotificacionesContext'
 
 function Tribunales() {
+  const { mostrarNotificacion } = useNotificaciones()
+  const {
+    loading: tribunalesLoading,
+    error,
+    obtenerTribunales,
+    crearTribunal,
+    modificarTribunal,
+    asignarProfesores,
+    configurarTribunal,
+    generarActaDefensa,
+    obtenerEstadisticasTribunal,
+    obtenerProfesoresDisponibles,
+    clearError
+  } = useTribunales()
+
   const [tribunales, setTribunales] = useState([])
   const [loading, setLoading] = useState(true)
   const [filtro, setFiltro] = useState('todos') // todos, presidente, vocal, proximos
   const [modalActivo, setModalActivo] = useState(null)
+  const [vistaActiva, setVistaActiva] = useState('lista') // lista, presidente, actas
+  const [profesoresDisponibles, setProfesoresDisponibles] = useState([])
+  const [estadisticasTribunal, setEstadisticasTribunal] = useState(null)
   const [nuevoTribunal, setNuevoTribunal] = useState({
     nombre: '',
     descripcion: '',
@@ -119,7 +139,67 @@ function Tribunales() {
     }
 
     cargarTribunales()
+    cargarProfesoresDisponibles()
   }, [])
+
+  // Cargar profesores disponibles
+  const cargarProfesoresDisponibles = async () => {
+    const resultado = await obtenerProfesoresDisponibles()
+    if (resultado.success) {
+      setProfesoresDisponibles(resultado.data)
+    }
+  }
+
+  // Manejar creación de tribunal como presidente
+  const manejarCrearTribunalPresidente = async (datosFormulario) => {
+    const resultado = await crearTribunal(datosFormulario)
+    
+    if (resultado.success) {
+      mostrarNotificacion(resultado.message, 'success')
+      setModalActivo(null)
+      cargarTribunales()
+    } else {
+      mostrarNotificacion(resultado.error, 'error')
+    }
+  }
+
+  // Manejar generación de acta
+  const manejarGenerarActa = async (defensaId, calificaciones) => {
+    const resultado = await generarActaDefensa(defensaId, calificaciones)
+    
+    if (resultado.success) {
+      mostrarNotificacion(resultado.message, 'success')
+      setModalActivo(null)
+      // Simular descarga del PDF
+      const link = document.createElement('a')
+      link.href = '#'
+      link.download = resultado.data.archivoGenerado
+      link.click()
+    } else {
+      mostrarNotificacion(resultado.error, 'error')
+    }
+  }
+
+  // Manejar asignación de profesores
+  const manejarAsignarProfesores = async (tribunalId, profesores) => {
+    const resultado = await asignarProfesores(tribunalId, profesores)
+    
+    if (resultado.success) {
+      mostrarNotificacion(resultado.message, 'success')
+      setModalActivo(null)
+      cargarTribunales()
+    } else {
+      mostrarNotificacion(resultado.error, 'error')
+    }
+  }
+
+  // Cargar estadísticas de tribunal
+  const cargarEstadisticasTribunal = async (tribunalId) => {
+    const resultado = await obtenerEstadisticasTribunal(tribunalId)
+    if (resultado.success) {
+      setEstadisticasTribunal(resultado.data)
+    }
+  }
 
   const getEstadoColor = (estado) => {
     switch (estado) {
@@ -239,18 +319,32 @@ function Tribunales() {
       <div className="mb-8">
         <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Mis Tribunales</h1>
+            <h1 className="text-3xl font-bold text-gray-900">👑 Gestión de Tribunales</h1>
             <p className="text-gray-600 mt-2">
-              Gestiona los tribunales donde participas como presidente o vocal
+              Gestiona tribunales como presidente y participa como vocal
             </p>
           </div>
-          <button
-            onClick={() => setModalActivo('crear')}
-            className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 flex items-center space-x-2"
-          >
-            <span>➕</span>
-            <span>Crear Tribunal</span>
-          </button>
+          <div className="flex space-x-3">
+            <button
+              onClick={() => setVistaActiva('actas')}
+              className={`px-4 py-2 rounded-md ${vistaActiva === 'actas' ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
+            >
+              📄 Actas
+            </button>
+            <button
+              onClick={() => setVistaActiva('presidente')}
+              className={`px-4 py-2 rounded-md ${vistaActiva === 'presidente' ? 'bg-purple-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
+            >
+              👑 Presidente
+            </button>
+            <button
+              onClick={() => setModalActivo('crear')}
+              className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 flex items-center space-x-2"
+            >
+              <span>➕</span>
+              <span>Crear Tribunal</span>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -457,6 +551,276 @@ function Tribunales() {
       </div>
 
       {/* Modal para crear tribunal */}
+      {/* Vista Presidente - Panel de Control */}
+      {vistaActiva === 'presidente' && (
+        <div className="space-y-6">
+          <div className="bg-white rounded-lg shadow p-6">
+            <h2 className="text-xl font-semibold mb-6">👑 Panel de Control - Presidente</h2>
+            
+            {/* Tribunales donde soy presidente */}
+            <div className="space-y-4">
+              {tribunales.filter(t => t.miembros.some(m => m.esYo && m.rol === 'Presidente')).map(tribunal => (
+                <div key={tribunal.id} className="border border-gray-200 rounded-lg p-4">
+                  <div className="flex justify-between items-start mb-3">
+                    <div>
+                      <h3 className="font-semibold text-gray-900">{tribunal.nombre}</h3>
+                      <p className="text-sm text-gray-600">{tribunal.descripcion}</p>
+                    </div>
+                    <span className={`px-2 py-1 text-xs rounded-full ${getEstadoColor(tribunal.estado)}`}>
+                      {tribunal.estado}
+                    </span>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                    <div className="text-sm">
+                      <span className="font-medium text-gray-500">Defensa:</span>
+                      <p>{new Date(tribunal.fechaDefensa).toLocaleDateString('es-ES')} - {tribunal.aula}</p>
+                    </div>
+                    <div className="text-sm">
+                      <span className="font-medium text-gray-500">TFG:</span>
+                      <p>{tribunal.tfg.titulo}</p>
+                    </div>
+                    <div className="text-sm">
+                      <span className="font-medium text-gray-500">Estudiante:</span>
+                      <p>{tribunal.tfg.estudiante}</p>
+                    </div>
+                  </div>
+
+                  <div className="flex justify-end space-x-3">
+                    <button
+                      onClick={() => cargarEstadisticasTribunal(tribunal.id)}
+                      className="text-blue-600 hover:text-blue-800 text-sm"
+                    >
+                      📊 Estadísticas
+                    </button>
+                    <button
+                      onClick={() => setModalActivo({ tipo: 'asignar-profesores', tribunal })}
+                      className="text-purple-600 hover:text-purple-800 text-sm"
+                    >
+                      👥 Asignar Profesores
+                    </button>
+                    <button
+                      onClick={() => setModalActivo({ tipo: 'configurar', tribunal })}
+                      className="text-gray-600 hover:text-gray-800 text-sm"
+                    >
+                      ⚙️ Configurar
+                    </button>
+                    {tribunal.estado === 'Completado' && (
+                      <button
+                        onClick={() => setModalActivo({ tipo: 'generar-acta', tribunal })}
+                        className="text-green-600 hover:text-green-800 text-sm"
+                      >
+                        📄 Generar Acta
+                      </button>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Vista Actas */}
+      {vistaActiva === 'actas' && (
+        <div className="space-y-6">
+          <div className="bg-white rounded-lg shadow p-6">
+            <h2 className="text-xl font-semibold mb-6">📄 Gestión de Actas</h2>
+            
+            <div className="space-y-4">
+              {tribunales.filter(t => t.estado === 'Completado').map(tribunal => (
+                <div key={tribunal.id} className="border border-gray-200 rounded-lg p-4">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h3 className="font-semibold text-gray-900">{tribunal.nombre}</h3>
+                      <p className="text-sm text-gray-600">{tribunal.tfg.titulo} - {tribunal.tfg.estudiante}</p>
+                      <p className="text-xs text-gray-500 mt-1">
+                        Defendido el {new Date(tribunal.fechaDefensa).toLocaleDateString('es-ES')}
+                      </p>
+                    </div>
+                    <div className="flex space-x-3">
+                      {tribunal.acta.generada ? (
+                        <button className="text-green-600 hover:text-green-800 text-sm">
+                          📄 Descargar Acta
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => setModalActivo({ tipo: 'generar-acta', tribunal })}
+                          className="text-blue-600 hover:text-blue-800 text-sm"
+                        >
+                          📝 Generar Acta
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal Generar Acta */}
+      {modalActivo?.tipo === 'generar-acta' && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+          <div className="relative top-20 mx-auto p-5 border w-full max-w-md shadow-lg rounded-md bg-white">
+            <div className="mt-3">
+              <h3 className="text-lg font-medium text-gray-900 mb-4">📄 Generar Acta de Defensa</h3>
+              
+              <form onSubmit={(e) => {
+                e.preventDefault()
+                const form = e.target
+                const calificaciones = {
+                  calificacionFinal: parseFloat(form.calificacion.value),
+                  presentacion: parseFloat(form.presentacion.value) || 0,
+                  contenido: parseFloat(form.contenido.value) || 0,
+                  defensa: parseFloat(form.defensa.value) || 0,
+                  observaciones: form.observaciones.value
+                }
+                manejarGenerarActa(modalActivo.tribunal.id, calificaciones)
+              }}>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Calificación Final * (0-10)
+                    </label>
+                    <input
+                      name="calificacion"
+                      type="number"
+                      min="0"
+                      max="10"
+                      step="0.1"
+                      className="w-full border border-gray-300 rounded-md px-3 py-2"
+                      required
+                    />
+                  </div>
+                  
+                  <div className="grid grid-cols-3 gap-3">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Presentación</label>
+                      <input
+                        name="presentacion"
+                        type="number"
+                        min="0"
+                        max="10"
+                        step="0.1"
+                        className="w-full border border-gray-300 rounded-md px-3 py-2"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Contenido</label>
+                      <input
+                        name="contenido"
+                        type="number"
+                        min="0"
+                        max="10"
+                        step="0.1"
+                        className="w-full border border-gray-300 rounded-md px-3 py-2"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">Defensa</label>
+                      <input
+                        name="defensa"
+                        type="number"
+                        min="0"
+                        max="10"
+                        step="0.1"
+                        className="w-full border border-gray-300 rounded-md px-3 py-2"
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Observaciones</label>
+                    <textarea
+                      name="observaciones"
+                      className="w-full border border-gray-300 rounded-md px-3 py-2"
+                      rows={3}
+                      placeholder="Observaciones de la evaluación..."
+                    />
+                  </div>
+                </div>
+
+                <div className="flex justify-end space-x-3 mt-6">
+                  <button
+                    type="button"
+                    onClick={() => setModalActivo(null)}
+                    className="px-4 py-2 text-gray-600 hover:text-gray-800"
+                  >
+                    Cancelar
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={tribunalesLoading}
+                    className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 disabled:opacity-50"
+                  >
+                    {tribunalesLoading ? 'Generando...' : 'Generar Acta PDF'}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal Asignar Profesores */}
+      {modalActivo?.tipo === 'asignar-profesores' && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+          <div className="relative top-10 mx-auto p-5 border w-full max-w-2xl shadow-lg rounded-md bg-white">
+            <div className="mt-3">
+              <h3 className="text-lg font-medium text-gray-900 mb-4">👥 Asignar Profesores al Tribunal</h3>
+              <p className="text-gray-600 mb-6">Tribunal: {modalActivo.tribunal.nombre}</p>
+              
+              <div className="space-y-4">
+                <h4 className="font-medium text-gray-900">Profesores Disponibles:</h4>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-96 overflow-y-auto">
+                  {profesoresDisponibles.map(profesor => (
+                    <label key={profesor.id} className="flex items-center space-x-3 p-3 border border-gray-200 rounded-md hover:bg-gray-50">
+                      <input
+                        type="checkbox"
+                        disabled={!profesor.disponible}
+                        className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 disabled:opacity-50"
+                      />
+                      <div className="flex-1">
+                        <div className="font-medium text-gray-900">{profesor.nombre}</div>
+                        <div className="text-sm text-gray-500">{profesor.departamento}</div>
+                        <div className="text-xs text-gray-400">
+                          {profesor.especialidades?.join(', ')}
+                        </div>
+                        {!profesor.disponible && (
+                          <div className="text-xs text-red-500">No disponible actualmente</div>
+                        )}
+                      </div>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              <div className="flex justify-end space-x-3 mt-6">
+                <button
+                  type="button"
+                  onClick={() => setModalActivo(null)}
+                  className="px-4 py-2 text-gray-600 hover:text-gray-800"
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={() => {
+                    // Simular asignación
+                    mostrarNotificacion('Profesores asignados correctamente', 'success')
+                    setModalActivo(null)
+                  }}
+                  className="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700"
+                >
+                  Asignar Profesores
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {modalActivo === 'crear' && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
           <div className="relative top-10 mx-auto p-5 border w-full max-w-2xl shadow-lg rounded-md bg-white">

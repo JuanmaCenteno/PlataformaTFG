@@ -323,11 +323,187 @@ export const useTribunales = () => {
     }
   }
 
+  // Renombrar función para mantener compatibilidad
+  const obtenerTribunales = obtenerMisTribunales
+
+  // Asignar profesores al tribunal
+  const asignarProfesores = async (tribunalId, profesores) => {
+    setLoading(true)
+    setError(null)
+    
+    try {
+      await new Promise(resolve => setTimeout(resolve, 600))
+      
+      // Verificar disponibilidad de profesores
+      const profesoresOcupados = profesores.filter(() => Math.random() > 0.8) // 20% probabilidad
+      
+      if (profesoresOcupados.length > 0) {
+        return {
+          success: false,
+          error: `Los siguientes profesores no están disponibles: ${profesoresOcupados.map(p => p.nombre).join(', ')}`
+        }
+      }
+
+      return { 
+        success: true, 
+        message: 'Profesores asignados correctamente',
+        data: { profesoresAsignados: profesores.length }
+      }
+      
+    } catch (err) {
+      const errorMessage = err.message || 'Error al asignar profesores'
+      setError(errorMessage)
+      return { success: false, error: errorMessage }
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Modificar tribunal existente
+  const modificarTribunal = async (tribunalId, cambios) => {
+    setLoading(true)
+    setError(null)
+    
+    try {
+      await new Promise(resolve => setTimeout(resolve, 800))
+      
+      // Validaciones específicas según el cambio
+      if (cambios.vocales && cambios.vocales.length < 2) {
+        throw new Error('Se requieren al menos 2 vocales')
+      }
+
+      return { success: true, message: 'Tribunal modificado correctamente' }
+      
+    } catch (err) {
+      const errorMessage = err.message || 'Error al modificar tribunal'
+      setError(errorMessage)
+      return { success: false, error: errorMessage }
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Configurar tribunal
+  const configurarTribunal = async (tribunalId, configuracion) => {
+    setLoading(true)
+    setError(null)
+    
+    try {
+      await new Promise(resolve => setTimeout(resolve, 400))
+      
+      // Validar configuración
+      if (configuracion.duracionDefensa < 30 || configuracion.duracionDefensa > 180) {
+        throw new Error('La duración debe estar entre 30 y 180 minutos')
+      }
+
+      return { 
+        success: true, 
+        message: 'Configuración actualizada correctamente' 
+      }
+      
+    } catch (err) {
+      const errorMessage = err.message || 'Error al configurar tribunal'
+      setError(errorMessage)
+      return { success: false, error: errorMessage }
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Generar acta de defensa
+  const generarActaDefensa = async (defensaId, calificaciones) => {
+    setLoading(true)
+    setError(null)
+    
+    try {
+      await new Promise(resolve => setTimeout(resolve, 1500))
+      
+      // Validar calificaciones
+      if (!calificaciones.calificacionFinal) {
+        throw new Error('La calificación final es obligatoria')
+      }
+      
+      if (calificaciones.calificacionFinal < 0 || calificaciones.calificacionFinal > 10) {
+        throw new Error('La calificación debe estar entre 0 y 10')
+      }
+
+      const acta = {
+        id: `ACTA-${defensaId}-${Date.now()}`,
+        defensaId,
+        fechaGeneracion: new Date().toISOString(),
+        tribunal: {
+          presidente: "Dr. María García",
+          vocales: ["Dr. Carlos López", "Dra. Ana Martín"]
+        },
+        calificaciones: {
+          ...calificaciones,
+          deliberacion: `Acta generada automáticamente el ${new Date().toLocaleDateString('es-ES')}`
+        },
+        estado: "Finalizada",
+        archivoGenerado: `acta_defensa_${defensaId}.pdf`
+      }
+
+      return { 
+        success: true, 
+        data: acta, 
+        message: 'Acta generada correctamente' 
+      }
+      
+    } catch (err) {
+      const errorMessage = err.message || 'Error al generar acta'
+      setError(errorMessage)
+      return { success: false, error: errorMessage }
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Obtener estadísticas del tribunal
+  const obtenerEstadisticasTribunal = async (tribunalId) => {
+    setLoading(true)
+    setError(null)
+    
+    try {
+      await new Promise(resolve => setTimeout(resolve, 500))
+      
+      const estadisticas = {
+        totalDefensas: 11,
+        defensasAprobadas: 9,
+        defensasSuspensos: 2,
+        promedioCalificaciones: 7.8,
+        duracionPromedio: 65, // minutos
+        tribunalActivo: true,
+        ultimaDefensa: "2025-01-25T11:00:00Z",
+        proximaDefensa: "2025-02-15T10:00:00Z",
+        calificacionesPorMes: [
+          { mes: 'Enero', aprobados: 4, suspensos: 1, promedio: 7.6 },
+          { mes: 'Diciembre', aprobados: 3, suspensos: 0, promedio: 8.2 },
+          { mes: 'Noviembre', aprobados: 2, suspensos: 1, promedio: 7.1 }
+        ],
+        profesoresMasActivos: [
+          { nombre: "Dr. Carlos López", defensas: 8 },
+          { nombre: "Dra. Ana Martín", defensas: 6 }
+        ]
+      }
+      
+      return { success: true, data: estadisticas }
+      
+    } catch (err) {
+      const errorMessage = 'Error al obtener estadísticas'
+      setError(errorMessage)
+      return { success: false, error: errorMessage }
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return {
     loading,
     error,
+    // Funciones básicas existentes
     crearTribunal,
     obtenerMisTribunales,
+    obtenerTribunales, // Alias para compatibilidad
     guardarCalificaciones,
     cambiarEstadoTribunal,
     generarActa,
@@ -335,6 +511,12 @@ export const useTribunales = () => {
     obtenerTFGsDisponibles,
     programarDefensa,
     obtenerEstadisticasTribunales,
+    // Nuevas funciones para Fase 5.2
+    modificarTribunal,
+    asignarProfesores,
+    configurarTribunal,
+    generarActaDefensa,
+    obtenerEstadisticasTribunal,
     clearError: () => setError(null)
   }
 }
