@@ -20,6 +20,7 @@ import Tribunales from './pages/profesor/Tribunales'
 import DetalleTribunal from './pages/profesor/DetalleTribunal'
 import Calendario from './pages/profesor/Calendario'
 import GestionUsuarios from './pages/admin/GestionUsuarios'
+import Reportes from './pages/admin/Reportes'
 
 function App() {
   return (
@@ -98,6 +99,11 @@ function App() {
             <Route path="/admin/usuarios" element={
               <ProtectedRoute requiredRole="admin">
                 <Layout><GestionUsuarios /></Layout>
+              </ProtectedRoute>
+            } />
+            <Route path="/admin/reportes" element={
+              <ProtectedRoute requiredRole="admin">
+                <Layout><Reportes /></Layout>
               </ProtectedRoute>
             } />
             
