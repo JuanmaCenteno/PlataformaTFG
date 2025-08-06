@@ -12,7 +12,6 @@
 namespace Symfony\Component\Security\Core\Exception;
 
 use Symfony\Component\HttpKernel\Attribute\WithHttpStatus;
-use Symfony\Component\Security\Core\Authorization\AccessDecision;
 
 /**
  * AccessDeniedException is thrown when the account has not the required role.
@@ -24,7 +23,6 @@ class AccessDeniedException extends RuntimeException
 {
     private array $attributes = [];
     private mixed $subject = null;
-    private ?AccessDecision $accessDecision = null;
 
     public function __construct(string $message = 'Access Denied.', ?\Throwable $previous = null, int $code = 403)
     {
@@ -36,7 +34,10 @@ class AccessDeniedException extends RuntimeException
         return $this->attributes;
     }
 
-    public function setAttributes(array|string $attributes): void
+    /**
+     * @return void
+     */
+    public function setAttributes(array|string $attributes)
     {
         $this->attributes = (array) $attributes;
     }
@@ -46,18 +47,11 @@ class AccessDeniedException extends RuntimeException
         return $this->subject;
     }
 
-    public function setSubject(mixed $subject): void
+    /**
+     * @return void
+     */
+    public function setSubject(mixed $subject)
     {
         $this->subject = $subject;
-    }
-
-    public function setAccessDecision(AccessDecision $accessDecision): void
-    {
-        $this->accessDecision = $accessDecision;
-    }
-
-    public function getAccessDecision(): ?AccessDecision
-    {
-        return $this->accessDecision;
     }
 }

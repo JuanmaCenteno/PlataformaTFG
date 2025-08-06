@@ -22,13 +22,14 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  */
 abstract class AbstractFactory implements AuthenticatorFactoryInterface
 {
-    protected array $options = [
+    protected $options = [
         'check_path' => '/login_check',
         'use_forward' => false,
+        'require_previous_session' => false,
         'login_path' => '/login',
     ];
 
-    protected array $defaultSuccessHandlerOptions = [
+    protected $defaultSuccessHandlerOptions = [
         'always_use_default_target_path' => false,
         'default_target_path' => '/',
         'login_path' => '/login',
@@ -36,7 +37,7 @@ abstract class AbstractFactory implements AuthenticatorFactoryInterface
         'use_referer' => false,
     ];
 
-    protected array $defaultFailureHandlerOptions = [
+    protected $defaultFailureHandlerOptions = [
         'failure_path' => null,
         'failure_forward' => false,
         'login_path' => '/login',
@@ -48,7 +49,10 @@ abstract class AbstractFactory implements AuthenticatorFactoryInterface
         $this->options[$name] = $default;
     }
 
-    public function addConfiguration(NodeDefinition $node): void
+    /**
+     * @return void
+     */
+    public function addConfiguration(NodeDefinition $node)
     {
         $builder = $node->children();
 
@@ -60,7 +64,12 @@ abstract class AbstractFactory implements AuthenticatorFactoryInterface
         ;
 
         foreach (array_merge($this->options, $this->defaultSuccessHandlerOptions, $this->defaultFailureHandlerOptions) as $name => $default) {
-            if (\is_bool($default)) {
+            if ('require_previous_session' === $name) {
+                $builder
+                    ->booleanNode($name)
+                    ->setDeprecated('symfony/security-bundle', '6.4', 'Option "%node%" at "%path%" is deprecated, it will be removed in version 7.0. Setting it has no effect anymore.')
+                    ->defaultValue($default);
+            } elseif (\is_bool($default)) {
                 $builder->booleanNode($name)->defaultValue($default);
             } else {
                 $builder->scalarNode($name)->defaultValue($default);
@@ -68,7 +77,10 @@ abstract class AbstractFactory implements AuthenticatorFactoryInterface
         }
     }
 
-    protected function createAuthenticationSuccessHandler(ContainerBuilder $container, string $id, array $config): string
+    /**
+     * @return string
+     */
+    protected function createAuthenticationSuccessHandler(ContainerBuilder $container, string $id, array $config)
     {
         $successHandlerId = $this->getSuccessHandlerId($id);
         $options = array_intersect_key($config, $this->defaultSuccessHandlerOptions);
@@ -87,7 +99,10 @@ abstract class AbstractFactory implements AuthenticatorFactoryInterface
         return $successHandlerId;
     }
 
-    protected function createAuthenticationFailureHandler(ContainerBuilder $container, string $id, array $config): string
+    /**
+     * @return string
+     */
+    protected function createAuthenticationFailureHandler(ContainerBuilder $container, string $id, array $config)
     {
         $id = $this->getFailureHandlerId($id);
         $options = array_intersect_key($config, $this->defaultFailureHandlerOptions);
@@ -104,12 +119,18 @@ abstract class AbstractFactory implements AuthenticatorFactoryInterface
         return $id;
     }
 
-    protected function getSuccessHandlerId(string $id): string
+    /**
+     * @return string
+     */
+    protected function getSuccessHandlerId(string $id)
     {
         return 'security.authentication.success_handler.'.$id.'.'.str_replace('-', '_', $this->getKey());
     }
 
-    protected function getFailureHandlerId(string $id): string
+    /**
+     * @return string
+     */
+    protected function getFailureHandlerId(string $id)
     {
         return 'security.authentication.failure_handler.'.$id.'.'.str_replace('-', '_', $this->getKey());
     }

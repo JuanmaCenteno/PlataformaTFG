@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\Security\Http\Firewall\AbstractListener;
 use Symfony\Component\Security\Http\Firewall\AuthenticatorManagerListener;
+use Symfony\Component\VarDumper\Caster\ClassStub;
 use Symfony\Contracts\Service\ResetInterface;
 
 /**
@@ -24,38 +25,51 @@ use Symfony\Contracts\Service\ResetInterface;
  */
 final class TraceableAuthenticatorManagerListener extends AbstractListener implements ResetInterface
 {
-    private array $authenticators = [];
+    private AuthenticatorManagerListener $authenticationManagerListener;
+    private array $authenticatorsInfo = [];
+    private bool $hasVardumper;
 
-    public function __construct(private AuthenticatorManagerListener $authenticationManagerListener)
+    public function __construct(AuthenticatorManagerListener $authenticationManagerListener)
     {
+        $this->authenticationManagerListener = $authenticationManagerListener;
+        $this->hasVardumper = class_exists(ClassStub::class);
     }
 
     public function supports(Request $request): ?bool
     {
-        $supports = $this->authenticationManagerListener->supports($request);
-
-        foreach ($request->attributes->get('_security_skipped_authenticators') as $authenticator) {
-            $this->authenticators[] = $authenticator instanceof TraceableAuthenticator
-                ? $authenticator
-                : new TraceableAuthenticator($authenticator)
-            ;
-        }
-
-        $supportedAuthenticators = [];
-        foreach ($request->attributes->get('_security_authenticators') as $authenticator) {
-            $this->authenticators[] = $supportedAuthenticators[] = $authenticator instanceof TraceableAuthenticator
-                ? $authenticator :
-                new TraceableAuthenticator($authenticator)
-            ;
-        }
-        $request->attributes->set('_security_authenticators', $supportedAuthenticators);
-
-        return $supports;
+        return $this->authenticationManagerListener->supports($request);
     }
 
     public function authenticate(RequestEvent $event): void
     {
+        $request = $event->getRequest();
+
+        if (!$authenticators = $request->attributes->get('_security_authenticators')) {
+            return;
+        }
+
+        foreach ($request->attributes->get('_security_skipped_authenticators') as $skippedAuthenticator) {
+            $this->authenticatorsInfo[] = [
+                'supports' => false,
+                'stub' => $this->hasVardumper ? new ClassStub($skippedAuthenticator::class) : $skippedAuthenticator::class,
+                'passport' => null,
+                'duration' => 0,
+                'authenticated' => null,
+                'badges' => [],
+            ];
+        }
+
+        foreach ($authenticators as $key => $authenticator) {
+            $authenticators[$key] = new TraceableAuthenticator($authenticator);
+        }
+
+        $request->attributes->set('_security_authenticators', $authenticators);
+
         $this->authenticationManagerListener->authenticate($event);
+
+        foreach ($authenticators as $authenticator) {
+            $this->authenticatorsInfo[] = $authenticator->getInfo();
+        }
     }
 
     public function getAuthenticatorManagerListener(): AuthenticatorManagerListener
@@ -65,14 +79,11 @@ final class TraceableAuthenticatorManagerListener extends AbstractListener imple
 
     public function getAuthenticatorsInfo(): array
     {
-        return array_map(
-            static fn (TraceableAuthenticator $authenticator) => $authenticator->getInfo(),
-            $this->authenticators
-        );
+        return $this->authenticatorsInfo;
     }
 
     public function reset(): void
     {
-        $this->authenticators = [];
+        $this->authenticatorsInfo = [];
     }
 }

@@ -22,7 +22,10 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class AddExpressionLanguageProvidersPass implements CompilerPassInterface
 {
-    public function process(ContainerBuilder $container): void
+    /**
+     * @return void
+     */
+    public function process(ContainerBuilder $container)
     {
         if ($container->has('security.expression_language')) {
             $definition = $container->findDefinition('security.expression_language');

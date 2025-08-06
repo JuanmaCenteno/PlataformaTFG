@@ -16,7 +16,7 @@ namespace Symfony\Bundle\FrameworkBundle\Secrets;
  */
 abstract class AbstractVault
 {
-    protected ?string $lastMessage = null;
+    protected $lastMessage;
 
     public function getLastMessage(): ?string
     {
@@ -31,9 +31,6 @@ abstract class AbstractVault
 
     abstract public function remove(string $name): bool;
 
-    /**
-     * @return array<string, string|null>
-     */
     abstract public function list(bool $reveal = false): array;
 
     protected function validateName(string $name): void
@@ -43,7 +40,10 @@ abstract class AbstractVault
         }
     }
 
-    protected function getPrettyPath(string $path): string
+    /**
+     * @return string
+     */
+    protected function getPrettyPath(string $path)
     {
         return str_replace(getcwd().\DIRECTORY_SEPARATOR, '', $path);
     }

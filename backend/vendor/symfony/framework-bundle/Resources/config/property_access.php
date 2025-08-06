@@ -13,8 +13,6 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
-use Symfony\Component\PropertyInfo\PropertyReadInfoExtractorInterface;
-use Symfony\Component\PropertyInfo\PropertyWriteInfoExtractorInterface;
 
 return static function (ContainerConfigurator $container) {
     $container->services()
@@ -23,8 +21,8 @@ return static function (ContainerConfigurator $container) {
                 abstract_arg('magic methods allowed, set by the extension'),
                 abstract_arg('throw exceptions, set by the extension'),
                 service('cache.property_access')->ignoreOnInvalid(),
-                service(PropertyReadInfoExtractorInterface::class)->nullOnInvalid(),
-                service(PropertyWriteInfoExtractorInterface::class)->nullOnInvalid(),
+                abstract_arg('propertyReadInfoExtractor, set by the extension'),
+                abstract_arg('propertyWriteInfoExtractor, set by the extension'),
             ])
 
         ->alias(PropertyAccessorInterface::class, 'property_accessor')

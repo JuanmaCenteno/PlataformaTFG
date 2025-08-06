@@ -25,9 +25,11 @@ use Symfony\Component\Security\Http\Event\CheckPassportEvent;
  */
 class UserCheckerListener implements EventSubscriberInterface
 {
-    public function __construct(
-        private UserCheckerInterface $userChecker,
-    ) {
+    private UserCheckerInterface $userChecker;
+
+    public function __construct(UserCheckerInterface $userChecker)
+    {
+        $this->userChecker = $userChecker;
     }
 
     public function preCheckCredentials(CheckPassportEvent $event): void
@@ -47,7 +49,7 @@ class UserCheckerListener implements EventSubscriberInterface
             return;
         }
 
-        $this->userChecker->checkPostAuth($user, $event->getAuthenticationToken());
+        $this->userChecker->checkPostAuth($user);
     }
 
     public static function getSubscribedEvents(): array

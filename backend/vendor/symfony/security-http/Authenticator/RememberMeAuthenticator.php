@@ -19,6 +19,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\CookieTheftException;
+use Symfony\Component\Security\Core\Exception\InvalidArgumentException;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
@@ -43,31 +44,20 @@ use Symfony\Component\Security\Http\RememberMe\ResponseListener;
  */
 class RememberMeAuthenticator implements InteractiveAuthenticatorInterface
 {
+    private RememberMeHandlerInterface $rememberMeHandler;
     private string $secret;
     private TokenStorageInterface $tokenStorage;
     private string $cookieName;
     private ?LoggerInterface $logger;
 
-    /**
-     * @param TokenStorageInterface $tokenStorage
-     * @param string                $cookieName
-     * @param ?LoggerInterface      $logger
-     */
-    public function __construct(
-        private RememberMeHandlerInterface $rememberMeHandler,
-        #[\SensitiveParameter] TokenStorageInterface|string $tokenStorage,
-        string|TokenStorageInterface $cookieName,
-        LoggerInterface|string|null $logger = null,
-    ) {
-        if (\is_string($tokenStorage)) {
-            trigger_deprecation('symfony/security-http', '7.2', 'The "$secret" argument of "%s()" is deprecated.', __METHOD__);
-
-            $this->secret = $tokenStorage;
-            $tokenStorage = $cookieName;
-            $cookieName = $logger;
-            $logger = \func_num_args() > 4 ? func_get_arg(4) : null;
+    public function __construct(RememberMeHandlerInterface $rememberMeHandler, #[\SensitiveParameter] string $secret, TokenStorageInterface $tokenStorage, string $cookieName, ?LoggerInterface $logger = null)
+    {
+        if (!$secret) {
+            throw new InvalidArgumentException('A non-empty secret is required.');
         }
 
+        $this->rememberMeHandler = $rememberMeHandler;
+        $this->secret = $secret;
         $this->tokenStorage = $tokenStorage;
         $this->cookieName = $cookieName;
         $this->logger = $logger;
@@ -109,11 +99,7 @@ class RememberMeAuthenticator implements InteractiveAuthenticatorInterface
 
     public function createToken(Passport $passport, string $firewallName): TokenInterface
     {
-        if (isset($this->secret)) {
-            return new RememberMeToken($passport->getUser(), $firewallName, $this->secret);
-        }
-
-        return new RememberMeToken($passport->getUser(), $firewallName);
+        return new RememberMeToken($passport->getUser(), $firewallName, $this->secret);
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response

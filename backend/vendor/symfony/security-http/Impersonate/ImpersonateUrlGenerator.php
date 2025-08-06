@@ -25,11 +25,15 @@ use Symfony\Component\Security\Http\Firewall\SwitchUserListener;
  */
 class ImpersonateUrlGenerator
 {
-    public function __construct(
-        private RequestStack $requestStack,
-        private FirewallMap $firewallMap,
-        private TokenStorageInterface $tokenStorage,
-    ) {
+    private RequestStack $requestStack;
+    private TokenStorageInterface $tokenStorage;
+    private FirewallMap $firewallMap;
+
+    public function __construct(RequestStack $requestStack, FirewallMap $firewallMap, TokenStorageInterface $tokenStorage)
+    {
+        $this->requestStack = $requestStack;
+        $this->tokenStorage = $tokenStorage;
+        $this->firewallMap = $firewallMap;
     }
 
     public function generateImpersonationPath(string $identifier): string

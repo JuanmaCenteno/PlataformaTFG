@@ -35,7 +35,6 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Core\Authorization\AccessDecision;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -56,7 +55,10 @@ use Twig\Environment;
  */
 abstract class AbstractController implements ServiceSubscriberInterface
 {
-    protected ContainerInterface $container;
+    /**
+     * @var ContainerInterface
+     */
+    protected $container;
 
     #[Required]
     public function setContainer(ContainerInterface $container): ?ContainerInterface
@@ -183,7 +185,7 @@ abstract class AbstractController implements ServiceSubscriberInterface
         }
 
         if (!$session instanceof FlashBagAwareSessionInterface) {
-            throw new \LogicException(\sprintf('You cannot use the addFlash method because class "%s" doesn\'t implement "%s".', get_debug_type($session), FlashBagAwareSessionInterface::class));
+            trigger_deprecation('symfony/framework-bundle', '6.2', 'Calling "addFlash()" method when the session does not implement %s is deprecated.', FlashBagAwareSessionInterface::class);
         }
 
         $session->getFlashBag()->add($type, $message);
@@ -204,21 +206,6 @@ abstract class AbstractController implements ServiceSubscriberInterface
     }
 
     /**
-     * Checks if the attribute is granted against the current authentication token and optionally supplied subject.
-     */
-    protected function getAccessDecision(mixed $attribute, mixed $subject = null): AccessDecision
-    {
-        if (!$this->container->has('security.authorization_checker')) {
-            throw new \LogicException('The SecurityBundle is not registered in your application. Try running "composer require symfony/security-bundle".');
-        }
-
-        $accessDecision = new AccessDecision();
-        $accessDecision->isGranted = $this->container->get('security.authorization_checker')->isGranted($attribute, $subject, $accessDecision);
-
-        return $accessDecision;
-    }
-
-    /**
      * Throws an exception unless the attribute is granted against the current authentication token and optionally
      * supplied subject.
      *
@@ -226,24 +213,12 @@ abstract class AbstractController implements ServiceSubscriberInterface
      */
     protected function denyAccessUnlessGranted(mixed $attribute, mixed $subject = null, string $message = 'Access Denied.'): void
     {
-        if (class_exists(AccessDecision::class)) {
-            $accessDecision = $this->getAccessDecision($attribute, $subject);
-            $isGranted = $accessDecision->isGranted;
-        } else {
-            $accessDecision = null;
-            $isGranted = $this->isGranted($attribute, $subject);
-        }
+        if (!$this->isGranted($attribute, $subject)) {
+            $exception = $this->createAccessDeniedException($message);
+            $exception->setAttributes([$attribute]);
+            $exception->setSubject($subject);
 
-        if (!$isGranted) {
-            $e = $this->createAccessDeniedException(3 > \func_num_args() && $accessDecision ? $accessDecision->getMessage() : $message);
-            $e->setAttributes([$attribute]);
-            $e->setSubject($subject);
-
-            if ($accessDecision) {
-                $e->setAccessDecision($accessDecision);
-            }
-
-            throw $e;
+            throw $exception;
         }
     }
 
@@ -287,6 +262,20 @@ abstract class AbstractController implements ServiceSubscriberInterface
     protected function renderBlock(string $view, string $block, array $parameters = [], ?Response $response = null): Response
     {
         return $this->doRender($view, $block, $parameters, $response, __FUNCTION__);
+    }
+
+    /**
+     * Renders a view and sets the appropriate status code when a form is listed in parameters.
+     *
+     * If an invalid form is found in the list of parameters, a 422 status code is returned.
+     *
+     * @deprecated since Symfony 6.2, use render() instead
+     */
+    protected function renderForm(string $view, array $parameters = [], ?Response $response = null): Response
+    {
+        trigger_deprecation('symfony/framework-bundle', '6.2', 'The "%s::renderForm()" method is deprecated, use "render()" instead.', get_debug_type($this));
+
+        return $this->render($view, $parameters, $response);
     }
 
     /**

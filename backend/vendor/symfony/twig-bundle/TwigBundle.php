@@ -11,7 +11,6 @@
 
 namespace Symfony\Bundle\TwigBundle;
 
-use Symfony\Bundle\TwigBundle\DependencyInjection\Compiler\AttributeExtensionPass;
 use Symfony\Bundle\TwigBundle\DependencyInjection\Compiler\ExtensionPass;
 use Symfony\Bundle\TwigBundle\DependencyInjection\Compiler\RuntimeLoaderPass;
 use Symfony\Bundle\TwigBundle\DependencyInjection\Compiler\TwigEnvironmentPass;
@@ -28,19 +27,24 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  */
 class TwigBundle extends Bundle
 {
-    public function build(ContainerBuilder $container): void
+    /**
+     * @return void
+     */
+    public function build(ContainerBuilder $container)
     {
         parent::build($container);
 
         // ExtensionPass must be run before the FragmentRendererPass as it adds tags that are processed later
         $container->addCompilerPass(new ExtensionPass(), PassConfig::TYPE_BEFORE_OPTIMIZATION, 10);
-        $container->addCompilerPass(new AttributeExtensionPass());
         $container->addCompilerPass(new TwigEnvironmentPass());
         $container->addCompilerPass(new TwigLoaderPass());
         $container->addCompilerPass(new RuntimeLoaderPass(), PassConfig::TYPE_BEFORE_REMOVING);
     }
 
-    public function registerCommands(Application $application): void
+    /**
+     * @return void
+     */
+    public function registerCommands(Application $application)
     {
         // noop
     }

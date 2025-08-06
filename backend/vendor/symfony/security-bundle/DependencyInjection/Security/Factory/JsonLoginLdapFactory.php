@@ -29,7 +29,7 @@ class JsonLoginLdapFactory extends JsonLoginFactory
         $node
             ->children()
                 ->scalarNode('service')->defaultValue('ldap')->end()
-                ->scalarNode('dn_string')->defaultValue('{user_identifier}')->end()
+                ->scalarNode('dn_string')->defaultValue('{username}')->end()
                 ->scalarNode('query_string')->end()
                 ->scalarNode('search_dn')->defaultValue('')->end()
                 ->scalarNode('search_password')->defaultValue('')->end()

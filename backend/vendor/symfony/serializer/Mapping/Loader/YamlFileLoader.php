@@ -133,8 +133,7 @@ class YamlFileLoader extends FileLoader
 
             $classMetadata->setClassDiscriminatorMapping(new ClassDiscriminatorMapping(
                 $yaml['discriminator_map']['type_property'],
-                $yaml['discriminator_map']['mapping'],
-                $yaml['discriminator_map']['default_type'] ?? null
+                $yaml['discriminator_map']['mapping']
             ));
         }
 
@@ -161,7 +160,7 @@ class YamlFileLoader extends FileLoader
 
         $classes = $this->yamlParser->parseFile($this->file, Yaml::PARSE_CONSTANT);
 
-        if (!$classes) {
+        if (empty($classes)) {
             return [];
         }
 

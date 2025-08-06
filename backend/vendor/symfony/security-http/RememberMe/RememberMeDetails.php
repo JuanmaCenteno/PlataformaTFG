@@ -21,12 +21,17 @@ class RememberMeDetails
 {
     public const COOKIE_DELIMITER = ':';
 
-    public function __construct(
-        private string $userFqcn,
-        private string $userIdentifier,
-        private int $expires,
-        private string $value,
-    ) {
+    private string $userFqcn;
+    private string $userIdentifier;
+    private int $expires;
+    private string $value;
+
+    public function __construct(string $userFqcn, string $userIdentifier, int $expires, string $value)
+    {
+        $this->userFqcn = $userFqcn;
+        $this->userIdentifier = $userIdentifier;
+        $this->expires = $expires;
+        $this->value = $value;
     }
 
     public static function fromRawCookie(string $rawCookie): self

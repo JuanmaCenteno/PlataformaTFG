@@ -25,12 +25,14 @@ class PlaintextPasswordHasher implements LegacyPasswordHasherInterface
 {
     use CheckPasswordLengthTrait;
 
+    private bool $ignorePasswordCase;
+
     /**
      * @param bool $ignorePasswordCase Compare password case-insensitive
      */
-    public function __construct(
-        private bool $ignorePasswordCase = false,
-    ) {
+    public function __construct(bool $ignorePasswordCase = false)
+    {
+        $this->ignorePasswordCase = $ignorePasswordCase;
     }
 
     public function hash(#[\SensitiveParameter] string $plainPassword, ?string $salt = null): string
@@ -64,7 +66,7 @@ class PlaintextPasswordHasher implements LegacyPasswordHasherInterface
 
     private function mergePasswordAndSalt(#[\SensitiveParameter] string $password, ?string $salt): string
     {
-        if (!$salt) {
+        if (empty($salt)) {
             return $password;
         }
 

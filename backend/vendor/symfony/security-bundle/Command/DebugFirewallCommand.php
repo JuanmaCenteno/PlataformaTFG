@@ -25,7 +25,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Security\Http\Authenticator\AuthenticatorInterface;
-use Symfony\Component\Security\Http\Authenticator\Debug\TraceableAuthenticator;
 
 /**
  * @author Timo Bakx <timobakx@gmail.com>
@@ -33,16 +32,22 @@ use Symfony\Component\Security\Http\Authenticator\Debug\TraceableAuthenticator;
 #[AsCommand(name: 'debug:firewall', description: 'Display information about your security firewall(s)')]
 final class DebugFirewallCommand extends Command
 {
+    private array $firewallNames;
+    private ContainerInterface $contexts;
+    private ContainerInterface $eventDispatchers;
+    private array $authenticators;
+
     /**
      * @param string[]                   $firewallNames
      * @param AuthenticatorInterface[][] $authenticators
      */
-    public function __construct(
-        private array $firewallNames,
-        private ContainerInterface $contexts,
-        private ContainerInterface $eventDispatchers,
-        private array $authenticators,
-    ) {
+    public function __construct(array $firewallNames, ContainerInterface $contexts, ContainerInterface $eventDispatchers, array $authenticators)
+    {
+        $this->firewallNames = $firewallNames;
+        $this->contexts = $contexts;
+        $this->eventDispatchers = $eventDispatchers;
+        $this->authenticators = $authenticators;
+
         parent::__construct();
     }
 
@@ -211,7 +216,7 @@ EOF
         $io->table(
             ['Classname'],
             array_map(
-                fn ($authenticator) => [($authenticator instanceof TraceableAuthenticator ? $authenticator->getAuthenticator() : $authenticator)::class],
+                fn ($authenticator) => [$authenticator::class],
                 $authenticators
             )
         );
@@ -233,10 +238,10 @@ EOF
 
         if ($callable instanceof \Closure) {
             $r = new \ReflectionFunction($callable);
-            if ($r->isAnonymous()) {
+            if (str_contains($r->name, '{closure')) {
                 return 'Closure()';
             }
-            if ($class = $r->getClosureCalledClass()) {
+            if ($class = \PHP_VERSION_ID >= 80111 ? $r->getClosureCalledClass() : $r->getClosureScopeClass()) {
                 return \sprintf('%s::%s()', $class->name, $r->name);
             }
 

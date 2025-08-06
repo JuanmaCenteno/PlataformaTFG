@@ -23,14 +23,15 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
  */
 abstract class AbstractRememberMeHandler implements RememberMeHandlerInterface
 {
-    protected array $options;
+    private UserProviderInterface $userProvider;
+    protected $requestStack;
+    protected $options;
+    protected $logger;
 
-    public function __construct(
-        private UserProviderInterface $userProvider,
-        protected RequestStack $requestStack,
-        array $options = [],
-        protected ?LoggerInterface $logger = null,
-    ) {
+    public function __construct(UserProviderInterface $userProvider, RequestStack $requestStack, array $options = [], ?LoggerInterface $logger = null)
+    {
+        $this->userProvider = $userProvider;
+        $this->requestStack = $requestStack;
         $this->options = $options + [
             'name' => 'REMEMBERME',
             'lifetime' => 31536000,
@@ -42,6 +43,7 @@ abstract class AbstractRememberMeHandler implements RememberMeHandlerInterface
             'always_remember_me' => false,
             'remember_me_parameter' => '_remember_me',
         ];
+        $this->logger = $logger;
     }
 
     /**
@@ -57,7 +59,16 @@ abstract class AbstractRememberMeHandler implements RememberMeHandlerInterface
 
     public function consumeRememberMeCookie(RememberMeDetails $rememberMeDetails): UserInterface
     {
-        $user = $this->userProvider->loadUserByIdentifier($rememberMeDetails->getUserIdentifier());
+        try {
+            $user = $this->userProvider->loadUserByIdentifier($rememberMeDetails->getUserIdentifier());
+        } catch (AuthenticationException $e) {
+            throw $e;
+        }
+
+        if (!$user instanceof UserInterface) {
+            throw new \LogicException(\sprintf('The UserProviderInterface implementation must return an instance of UserInterface, but returned "%s".', get_debug_type($user)));
+        }
+
         $this->processRememberMe($rememberMeDetails, $user);
 
         $this->logger?->info('Remember-me cookie accepted.');
@@ -76,8 +87,10 @@ abstract class AbstractRememberMeHandler implements RememberMeHandlerInterface
      * Creates the remember-me cookie using the correct configuration.
      *
      * @param RememberMeDetails|null $rememberMeDetails The details for the cookie, or null to clear the remember-me cookie
+     *
+     * @return void
      */
-    protected function createCookie(?RememberMeDetails $rememberMeDetails): void
+    protected function createCookie(?RememberMeDetails $rememberMeDetails)
     {
         $request = $this->requestStack->getMainRequest();
         if (!$request) {

@@ -30,9 +30,11 @@ class DefaultAuthenticationSuccessHandler implements AuthenticationSuccessHandle
 {
     use TargetPathTrait;
 
-    protected array $options;
-    protected ?string $firewallName = null;
-    protected array $defaultOptions = [
+    protected $httpUtils;
+    protected $logger;
+    protected $options;
+    protected $firewallName;
+    protected $defaultOptions = [
         'always_use_default_target_path' => false,
         'default_target_path' => '/',
         'login_path' => '/login',
@@ -43,11 +45,10 @@ class DefaultAuthenticationSuccessHandler implements AuthenticationSuccessHandle
     /**
      * @param array $options Options for processing a successful authentication attempt
      */
-    public function __construct(
-        protected HttpUtils $httpUtils,
-        array $options = [],
-        protected ?LoggerInterface $logger = null,
-    ) {
+    public function __construct(HttpUtils $httpUtils, array $options = [], ?LoggerInterface $logger = null)
+    {
+        $this->httpUtils = $httpUtils;
+        $this->logger = $logger;
         $this->setOptions($options);
     }
 
@@ -64,7 +65,10 @@ class DefaultAuthenticationSuccessHandler implements AuthenticationSuccessHandle
         return $this->options;
     }
 
-    public function setOptions(array $options): void
+    /**
+     * @return void
+     */
+    public function setOptions(array $options)
     {
         $this->options = array_merge($this->defaultOptions, $options);
     }

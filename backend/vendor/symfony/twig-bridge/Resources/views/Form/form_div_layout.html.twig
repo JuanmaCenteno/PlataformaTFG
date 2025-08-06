@@ -68,11 +68,7 @@
             {% set render_preferred_choices = true %}
             {{- block('choice_widget_options') -}}
             {%- if choices|length > 0 and separator is not none -%}
-                {%- if separator_html is not defined or separator_html is same as(false) -%}
-                    <option disabled="disabled">{{ separator }}</option>
-                {% else %}
-                    {{ separator|raw }}
-                {% endif %}
+                <option disabled="disabled">{{ separator }}</option>
             {%- endif -%}
         {%- endif -%}
         {%- set options = choices -%}

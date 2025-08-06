@@ -51,11 +51,15 @@ class InMemoryUserProvider implements UserProviderInterface
 
     /**
      * Adds a new User to the provider.
+     *
+     * @return void
+     *
+     * @throws \LogicException
      */
-    public function createUser(UserInterface $user): void
+    public function createUser(UserInterface $user)
     {
         if (!$user instanceof InMemoryUser) {
-            throw new UnsupportedUserException(\sprintf('Instances of "%s" are not supported.', get_debug_type($user)));
+            trigger_deprecation('symfony/security-core', '6.3', 'Passing users that are not instance of "%s" to "%s" is deprecated, "%s" given.', InMemoryUser::class, __METHOD__, get_debug_type($user));
         }
 
         $userIdentifier = strtolower($user->getUserIdentifier());
@@ -91,11 +95,13 @@ class InMemoryUserProvider implements UserProviderInterface
     }
 
     /**
-     * Returns the user by given user.
+     * Returns the user by given username.
+     *
+     * @return InMemoryUser change return type on 7.0
      *
      * @throws UserNotFoundException if user whose given username does not exist
      */
-    private function getUser(string $username): InMemoryUser
+    private function getUser(string $username): UserInterface
     {
         if (!isset($this->users[strtolower($username)])) {
             $ex = new UserNotFoundException(\sprintf('Username "%s" does not exist.', $username));

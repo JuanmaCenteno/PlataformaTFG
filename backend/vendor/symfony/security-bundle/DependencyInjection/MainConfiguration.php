@@ -17,7 +17,6 @@ use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
-use Symfony\Component\Security\Http\Authentication\ExposeSecurityLevel;
 use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface;
 use Symfony\Component\Security\Http\Session\SessionAuthenticationStrategy;
 
@@ -37,13 +36,16 @@ class MainConfiguration implements ConfigurationInterface
     /** @internal */
     public const STRATEGY_PRIORITY = 'priority';
 
+    private array $factories;
+    private array $userProviderFactories;
+
     /**
      * @param array<AuthenticatorFactoryInterface> $factories
      */
-    public function __construct(
-        private array $factories,
-        private array $userProviderFactories,
-    ) {
+    public function __construct(array $factories, array $userProviderFactories)
+    {
+        $this->factories = $factories;
+        $this->userProviderFactories = $userProviderFactories;
     }
 
     /**
@@ -55,36 +57,15 @@ class MainConfiguration implements ConfigurationInterface
         $rootNode = $tb->getRootNode();
 
         $rootNode
-            ->docUrl('https://symfony.com/doc/{version:major}.{version:minor}/reference/configuration/security.html', 'symfony/security-bundle')
-            ->beforeNormalization()
-                ->always()
-                ->then(function ($v) {
-                    if (isset($v['hide_user_not_found']) && isset($v['expose_security_errors'])) {
-                        throw new InvalidConfigurationException('You cannot use both "hide_user_not_found" and "expose_security_errors" at the same time.');
-                    }
-
-                    if (isset($v['hide_user_not_found']) && !isset($v['expose_security_errors'])) {
-                        $v['expose_security_errors'] = $v['hide_user_not_found'] ? ExposeSecurityLevel::None : ExposeSecurityLevel::All;
-                    }
-
-                    return $v;
-                })
-            ->end()
             ->children()
                 ->scalarNode('access_denied_url')->defaultNull()->example('/foo/error403')->end()
                 ->enumNode('session_fixation_strategy')
                     ->values([SessionAuthenticationStrategy::NONE, SessionAuthenticationStrategy::MIGRATE, SessionAuthenticationStrategy::INVALIDATE])
                     ->defaultValue(SessionAuthenticationStrategy::MIGRATE)
                 ->end()
-                ->booleanNode('hide_user_not_found')
-                    ->setDeprecated('symfony/security-bundle', '7.3', 'The "%node%" option is deprecated and will be removed in 8.0. Use the "expose_security_errors" option instead.')
-                ->end()
-                ->enumNode('expose_security_errors')
-                    ->beforeNormalization()->ifString()->then(fn ($v) => ExposeSecurityLevel::tryFrom($v))->end()
-                    ->values(ExposeSecurityLevel::cases())
-                    ->defaultValue(ExposeSecurityLevel::None)
-                ->end()
+                ->booleanNode('hide_user_not_found')->defaultTrue()->end()
                 ->booleanNode('erase_credentials')->defaultTrue()->end()
+                ->booleanNode('enable_authenticator_manager')->setDeprecated('symfony/security-bundle', '6.2', 'The "%node%" option at "%path%" is deprecated.')->defaultTrue()->end()
                 ->arrayNode('access_decision_manager')
                     ->addDefaultsIfNotSet()
                     ->children()
@@ -158,7 +139,7 @@ class MainConfiguration implements ConfigurationInterface
                             ->scalarNode('requires_channel')->defaultNull()->end()
                             ->scalarNode('path')
                                 ->defaultNull()
-                                ->info('Use the urldecoded format.')
+                                ->info('use the urldecoded format')
                                 ->example('^/path to resource/')
                             ->end()
                             ->scalarNode('host')->defaultNull()->end()
@@ -231,7 +212,7 @@ class MainConfiguration implements ConfigurationInterface
             ->scalarNode('access_denied_url')->end()
             ->scalarNode('access_denied_handler')->end()
             ->scalarNode('entry_point')
-                ->info(\sprintf('An enabled authenticator name or a service id that implements "%s".', AuthenticationEntryPointInterface::class))
+                ->info(\sprintf('An enabled authenticator name or a service id that implements "%s"', AuthenticationEntryPointInterface::class))
             ->end()
             ->scalarNode('provider')->end()
             ->booleanNode('stateless')->defaultFalse()->end()
@@ -240,6 +221,14 @@ class MainConfiguration implements ConfigurationInterface
             ->arrayNode('logout')
                 ->treatTrueLike([])
                 ->canBeUnset()
+                ->beforeNormalization()
+                    ->ifTrue(fn ($v): bool => isset($v['csrf_token_generator']) && !isset($v['csrf_token_manager']))
+                    ->then(function (array $v): array {
+                        $v['csrf_token_manager'] = $v['csrf_token_generator'];
+
+                        return $v;
+                    })
+                ->end()
                 ->beforeNormalization()
                     ->ifTrue(fn ($v): bool => \is_array($v) && (isset($v['csrf_token_manager']) xor isset($v['enable_csrf'])))
                     ->then(function (array $v): array {
@@ -256,6 +245,13 @@ class MainConfiguration implements ConfigurationInterface
                     ->booleanNode('enable_csrf')->defaultNull()->end()
                     ->scalarNode('csrf_token_id')->defaultValue('logout')->end()
                     ->scalarNode('csrf_parameter')->defaultValue('_csrf_token')->end()
+                    ->scalarNode('csrf_token_generator')
+                        ->setDeprecated(
+                            'symfony/security-bundle',
+                            '6.3',
+                            'The "%node%" option is deprecated. Use "csrf_token_manager" instead.'
+                        )
+                    ->end()
                     ->scalarNode('csrf_token_manager')->end()
                     ->scalarNode('path')->defaultValue('/logout')->end()
                     ->scalarNode('target')->defaultValue('/')->end()

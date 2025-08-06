@@ -26,15 +26,16 @@ class NativeSessionTokenStorage implements ClearableTokenStorageInterface
     public const SESSION_NAMESPACE = '_csrf';
 
     private bool $sessionStarted = false;
+    private string $namespace;
 
     /**
      * Initializes the storage with a session namespace.
      *
      * @param string $namespace The namespace under which the token is stored in the session
      */
-    public function __construct(
-        private string $namespace = self::SESSION_NAMESPACE,
-    ) {
+    public function __construct(string $namespace = self::SESSION_NAMESPACE)
+    {
+        $this->namespace = $namespace;
     }
 
     public function getToken(string $tokenId): string
@@ -50,7 +51,10 @@ class NativeSessionTokenStorage implements ClearableTokenStorageInterface
         return (string) $_SESSION[$this->namespace][$tokenId];
     }
 
-    public function setToken(string $tokenId, #[\SensitiveParameter] string $token): void
+    /**
+     * @return void
+     */
+    public function setToken(string $tokenId, #[\SensitiveParameter] string $token)
     {
         if (!$this->sessionStarted) {
             $this->startSession();
@@ -89,7 +93,10 @@ class NativeSessionTokenStorage implements ClearableTokenStorageInterface
         return $token;
     }
 
-    public function clear(): void
+    /**
+     * @return void
+     */
+    public function clear()
     {
         unset($_SESSION[$this->namespace]);
     }

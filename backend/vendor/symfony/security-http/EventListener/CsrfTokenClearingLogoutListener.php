@@ -23,9 +23,11 @@ use Symfony\Component\Security\Http\Event\LogoutEvent;
  */
 class CsrfTokenClearingLogoutListener implements EventSubscriberInterface
 {
-    public function __construct(
-        private ClearableTokenStorageInterface $csrfTokenStorage,
-    ) {
+    private ClearableTokenStorageInterface $csrfTokenStorage;
+
+    public function __construct(ClearableTokenStorageInterface $csrfTokenStorage)
+    {
+        $this->csrfTokenStorage = $csrfTokenStorage;
     }
 
     public function onLogout(LogoutEvent $event): void

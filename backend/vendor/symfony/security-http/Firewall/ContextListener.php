@@ -43,7 +43,11 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
  */
 class ContextListener extends AbstractListener
 {
+    private TokenStorageInterface $tokenStorage;
     private string $sessionKey;
+    private ?LoggerInterface $logger;
+    private iterable $userProviders;
+    private ?EventDispatcherInterface $dispatcher;
     private bool $registered = false;
     private AuthenticationTrustResolverInterface $trustResolver;
     private ?\Closure $sessionTrackerEnabler;
@@ -51,20 +55,18 @@ class ContextListener extends AbstractListener
     /**
      * @param iterable<mixed, UserProviderInterface> $userProviders
      */
-    public function __construct(
-        private TokenStorageInterface $tokenStorage,
-        private iterable $userProviders,
-        string $contextKey,
-        private ?LoggerInterface $logger = null,
-        private ?EventDispatcherInterface $dispatcher = null,
-        ?AuthenticationTrustResolverInterface $trustResolver = null,
-        ?callable $sessionTrackerEnabler = null,
-    ) {
-        if (!$contextKey) {
+    public function __construct(TokenStorageInterface $tokenStorage, iterable $userProviders, string $contextKey, ?LoggerInterface $logger = null, ?EventDispatcherInterface $dispatcher = null, ?AuthenticationTrustResolverInterface $trustResolver = null, ?callable $sessionTrackerEnabler = null)
+    {
+        if (empty($contextKey)) {
             throw new \InvalidArgumentException('$contextKey must not be empty.');
         }
 
+        $this->tokenStorage = $tokenStorage;
+        $this->userProviders = $userProviders;
         $this->sessionKey = '_security_'.$contextKey;
+        $this->logger = $logger;
+        $this->dispatcher = $dispatcher;
+
         $this->trustResolver = $trustResolver ?? new AuthenticationTrustResolver();
         $this->sessionTrackerEnabler = null === $sessionTrackerEnabler ? null : $sessionTrackerEnabler(...);
     }
@@ -191,7 +193,7 @@ class ContextListener extends AbstractListener
      *
      * @throws \RuntimeException
      */
-    private function refreshUser(TokenInterface $token): ?TokenInterface
+    protected function refreshUser(TokenInterface $token): ?TokenInterface
     {
         $user = $token->getUser();
 
@@ -214,7 +216,7 @@ class ContextListener extends AbstractListener
                 $newToken->setUser($refreshedUser, false);
 
                 // tokens can be deauthenticated if the user has been changed.
-                if ($token instanceof AbstractToken && self::hasUserChanged($user, $newToken)) {
+                if ($token instanceof AbstractToken && $this->hasUserChanged($user, $newToken)) {
                     $userDeauthenticated = true;
 
                     $this->logger?->debug('Cannot refresh token because user has changed.', ['username' => $refreshedUser->getUserIdentifier(), 'provider' => $provider::class]);
@@ -239,7 +241,7 @@ class ContextListener extends AbstractListener
             } catch (UnsupportedUserException) {
                 // let's try the next user provider
             } catch (UserNotFoundException $e) {
-                $this->logger?->info('Username could not be found in the selected user provider.', ['username' => $e->getUserIdentifier(), 'provider' => $provider::class]);
+                $this->logger?->warning('Username could not be found in the selected user provider.', ['username' => $e->getUserIdentifier(), 'provider' => $provider::class]);
 
                 $userNotFoundByProvider = true;
             }
@@ -292,17 +294,7 @@ class ContextListener extends AbstractListener
         }
 
         if ($originalUser instanceof PasswordAuthenticatedUserInterface || $refreshedUser instanceof PasswordAuthenticatedUserInterface) {
-            if (!$originalUser instanceof PasswordAuthenticatedUserInterface || !$refreshedUser instanceof PasswordAuthenticatedUserInterface) {
-                return true;
-            }
-
-            $originalPassword = $originalUser->getPassword();
-            $refreshedPassword = $refreshedUser->getPassword();
-
-            if (null !== $originalPassword
-                && $refreshedPassword !== $originalPassword
-                && (8 !== \strlen($originalPassword) || hash('crc32c', $refreshedPassword ?? $originalPassword) !== $originalPassword)
-            ) {
+            if (!$originalUser instanceof PasswordAuthenticatedUserInterface || !$refreshedUser instanceof PasswordAuthenticatedUserInterface || $originalUser->getPassword() !== $refreshedUser->getPassword()) {
                 return true;
             }
 
@@ -310,17 +302,20 @@ class ContextListener extends AbstractListener
                 return true;
             }
 
-            if ($originalUser instanceof LegacyPasswordAuthenticatedUserInterface && $originalUser->getSalt() !== $refreshedUser->getSalt()) {
+            if ($originalUser instanceof LegacyPasswordAuthenticatedUserInterface && $refreshedUser instanceof LegacyPasswordAuthenticatedUserInterface && $originalUser->getSalt() !== $refreshedUser->getSalt()) {
                 return true;
             }
         }
 
-        $refreshedRoles = array_map('strval', $refreshedUser->getRoles());
-        $originalRoles = $refreshedToken->getRoleNames(); // This comes from cloning the original token, so it still contains the roles of the original user
+        $userRoles = array_map('strval', (array) $refreshedUser->getRoles());
+
+        if ($refreshedToken instanceof SwitchUserToken) {
+            $userRoles[] = 'ROLE_PREVIOUS_ADMIN';
+        }
 
         if (
-            \count($refreshedRoles) !== \count($originalRoles)
-            || \count($refreshedRoles) !== \count(array_intersect($refreshedRoles, $originalRoles))
+            \count($userRoles) !== \count($refreshedToken->getRoleNames())
+            || \count($userRoles) !== \count(array_intersect($userRoles, $refreshedToken->getRoleNames()))
         ) {
             return true;
         }

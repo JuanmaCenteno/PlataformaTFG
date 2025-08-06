@@ -29,12 +29,8 @@ if (!class_exists(BaseExpressionLanguage::class)) {
      */
     class ExpressionLanguage extends BaseExpressionLanguage
     {
-        public function __construct(?CacheItemPoolInterface $cache = null, iterable $providers = [])
+        public function __construct(?CacheItemPoolInterface $cache = null, array $providers = [])
         {
-            if (!\is_array($providers)) {
-                $providers = iterator_to_array($providers, false);
-            }
-
             // prepend the default provider to let users override it easily
             array_unshift($providers, new ExpressionLanguageProvider());
 

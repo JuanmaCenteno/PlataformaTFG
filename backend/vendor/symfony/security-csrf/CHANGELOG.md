@@ -1,11 +1,6 @@
 CHANGELOG
 =========
 
-7.2
----
-
- * Add `SameOriginCsrfTokenManager`
-
 6.0
 ---
 

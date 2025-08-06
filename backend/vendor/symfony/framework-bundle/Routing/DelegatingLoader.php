@@ -29,12 +29,14 @@ use Symfony\Component\Routing\RouteCollection;
 class DelegatingLoader extends BaseDelegatingLoader
 {
     private bool $loading = false;
+    private array $defaultOptions;
+    private array $defaultRequirements;
 
-    public function __construct(
-        LoaderResolverInterface $resolver,
-        private array $defaultOptions = [],
-        private array $defaultRequirements = [],
-    ) {
+    public function __construct(LoaderResolverInterface $resolver, array $defaultOptions = [], array $defaultRequirements = [])
+    {
+        $this->defaultOptions = $defaultOptions;
+        $this->defaultRequirements = $defaultRequirements;
+
         parent::__construct($resolver);
     }
 

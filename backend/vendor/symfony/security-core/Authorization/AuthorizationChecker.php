@@ -11,11 +11,8 @@
 
 namespace Symfony\Component\Security\Core\Authorization;
 
-use Symfony\Component\Security\Core\Authentication\Token\AbstractToken;
 use Symfony\Component\Security\Core\Authentication\Token\NullToken;
-use Symfony\Component\Security\Core\Authentication\Token\OfflineTokenInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * AuthorizationChecker is the main authorization point of the Security component.
@@ -25,44 +22,29 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @author Fabien Potencier <fabien@symfony.com>
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  */
-class AuthorizationChecker implements AuthorizationCheckerInterface, UserAuthorizationCheckerInterface
+class AuthorizationChecker implements AuthorizationCheckerInterface
 {
-    private array $tokenStack = [];
-    private array $accessDecisionStack = [];
+    private TokenStorageInterface $tokenStorage;
+    private AccessDecisionManagerInterface $accessDecisionManager;
 
-    public function __construct(
-        private TokenStorageInterface $tokenStorage,
-        private AccessDecisionManagerInterface $accessDecisionManager,
-    ) {
+    public function __construct(TokenStorageInterface $tokenStorage, AccessDecisionManagerInterface $accessDecisionManager, bool $exceptionOnNoToken = false)
+    {
+        if ($exceptionOnNoToken) {
+            throw new \LogicException(\sprintf('Argument $exceptionOnNoToken of "%s()" must be set to "false".', __METHOD__));
+        }
+
+        $this->tokenStorage = $tokenStorage;
+        $this->accessDecisionManager = $accessDecisionManager;
     }
 
-    final public function isGranted(mixed $attribute, mixed $subject = null, ?AccessDecision $accessDecision = null): bool
+    final public function isGranted(mixed $attribute, mixed $subject = null): bool
     {
-        $token = end($this->tokenStack) ?: $this->tokenStorage->getToken();
+        $token = $this->tokenStorage->getToken();
 
         if (!$token || !$token->getUser()) {
             $token = new NullToken();
         }
-        $accessDecision ??= end($this->accessDecisionStack) ?: new AccessDecision();
-        $this->accessDecisionStack[] = $accessDecision;
 
-        try {
-            return $accessDecision->isGranted = $this->accessDecisionManager->decide($token, [$attribute], $subject, $accessDecision);
-        } finally {
-            array_pop($this->accessDecisionStack);
-        }
-    }
-
-    final public function isGrantedForUser(UserInterface $user, mixed $attribute, mixed $subject = null, ?AccessDecision $accessDecision = null): bool
-    {
-        $token = new class($user->getRoles()) extends AbstractToken implements OfflineTokenInterface {};
-        $token->setUser($user);
-        $this->tokenStack[] = $token;
-
-        try {
-            return $this->isGranted($attribute, $subject, $accessDecision);
-        } finally {
-            array_pop($this->tokenStack);
-        }
+        return $this->accessDecisionManager->decide($token, [$attribute], $subject);
     }
 }

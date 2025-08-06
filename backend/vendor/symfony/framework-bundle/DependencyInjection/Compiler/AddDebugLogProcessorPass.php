@@ -17,7 +17,10 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class AddDebugLogProcessorPass implements CompilerPassInterface
 {
-    public function process(ContainerBuilder $container): void
+    /**
+     * @return void
+     */
+    public function process(ContainerBuilder $container)
     {
         if (!$container->hasDefinition('profiler')) {
             return;
@@ -31,5 +34,19 @@ class AddDebugLogProcessorPass implements CompilerPassInterface
 
         $container->getDefinition('monolog.logger_prototype')
             ->setConfigurator([new Reference('debug.debug_logger_configurator'), 'pushDebugLogger']);
+    }
+
+    /**
+     * @deprecated since Symfony 6.4, use HttpKernel's DebugLoggerConfigurator instead
+     *
+     * @return void
+     */
+    public static function configureLogger(mixed $logger)
+    {
+        trigger_deprecation('symfony/framework-bundle', '6.4', 'The "%s()" method is deprecated, use HttpKernel\'s DebugLoggerConfigurator instead.', __METHOD__);
+
+        if (\is_object($logger) && method_exists($logger, 'removeDebugLogger') && \in_array(\PHP_SAPI, ['cli', 'phpdbg'], true)) {
+            $logger->removeDebugLogger();
+        }
     }
 }

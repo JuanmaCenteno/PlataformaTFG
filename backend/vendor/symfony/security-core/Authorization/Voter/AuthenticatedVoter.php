@@ -12,10 +12,8 @@
 namespace Symfony\Component\Security\Core\Authorization\Voter;
 
 use Symfony\Component\Security\Core\Authentication\AuthenticationTrustResolverInterface;
-use Symfony\Component\Security\Core\Authentication\Token\OfflineTokenInterface;
 use Symfony\Component\Security\Core\Authentication\Token\SwitchUserToken;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Exception\InvalidArgumentException;
 
 /**
  * AuthenticatedVoter votes if an attribute like IS_AUTHENTICATED_FULLY,
@@ -35,21 +33,16 @@ class AuthenticatedVoter implements CacheableVoterInterface
     public const IS_REMEMBERED = 'IS_REMEMBERED';
     public const PUBLIC_ACCESS = 'PUBLIC_ACCESS';
 
-    public function __construct(
-        private AuthenticationTrustResolverInterface $authenticationTrustResolver,
-    ) {
+    private AuthenticationTrustResolverInterface $authenticationTrustResolver;
+
+    public function __construct(AuthenticationTrustResolverInterface $authenticationTrustResolver)
+    {
+        $this->authenticationTrustResolver = $authenticationTrustResolver;
     }
 
-    /**
-     * @param Vote|null $vote Should be used to explain the vote
-     */
-    public function vote(TokenInterface $token, mixed $subject, array $attributes/* , ?Vote $vote = null */): int
+    public function vote(TokenInterface $token, mixed $subject, array $attributes): int
     {
-        $vote = 3 < \func_num_args() ? func_get_arg(3) : null;
-
         if ($attributes === [self::PUBLIC_ACCESS]) {
-            $vote?->addReason('Access is public.');
-
             return VoterInterface::ACCESS_GRANTED;
         }
 
@@ -63,49 +56,30 @@ class AuthenticatedVoter implements CacheableVoterInterface
                 continue;
             }
 
-            if ($token instanceof OfflineTokenInterface) {
-                throw new InvalidArgumentException('Cannot decide on authentication attributes when an offline token is used.');
-            }
-
             $result = VoterInterface::ACCESS_DENIED;
 
-            if ((self::IS_AUTHENTICATED_FULLY === $attribute || self::IS_AUTHENTICATED_REMEMBERED === $attribute)
-                && $this->authenticationTrustResolver->isFullFledged($token)
-            ) {
-                $vote?->addReason('The user is fully authenticated.');
-
+            if (self::IS_AUTHENTICATED_FULLY === $attribute
+                && $this->authenticationTrustResolver->isFullFledged($token)) {
                 return VoterInterface::ACCESS_GRANTED;
             }
 
             if (self::IS_AUTHENTICATED_REMEMBERED === $attribute
-                && $this->authenticationTrustResolver->isRememberMe($token)
-            ) {
-                $vote?->addReason('The user is remembered.');
-
+                && ($this->authenticationTrustResolver->isRememberMe($token)
+                    || $this->authenticationTrustResolver->isFullFledged($token))) {
                 return VoterInterface::ACCESS_GRANTED;
             }
 
             if (self::IS_AUTHENTICATED === $attribute && $this->authenticationTrustResolver->isAuthenticated($token)) {
-                $vote?->addReason('The user is authenticated.');
-
                 return VoterInterface::ACCESS_GRANTED;
             }
 
             if (self::IS_REMEMBERED === $attribute && $this->authenticationTrustResolver->isRememberMe($token)) {
-                $vote?->addReason('The user is remembered.');
-
                 return VoterInterface::ACCESS_GRANTED;
             }
 
             if (self::IS_IMPERSONATOR === $attribute && $token instanceof SwitchUserToken) {
-                $vote?->addReason('The user is impersonating another user.');
-
                 return VoterInterface::ACCESS_GRANTED;
             }
-        }
-
-        if (VoterInterface::ACCESS_DENIED === $result) {
-            $vote?->addReason('The user is not appropriately authenticated.');
         }
 
         return $result;

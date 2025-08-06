@@ -30,11 +30,12 @@ interface VoterInterface
      * This method must return one of the following constants:
      * ACCESS_GRANTED, ACCESS_DENIED, or ACCESS_ABSTAIN.
      *
-     * @param mixed     $subject    The subject to secure
-     * @param array     $attributes An array of attributes associated with the method being invoked
-     * @param Vote|null $vote       Should be used to explain the vote
+     * @param mixed $subject    The subject to secure
+     * @param array $attributes An array of attributes associated with the method being invoked
      *
-     * @return self::ACCESS_*
+     * @return int either ACCESS_GRANTED, ACCESS_ABSTAIN, or ACCESS_DENIED
+     *
+     * @psalm-return self::ACCESS_* must be transformed into @return on Symfony 7
      */
-    public function vote(TokenInterface $token, mixed $subject, array $attributes/* , ?Vote $vote = null */): int;
+    public function vote(TokenInterface $token, mixed $subject, array $attributes);
 }

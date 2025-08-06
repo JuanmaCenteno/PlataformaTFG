@@ -27,11 +27,15 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 class RedirectController
 {
-    public function __construct(
-        private ?UrlGeneratorInterface $router = null,
-        private ?int $httpPort = null,
-        private ?int $httpsPort = null,
-    ) {
+    private ?UrlGeneratorInterface $router;
+    private ?int $httpPort;
+    private ?int $httpsPort;
+
+    public function __construct(?UrlGeneratorInterface $router = null, ?int $httpPort = null, ?int $httpsPort = null)
+    {
+        $this->router = $router;
+        $this->httpPort = $httpPort;
+        $this->httpsPort = $httpsPort;
     }
 
     /**

@@ -25,14 +25,13 @@ use Symfony\Component\Security\Http\Firewall\LogoutListener;
  */
 class LazyFirewallContext extends FirewallContext
 {
-    public function __construct(
-        iterable $listeners,
-        ?ExceptionListener $exceptionListener,
-        ?LogoutListener $logoutListener,
-        ?FirewallConfig $config,
-        private TokenStorage $tokenStorage,
-    ) {
+    private TokenStorage $tokenStorage;
+
+    public function __construct(iterable $listeners, ?ExceptionListener $exceptionListener, ?LogoutListener $logoutListener, ?FirewallConfig $config, TokenStorage $tokenStorage)
+    {
         parent::__construct($listeners, $exceptionListener, $logoutListener, $config);
+
+        $this->tokenStorage = $tokenStorage;
     }
 
     public function getListeners(): iterable

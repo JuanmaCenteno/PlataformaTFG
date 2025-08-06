@@ -19,9 +19,11 @@ namespace Symfony\Component\Security\Core\Exception;
  */
 class TooManyLoginAttemptsAuthenticationException extends AuthenticationException
 {
-    public function __construct(
-        private ?int $threshold = null,
-    ) {
+    private ?int $threshold;
+
+    public function __construct(?int $threshold = null)
+    {
+        $this->threshold = $threshold;
     }
 
     public function getMessageData(): array

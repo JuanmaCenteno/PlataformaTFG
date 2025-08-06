@@ -28,14 +28,14 @@ use Symfony\Component\HttpFoundation\Test\Constraint as ResponseConstraint;
  */
 trait BrowserKitAssertionsTrait
 {
-    public static function assertResponseIsSuccessful(string $message = '', bool $verbose = true): void
+    public static function assertResponseIsSuccessful(string $message = ''): void
     {
-        self::assertThatForResponse(new ResponseConstraint\ResponseIsSuccessful($verbose), $message);
+        self::assertThatForResponse(new ResponseConstraint\ResponseIsSuccessful(), $message);
     }
 
-    public static function assertResponseStatusCodeSame(int $expectedCode, string $message = '', bool $verbose = true): void
+    public static function assertResponseStatusCodeSame(int $expectedCode, string $message = ''): void
     {
-        self::assertThatForResponse(new ResponseConstraint\ResponseStatusCodeSame($expectedCode, $verbose), $message);
+        self::assertThatForResponse(new ResponseConstraint\ResponseStatusCodeSame($expectedCode), $message);
     }
 
     public static function assertResponseFormatSame(?string $expectedFormat, string $message = ''): void
@@ -43,9 +43,9 @@ trait BrowserKitAssertionsTrait
         self::assertThatForResponse(new ResponseConstraint\ResponseFormatSame(self::getRequest(), $expectedFormat), $message);
     }
 
-    public static function assertResponseRedirects(?string $expectedLocation = null, ?int $expectedCode = null, string $message = '', bool $verbose = true): void
+    public static function assertResponseRedirects(?string $expectedLocation = null, ?int $expectedCode = null, string $message = ''): void
     {
-        $constraint = new ResponseConstraint\ResponseIsRedirected($verbose);
+        $constraint = new ResponseConstraint\ResponseIsRedirected();
         if ($expectedLocation) {
             if (class_exists(ResponseConstraint\ResponseHeaderLocationSame::class)) {
                 $locationConstraint = new ResponseConstraint\ResponseHeaderLocationSame(self::getRequest(), $expectedLocation);
@@ -100,9 +100,9 @@ trait BrowserKitAssertionsTrait
         ), $message);
     }
 
-    public static function assertResponseIsUnprocessable(string $message = '', bool $verbose = true): void
+    public static function assertResponseIsUnprocessable(string $message = ''): void
     {
-        self::assertThatForResponse(new ResponseConstraint\ResponseIsUnprocessable($verbose), $message);
+        self::assertThatForResponse(new ResponseConstraint\ResponseIsUnprocessable(), $message);
     }
 
     public static function assertBrowserHasCookie(string $name, string $path = '/', ?string $domain = null, string $message = ''): void

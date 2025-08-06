@@ -30,7 +30,10 @@ interface AuthenticatorFactoryInterface
      */
     public function getKey(): string;
 
-    public function addConfiguration(NodeDefinition $builder): void;
+    /**
+     * @return void
+     */
+    public function addConfiguration(NodeDefinition $builder);
 
     /**
      * Creates the authenticator service(s) for the provided configuration.

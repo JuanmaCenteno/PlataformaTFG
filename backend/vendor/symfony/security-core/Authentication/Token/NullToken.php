@@ -33,7 +33,10 @@ class NullToken implements TokenInterface
         return null;
     }
 
-    public function setUser(UserInterface $user): never
+    /**
+     * @return never
+     */
+    public function setUser(UserInterface $user)
     {
         throw new \BadMethodCallException('Cannot set user on a NullToken.');
     }
@@ -44,14 +47,10 @@ class NullToken implements TokenInterface
     }
 
     /**
-     * @deprecated since Symfony 7.3
+     * @return void
      */
-    #[\Deprecated(since: 'symfony/security-core 7.3')]
-    public function eraseCredentials(): void
+    public function eraseCredentials()
     {
-        if (\PHP_VERSION_ID < 80400) {
-            @trigger_error(\sprintf('Method %s::eraseCredentials() is deprecated since symfony/security-core 7.3', self::class), \E_USER_DEPRECATED);
-        }
     }
 
     public function getAttributes(): array
@@ -59,7 +58,10 @@ class NullToken implements TokenInterface
         return [];
     }
 
-    public function setAttributes(array $attributes): never
+    /**
+     * @return never
+     */
+    public function setAttributes(array $attributes)
     {
         throw new \BadMethodCallException('Cannot set attributes of NullToken.');
     }
@@ -74,7 +76,10 @@ class NullToken implements TokenInterface
         return null;
     }
 
-    public function setAttribute(string $name, mixed $value): never
+    /**
+     * @return never
+     */
+    public function setAttribute(string $name, mixed $value)
     {
         throw new \BadMethodCallException('Cannot add attribute to NullToken.');
     }
