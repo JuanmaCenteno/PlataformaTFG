@@ -280,6 +280,15 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
+        'gesdinet/jwt-refresh-token-bundle' => array(
+            'pretty_version' => 'v1.5.0',
+            'version' => '1.5.0.0',
+            'reference' => '8706b0d8dcb26610358ba3328ec412315b55c3cd',
+            'type' => 'symfony-bundle',
+            'install_path' => __DIR__ . '/../gesdinet/jwt-refresh-token-bundle',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'jms/metadata' => array(
             'pretty_version' => '2.8.0',
             'version' => '2.8.0.0',

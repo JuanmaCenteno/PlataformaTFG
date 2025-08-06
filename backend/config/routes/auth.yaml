@@ -1,0 +1,4 @@
+# Ruta de login (manejada por LexikJWTAuthenticationBundle)
+api_login_check:
+    path: /api/auth/login
+    methods: [POST]
