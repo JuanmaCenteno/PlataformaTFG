@@ -1,24 +1,268 @@
+# ===============================================
+# GLOBAL GITIGNORE - TFG Platform Monorepo
+# ===============================================
+
+# ===============================================
+# FRONTEND (React/Vite)
+# ===============================================
+
 # Logs
-logs
+frontend/logs/
+frontend/*.log
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+frontend/pnpm-debug.log*
+frontend/lerna-debug.log*
+
+# Dependencies
+frontend/node_modules/
+frontend/.pnp
+frontend/.pnp.js
+
+# Production builds
+frontend/dist/
+frontend/dist-ssr/
+frontend/build/
+
+# Environment variables
+frontend/.env
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+
+# Vite
+frontend/.vite/
+
+# Testing
+frontend/coverage/
+frontend/.nyc_output/
+
+# ===============================================
+# BACKEND (Symfony/PHP)
+# ===============================================
+
+# Symfony specific
+backend/var/
+backend/vendor/
+backend/public/bundles/
+backend/public/uploads/
+
+# Environment files
+backend/.env.local
+backend/.env.local.php
+backend/.env.*.local
+
+# Composer
+backend/composer.phar
+
+# PHPUnit
+backend/.phpunit.result.cache
+backend/phpunit.xml
+backend/tests/_output/
+
+# Doctrine migrations (keep structure, ignore data)
+backend/migrations/*.php
+
+# JWT Keys (regenerate in production)
+backend/config/jwt/*.pem
+
+# Symfony cache and logs
+backend/var/cache/
+backend/var/log/
+backend/var/sessions/
+
+# ===============================================
+# DDEV (Docker Development Environment)
+# ===============================================
+
+# DDEV generated files
+backend/.ddev/.homeadditions/
+backend/.ddev/.dbimageBuild/
+backend/.ddev/db_snapshots/
+backend/.ddev/.ddev-docker-compose-*
+backend/.ddev/import-db/
+backend/.ddev/mysql/
+backend/.ddev/postgres/
+backend/.ddev/import.yaml
+backend/.ddev/.gitignore
+
+# DDEV global (if using global DDEV config)
+.ddev/traefik/
+.ddev/.global_commands/
+
+# ===============================================
+# DOCUMENTATION & CONFIG
+# ===============================================
+
+# Keep docs but ignore generated docs
+docs/build/
+docs/node_modules/
+
+# ===============================================
+# SYSTEM & EDITOR FILES
+# ===============================================
+
+# Operating System
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# IDE and Editors
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+.idea/
+*.swp
+*.swo
+*~
+
+# Sublime Text
+*.sublime-workspace
+*.sublime-project
+
+# Vim
+.netrwhist
+
+# ===============================================
+# DEVELOPMENT & DEBUGGING
+# ===============================================
+
+# Debug files
 *.log
+*.sql
+*.sqlite
+*.sqlite3
+
+# Temporary files
+*.tmp
+*.temp
+.temp/
+.tmp/
+
+# Backup files
+*.bak
+*.backup
+*.old
+
+# ===============================================
+# DEPLOYMENT & PRODUCTION
+# ===============================================
+
+# Docker (for production deployment)
+docker-compose.override.yml
+.docker/
+
+# SSL/TLS certificates
+*.pem
+*.key
+*.crt
+*.csr
+
+# Terraform (if using Infrastructure as Code)
+*.tfstate
+*.tfstate.*
+.terraform/
+
+# Kubernetes secrets
+k8s/secrets/
+
+# ===============================================
+# PACKAGE MANAGERS & DEPENDENCIES
+# ===============================================
+
+# NPM
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-pnpm-debug.log*
+.npm
+.yarn/
+
+# Composer
+composer.lock
+
+# ===============================================
+# TESTING & COVERAGE
+# ===============================================
+
+# Jest
+jest.config.js
+
+# PHP testing
+backend/tests/_reports/
+backend/coverage/
+
+# E2E testing
+cypress/videos/
+cypress/screenshots/
+cypress/downloads/
+
+# ===============================================
+# BUILD ARTIFACTS & ASSETS
+# ===============================================
+
+# Webpack
+.cache/
+dist/
+
+# Asset compilation
+public/build/
+public/assets/compiled/
+
+# ===============================================
+# SECURITY & SENSITIVE DATA
+# ===============================================
+
+# API Keys and secrets (should be in environment variables)
+.secrets
+secrets.json
+.env.secrets
+
+# Database dumps (contains sensitive data)
+*.dump
+*.sql.gz
+
+# User uploads (in development, keep structure)
+backend/public/uploads/*
+!backend/public/uploads/.gitkeep
+
+# ===============================================
+# MONOREPO SPECIFIC
+# ===============================================
+
+# Root node_modules (for global scripts)
+/node_modules/
+/package-lock.json
+/yarn.lock
+
+# Global logs
+*.log
+
+# Monorepo tools
+.rush/
+.pnpm-store/
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
+# ===============================================
+# OPTIONAL: ADVANCED GITIGNORE PATTERNS
+# ===============================================
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+# Ignore but keep empty directories
+**/.gitkeep
+
+# Ignore all but specific file types in uploads
+backend/public/uploads/*
+!backend/public/uploads/**/*.pdf
+!backend/public/uploads/.gitkeep
+
+# Keep example configs but ignore actual configs
+!*.example
+!*.sample
