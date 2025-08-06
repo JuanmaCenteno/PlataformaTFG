@@ -29,19 +29,25 @@ use Symfony\Component\HttpKernel\KernelInterface;
  * Generate all config builders.
  *
  * @author Tobias Nyholm <tobias.nyholm@gmail.com>
- *
- * @final since Symfony 7.1
  */
 class ConfigBuilderCacheWarmer implements CacheWarmerInterface
 {
-    public function __construct(
-        private KernelInterface $kernel,
-        private ?LoggerInterface $logger = null,
-    ) {
+    private KernelInterface $kernel;
+    private ?LoggerInterface $logger;
+
+    public function __construct(KernelInterface $kernel, ?LoggerInterface $logger = null)
+    {
+        $this->kernel = $kernel;
+        $this->logger = $logger;
     }
 
-    public function warmUp(string $cacheDir, ?string $buildDir = null): array
+    /**
+     * @param string|null $buildDir
+     */
+    public function warmUp(string $cacheDir /* , string $buildDir = null */): array
     {
+        $buildDir = 1 < \func_num_args() ? func_get_arg(1) : null;
+
         if (!$buildDir) {
             return [];
         }

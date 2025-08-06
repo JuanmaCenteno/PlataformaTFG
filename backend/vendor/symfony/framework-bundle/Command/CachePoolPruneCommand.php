@@ -26,13 +26,16 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 #[AsCommand(name: 'cache:pool:prune', description: 'Prune cache pools')]
 final class CachePoolPruneCommand extends Command
 {
+    private iterable $pools;
+
     /**
      * @param iterable<mixed, PruneableInterface> $pools
      */
-    public function __construct(
-        private iterable $pools,
-    ) {
+    public function __construct(iterable $pools)
+    {
         parent::__construct();
+
+        $this->pools = $pools;
     }
 
     protected function configure(): void

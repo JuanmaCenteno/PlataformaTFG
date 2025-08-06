@@ -26,6 +26,7 @@ class InlineServiceDefinitionsPass extends AbstractRecursivePass
 {
     protected bool $skipScalars = true;
 
+    private ?AnalyzeServiceReferencesPass $analyzingPass;
     private array $cloningIds = [];
     private array $connectedIds = [];
     private array $notInlinedIds = [];
@@ -33,12 +34,15 @@ class InlineServiceDefinitionsPass extends AbstractRecursivePass
     private array $notInlinableIds = [];
     private ?ServiceReferenceGraph $graph = null;
 
-    public function __construct(
-        private ?AnalyzeServiceReferencesPass $analyzingPass = null,
-    ) {
+    public function __construct(?AnalyzeServiceReferencesPass $analyzingPass = null)
+    {
+        $this->analyzingPass = $analyzingPass;
     }
 
-    public function process(ContainerBuilder $container): void
+    /**
+     * @return void
+     */
+    public function process(ContainerBuilder $container)
     {
         $this->container = $container;
         if ($this->analyzingPass) {
@@ -168,9 +172,6 @@ class InlineServiceDefinitionsPass extends AbstractRecursivePass
      */
     private function isInlineableDefinition(string $id, Definition $definition): bool
     {
-        if (str_starts_with($id, '.autowire_inline.')) {
-            return true;
-        }
         if ($definition->hasErrors() || $definition->isDeprecated() || $definition->isLazy() || $definition->isSynthetic() || $definition->hasTag('container.do_not_inline')) {
             return false;
         }

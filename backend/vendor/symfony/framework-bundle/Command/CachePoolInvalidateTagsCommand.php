@@ -30,13 +30,14 @@ use Symfony\Contracts\Service\ServiceProviderInterface;
 #[AsCommand(name: 'cache:pool:invalidate-tags', description: 'Invalidate cache tags for all or a specific pool')]
 final class CachePoolInvalidateTagsCommand extends Command
 {
+    private ServiceProviderInterface $pools;
     private array $poolNames;
 
-    public function __construct(
-        private ServiceProviderInterface $pools,
-    ) {
+    public function __construct(ServiceProviderInterface $pools)
+    {
         parent::__construct();
 
+        $this->pools = $pools;
         $this->poolNames = array_keys($pools->getProvidedServices());
     }
 

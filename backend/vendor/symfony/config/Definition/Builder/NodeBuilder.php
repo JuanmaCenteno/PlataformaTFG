@@ -18,8 +18,8 @@ namespace Symfony\Component\Config\Definition\Builder;
  */
 class NodeBuilder implements NodeParentInterface
 {
-    protected (NodeDefinition&ParentNodeDefinitionInterface)|null $parent = null;
-    protected array $nodeMapping;
+    protected $parent;
+    protected $nodeMapping;
 
     public function __construct()
     {
@@ -31,7 +31,6 @@ class NodeBuilder implements NodeParentInterface
             'float' => FloatNodeDefinition::class,
             'array' => ArrayNodeDefinition::class,
             'enum' => EnumNodeDefinition::class,
-            'string' => StringNodeDefinition::class,
         ];
     }
 
@@ -40,8 +39,11 @@ class NodeBuilder implements NodeParentInterface
      *
      * @return $this
      */
-    public function setParent((NodeDefinition&ParentNodeDefinitionInterface)|null $parent): static
+    public function setParent(?ParentNodeDefinitionInterface $parent = null): static
     {
+        if (1 > \func_num_args()) {
+            trigger_deprecation('symfony/form', '6.2', 'Calling "%s()" without any arguments is deprecated, pass null explicitly instead.', __METHOD__);
+        }
         $this->parent = $parent;
 
         return $this;
@@ -104,17 +106,11 @@ class NodeBuilder implements NodeParentInterface
     }
 
     /**
-     * Creates a child string node.
-     */
-    public function stringNode(string $name): StringNodeDefinition
-    {
-        return $this->node($name, 'string');
-    }
-
-    /**
      * Returns the parent node.
+     *
+     * @return NodeDefinition&ParentNodeDefinitionInterface
      */
-    public function end(): NodeDefinition&ParentNodeDefinitionInterface
+    public function end()
     {
         return $this->parent;
     }

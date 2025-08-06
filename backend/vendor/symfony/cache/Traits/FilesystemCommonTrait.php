@@ -77,7 +77,10 @@ trait FilesystemCommonTrait
         return $ok;
     }
 
-    protected function doUnlink(string $file): bool
+    /**
+     * @return bool
+     */
+    protected function doUnlink(string $file)
     {
         return @unlink($file);
     }
@@ -108,6 +111,7 @@ trait FilesystemCommonTrait
 
             if ('\\' === \DIRECTORY_SEPARATOR) {
                 $success = copy($tmp, $file);
+                $unlink = true;
             } else {
                 $success = rename($tmp, $file);
                 $unlink = !$success;
@@ -173,7 +177,10 @@ trait FilesystemCommonTrait
         throw new \BadMethodCallException('Cannot serialize '.__CLASS__);
     }
 
-    public function __wakeup(): void
+    /**
+     * @return void
+     */
+    public function __wakeup()
     {
         throw new \BadMethodCallException('Cannot unserialize '.__CLASS__);
     }

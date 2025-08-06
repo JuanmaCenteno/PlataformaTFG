@@ -31,10 +31,13 @@ use Symfony\Component\HttpKernel\CacheWarmer\WarmableInterface;
 #[AsCommand(name: 'cache:warmup', description: 'Warm up an empty cache')]
 class CacheWarmupCommand extends Command
 {
-    public function __construct(
-        private CacheWarmerAggregate $cacheWarmer,
-    ) {
+    private CacheWarmerAggregate $cacheWarmer;
+
+    public function __construct(CacheWarmerAggregate $cacheWarmer)
+    {
         parent::__construct();
+
+        $this->cacheWarmer = $cacheWarmer;
     }
 
     protected function configure(): void

@@ -33,10 +33,11 @@ use Symfony\Component\ErrorHandler\ErrorRenderer\FileLinkFormatter;
 #[AsCommand(name: 'debug:autowiring', description: 'List classes/interfaces you can use for autowiring')]
 class DebugAutowiringCommand extends ContainerDebugCommand
 {
-    public function __construct(
-        ?string $name = null,
-        private ?FileLinkFormatter $fileLinkFormatter = null,
-    ) {
+    private ?FileLinkFormatter $fileLinkFormatter;
+
+    public function __construct(?string $name = null, ?FileLinkFormatter $fileLinkFormatter = null)
+    {
+        $this->fileLinkFormatter = $fileLinkFormatter;
         parent::__construct($name);
     }
 

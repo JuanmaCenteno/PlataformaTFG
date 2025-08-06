@@ -70,12 +70,12 @@ class ErrorHandler
     private array $loggers = [
         \E_DEPRECATED => [null, LogLevel::INFO],
         \E_USER_DEPRECATED => [null, LogLevel::INFO],
-        \E_NOTICE => [null, LogLevel::ERROR],
-        \E_USER_NOTICE => [null, LogLevel::ERROR],
-        \E_WARNING => [null, LogLevel::ERROR],
-        \E_USER_WARNING => [null, LogLevel::ERROR],
-        \E_COMPILE_WARNING => [null, LogLevel::ERROR],
-        \E_CORE_WARNING => [null, LogLevel::ERROR],
+        \E_NOTICE => [null, LogLevel::WARNING],
+        \E_USER_NOTICE => [null, LogLevel::WARNING],
+        \E_WARNING => [null, LogLevel::WARNING],
+        \E_USER_WARNING => [null, LogLevel::WARNING],
+        \E_COMPILE_WARNING => [null, LogLevel::WARNING],
+        \E_CORE_WARNING => [null, LogLevel::WARNING],
         \E_USER_ERROR => [null, LogLevel::CRITICAL],
         \E_RECOVERABLE_ERROR => [null, LogLevel::CRITICAL],
         \E_COMPILE_ERROR => [null, LogLevel::CRITICAL],
@@ -90,6 +90,7 @@ class ErrorHandler
     private int $screamedErrors = 0x55; // E_ERROR + E_CORE_ERROR + E_COMPILE_ERROR + E_PARSE
     private int $loggedErrors = 0;
     private \Closure $configureException;
+    private bool $debug;
 
     private bool $isRecursive = false;
     private bool $isRoot = false;
@@ -176,13 +177,11 @@ class ErrorHandler
         }
     }
 
-    public function __construct(
-        ?BufferingLogger $bootstrappingLogger = null,
-        private bool $debug = false,
-    ) {
+    public function __construct(?BufferingLogger $bootstrappingLogger = null, bool $debug = false)
+    {
         if (\PHP_VERSION_ID < 80400) {
             $this->levels[\E_STRICT] = 'Runtime Notice';
-            $this->loggers[\E_STRICT] = [null, LogLevel::ERROR];
+            $this->loggers[\E_STRICT] = [null, LogLevel::WARNING];
         }
 
         if ($bootstrappingLogger) {
@@ -196,6 +195,7 @@ class ErrorHandler
             $e->line = $line ?? $e->line;
         }, null, new class extends \Exception {
         });
+        $this->debug = $debug;
     }
 
     /**
