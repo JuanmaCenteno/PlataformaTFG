@@ -3,6 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\Defensa;
+use App\Entity\User;
+use App\Entity\Tribunal;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -16,28 +18,468 @@ class DefensaRepository extends ServiceEntityRepository
         parent::__construct($registry, Defensa::class);
     }
 
-    //    /**
-    //     * @return Defensa[] Returns an array of Defensa objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('d')
-    //            ->andWhere('d.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('d.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    /**
+     * Encuentra todas las defensas paginadas con filtros
+     */
+    public function findAllPaginated(
+        int $page = 1, 
+        int $perPage = 10, 
+        ?string $estado = null,
+        ?string $fechaInicio = null,
+        ?string $fechaFin = null
+    ): array {
+        $qb = $this->createQueryBuilder('d')
+            ->leftJoin('d.tfg', 't')
+            ->leftJoin('t.estudiante', 'e')
+            ->leftJoin('d.tribunal', 'tr')
+            ->leftJoin('tr.presidente', 'p')
+            ->addSelect('t', 'e', 'tr', 'p')
+            ->orderBy('d.fechaDefensa', 'DESC');
 
-    //    public function findOneBySomeField($value): ?Defensa
-    //    {
-    //        return $this->createQueryBuilder('d')
-    //            ->andWhere('d.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+        // Filtro por estado
+        if ($estado) {
+            $qb->andWhere('d.estado = :estado')
+               ->setParameter('estado', $estado);
+        }
+
+        // Filtro por rango de fechas
+        if ($fechaInicio) {
+            try {
+                $inicio = new \DateTime($fechaInicio);
+                $qb->andWhere('d.fechaDefensa >= :fechaInicio')
+                   ->setParameter('fechaInicio', $inicio);
+            } catch (\Exception $e) {}
+        }
+
+        if ($fechaFin) {
+            try {
+                $fin = new \DateTime($fechaFin);
+                $qb->andWhere('d.fechaDefensa <= :fechaFin')
+                   ->setParameter('fechaFin', $fin);
+            } catch (\Exception $e) {}
+        }
+
+        // Total count
+        $totalQb = clone $qb;
+        $total = $totalQb->select('COUNT(DISTINCT d.id)')->getQuery()->getSingleScalarResult();
+
+        // Paginated results
+        $results = $qb
+            ->setFirstResult(($page - 1) * $perPage)
+            ->setMaxResults($perPage)
+            ->getQuery()
+            ->getResult();
+
+        return [
+            'data' => $results,
+            'total' => $total
+        ];
+    }
+
+    /**
+     * Encuentra defensas donde el usuario es miembro del tribunal
+     */
+    public function findByTribunalMember(
+        User $usuario,
+        int $page = 1,
+        int $perPage = 10,
+        ?string $estado = null,
+        ?string $fechaInicio = null,
+        ?string $fechaFin = null
+    ): array {
+        $qb = $this->createQueryBuilder('d')
+            ->leftJoin('d.tfg', 't')
+            ->leftJoin('t.estudiante', 'e')
+            ->leftJoin('d.tribunal', 'tr')
+            ->leftJoin('tr.presidente', 'p')
+            ->leftJoin('tr.secretario', 's')
+            ->leftJoin('tr.vocal', 'v')
+            ->addSelect('t', 'e', 'tr', 'p', 's', 'v')
+            ->where('tr.presidente = :usuario OR tr.secretario = :usuario OR tr.vocal = :usuario')
+            ->setParameter('usuario', $usuario)
+            ->orderBy('d.fechaDefensa', 'DESC');
+
+        // Aplicar filtros similares al método anterior
+        if ($estado) {
+            $qb->andWhere('d.estado = :estado')
+               ->setParameter('estado', $estado);
+        }
+
+        if ($fechaInicio) {
+            try {
+                $inicio = new \DateTime($fechaInicio);
+                $qb->andWhere('d.fechaDefensa >= :fechaInicio')
+                   ->setParameter('fechaInicio', $inicio);
+            } catch (\Exception $e) {}
+        }
+
+        if ($fechaFin) {
+            try {
+                $fin = new \DateTime($fechaFin);
+                $qb->andWhere('d.fechaDefensa <= :fechaFin')
+                   ->setParameter('fechaFin', $fin);
+            } catch (\Exception $e) {}
+        }
+
+        // Total count
+        $totalQb = clone $qb;
+        $total = $totalQb->select('COUNT(DISTINCT d.id)')->getQuery()->getSingleScalarResult();
+
+        // Paginated results
+        $results = $qb
+            ->setFirstResult(($page - 1) * $perPage)
+            ->setMaxResults($perPage)
+            ->getQuery()
+            ->getResult();
+
+        return [
+            'data' => $results,
+            'total' => $total
+        ];
+    }
+
+    /**
+     * Encuentra defensas para el calendario (formato FullCalendar)
+     */
+    public function findForCalendar(User $usuario, \DateTimeInterface $inicio, \DateTimeInterface $fin): array
+    {
+        $roles = $usuario->getRoles();
+
+        $qb = $this->createQueryBuilder('d')
+            ->leftJoin('d.tfg', 't')
+            ->leftJoin('t.estudiante', 'e')
+            ->leftJoin('d.tribunal', 'tr')
+            ->leftJoin('tr.presidente', 'p')
+            ->leftJoin('tr.secretario', 's')
+            ->leftJoin('tr.vocal', 'v')
+            ->addSelect('t', 'e', 'tr', 'p', 's', 'v')
+            ->where('d.fechaDefensa BETWEEN :inicio AND :fin')
+            ->setParameter('inicio', $inicio)
+            ->setParameter('fin', $fin)
+            ->orderBy('d.fechaDefensa', 'ASC');
+
+        // Filtrar según rol del usuario
+        if (!in_array('ROLE_ADMIN', $roles)) {
+            // Si no es admin, solo ver defensas donde participa
+            $qb->andWhere(
+                'd.tfg IN (
+                    SELECT tfg FROM App\Entity\TFG tfg 
+                    WHERE tfg.estudiante = :usuario 
+                    OR tfg.tutor = :usuario 
+                    OR tfg.cotutor = :usuario
+                ) OR tr.presidente = :usuario OR tr.secretario = :usuario OR tr.vocal = :usuario'
+            )->setParameter('usuario', $usuario);
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * Busca conflictos de horario para un tribunal en una fecha específica
+     */
+    public function findConflict(
+        Tribunal $tribunal, 
+        \DateTimeInterface $fechaDefensa, 
+        int $duracion = 30,
+        ?int $excludeDefensaId = null
+    ): ?Defensa {
+        $fechaInicio = (clone $fechaDefensa)->sub(new \DateInterval('PT' . $duracion . 'M'));
+        $fechaFin = (clone $fechaDefensa)->add(new \DateInterval('PT' . $duracion . 'M'));
+
+        $qb = $this->createQueryBuilder('d')
+            ->where('d.tribunal = :tribunal')
+            ->andWhere('d.estado != :cancelada')
+            ->andWhere(
+                '(d.fechaDefensa BETWEEN :fechaInicio AND :fechaFin) OR 
+                 (:fechaDefensa BETWEEN d.fechaDefensa AND DATE_ADD(d.fechaDefensa, INTERVAL d.duracionEstimada MINUTE))'
+            )
+            ->setParameter('tribunal', $tribunal)
+            ->setParameter('cancelada', 'cancelada')
+            ->setParameter('fechaInicio', $fechaInicio)
+            ->setParameter('fechaFin', $fechaFin)
+            ->setParameter('fechaDefensa', $fechaDefensa)
+            ->setMaxResults(1);
+
+        if ($excludeDefensaId) {
+            $qb->andWhere('d.id != :excludeId')
+               ->setParameter('excludeId', $excludeDefensaId);
+        }
+
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * Busca conflictos de aula en una fecha específica
+     */
+    public function findAulaConflict(
+        string $aula, 
+        \DateTimeInterface $fechaDefensa, 
+        int $duracion = 30,
+        ?int $excludeDefensaId = null
+    ): ?Defensa {
+        $fechaInicio = (clone $fechaDefensa)->sub(new \DateInterval('PT' . $duracion . 'M'));
+        $fechaFin = (clone $fechaDefensa)->add(new \DateInterval('PT' . $duracion . 'M'));
+
+        $qb = $this->createQueryBuilder('d')
+            ->where('d.aula = :aula')
+            ->andWhere('d.estado != :cancelada')
+            ->andWhere(
+                '(d.fechaDefensa BETWEEN :fechaInicio AND :fechaFin) OR 
+                 (:fechaDefensa BETWEEN d.fechaDefensa AND DATE_ADD(d.fechaDefensa, INTERVAL d.duracionEstimada MINUTE))'
+            )
+            ->setParameter('aula', $aula)
+            ->setParameter('cancelada', 'cancelada')
+            ->setParameter('fechaInicio', $fechaInicio)
+            ->setParameter('fechaFin', $fechaFin)
+            ->setParameter('fechaDefensa', $fechaDefensa)
+            ->setMaxResults(1);
+
+        if ($excludeDefensaId) {
+            $qb->andWhere('d.id != :excludeId')
+               ->setParameter('excludeId', $excludeDefensaId);
+        }
+
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * Encuentra defensas programadas para hoy
+     */
+    public function findDefensasHoy(): array
+    {
+        $hoy = new \DateTime('today');
+        $manana = new \DateTime('tomorrow');
+
+        return $this->createQueryBuilder('d')
+            ->leftJoin('d.tfg', 't')
+            ->leftJoin('t.estudiante', 'e')
+            ->leftJoin('d.tribunal', 'tr')
+            ->addSelect('t', 'e', 'tr')
+            ->where('d.fechaDefensa >= :hoy')
+            ->andWhere('d.fechaDefensa < :manana')
+            ->andWhere('d.estado = :programada')
+            ->setParameter('hoy', $hoy)
+            ->setParameter('manana', $manana)
+            ->setParameter('programada', 'programada')
+            ->orderBy('d.fechaDefensa', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Encuentra defensas próximas (para recordatorios)
+     */
+    public function findProximasDefensas(int $horasAnticipacion = 24): array
+    {
+        $ahora = new \DateTime();
+        $limite = (clone $ahora)->add(new \DateInterval('PT' . $horasAnticipacion . 'H'));
+
+        return $this->createQueryBuilder('d')
+            ->leftJoin('d.tfg', 't')
+            ->leftJoin('t.estudiante', 'e')
+            ->leftJoin('d.tribunal', 'tr')
+            ->leftJoin('tr.presidente', 'p')
+            ->leftJoin('tr.secretario', 's')
+            ->leftJoin('tr.vocal', 'v')
+            ->addSelect('t', 'e', 'tr', 'p', 's', 'v')
+            ->where('d.fechaDefensa BETWEEN :ahora AND :limite')
+            ->andWhere('d.estado = :programada')
+            ->setParameter('ahora', $ahora)
+            ->setParameter('limite', $limite)
+            ->setParameter('programada', 'programada')
+            ->orderBy('d.fechaDefensa', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Obtiene estadísticas de defensas
+     */
+    public function getEstadisticas(): array
+    {
+        // Total por estado
+        $estadoStats = $this->createQueryBuilder('d')
+            ->select('d.estado, COUNT(d.id) as total')
+            ->groupBy('d.estado')
+            ->getQuery()
+            ->getResult();
+
+        // Defensas por mes (últimos 12 meses)
+        $defensasPorMes = $this->createQueryBuilder('d')
+            ->select('YEAR(d.fechaDefensa) as anio, MONTH(d.fechaDefensa) as mes, COUNT(d.id) as total')
+            ->where('d.fechaDefensa >= :hace12meses')
+            ->andWhere('d.estado != :cancelada')
+            ->setParameter('hace12meses', new \DateTime('-12 months'))
+            ->setParameter('cancelada', 'cancelada')
+            ->groupBy('anio', 'mes')
+            ->orderBy('anio', 'DESC')
+            ->addOrderBy('mes', 'DESC')
+            ->getQuery()
+            ->getResult();
+
+        // Tribunales más activos
+        $tribunalesActivos = $this->createQueryBuilder('d')
+            ->select('tr.id, tr.nombre, COUNT(d.id) as total_defensas')
+            ->leftJoin('d.tribunal', 'tr')
+            ->where('d.estado = :completada')
+            ->setParameter('completada', 'completada')
+            ->groupBy('tr.id')
+            ->orderBy('total_defensas', 'DESC')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult();
+
+        // Promedio de duración de defensas
+        $duracionPromedio = $this->createQueryBuilder('d')
+            ->select('AVG(d.duracionEstimada) as duracion_promedio')
+            ->where('d.estado = :completada')
+            ->setParameter('completada', 'completada')
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        return [
+            'por_estado' => $estadoStats,
+            'por_mes' => $defensasPorMes,
+            'tribunales_activos' => $tribunalesActivos,
+            'duracion_promedio' => round($duracionPromedio ?? 30, 2)
+        ];
+    }
+
+    /**
+     * Encuentra defensas pendientes de calificar
+     */
+    public function findPendientesDeCalificar(User $evaluador): array
+    {
+        return $this->createQueryBuilder('d')
+            ->leftJoin('d.tfg', 't')
+            ->leftJoin('t.estudiante', 'e')
+            ->leftJoin('d.tribunal', 'tr')
+            ->leftJoin('d.calificaciones', 'c', 'WITH', 'c.evaluador = :evaluador')
+            ->addSelect('t', 'e', 'tr')
+            ->where('d.estado = :completada')
+            ->andWhere('tr.presidente = :evaluador OR tr.secretario = :evaluador OR tr.vocal = :evaluador')
+            ->andWhere('c.id IS NULL') // No tiene calificación de este evaluador
+            ->setParameter('completada', 'completada')
+            ->setParameter('evaluador', $evaluador)
+            ->orderBy('d.fechaDefensa', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Encuentra defensas por estudiante
+     */
+    public function findByEstudiante(User $estudiante): array
+    {
+        return $this->createQueryBuilder('d')
+            ->leftJoin('d.tfg', 't')
+            ->leftJoin('d.tribunal', 'tr')
+            ->leftJoin('tr.presidente', 'p')
+            ->addSelect('t', 'tr', 'p')
+            ->where('t.estudiante = :estudiante')
+            ->setParameter('estudiante', $estudiante)
+            ->orderBy('d.fechaDefensa', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Encuentra defensas sin acta generada (completadas)
+     */
+    public function findSinActa(): array
+    {
+        return $this->createQueryBuilder('d')
+            ->leftJoin('d.tfg', 't')
+            ->leftJoin('t.estudiante', 'e')
+            ->leftJoin('d.tribunal', 'tr')
+            ->addSelect('t', 'e', 'tr')
+            ->where('d.estado = :completada')
+            ->andWhere('d.actaGenerada = false OR d.actaGenerada IS NULL')
+            ->setParameter('completada', 'completada')
+            ->orderBy('d.fechaDefensa', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Busca defensas por rango de fechas y aula
+     */
+    public function findByFechaAndAula(
+        \DateTimeInterface $fecha, 
+        ?string $aula = null
+    ): array {
+        $inicioDia = (clone $fecha)->setTime(0, 0, 0);
+        $finDia = (clone $fecha)->setTime(23, 59, 59);
+
+        $qb = $this->createQueryBuilder('d')
+            ->leftJoin('d.tfg', 't')
+            ->leftJoin('t.estudiante', 'e')
+            ->leftJoin('d.tribunal', 'tr')
+            ->addSelect('t', 'e', 'tr')
+            ->where('d.fechaDefensa BETWEEN :inicio AND :fin')
+            ->andWhere('d.estado != :cancelada')
+            ->setParameter('inicio', $inicioDia)
+            ->setParameter('fin', $finDia)
+            ->setParameter('cancelada', 'cancelada')
+            ->orderBy('d.fechaDefensa', 'ASC');
+
+        if ($aula) {
+            $qb->andWhere('d.aula = :aula')
+               ->setParameter('aula', $aula);
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * Obtiene la carga de trabajo de un tribunal en un período
+     */
+    public function getTribunalWorkloadInPeriod(
+        Tribunal $tribunal,
+        \DateTimeInterface $inicio,
+        \DateTimeInterface $fin
+    ): array {
+        $defensas = $this->createQueryBuilder('d')
+            ->select('d.estado, COUNT(d.id) as total')
+            ->where('d.tribunal = :tribunal')
+            ->andWhere('d.fechaDefensa BETWEEN :inicio AND :fin')
+            ->setParameter('tribunal', $tribunal)
+            ->setParameter('inicio', $inicio)
+            ->setParameter('fin', $fin)
+            ->groupBy('d.estado')
+            ->getQuery()
+            ->getResult();
+
+        $result = [
+            'programada' => 0,
+            'completada' => 0,
+            'cancelada' => 0
+        ];
+
+        foreach ($defensas as $defensa) {
+            $result[$defensa['estado']] = (int) $defensa['total'];
+        }
+
+        $result['total'] = array_sum($result);
+
+        return $result;
+    }
+
+    public function save(Defensa $entity, bool $flush = false): void
+    {
+        $this->getEntityManager()->persist($entity);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+    public function remove(Defensa $entity, bool $flush = false): void
+    {
+        $this->getEntityManager()->remove($entity);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
 }
