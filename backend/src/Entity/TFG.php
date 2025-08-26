@@ -23,14 +23,6 @@ use ApiPlatform\Doctrine\Orm\Filter\DateFilter;
 #[ApiResource(
     operations: [
         new GetCollection(
-            uriTemplate: '/tfgs/mis-tfgs',
-            controller: 'App\Controller\Api\MisTFGsController',
-            security: "is_granted('ROLE_ESTUDIANTE')",
-            paginationEnabled: true,
-            paginationItemsPerPage: 5,
-            paginationClientItemsPerPage: true
-        ),
-        new GetCollection(
             uriTemplate: '/tfgs',
             security: "is_granted('ROLE_ADMIN')",
             paginationEnabled: true,

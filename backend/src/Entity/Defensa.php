@@ -22,11 +22,6 @@ use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 #[ApiResource(
     operations: [
         new GetCollection(
-            uriTemplate: '/defensas/calendario',
-            controller: 'App\Controller\Api\DefensasCalendarioController',
-            paginationEnabled: false // Deshabilitado para calendarios
-        ),
-        new GetCollection(
             uriTemplate: '/defensas',
             security: "is_granted('ROLE_PRESIDENTE_TRIBUNAL') or is_granted('ROLE_ADMIN')",
             paginationEnabled: true,
