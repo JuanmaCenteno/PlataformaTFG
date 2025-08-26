@@ -148,6 +148,7 @@ class ComposerStaticInit54c05e64f01f49eb136e9af7b3075bdd
         ),
         'L' => 
         array (
+            'Liip\\ImagineBundle\\' => 19,
             'Lexik\\Bundle\\JWTAuthenticationBundle\\' => 37,
             'League\\MimeTypeDetection\\' => 25,
             'League\\Flysystem\\Local\\' => 23,
@@ -155,6 +156,10 @@ class ComposerStaticInit54c05e64f01f49eb136e9af7b3075bdd
             'League\\FlysystemBundle\\' => 23,
             'Lcobucci\\JWT\\' => 13,
             'Lcobucci\\Clock\\' => 15,
+        ),
+        'I' => 
+        array (
+            'Imagine\\' => 8,
         ),
         'G' => 
         array (
@@ -576,6 +581,10 @@ class ComposerStaticInit54c05e64f01f49eb136e9af7b3075bdd
         array (
             0 => __DIR__ . '/..' . '/masterminds/html5/src',
         ),
+        'Liip\\ImagineBundle\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/liip/imagine-bundle',
+        ),
         'Lexik\\Bundle\\JWTAuthenticationBundle\\' => 
         array (
             0 => __DIR__ . '/..' . '/lexik/jwt-authentication-bundle',
@@ -603,6 +612,10 @@ class ComposerStaticInit54c05e64f01f49eb136e9af7b3075bdd
         'Lcobucci\\Clock\\' => 
         array (
             0 => __DIR__ . '/..' . '/lcobucci/clock/src',
+        ),
+        'Imagine\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/imagine/imagine/src',
         ),
         'Gesdinet\\JWTRefreshTokenBundle\\' => 
         array (
