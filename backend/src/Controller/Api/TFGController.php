@@ -7,6 +7,9 @@ use App\Entity\User;
 use App\Repository\TFGRepository;
 use App\Repository\UserRepository;
 use App\Service\NotificacionService;
+use App\Dto\TFGCreateDto;
+use App\Dto\TFGUpdateDto;
+use App\Dto\TFGEstadoUpdateDto;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -31,7 +34,7 @@ class TFGController extends AbstractController
 
     /**
      * GET /api/tfgs/mis-tfgs
-     * Devuelve TFGs según el rol del usuario autenticado
+     * Devuelve TFGs según el rol del usuario autenticado con paginación mejorada
      */
     #[Route('/mis-tfgs', name: 'api_tfgs_mis_tfgs', methods: ['GET'])]
     public function misTfgs(Request $request): JsonResponse
@@ -39,32 +42,70 @@ class TFGController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
         $roles = $user->getRoles();
+        
+        // Validar y sanitizar parámetros de paginación
         $page = max(1, $request->query->getInt('page', 1));
         $perPage = min(50, max(1, $request->query->getInt('per_page', 10)));
+        
+        // Parámetros de filtrado opcionales
+        $estado = $request->query->get('estado');
+        $search = $request->query->get('search');
+        $sortBy = $request->query->get('sort_by', 'created_at');
+        $sortOrder = $request->query->get('sort_order', 'DESC');
+        
+        // Validar parámetros de ordenamiento
+        $allowedSortFields = ['created_at', 'updated_at', 'titulo', 'estado'];
+        if (!in_array($sortBy, $allowedSortFields)) {
+            $sortBy = 'created_at';
+        }
+        
+        if (!in_array(strtoupper($sortOrder), ['ASC', 'DESC'])) {
+            $sortOrder = 'DESC';
+        }
 
         // Determinar qué TFGs puede ver según su rol
-        $tfgs = match(true) {
-            in_array('ROLE_ADMIN', $roles) => $this->tfgRepository->findAllPaginated($page, $perPage),
-            in_array('ROLE_PRESIDENTE_TRIBUNAL', $roles) => $this->tfgRepository->findByTribunal($user, $page, $perPage),
-            in_array('ROLE_PROFESOR', $roles) => $this->tfgRepository->findByTutorOrCotutor($user, $page, $perPage),
-            in_array('ROLE_ESTUDIANTE', $roles) => $this->tfgRepository->findByEstudiante($user, $page, $perPage),
+        $result = match(true) {
+            in_array('ROLE_ADMIN', $roles) => $this->tfgRepository->findAllPaginated(
+                $page, $perPage, $estado, $search, $sortBy, $sortOrder
+            ),
+            in_array('ROLE_PRESIDENTE_TRIBUNAL', $roles) => $this->tfgRepository->findByTribunal(
+                $user, $page, $perPage, $estado, $search, $sortBy, $sortOrder
+            ),
+            in_array('ROLE_PROFESOR', $roles) => $this->tfgRepository->findByTutorOrCotutor(
+                $user, $page, $perPage, $estado, $search, $sortBy, $sortOrder
+            ),
+            in_array('ROLE_ESTUDIANTE', $roles) => $this->tfgRepository->findByEstudiante(
+                $user, $page, $perPage, $estado, $search, $sortBy, $sortOrder
+            ),
             default => ['data' => [], 'total' => 0]
         };
 
+        $totalPages = ceil($result['total'] / $perPage);
+        
         return $this->json([
-            'data' => $tfgs['data'],
+            'data' => $result['data'],
             'meta' => [
-                'total' => $tfgs['total'],
-                'page' => $page,
+                'current_page' => $page,
                 'per_page' => $perPage,
-                'total_pages' => ceil($tfgs['total'] / $perPage)
+                'total' => $result['total'],
+                'total_pages' => $totalPages,
+                'has_next' => $page < $totalPages,
+                'has_previous' => $page > 1,
+                'from' => (($page - 1) * $perPage) + 1,
+                'to' => min($page * $perPage, $result['total'])
+            ],
+            'links' => [
+                'first' => $this->generatePaginationUrl($request, 1),
+                'last' => $this->generatePaginationUrl($request, $totalPages),
+                'prev' => $page > 1 ? $this->generatePaginationUrl($request, $page - 1) : null,
+                'next' => $page < $totalPages ? $this->generatePaginationUrl($request, $page + 1) : null,
             ]
         ], 200, [], ['groups' => ['tfg:read', 'user:basic']]);
     }
 
     /**
      * POST /api/tfgs
-     * Crear nuevo TFG (solo estudiantes)
+     * Crear nuevo TFG (solo estudiantes) con validación DTO
      */
     #[Route('', name: 'api_tfgs_create', methods: ['POST'])]
     #[IsGranted('ROLE_ESTUDIANTE')]
@@ -74,6 +115,26 @@ class TFGController extends AbstractController
         
         if (!$data) {
             return $this->json(['error' => 'Datos JSON inválidos'], 400);
+        }
+
+        // Crear DTO para validación
+        $dto = new TFGCreateDto();
+        $dto->titulo = $data['titulo'] ?? '';
+        $dto->descripcion = $data['descripcion'] ?? '';
+        $dto->resumen = $data['resumen'] ?? '';
+        $dto->palabras_clave = $data['palabras_clave'] ?? [];
+        $dto->tutor_id = $data['tutor_id'] ?? null;
+        $dto->cotutor_id = $data['cotutor_id'] ?? null;
+        $dto->fecha_inicio = $data['fecha_inicio'] ?? null;
+        $dto->fecha_fin_estimada = $data['fecha_fin_estimada'] ?? null;
+
+        // Validar DTO
+        $errors = $this->validator->validate($dto);
+        if (count($errors) > 0) {
+            return $this->json([
+                'error' => 'Datos de entrada inválidos',
+                'violations' => $this->formatValidationErrors($errors)
+            ], 400);
         }
 
         /** @var User $estudiante */
@@ -93,16 +154,24 @@ class TFGController extends AbstractController
 
         // Crear nueva entidad TFG
         $tfg = new TFG();
-        $tfg->setTitulo($data['titulo'] ?? '');
-        $tfg->setDescripcion($data['descripcion'] ?? '');
-        $tfg->setResumen($data['resumen'] ?? '');
-        $tfg->setPalabrasClave($data['palabras_clave'] ?? []);
+        $tfg->setTitulo($dto->titulo);
+        $tfg->setDescripcion($dto->descripcion);
+        $tfg->setResumen($dto->resumen);
+        $tfg->setPalabrasClave($dto->palabras_clave);
         $tfg->setEstudiante($estudiante);
         $tfg->setEstado('borrador');
 
-        // Asignar tutor si se proporciona
-        if (!empty($data['tutor_id'])) {
-            $tutor = $this->userRepository->find($data['tutor_id']);
+        // Asignar fechas si se proporcionan
+        if ($dto->fecha_inicio) {
+            $tfg->setFechaInicio(new \DateTime($dto->fecha_inicio));
+        }
+        if ($dto->fecha_fin_estimada) {
+            $tfg->setFechaFinEstimada(new \DateTime($dto->fecha_fin_estimada));
+        }
+
+        // Asignar tutor
+        if ($dto->tutor_id) {
+            $tutor = $this->userRepository->find($dto->tutor_id);
             if (!$tutor || !in_array('ROLE_PROFESOR', $tutor->getRoles())) {
                 return $this->json(['error' => 'Tutor no válido'], 400);
             }
@@ -110,22 +179,21 @@ class TFGController extends AbstractController
         }
 
         // Asignar cotutor si se proporciona
-        if (!empty($data['cotutor_id'])) {
-            $cotutor = $this->userRepository->find($data['cotutor_id']);
+        if ($dto->cotutor_id) {
+            $cotutor = $this->userRepository->find($dto->cotutor_id);
             if (!$cotutor || !in_array('ROLE_PROFESOR', $cotutor->getRoles())) {
                 return $this->json(['error' => 'Cotutor no válido'], 400);
             }
             $tfg->setCotutor($cotutor);
         }
 
-        // Validar datos
-        $errors = $this->validator->validate($tfg);
-        if (count($errors) > 0) {
-            $errorMessages = [];
-            foreach ($errors as $error) {
-                $errorMessages[] = $error->getMessage();
-            }
-            return $this->json(['errors' => $errorMessages], 400);
+        // Validar entidad final
+        $entityErrors = $this->validator->validate($tfg);
+        if (count($entityErrors) > 0) {
+            return $this->json([
+                'error' => 'Error de validación de entidad',
+                'violations' => $this->formatValidationErrors($entityErrors)
+            ], 400);
         }
 
         // Guardar en base de datos
@@ -147,7 +215,7 @@ class TFGController extends AbstractController
 
     /**
      * PUT /api/tfgs/{id}
-     * Actualizar TFG (estudiante: solo propio, profesor: solo asignado, admin: todos)
+     * Actualizar TFG con validación DTO
      */
     #[Route('/{id}', name: 'api_tfgs_update', methods: ['PUT'])]
     public function update(int $id, Request $request): JsonResponse
@@ -167,17 +235,32 @@ class TFGController extends AbstractController
             return $this->json(['error' => 'Datos JSON inválidos'], 400);
         }
 
-        // Solo permitir actualizar ciertos campos según el rol
+        // Crear DTO para validación
+        $dto = new TFGUpdateDto();
+        $dto->titulo = $data['titulo'] ?? $tfg->getTitulo();
+        $dto->descripcion = $data['descripcion'] ?? $tfg->getDescripcion();
+        $dto->resumen = $data['resumen'] ?? $tfg->getResumen();
+        $dto->palabras_clave = $data['palabras_clave'] ?? $tfg->getPalabrasClave();
+
+        // Validar DTO
+        $errors = $this->validator->validate($dto);
+        if (count($errors) > 0) {
+            return $this->json([
+                'error' => 'Datos de entrada inválidos',
+                'violations' => $this->formatValidationErrors($errors)
+            ], 400);
+        }
+
         /** @var User $user */
         $user = $this->getUser();
         $roles = $user->getRoles();
 
-        // Estudiante solo puede editar metadatos básicos
+        // Solo permitir actualizar ciertos campos según el rol
         if (in_array('ROLE_ESTUDIANTE', $roles)) {
-            if (isset($data['titulo'])) $tfg->setTitulo($data['titulo']);
-            if (isset($data['descripcion'])) $tfg->setDescripcion($data['descripcion']);
-            if (isset($data['resumen'])) $tfg->setResumen($data['resumen']);
-            if (isset($data['palabras_clave'])) $tfg->setPalabrasClave($data['palabras_clave']);
+            $tfg->setTitulo($dto->titulo);
+            $tfg->setDescripcion($dto->descripcion);
+            $tfg->setResumen($dto->resumen);
+            $tfg->setPalabrasClave($dto->palabras_clave);
         }
 
         // Profesor/Admin pueden actualizar más campos
@@ -190,14 +273,13 @@ class TFGController extends AbstractController
             }
         }
 
-        // Validar
-        $errors = $this->validator->validate($tfg);
-        if (count($errors) > 0) {
-            $errorMessages = [];
-            foreach ($errors as $error) {
-                $errorMessages[] = $error->getMessage();
-            }
-            return $this->json(['errors' => $errorMessages], 400);
+        // Validar entidad actualizada
+        $entityErrors = $this->validator->validate($tfg);
+        if (count($entityErrors) > 0) {
+            return $this->json([
+                'error' => 'Error de validación de entidad',
+                'violations' => $this->formatValidationErrors($entityErrors)
+            ], 400);
         }
 
         $this->entityManager->flush();
@@ -207,7 +289,7 @@ class TFGController extends AbstractController
 
     /**
      * PUT /api/tfgs/{id}/estado
-     * Cambiar estado del TFG (solo profesores y admin)
+     * Cambiar estado del TFG con validación DTO
      */
     #[Route('/{id}/estado', name: 'api_tfgs_update_estado', methods: ['PUT'])]
     public function updateEstado(int $id, Request $request): JsonResponse
@@ -223,25 +305,36 @@ class TFGController extends AbstractController
 
         $data = json_decode($request->getContent(), true);
         
-        if (!isset($data['estado'])) {
-            return $this->json(['error' => 'Estado requerido'], 400);
+        if (!$data) {
+            return $this->json(['error' => 'Datos JSON inválidos'], 400);
         }
 
-        $nuevoEstado = $data['estado'];
-        $comentario = $data['comentario'] ?? '';
+        // Crear DTO para validación
+        $dto = new TFGEstadoUpdateDto();
+        $dto->estado = $data['estado'] ?? '';
+        $dto->comentario = $data['comentario'] ?? '';
+
+        // Validar DTO
+        $errors = $this->validator->validate($dto);
+        if (count($errors) > 0) {
+            return $this->json([
+                'error' => 'Datos de entrada inválidos',
+                'violations' => $this->formatValidationErrors($errors)
+            ], 400);
+        }
 
         // Validar transición de estado
-        if (!$tfg->canTransitionTo($nuevoEstado)) {
+        if (!$tfg->canTransitionTo($dto->estado)) {
             return $this->json([
-                'error' => "No se puede cambiar de '{$tfg->getEstado()}' a '{$nuevoEstado}'"
+                'error' => "No se puede cambiar de '{$tfg->getEstado()}' a '{$dto->estado}'"
             ], 400);
         }
 
         $estadoAnterior = $tfg->getEstado();
-        $tfg->setEstado($nuevoEstado);
+        $tfg->setEstado($dto->estado);
 
         // Actualizar fecha de finalización si se aprueba
-        if ($nuevoEstado === 'aprobado' && !$tfg->getFechaFinReal()) {
+        if ($dto->estado === 'aprobado' && !$tfg->getFechaFinReal()) {
             $tfg->setFechaFinReal(new \DateTime());
         }
 
@@ -251,15 +344,10 @@ class TFGController extends AbstractController
         $this->notificacionService->crearNotificacion(
             $tfg->getEstudiante(),
             'Estado de TFG actualizado',
-            "Tu TFG '{$tfg->getTitulo()}' ha cambiado de estado: {$estadoAnterior} → {$nuevoEstado}" . 
-            ($comentario ? "\n\nComentario: {$comentario}" : ''),
-            $this->getTipoNotificacionPorEstado($nuevoEstado)
+            "Tu TFG '{$tfg->getTitulo()}' ha cambiado de estado: {$estadoAnterior} → {$dto->estado}" . 
+            ($dto->comentario ? "\n\nComentario: {$dto->comentario}" : ''),
+            $this->getTipoNotificacionPorEstado($dto->estado)
         );
-
-        // Si hay comentario, crear un comentario en el TFG
-        if ($comentario) {
-            // TODO: Implementar sistema de comentarios
-        }
 
         return $this->json([
             'id' => $tfg->getId(),
@@ -315,6 +403,33 @@ class TFGController extends AbstractController
         $this->entityManager->flush();
 
         return $this->json(['message' => 'TFG eliminado correctamente'], 200);
+    }
+
+    /**
+     * Generar URL de paginación manteniendo parámetros de consulta
+     */
+    private function generatePaginationUrl(Request $request, int $page): string
+    {
+        $params = $request->query->all();
+        $params['page'] = $page;
+        
+        return $request->getPathInfo() . '?' . http_build_query($params);
+    }
+
+    /**
+     * Formatear errores de validación para respuesta JSON
+     */
+    private function formatValidationErrors($errors): array
+    {
+        $violations = [];
+        foreach ($errors as $error) {
+            $violations[] = [
+                'field' => $error->getPropertyPath(),
+                'message' => $error->getMessage(),
+                'invalid_value' => $error->getInvalidValue()
+            ];
+        }
+        return $violations;
     }
 
     private function getTipoNotificacionPorEstado(string $estado): string

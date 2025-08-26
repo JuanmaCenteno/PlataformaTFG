@@ -9,8 +9,59 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\DateFilter;
 
 #[ORM\Entity(repositoryClass: TFGRepository::class)]
+#[ApiResource(
+    operations: [
+        new GetCollection(
+            uriTemplate: '/tfgs/mis-tfgs',
+            controller: 'App\Controller\Api\MisTFGsController',
+            security: "is_granted('ROLE_ESTUDIANTE')",
+            paginationEnabled: true,
+            paginationItemsPerPage: 5,
+            paginationClientItemsPerPage: true
+        ),
+        new GetCollection(
+            uriTemplate: '/tfgs',
+            security: "is_granted('ROLE_ADMIN')",
+            paginationEnabled: true,
+            paginationItemsPerPage: 20
+        ),
+        new Get(
+            security: "is_granted('ROLE_ADMIN') or (is_granted('ROLE_ESTUDIANTE') and object.getEstudiante() == user) or (is_granted('ROLE_PROFESOR') and object.getTutor() == user)"
+        ),
+        new Post(
+            security: "is_granted('ROLE_ESTUDIANTE')"
+        ),
+        new Put(
+            security: "is_granted('ROLE_ADMIN') or (is_granted('ROLE_ESTUDIANTE') and object.getEstudiante() == user)"
+        )
+    ],
+    normalizationContext: ['groups' => ['tfg:read']],
+    denormalizationContext: ['groups' => ['tfg:write']]
+)]
+#[ApiFilter(SearchFilter::class, properties: [
+    'titulo' => 'partial',
+    'estado' => 'exact',
+    'estudiante.nombre' => 'partial',
+    'tutor.nombre' => 'partial'
+])]
+#[ApiFilter(OrderFilter::class, properties: [
+    'created_at' => 'DESC',
+    'updated_at' => 'DESC',
+    'titulo' => 'ASC',
+    'estado' => 'ASC'
+])]
+#[ApiFilter(DateFilter::class, properties: ['created_at', 'updated_at', 'fecha_inicio'])]
 #[ORM\Table(name: 'tfgs')]
 #[ORM\HasLifecycleCallbacks]
 class TFG

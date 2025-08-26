@@ -1,7 +1,29 @@
 api_platform:
-    title: Hello API Platform
-    version: 1.0.0
+    title: 'TFG Management API'
+    version: '1.0.0'
+    
+    # Configuración global de paginación
     defaults:
-        stateless: true
-        cache_headers:
-            vary: ['Content-Type', 'Authorization', 'Origin']
+        pagination_enabled: true
+        pagination_page_parameter_name: 'page'
+        pagination_items_per_page_parameter_name: 'per_page'
+        pagination_items_per_page: 10
+        pagination_maximum_items_per_page: 100
+        pagination_partial: false
+        pagination_client_enabled: true
+        pagination_client_items_per_page: true
+        pagination_fetch_join_collection: true
+    
+    # Formatos de serialización
+    formats:
+        json: ['application/json']
+        html: ['text/html']
+        
+    # Configuración de documentación
+    swagger:
+        versions: [3]
+        
+    # Configuración de CORS
+    http_cache:
+        invalidation:
+            enabled: false

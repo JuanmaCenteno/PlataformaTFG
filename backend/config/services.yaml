@@ -28,3 +28,6 @@ services:
         arguments:
             $appName: '%env(APP_NAME)%'
             $fromEmail: '%env(FROM_EMAIL)%'
+    
+    # Custom Serializer Handler
+    App\Service\SimpleCircularHandler: ~
