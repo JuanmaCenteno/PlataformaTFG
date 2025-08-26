@@ -18,6 +18,8 @@ use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Doctrine\Orm\Filter\DateFilter;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: TFGRepository::class)]
 #[ApiResource(
@@ -56,6 +58,7 @@ use ApiPlatform\Doctrine\Orm\Filter\DateFilter;
 #[ApiFilter(DateFilter::class, properties: ['created_at', 'updated_at', 'fecha_inicio'])]
 #[ORM\Table(name: 'tfgs')]
 #[ORM\HasLifecycleCallbacks]
+#[Vich\Uploadable]
 class TFG
 {
     // Estados posibles del TFG
@@ -153,6 +156,25 @@ class TFG
     #[ORM\Column(type: Types::DECIMAL, precision: 3, scale: 2, nullable: true)]
     private ?string $calificacion = null;
 
+    // =====================================
+    // CAMPOS DE ARCHIVO CON VICHUPLOADER
+    // =====================================
+
+    /**
+     * Campo que maneja el archivo File object para VichUploader
+     * No se serializa ni se persiste en la base de datos
+     */
+    #[Vich\UploadableField(mapping: 'tfg_documents', fileNameProperty: 'archivoPath', size: 'archivoSize', mimeType: 'archivoMimeType', originalName: 'archivoOriginalName')]
+    #[Assert\File(
+        maxSize: '50M',
+        mimeTypes: [
+            'application/pdf',
+            'application/x-pdf',
+        ],
+        mimeTypesMessage: 'Solo se permiten archivos PDF de hasta 50MB'
+    )]
+    private ?File $archivoFile = null;
+
     #[Groups(['tfg:read'])]
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $archivoPath = null;
@@ -199,6 +221,10 @@ class TFG
     {
         $this->updatedAt = new \DateTime();
     }
+
+    // =====================================
+    // GETTERS Y SETTERS BÁSICOS
+    // =====================================
 
     public function getId(): ?int
     {
@@ -338,6 +364,32 @@ class TFG
     {
         $this->calificacion = $calificacion;
         return $this;
+    }
+
+    // =====================================
+    // MÉTODOS DE ARCHIVO CON VICHUPLOADER
+    // =====================================
+
+    /**
+     * Setter para el archivo File object (VichUploader)
+     */
+    public function setArchivoFile(?File $archivoFile = null): void
+    {
+        $this->archivoFile = $archivoFile;
+
+        if (null !== $archivoFile) {
+            // Es necesario cambiar al menos una property mapeada
+            // para que el listener de Vich sea disparado
+            $this->updatedAt = new \DateTime();
+        }
+    }
+
+    /**
+     * Getter para el archivo File object (VichUploader)
+     */
+    public function getArchivoFile(): ?File
+    {
+        return $this->archivoFile;
     }
 
     public function getArchivoPath(): ?string
@@ -547,7 +599,7 @@ class TFG
      */
     public function hasFile(): bool
     {
-        return $this->archivoPath !== null;
+        return $this->archivoPath !== null && $this->archivoOriginalName !== null;
     }
 
     /**

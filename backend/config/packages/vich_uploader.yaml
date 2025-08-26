@@ -1,8 +1,16 @@
 vich_uploader:
     db_driver: orm
-
-    #mappings:
-    #    products:
-    #        uri_prefix: /images/products
-    #        upload_destination: '%kernel.project_dir%/public/images/products'
-    #        namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+    
+    mappings:
+        tfg_documents:
+            uri_prefix: /uploads/tfgs
+            upload_destination: '%kernel.project_dir%/public/uploads/tfgs'
+            namer: 
+                service: 'App\Service\TFGFileNamer'
+                options: { property: 'id' }
+            inject_on_load: false
+            delete_on_update: true
+            delete_on_remove: true
+            
+    metadata:
+        type: attribute
