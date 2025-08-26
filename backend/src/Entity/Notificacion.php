@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Repository\NotificacionRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: NotificacionRepository::class)]
 #[ORM\Table(name: 'notificaciones')]
@@ -24,35 +26,59 @@ class Notificacion
         self::TIPO_ERROR,
     ];
 
+    #[Groups(['notificacion:read'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups(['notificacion:read'])]
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?User $usuario = null;
 
+    #[Groups(['notificacion:read'])]
+    #[Assert\Choice(choices: self::TIPOS_VALIDOS, message: 'Tipo de notificación no válido')]
     #[ORM\Column(length: 50, options: ['default' => 'info'])]
     private ?string $tipo = self::TIPO_INFO;
 
+    #[Groups(['notificacion:read'])]
+    #[Assert\NotBlank(message: 'El título es obligatorio')]
+    #[Assert\Length(
+        max: 255,
+        maxMessage: 'El título no puede superar los {{ limit }} caracteres'
+    )]
     #[ORM\Column(length: 255)]
     private ?string $titulo = null;
 
+    #[Groups(['notificacion:read'])]
+    #[Assert\NotBlank(message: 'El mensaje es obligatorio')]
+    #[Assert\Length(
+        max: 2000,
+        maxMessage: 'El mensaje no puede superar los {{ limit }} caracteres'
+    )]
     #[ORM\Column(type: Types::TEXT)]
     private ?string $mensaje = null;
 
+    #[Groups(['notificacion:read'])]
     #[ORM\Column(options: ['default' => false])]
     private ?bool $leida = false;
 
+    #[Groups(['notificacion:read'])]
     #[ORM\Column(options: ['default' => false])]
     private ?bool $enviadaPorEmail = false;
 
+    #[Groups(['notificacion:read'])]
     #[ORM\Column(type: Types::JSON, nullable: true)]
     private ?array $metadata = [];
 
+    #[Groups(['notificacion:read'])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
+
+    #[Groups(['notificacion:read'])]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $updatedAt = null;
 
     public function __construct()
     {
@@ -61,6 +87,13 @@ class Notificacion
         $this->enviadaPorEmail = false;
         $this->metadata = [];
         $this->createdAt = new \DateTime();
+        $this->updatedAt = new \DateTime();
+    }
+
+    #[ORM\PreUpdate]
+    public function setUpdatedAtValue(): void
+    {
+        $this->updatedAt = new \DateTime();
     }
 
     public function getId(): ?int
@@ -123,6 +156,9 @@ class Notificacion
     public function setLeida(bool $leida): static
     {
         $this->leida = $leida;
+        if ($leida) {
+            $this->updatedAt = new \DateTime();
+        }
         return $this;
     }
 
@@ -159,18 +195,156 @@ class Notificacion
         return $this;
     }
 
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(?\DateTimeInterface $updatedAt): static
+    {
+        $this->updatedAt = $updatedAt;
+        return $this;
+    }
+
+    // =====================================
+    // MÉTODOS PARA SERIALIZACIÓN
+    // =====================================
+
     /**
-     * Métodos auxiliares
+     * Tiempo transcurrido desde la creación para mostrar en la UI
+     */
+    #[Groups(['notificacion:read'])]
+    public function getTiempoTranscurrido(): string
+    {
+        if (!$this->createdAt) {
+            return 'Desconocido';
+        }
+        
+        $now = new \DateTime();
+        $diff = $this->createdAt->diff($now);
+        
+        if ($diff->days > 0) {
+            return $diff->days . ' día' . ($diff->days > 1 ? 's' : '');
+        } elseif ($diff->h > 0) {
+            return $diff->h . ' hora' . ($diff->h > 1 ? 's' : '');
+        } elseif ($diff->i > 0) {
+            return $diff->i . ' minuto' . ($diff->i > 1 ? 's' : '');
+        } else {
+            return 'Ahora mismo';
+        }
+    }
+
+    /**
+     * Información del tipo para la UI
+     */
+    #[Groups(['notificacion:read'])]
+    public function getTipoInfo(): array
+    {
+        return [
+            'valor' => $this->tipo,
+            'label' => $this->getTipoLabel(),
+            'icono' => $this->getIcono(),
+            'color' => $this->getColorClass(),
+            'border' => $this->getBorderColorClass()
+        ];
+    }
+
+    /**
+     * Label del tipo para mostrar
+     */
+    #[Groups(['notificacion:read'])]
+    public function getTipoLabel(): string
+    {
+        return match ($this->tipo) {
+            self::TIPO_SUCCESS => 'Éxito',
+            self::TIPO_WARNING => 'Advertencia',
+            self::TIPO_ERROR => 'Error',
+            default => 'Información'
+        };
+    }
+
+    /**
+     * Estado de la notificación para la UI
+     */
+    #[Groups(['notificacion:read'])]
+    public function getEstadoInfo(): array
+    {
+        return [
+            'leida' => $this->leida,
+            'enviada_por_email' => $this->enviadaPorEmail,
+            'es_reciente' => $this->esReciente(),
+            'es_importante' => $this->esImportante(),
+            'requiere_accion' => $this->requiereAccion()
+        ];
+    }
+
+    /**
+     * Información de enlaces/acciones desde metadata
+     */
+    #[Groups(['notificacion:read'])]
+    public function getAcciones(): array
+    {
+        $acciones = [];
+        
+        if ($this->hasMetadata('route')) {
+            $acciones[] = [
+                'tipo' => 'enlace',
+                'texto' => 'Ver detalles',
+                'route' => $this->getMetadataValue('route'),
+                'params' => $this->getMetadataValue('route_params') ?? []
+            ];
+        }
+        
+        if ($this->hasMetadata('accion_principal')) {
+            $accionPrincipal = $this->getMetadataValue('accion_principal');
+            $acciones[] = [
+                'tipo' => 'accion',
+                'texto' => $accionPrincipal['texto'] ?? 'Acción',
+                'endpoint' => $accionPrincipal['endpoint'] ?? null,
+                'metodo' => $accionPrincipal['metodo'] ?? 'POST'
+            ];
+        }
+        
+        return $acciones;
+    }
+
+    /**
+     * Información del evento que generó la notificación
+     */
+    #[Groups(['notificacion:read'])]
+    public function getEventoInfo(): ?array
+    {
+        $tipoEvento = $this->getMetadataValue('tipo_evento');
+        
+        if (!$tipoEvento) {
+            return null;
+        }
+
+        return [
+            'tipo' => $tipoEvento,
+            'descripcion' => $this->getDescripcionEvento($tipoEvento),
+            'icono' => $this->getIconoEvento($tipoEvento)
+        ];
+    }
+
+    // =====================================
+    // MÉTODOS AUXILIARES
+    // =====================================
+
+    /**
+     * Métodos auxiliares existentes
      */
     public function marcarComoLeida(): static
     {
         $this->leida = true;
+        $this->updatedAt = new \DateTime();
         return $this;
     }
 
     public function marcarComoNoLeida(): static
     {
         $this->leida = false;
+        $this->updatedAt = new \DateTime();
         return $this;
     }
 
@@ -285,6 +459,149 @@ class Notificacion
         $expirationDate->modify("+{$daysToExpire} days");
         
         return new \DateTime() > $expirationDate;
+    }
+
+    // =====================================
+    // MÉTODOS PARA LÓGICA DE NEGOCIO
+    // =====================================
+
+    /**
+     * Verifica si la notificación es reciente (menos de 24 horas)
+     */
+    public function esReciente(): bool
+    {
+        if (!$this->createdAt) {
+            return false;
+        }
+        
+        $hace24horas = new \DateTime('-24 hours');
+        return $this->createdAt > $hace24horas;
+    }
+
+    /**
+     * Verifica si es una notificación importante
+     */
+    public function esImportante(): bool
+    {
+        return in_array($this->tipo, [self::TIPO_ERROR, self::TIPO_WARNING]) ||
+               $this->hasMetadata('prioridad') && $this->getMetadataValue('prioridad') === 'alta';
+    }
+
+    /**
+     * Verifica si requiere alguna acción del usuario
+     */
+    public function requiereAccion(): bool
+    {
+        return $this->hasMetadata('accion_principal') || 
+               $this->hasMetadata('route') ||
+               in_array($this->getMetadataValue('tipo_evento'), [
+                   'tfg_necesita_revision',
+                   'defensa_programada',
+                   'cambios_solicitados'
+               ]);
+    }
+
+    /**
+     * Obtiene descripción del evento según el tipo
+     */
+    private function getDescripcionEvento(string $tipoEvento): string
+    {
+        return match ($tipoEvento) {
+            'tfg_subido' => 'TFG subido por estudiante',
+            'tfg_aprobado' => 'TFG aprobado para defensa',
+            'defensa_programada' => 'Defensa programada',
+            'calificacion_publicada' => 'Calificación disponible',
+            'usuario_creado' => 'Cuenta de usuario creada',
+            'tribunal_asignado' => 'Asignado a tribunal',
+            'cambios_solicitados' => 'Cambios solicitados en TFG',
+            'defensa_completada' => 'Defensa completada',
+            'defensa_cancelada' => 'Defensa cancelada',
+            'recordatorio_defensa' => 'Recordatorio de defensa próxima',
+            'broadcast' => 'Mensaje del sistema',
+            'test' => 'Notificación de prueba',
+            default => 'Evento del sistema'
+        };
+    }
+
+    /**
+     * Obtiene icono específico del evento
+     */
+    private function getIconoEvento(string $tipoEvento): string
+    {
+        return match ($tipoEvento) {
+            'tfg_subido' => '📄',
+            'tfg_aprobado' => '✅',
+            'defensa_programada' => '📅',
+            'calificacion_publicada' => '📊',
+            'usuario_creado' => '👤',
+            'tribunal_asignado' => '⚖️',
+            'cambios_solicitados' => '✏️',
+            'defensa_completada' => '🎓',
+            'defensa_cancelada' => '❌',
+            'recordatorio_defensa' => '⏰',
+            'broadcast' => '📢',
+            'test' => '🧪',
+            default => $this->getIcono()
+        };
+    }
+
+    /**
+     * Verifica si puede ser marcada como leída por el usuario
+     */
+    public function puedeSerMarcadaLeida(): bool
+    {
+        return !$this->leida;
+    }
+
+    /**
+     * Verifica si puede ser eliminada
+     */
+    public function puedeSerEliminada(): bool
+    {
+        // Se puede eliminar si está leída o es antigua
+        return $this->leida || $this->esAntigua();
+    }
+
+    /**
+     * Verifica si es una notificación antigua (más de 30 días)
+     */
+    public function esAntigua(int $dias = 30): bool
+    {
+        if (!$this->createdAt) {
+            return false;
+        }
+        
+        $fechaLimite = new \DateTime("-{$dias} days");
+        return $this->createdAt < $fechaLimite;
+    }
+
+    /**
+     * Obtiene prioridad de la notificación
+     */
+    public function getPrioridad(): int
+    {
+        // Prioridad basada en tipo y metadata
+        $prioridadPorTipo = match ($this->tipo) {
+            self::TIPO_ERROR => 4,
+            self::TIPO_WARNING => 3,
+            self::TIPO_SUCCESS => 2,
+            self::TIPO_INFO => 1,
+            default => 1
+        };
+
+        // Aumentar prioridad si tiene metadata específica
+        if ($this->hasMetadata('prioridad')) {
+            $prioridadMeta = match ($this->getMetadataValue('prioridad')) {
+                'critica' => 5,
+                'alta' => 4,
+                'media' => 2,
+                'baja' => 1,
+                default => 1
+            };
+            return max($prioridadPorTipo, $prioridadMeta);
+        }
+
+        return $prioridadPorTipo;
     }
 
     public function __toString(): string

@@ -8,6 +8,8 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\DBAL\Types\Types;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: 'users')]
@@ -16,47 +18,98 @@ use Doctrine\DBAL\Types\Types;
 #[UniqueEntity(fields: ['dni'], message: 'Ya existe un usuario con este DNI')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    #[Groups(['user:read', 'user:basic', 'user:detailed'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups(['user:read', 'user:write', 'user:basic', 'user:detailed'])]
+    #[Assert\NotBlank(message: 'El email es obligatorio')]
+    #[Assert\Email(message: 'El formato del email no es válido')]
     #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
 
+    #[Groups(['user:read', 'user:admin'])]
     #[ORM\Column(type: Types::JSON)]
     private array $roles = [];
 
     #[ORM\Column(length: 255)]
     private ?string $password = null;
 
+    #[Groups(['user:read', 'user:write', 'user:basic', 'user:detailed'])]
+    #[Assert\NotBlank(message: 'El nombre es obligatorio')]
+    #[Assert\Length(
+        min: 2,
+        max: 100,
+        minMessage: 'El nombre debe tener al menos {{ limit }} caracteres',
+        maxMessage: 'El nombre no puede superar los {{ limit }} caracteres'
+    )]
     #[ORM\Column(length: 100)]
     private ?string $nombre = null;
 
+    #[Groups(['user:read', 'user:write', 'user:basic', 'user:detailed'])]
+    #[Assert\NotBlank(message: 'Los apellidos son obligatorios')]
+    #[Assert\Length(
+        min: 2,
+        max: 100,
+        minMessage: 'Los apellidos deben tener al menos {{ limit }} caracteres',
+        maxMessage: 'Los apellidos no pueden superar los {{ limit }} caracteres'
+    )]
     #[ORM\Column(length: 100)]
     private ?string $apellidos = null;
 
+    #[Groups(['user:read', 'user:write', 'user:detailed'])]
+    #[Assert\Length(
+        min: 8,
+        max: 20,
+        minMessage: 'El DNI debe tener al menos {{ limit }} caracteres',
+        maxMessage: 'El DNI no puede superar los {{ limit }} caracteres'
+    )]
     #[ORM\Column(length: 20, unique: true, nullable: true)]
     private ?string $dni = null;
 
+    #[Groups(['user:read', 'user:write', 'user:detailed'])]
+    #[Assert\Length(
+        max: 20,
+        maxMessage: 'El teléfono no puede superar los {{ limit }} caracteres'
+    )]
     #[ORM\Column(length: 20, nullable: true)]
     private ?string $telefono = null;
 
+    #[Groups(['user:read', 'user:write', 'user:detailed'])]
+    #[Assert\Length(
+        max: 100,
+        maxMessage: 'La universidad no puede superar los {{ limit }} caracteres'
+    )]
     #[ORM\Column(length: 100, nullable: true)]
     private ?string $universidad = null;
 
+    #[Groups(['user:read', 'user:write', 'user:detailed'])]
+    #[Assert\Length(
+        max: 100,
+        maxMessage: 'El departamento no puede superar los {{ limit }} caracteres'
+    )]
     #[ORM\Column(length: 100, nullable: true)]
     private ?string $departamento = null;
 
+    #[Groups(['user:read', 'user:write', 'user:detailed'])]
+    #[Assert\Length(
+        max: 100,
+        maxMessage: 'La especialidad no puede superar los {{ limit }} caracteres'
+    )]
     #[ORM\Column(length: 100, nullable: true)]
     private ?string $especialidad = null;
 
+    #[Groups(['user:read', 'user:admin'])]
     #[ORM\Column(options: ['default' => true])]
     private ?bool $isActive = true;
 
+    #[Groups(['user:read', 'user:detailed'])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
 
+    #[Groups(['user:read', 'user:detailed'])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $updatedAt = null;
 
@@ -91,8 +144,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     /**
      * A visual identifier that represents this user.
-     *
-     * @see UserInterface
      */
     public function getUserIdentifier(): string
     {
@@ -105,7 +156,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // Guarantee every user at least has ROLE_USER
+        // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
@@ -120,7 +171,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @see PasswordAuthenticatedUserInterface
      */
-    public function getPassword(): ?string
+    public function getPassword(): string
     {
         return $this->password;
     }
@@ -250,44 +301,181 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    // =====================================
+    // MÉTODOS PARA SERIALIZACIÓN
+    // =====================================
+
     /**
-     * Métodos auxiliares para roles
+     * Obtiene el nombre completo del usuario
+     */
+    #[Groups(['user:read', 'user:basic', 'user:detailed'])]
+    public function getNombreCompleto(): string
+    {
+        return trim(($this->nombre ?? '') . ' ' . ($this->apellidos ?? ''));
+    }
+
+    /**
+     * Obtiene el rol principal del usuario
+     */
+    #[Groups(['user:read', 'user:basic'])]
+    public function getRolPrincipal(): string
+    {
+        $roles = $this->getRoles();
+        
+        // Jerarquía de roles (mayor prioridad primero)
+        $jerarquia = [
+            'ROLE_ADMIN' => 'Administrador',
+            'ROLE_PRESIDENTE_TRIBUNAL' => 'Presidente de Tribunal',
+            'ROLE_PROFESOR' => 'Profesor',
+            'ROLE_ESTUDIANTE' => 'Estudiante',
+            'ROLE_USER' => 'Usuario'
+        ];
+
+        foreach ($jerarquia as $role => $label) {
+            if (in_array($role, $roles)) {
+                return $label;
+            }
+        }
+
+        return 'Usuario';
+    }
+
+    /**
+     * Obtiene las iniciales del usuario
+     */
+    #[Groups(['user:basic'])]
+    public function getIniciales(): string
+    {
+        $iniciales = '';
+        
+        if ($this->nombre) {
+            $iniciales .= strtoupper(substr($this->nombre, 0, 1));
+        }
+        
+        if ($this->apellidos) {
+            $palabras = explode(' ', $this->apellidos);
+            $iniciales .= strtoupper(substr($palabras[0], 0, 1));
+        }
+        
+        return $iniciales ?: 'U';
+    }
+
+    /**
+     * Verifica si el usuario tiene un rol específico
      */
     public function hasRole(string $role): bool
     {
         return in_array($role, $this->getRoles());
     }
 
-    public function addRole(string $role): static
+    /**
+     * Verifica si es estudiante
+     */
+    #[Groups(['user:read'])]
+    public function isEstudiante(): bool
     {
-        if (!$this->hasRole($role)) {
-            $this->roles[] = $role;
-        }
-        return $this;
-    }
-
-    public function removeRole(string $role): static
-    {
-        if (($key = array_search($role, $this->roles)) !== false) {
-            unset($this->roles[$key]);
-            $this->roles = array_values($this->roles);
-        }
-        return $this;
+        return $this->hasRole('ROLE_ESTUDIANTE');
     }
 
     /**
-     * Método auxiliar para obtener nombre completo
+     * Verifica si es profesor
      */
-    public function getNombreCompleto(): string
+    #[Groups(['user:read'])]
+    public function isProfesor(): bool
     {
-        return trim($this->nombre . ' ' . $this->apellidos);
+        return $this->hasRole('ROLE_PROFESOR') || $this->hasRole('ROLE_PRESIDENTE_TRIBUNAL');
     }
 
     /**
-     * Método para serialización (útil para sesiones)
+     * Verifica si es administrador
      */
+    #[Groups(['user:read'])]
+    public function isAdmin(): bool
+    {
+        return $this->hasRole('ROLE_ADMIN');
+    }
+
+    /**
+     * Obtiene información básica para mostrar en listas
+     */
+    #[Groups(['user:basic'])]
+    public function getBasicInfo(): array
+    {
+        return [
+            'id' => $this->id,
+            'nombre_completo' => $this->getNombreCompleto(),
+            'email' => $this->email,
+            'rol_principal' => $this->getRolPrincipal(),
+            'iniciales' => $this->getIniciales(),
+            'activo' => $this->isActive
+        ];
+    }
+
+    /**
+     * Obtiene el tiempo desde la creación
+     */
+    #[Groups(['user:detailed'])]
+    public function getTiempoRegistrado(): string
+    {
+        if (!$this->createdAt) {
+            return 'Desconocido';
+        }
+
+        $now = new \DateTime();
+        $diff = $this->createdAt->diff($now);
+
+        if ($diff->y > 0) {
+            return $diff->y . ' año' . ($diff->y > 1 ? 's' : '');
+        } elseif ($diff->m > 0) {
+            return $diff->m . ' mes' . ($diff->m > 1 ? 'es' : '');
+        } elseif ($diff->d > 0) {
+            return $diff->d . ' día' . ($diff->d > 1 ? 's' : '');
+        } else {
+            return 'Hoy';
+        }
+    }
+
+    /**
+     * Verifica si el perfil está completo
+     */
+    #[Groups(['user:detailed'])]
+    public function isPerfilCompleto(): bool
+    {
+        return !empty($this->nombre) && 
+               !empty($this->apellidos) && 
+               !empty($this->email) && 
+               (!$this->isEstudiante() || !empty($this->universidad));
+    }
+
+    /**
+     * Obtiene el porcentaje de completitud del perfil
+     */
+    #[Groups(['user:detailed'])]
+    public function getCompletitudPerfil(): int
+    {
+        $campos = ['nombre', 'apellidos', 'email'];
+        $camposOpcionales = ['dni', 'telefono', 'universidad', 'departamento'];
+        
+        $completados = 0;
+        $total = count($campos) + count($camposOpcionales);
+        
+        foreach ($campos as $campo) {
+            if (!empty($this->$campo)) {
+                $completados++;
+            }
+        }
+        
+        foreach ($camposOpcionales as $campo) {
+            if (!empty($this->$campo)) {
+                $completados++;
+            }
+        }
+        
+        return round(($completados / $total) * 100);
+    }
+
     public function __toString(): string
     {
-        return $this->getNombreCompleto();
+        return $this->getNombreCompleto() ?: $this->email ?: 'Usuario #' . $this->id;
     }
 }
