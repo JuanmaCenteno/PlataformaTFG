@@ -1,67 +1,256 @@
 import { useState } from 'react'
+import { defensaAPI, tribunalAPI, userAPI } from '../services/api'
 
 export const useCalendario = () => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
-  // Obtener defensas del profesor
-  const obtenerDefensas = async (filtros = {}) => {
+  // Obtener eventos del calendario para un rango de fechas
+  const obtenerEventos = async (fechaInicio, fechaFin) => {
     setLoading(true)
     setError(null)
     
     try {
-      await new Promise(resolve => setTimeout(resolve, 800))
+      const response = await defensaAPI.getCalendario(fechaInicio, fechaFin)
       
-      // Datos simulados más completos
-      const defensas = [
-        {
-          id: 1,
-          titulo: "Sistema de Gestión de TFGs con React y Symfony",
-          estudiante: { nombre: "Juan Pérez", email: "juan.perez@estudiante.edu" },
-          fecha: "2025-02-15T10:00:00Z",
-          duracion: 60,
-          aula: "Aula 301",
-          estado: "Programado",
-          miRol: "Presidente",
-          tribunal: {
-            id: 1,
-            nombre: "Tribunal TFG - Desarrollo Web",
-            presidente: "Dr. María García",
-            vocales: ["Dr. Carlos López", "Dra. Ana Martín"]
-          },
-          conflictos: [], // Sin conflictos
-          recordatoriosEnviados: false
-        },
-        {
-          id: 2,
-          titulo: "Aplicación Móvil para Gestión de Entregas",
-          estudiante: { nombre: "María Silva", email: "maria.silva@estudiante.edu" },
-          fecha: "2025-02-17T12:00:00Z",
-          duracion: 60,
-          aula: "Aula 205",
-          estado: "Programado",
-          miRol: "Vocal",
-          tribunal: {
-            id: 2,
-            nombre: "Tribunal TFG - Desarrollo Móvil",
-            presidente: "Dr. Pedro Ruiz",
-            vocales: ["Dr. María García", "Dra. Isabel Moreno"]
-          },
-          conflictos: [
-            {
-              tipo: "profesor_ocupado",
-              descripcion: "Dr. Pedro Ruiz tiene clase hasta las 12:30",
-              gravedad: "media"
-            }
-          ],
-          recordatoriosEnviados: false
+      // Formatear eventos para FullCalendar
+      const events = response.data.events || response.data.data || response.data
+      const formattedEvents = events.map(event => ({
+        id: event.id,
+        title: event.title,
+        start: event.start,
+        end: event.end,
+        backgroundColor: event.backgroundColor || '#3788d8',
+        borderColor: event.borderColor || '#3788d8',
+        extendedProps: {
+          tfg_id: event.extendedProps?.tfg_id,
+          tribunal_id: event.extendedProps?.tribunal_id,
+          aula: event.extendedProps?.aula,
+          estudiante: event.extendedProps?.estudiante,
+          estado: event.extendedProps?.estado || 'programada'
         }
-      ]
+      }))
       
-      return { success: true, data: defensas }
+      return { 
+        success: true, 
+        data: formattedEvents
+      }
       
     } catch (err) {
-      const errorMessage = err.response?.data?.message || 'Error al obtener defensas'
+      const errorMessage = err.response?.data?.message || 
+                          err.response?.data?.error || 
+                          'Error al obtener eventos del calendario'
+      setError(errorMessage)
+      return { success: false, error: errorMessage }
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Obtener defensas del profesor (alias para compatibilidad)
+  const obtenerDefensas = async (filtros = {}) => {
+    const fechaInicio = filtros.fechaInicio || new Date().toISOString().split('T')[0]
+    const fechaFin = filtros.fechaFin || new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+    
+    const eventos = await obtenerEventos(fechaInicio, fechaFin)
+    
+    if (!eventos.success) return eventos
+    
+    // Convertir eventos a formato defensas para compatibilidad
+    const defensas = eventos.data.map(evento => ({
+      id: evento.id,
+      titulo: evento.title,
+      fecha: evento.start,
+      duracion: evento.extendedProps?.duracion || 60,
+      aula: evento.extendedProps?.aula,
+      estado: evento.extendedProps?.estado || 'Programado',
+      estudiante: {
+        nombre: evento.extendedProps?.estudiante
+      },
+      tribunal: {
+        id: evento.extendedProps?.tribunal_id
+      }
+    }))
+    
+    return { success: true, data: defensas }
+  }
+
+  // Crear nueva defensa/evento
+  const crearEvento = async (datosEvento) => {
+    setLoading(true)
+    setError(null)
+    
+    try {
+      const response = await defensaAPI.create(datosEvento)
+      
+      return { 
+        success: true, 
+        data: response.data,
+        message: 'Evento creado correctamente'
+      }
+      
+    } catch (err) {
+      const errorMessage = err.response?.data?.message || 
+                          err.response?.data?.error || 
+                          'Error al crear evento'
+      setError(errorMessage)
+      return { success: false, error: errorMessage }
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Programar nueva defensa (alias para compatibilidad)
+  const programarDefensa = async (datosDefensa) => {
+    // Adaptar formato de datos para la API
+    const datosAPI = {
+      tfg_id: datosDefensa.tfgId,
+      tribunal_id: datosDefensa.tribunalId,
+      fecha_defensa: `${datosDefensa.fecha}T${datosDefensa.hora}:00`,
+      aula: datosDefensa.aula,
+      duracion_estimada: datosDefensa.duracion || 30,
+      observaciones: datosDefensa.observaciones || ''
+    }
+    
+    return crearEvento(datosAPI)
+  }
+
+  // Actualizar evento existente
+  const actualizarEvento = async (eventoId, datosEvento) => {
+    setLoading(true)
+    setError(null)
+    
+    try {
+      const response = await defensaAPI.update(eventoId, datosEvento)
+      
+      return { 
+        success: true, 
+        data: response.data,
+        message: 'Evento actualizado correctamente'
+      }
+      
+    } catch (err) {
+      const errorMessage = err.response?.data?.message || 
+                          err.response?.data?.error || 
+                          'Error al actualizar evento'
+      setError(errorMessage)
+      return { success: false, error: errorMessage }
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Modificar defensa (alias para compatibilidad)
+  const modificarDefensa = async (defensaId, cambios) => {
+    const datosAPI = {}
+    
+    if (cambios.fecha && cambios.hora) {
+      datosAPI.fecha_defensa = `${cambios.fecha}T${cambios.hora}:00`
+    }
+    if (cambios.aula) {
+      datosAPI.aula = cambios.aula
+    }
+    if (cambios.duracion) {
+      datosAPI.duracion_estimada = cambios.duracion
+    }
+    if (cambios.observaciones) {
+      datosAPI.observaciones = cambios.observaciones
+    }
+    
+    return actualizarEvento(defensaId, datosAPI)
+  }
+
+  // Eliminar evento
+  const eliminarEvento = async (eventoId) => {
+    setLoading(true)
+    setError(null)
+    
+    try {
+      await defensaAPI.delete(eventoId)
+      
+      return { 
+        success: true,
+        message: 'Evento eliminado correctamente'
+      }
+      
+    } catch (err) {
+      const errorMessage = err.response?.data?.message || 
+                          err.response?.data?.error || 
+                          'Error al eliminar evento'
+      setError(errorMessage)
+      return { success: false, error: errorMessage }
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Cancelar defensa (alias para compatibilidad)
+  const cancelarDefensa = async (defensaId, motivo) => {
+    const cambios = {
+      estado: 'cancelada',
+      observaciones: motivo
+    }
+    
+    return actualizarEvento(defensaId, cambios)
+  }
+
+  // Mover evento (arrastrar y soltar)
+  const moverEvento = async (eventoId, nuevaFecha, nuevaHora) => {
+    const nuevaFechaHora = `${nuevaFecha}T${nuevaHora || '10:00:00'}`
+    
+    return actualizarEvento(eventoId, {
+      fecha_defensa: nuevaFechaHora
+    })
+  }
+
+  // Redimensionar evento (cambiar duración)
+  const redimensionarEvento = async (eventoId, nuevaDuracion) => {
+    return actualizarEvento(eventoId, {
+      duracion_estimada: nuevaDuracion
+    })
+  }
+
+  // Obtener tribunales disponibles
+  const obtenerTribunalesDisponibles = async () => {
+    setLoading(true)
+    setError(null)
+    
+    try {
+      const response = await tribunalAPI.getAll()
+      
+      return { 
+        success: true, 
+        data: response.data.data || response.data
+      }
+      
+    } catch (err) {
+      const errorMessage = err.response?.data?.message || 
+                          err.response?.data?.error || 
+                          'Error al obtener tribunales'
+      setError(errorMessage)
+      return { success: false, error: errorMessage }
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Obtener profesores disponibles
+  const obtenerProfesoresDisponibles = async () => {
+    setLoading(true)
+    setError(null)
+    
+    try {
+      const response = await userAPI.getProfesores()
+      
+      return { 
+        success: true, 
+        data: response.data.data || response.data
+      }
+      
+    } catch (err) {
+      const errorMessage = err.response?.data?.message || 
+                          err.response?.data?.error || 
+                          'Error al obtener profesores'
       setError(errorMessage)
       return { success: false, error: errorMessage }
     } finally {
@@ -71,45 +260,59 @@ export const useCalendario = () => {
 
   // Detectar conflictos de horario
   const detectarConflictos = async (fechaHora, duracion, tribunalId, defensaId = null) => {
+    setLoading(true)
+    setError(null)
+    
     try {
-      await new Promise(resolve => setTimeout(resolve, 500))
+      const fecha = new Date(fechaHora)
+      const fechaStr = fecha.toISOString().split('T')[0]
+      
+      // Obtener eventos del día
+      const eventos = await obtenerEventos(fechaStr, fechaStr)
+      
+      if (!eventos.success) {
+        throw new Error(eventos.error)
+      }
       
       const conflictos = []
       const fechaInicio = new Date(fechaHora)
       const fechaFin = new Date(fechaInicio.getTime() + duracion * 60000)
       
-      // Simular verificación de conflictos
+      // Verificar solapamiento con otros eventos
+      eventos.data.forEach(evento => {
+        if (evento.id === defensaId) return // Excluir el evento actual si se está modificando
+        
+        const eventoInicio = new Date(evento.start)
+        const eventoFin = new Date(evento.end)
+        
+        // Verificar solapamiento
+        if (fechaInicio < eventoFin && fechaFin > eventoInicio) {
+          conflictos.push({
+            tipo: 'defensa_solapada',
+            descripcion: `Conflicto con: ${evento.title}`,
+            gravedad: 'alta',
+            evento: evento
+          })
+        }
+      })
       
-      // 1. Conflictos con otras defensas
-      if (fechaInicio.getHours() === 10 && fechaInicio.getMinutes() === 30) {
+      // Verificar horarios de trabajo (9:00-18:00, lunes a viernes)
+      const diaSemana = fechaInicio.getDay()
+      const hora = fechaInicio.getHours()
+      
+      if (diaSemana === 0 || diaSemana === 6) {
         conflictos.push({
-          tipo: 'defensa_solapada',
-          descripcion: 'Hay otra defensa programada de 10:00 a 11:00',
-          gravedad: 'alta',
-          sugerencia: 'Cambiar a las 11:30 o 14:00'
+          tipo: 'fin_de_semana',
+          descripcion: 'Se recomienda programar en días laborables',
+          gravedad: 'media'
         })
       }
       
-      // 2. Conflictos con horarios de clase
-      if (fechaInicio.getDay() >= 1 && fechaInicio.getDay() <= 5) { // Lunes a viernes
-        if (fechaInicio.getHours() >= 9 && fechaInicio.getHours() <= 11) {
-          conflictos.push({
-            tipo: 'horario_docencia',
-            descripcion: 'Horario de clases regulares (9:00-11:00)',
-            gravedad: 'media',
-            sugerencia: 'Considerar horario de tarde'
-          })
-        }
-      }
-      
-      // 3. Disponibilidad de miembros del tribunal
-      const miembrosOcupados = Math.random() > 0.7 // 30% probabilidad
-      if (miembrosOcupados) {
+      if (hora < 9 || hora >= 18) {
         conflictos.push({
-          tipo: 'profesor_ocupado',
-          descripcion: 'Uno o más miembros del tribunal no están disponibles',
-          gravedad: 'alta',
-          sugerencia: 'Verificar disponibilidad de todos los miembros'
+          tipo: 'fuera_horario_laboral',
+          descripcion: 'Fuera del horario laboral recomendado (9:00-18:00)',
+          gravedad: 'media'
         })
       }
       
@@ -117,96 +320,14 @@ export const useCalendario = () => {
         success: true,
         conflictos,
         recomendaciones: conflictos.length > 0 ? [
+          { hora: '10:00', disponibilidad: 'alta' },
           { hora: '14:00', disponibilidad: 'alta' },
-          { hora: '16:00', disponibilidad: 'media' },
-          { hora: '11:30', disponibilidad: 'baja' }
+          { hora: '16:00', disponibilidad: 'media' }
         ] : []
       }
       
     } catch (err) {
-      return { success: false, error: 'Error al detectar conflictos' }
-    }
-  }
-
-  // Programar nueva defensa con verificaciones
-  const programarDefensa = async (datosDefensa) => {
-    setLoading(true)
-    setError(null)
-    
-    try {
-      // 1. Validaciones básicas
-      if (!datosDefensa.tfgId) throw new Error('Debe seleccionar un TFG')
-      if (!datosDefensa.fecha) throw new Error('La fecha es obligatoria')
-      if (!datosDefensa.hora) throw new Error('La hora es obligatoria')
-      if (!datosDefensa.aula) throw new Error('Debe seleccionar un aula')
-      if (!datosDefensa.tribunalId) throw new Error('Debe asignar un tribunal')
-
-      const fechaDefensa = new Date(`${datosDefensa.fecha}T${datosDefensa.hora}`)
-      if (fechaDefensa <= new Date()) {
-        throw new Error('La fecha debe ser futura')
-      }
-
-      // 2. Detectar conflictos
-      const conflictosResult = await detectarConflictos(
-        fechaDefensa, 
-        datosDefensa.duracion || 60, 
-        datosDefensa.tribunalId
-      )
-      
-      if (!conflictosResult.success) {
-        throw new Error('Error al verificar conflictos')
-      }
-
-      // 3. Verificar disponibilidad del aula
-      const disponibilidadAula = await verificarDisponibilidadAula(
-        datosDefensa.aula, 
-        fechaDefensa, 
-        datosDefensa.duracion || 60
-      )
-      
-      if (!disponibilidadAula.disponible) {
-        throw new Error(`El aula ${datosDefensa.aula} no está disponible en ese horario`)
-      }
-
-      // 4. Si hay conflictos graves, requerir confirmación
-      const conflictosGraves = conflictosResult.conflictos.filter(c => c.gravedad === 'alta')
-      if (conflictosGraves.length > 0 && !datosDefensa.forzarProgramacion) {
-        return {
-          success: false,
-          requiereConfirmacion: true,
-          conflictos: conflictosResult.conflictos,
-          recomendaciones: conflictosResult.recomendaciones
-        }
-      }
-
-      // 5. Crear la defensa
-      await new Promise(resolve => setTimeout(resolve, 1200))
-
-      const nuevaDefensa = {
-        id: Date.now(),
-        ...datosDefensa,
-        fechaDefensa: fechaDefensa.toISOString(),
-        estado: 'Programado',
-        conflictos: conflictosResult.conflictos.filter(c => c.gravedad !== 'alta'),
-        fechaCreacion: new Date().toISOString(),
-        recordatoriosEnviados: false
-      }
-
-      // 6. Enviar notificaciones automáticamente
-      await enviarNotificacionDefensa(nuevaDefensa.id, 'programada', [
-        nuevaDefensa.estudiante?.email,
-        ...nuevaDefensa.tribunal?.vocales?.map(v => `${v.toLowerCase().replace(' ', '.')}@uni.edu`) || []
-      ])
-
-      return { 
-        success: true, 
-        data: nuevaDefensa, 
-        message: 'Defensa programada correctamente',
-        conflictos: conflictosResult.conflictos
-      }
-      
-    } catch (err) {
-      const errorMessage = err.message || 'Error al programar defensa'
+      const errorMessage = err.message || 'Error al detectar conflictos'
       setError(errorMessage)
       return { success: false, error: errorMessage }
     } finally {
@@ -214,44 +335,33 @@ export const useCalendario = () => {
     }
   }
 
-  // Verificar disponibilidad de aula mejorada
+  // Verificar disponibilidad de aula
   const verificarDisponibilidadAula = async (aula, fechaHora, duracion) => {
+    setLoading(true)
+    setError(null)
+    
     try {
-      await new Promise(resolve => setTimeout(resolve, 300))
+      const fecha = new Date(fechaHora)
+      const fechaStr = fecha.toISOString().split('T')[0]
+      
+      // Obtener eventos del día
+      const eventos = await obtenerEventos(fechaStr, fechaStr)
+      
+      if (!eventos.success) {
+        throw new Error(eventos.error)
+      }
       
       const fechaInicio = new Date(fechaHora)
       const fechaFin = new Date(fechaInicio.getTime() + duracion * 60000)
       
-      // Simular base de datos de reservas de aulas
-      const reservasExistentes = [
-        {
-          aula: "Aula 301",
-          fecha: "2025-02-15",
-          horaInicio: "09:00",
-          horaFin: "10:00",
-          evento: "Clase de Programación",
-          tipo: "docencia"
-        },
-        {
-          aula: "Aula 205",
-          fecha: "2025-02-17",
-          horaInicio: "11:30",
-          horaFin: "12:30",
-          evento: "Defensa TFG - Carlos Ruiz",
-          tipo: "defensa"
-        }
-      ]
-      
-      // Verificar conflictos
-      const conflictos = reservasExistentes.filter(reserva => {
-        if (reserva.aula !== aula) return false
-        if (reserva.fecha !== fechaInicio.toISOString().split('T')[0]) return false
+      // Verificar conflictos con el aula específica
+      const conflictos = eventos.data.filter(evento => {
+        if (evento.extendedProps?.aula !== aula) return false
         
-        const reservaInicio = new Date(`${reserva.fecha}T${reserva.horaInicio}:00`)
-        const reservaFin = new Date(`${reserva.fecha}T${reserva.horaFin}:00`)
+        const eventoInicio = new Date(evento.start)
+        const eventoFin = new Date(evento.end)
         
-        // Verificar solapamiento
-        return (fechaInicio < reservaFin && fechaFin > reservaInicio)
+        return fechaInicio < eventoFin && fechaFin > eventoInicio
       })
       
       const disponible = conflictos.length === 0
@@ -260,20 +370,23 @@ export const useCalendario = () => {
         success: true,
         disponible,
         conflictos: conflictos.map(c => ({
-          evento: c.evento,
-          horaInicio: c.horaInicio,
-          horaFin: c.horaFin,
-          tipo: c.tipo
+          evento: c.title,
+          inicio: c.start,
+          fin: c.end
         })),
         sugerencias: !disponible ? [
+          { hora: "10:00", disponible: true },
           { hora: "14:00", disponible: true },
-          { hora: "16:00", disponible: true },
-          { hora: "08:00", disponible: true }
+          { hora: "16:00", disponible: true }
         ] : []
       }
       
     } catch (err) {
-      return { success: false, disponible: false, error: 'Error al verificar disponibilidad' }
+      const errorMessage = err.message || 'Error al verificar disponibilidad'
+      setError(errorMessage)
+      return { success: false, disponible: false, error: errorMessage }
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -283,48 +396,12 @@ export const useCalendario = () => {
     setError(null)
     
     try {
-      await new Promise(resolve => setTimeout(resolve, 500))
+      // Obtener eventos del período
+      const eventos = await obtenerEventos(fechaInicio, fechaFin)
       
-      // Simular horarios del profesor
-      const horarioBase = {
-        lunes: [
-          { inicio: "09:00", fin: "11:00", tipo: "docencia", descripcion: "Ingeniería de Software" },
-          { inicio: "15:00", fin: "17:00", tipo: "tutorías", descripcion: "Tutorías" }
-        ],
-        martes: [
-          { inicio: "10:00", fin: "12:00", tipo: "docencia", descripcion: "Bases de Datos" }
-        ],
-        miércoles: [
-          { inicio: "09:00", fin: "11:00", tipo: "docencia", descripcion: "Ingeniería de Software" },
-          { inicio: "16:00", fin: "18:00", tipo: "investigación", descripcion: "Investigación" }
-        ],
-        jueves: [
-          { inicio: "10:00", fin: "12:00", tipo: "docencia", descripcion: "Bases de Datos" }
-        ],
-        viernes: [
-          { inicio: "09:00", fin: "10:00", tipo: "reuniones", descripcion: "Reunión de departamento" }
-        ]
+      if (!eventos.success) {
+        throw new Error(eventos.error)
       }
-      
-      // Eventos específicos (defensas, reuniones especiales, etc.)
-      const eventosEspecificos = [
-        {
-          fecha: '2025-02-15',
-          horaInicio: '10:00',
-          horaFin: '11:00',
-          evento: 'Defensa TFG - Juan Pérez',
-          tipo: 'defensa',
-          prioridad: 'alta'
-        },
-        {
-          fecha: '2025-02-17',
-          horaInicio: '14:00',
-          horaFin: '15:30',
-          evento: 'Reunión de coordinación',
-          tipo: 'reunión',
-          prioridad: 'media'
-        }
-      ]
       
       // Generar disponibilidad por días
       const disponibilidad = []
@@ -332,35 +409,32 @@ export const useCalendario = () => {
       const fin = new Date(fechaFin)
       
       for (let fecha = new Date(inicio); fecha <= fin; fecha.setDate(fecha.getDate() + 1)) {
-        const diaSemana = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'][fecha.getDay()]
         const fechaStr = fecha.toISOString().split('T')[0]
+        const eventosDelDia = eventos.data.filter(evento => 
+          evento.start.startsWith(fechaStr)
+        )
         
-        const horariosDelDia = horarioBase[diaSemana] || []
-        const eventosDelDia = eventosEspecificos.filter(e => e.fecha === fechaStr)
-        
-        // Combinar horarios base y eventos específicos
-        const ocupaciones = [
-          ...horariosDelDia.map(h => ({
-            ...h,
-            fecha: fechaStr,
-            prioridad: h.tipo === 'docencia' ? 'alta' : 'media'
-          })),
-          ...eventosDelDia
-        ]
+        const ocupaciones = eventosDelDia.map(evento => ({
+          inicio: new Date(evento.start).toTimeString().slice(0, 5),
+          fin: new Date(evento.end).toTimeString().slice(0, 5),
+          descripcion: evento.title,
+          tipo: 'defensa',
+          prioridad: 'alta'
+        }))
         
         disponibilidad.push({
           fecha: fechaStr,
-          diaSemana,
+          diaSemana: ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'][fecha.getDay()],
           ocupaciones,
           horasLibres: calcularHorasLibres(ocupaciones),
-          recomendaciones: generarRecomendaciones(ocupaciones, diaSemana)
+          recomendaciones: generarRecomendaciones(ocupaciones, fecha.getDay())
         })
       }
       
       return { success: true, data: disponibilidad }
       
     } catch (err) {
-      const errorMessage = 'Error al obtener disponibilidad del profesor'
+      const errorMessage = err.message || 'Error al obtener disponibilidad del profesor'
       setError(errorMessage)
       return { success: false, error: errorMessage }
     } finally {
@@ -371,19 +445,17 @@ export const useCalendario = () => {
   // Función auxiliar para calcular horas libres
   const calcularHorasLibres = (ocupaciones) => {
     const horariosOcupados = ocupaciones.map(o => ({
-      inicio: o.horaInicio || o.inicio,
-      fin: o.horaFin || o.fin
+      inicio: o.inicio,
+      fin: o.fin
     }))
     
-    // Horario laboral de 8:00 a 20:00
     const horasLibres = []
-    let horaActual = 8
+    let horaActual = 9 // Empezar a las 9:00
     
     horariosOcupados
       .sort((a, b) => a.inicio.localeCompare(b.inicio))
       .forEach(ocupacion => {
         const inicioOcupacion = parseInt(ocupacion.inicio.split(':')[0])
-        const finOcupacion = parseInt(ocupacion.fin.split(':')[0])
         
         if (horaActual < inicioOcupacion) {
           horasLibres.push({
@@ -393,15 +465,15 @@ export const useCalendario = () => {
           })
         }
         
-        horaActual = Math.max(horaActual, finOcupacion)
+        horaActual = Math.max(horaActual, parseInt(ocupacion.fin.split(':')[0]) + 1)
       })
     
     // Tiempo libre después de la última ocupación
-    if (horaActual < 20) {
+    if (horaActual < 18) {
       horasLibres.push({
         inicio: `${horaActual.toString().padStart(2, '0')}:00`,
-        fin: '20:00',
-        duracion: 20 - horaActual
+        fin: '18:00',
+        duracion: 18 - horaActual
       })
     }
     
@@ -412,29 +484,26 @@ export const useCalendario = () => {
   const generarRecomendaciones = (ocupaciones, diaSemana) => {
     const recomendaciones = []
     
-    // Mejores horarios por día de la semana
     const mejoresHorarios = {
-      lunes: ['14:00', '16:00'],
-      martes: ['14:00', '15:00', '16:00'],
-      miércoles: ['12:00', '14:00'],
-      jueves: ['14:00', '16:00'],
-      viernes: ['11:00', '14:00', '16:00']
+      1: ['10:00', '14:00', '16:00'], // Lunes
+      2: ['10:00', '14:00', '15:00'], // Martes
+      3: ['10:00', '12:00', '14:00'], // Miércoles
+      4: ['10:00', '14:00', '16:00'], // Jueves
+      5: ['10:00', '12:00', '14:00']  // Viernes
     }
     
-    const horariosSugeridos = mejoresHorarios[diaSemana] || ['14:00', '16:00']
+    const horariosSugeridos = mejoresHorarios[diaSemana] || ['10:00', '14:00']
     
     horariosSugeridos.forEach(hora => {
       const tieneConflicto = ocupaciones.some(o => {
-        const inicio = o.horaInicio || o.inicio
-        const fin = o.horaFin || o.fin
-        return hora >= inicio && hora < fin
+        return hora >= o.inicio && hora < o.fin
       })
       
       if (!tieneConflicto) {
         recomendaciones.push({
           hora,
           calidad: 'alta',
-          motivo: 'Horario sin conflictos académicos'
+          motivo: 'Horario sin conflictos'
         })
       }
     })
@@ -442,211 +511,58 @@ export const useCalendario = () => {
     return recomendaciones
   }
 
-  // Enviar notificaciones automáticas
-  const enviarNotificacionDefensa = async (defensaId, tipo, destinatarios) => {
-    try {
-      await new Promise(resolve => setTimeout(resolve, 500))
-      
-      const tiposNotificacion = {
-        programada: {
-          asunto: 'Nueva defensa TFG programada',
-          plantilla: 'defensa_programada'
-        },
-        modificada: {
-          asunto: 'Cambios en defensa TFG',
-          plantilla: 'defensa_modificada'
-        },
-        cancelada: {
-          asunto: 'Defensa TFG cancelada',
-          plantilla: 'defensa_cancelada'
-        },
-        recordatorio: {
-          asunto: 'Recordatorio: Defensa TFG mañana',
-          plantilla: 'recordatorio_defensa'
-        }
-      }
-      
-      const notificacion = tiposNotificacion[tipo]
-      if (!notificacion) throw new Error('Tipo de notificación no válido')
-      
-      // Simular envío de emails
-      console.log(`📧 Enviando ${notificacion.asunto} a:`, destinatarios)
-      
-      // Aquí iría la integración real con servicio de email
-      
-      return { 
-        success: true, 
-        message: `Notificaciones enviadas a ${destinatarios.length} destinatarios`,
-        enviados: destinatarios.length
-      }
-      
-    } catch (err) {
-      return { success: false, error: err.message || 'Error al enviar notificaciones' }
-    }
-  }
-
-  // Programar recordatorios automáticos
-  const programarRecordatorios = async (defensaId, fechaDefensa) => {
-    try {
-      const fecha = new Date(fechaDefensa)
-      const ahora = new Date()
-      
-      // Recordatorio 24 horas antes
-      const recordatorio24h = new Date(fecha.getTime() - 24 * 60 * 60 * 1000)
-      // Recordatorio 2 horas antes
-      const recordatorio2h = new Date(fecha.getTime() - 2 * 60 * 60 * 1000)
-      
-      const recordatorios = []
-      
-      if (recordatorio24h > ahora) {
-        recordatorios.push({
-          fecha: recordatorio24h,
-          tipo: 'recordatorio_24h',
-          defensaId
-        })
-      }
-      
-      if (recordatorio2h > ahora) {
-        recordatorios.push({
-          fecha: recordatorio2h,
-          tipo: 'recordatorio_2h',
-          defensaId
-        })
-      }
-      
-      // En una implementación real, estos se guardarían en base de datos
-      // y un cron job los procesaría
-      
-      return {
-        success: true,
-        recordatoriosProgramados: recordatorios.length,
-        recordatorios
-      }
-      
-    } catch (err) {
-      return { success: false, error: 'Error al programar recordatorios' }
-    }
-  }
-
-  // Resto de funciones existentes...
-  const modificarDefensa = async (defensaId, cambios) => {
-    setLoading(true)
-    setError(null)
-    
-    try {
-      // Si cambia fecha/hora, verificar conflictos
-      if (cambios.fecha || cambios.hora) {
-        const nuevaFecha = cambios.fecha ? 
-          new Date(`${cambios.fecha}T${cambios.hora || '10:00'}`) :
-          new Date(cambios.fechaCompleta)
-          
-        if (nuevaFecha <= new Date()) {
-          throw new Error('La nueva fecha debe ser futura')
-        }
-        
-        // Verificar conflictos
-        const conflictosResult = await detectarConflictos(
-          nuevaFecha, 
-          cambios.duracion || 60, 
-          cambios.tribunalId
-        )
-        
-        if (conflictosResult.conflictos.some(c => c.gravedad === 'alta') && !cambios.forzar) {
-          return {
-            success: false,
-            requiereConfirmacion: true,
-            conflictos: conflictosResult.conflictos
-          }
-        }
-      }
-      
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      
-      // Enviar notificación de cambio
-      await enviarNotificacionDefensa(defensaId, 'modificada', [])
-      
-      return { success: true, message: 'Defensa modificada correctamente' }
-      
-    } catch (err) {
-      const errorMessage = err.message || 'Error al modificar defensa'
-      setError(errorMessage)
-      return { success: false, error: errorMessage }
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const cancelarDefensa = async (defensaId, motivo) => {
-    setLoading(true)
-    setError(null)
-    
-    try {
-      await new Promise(resolve => setTimeout(resolve, 800))
-      
-      if (!motivo || motivo.trim().length < 10) {
-        throw new Error('Debe proporcionar un motivo de cancelación (mínimo 10 caracteres)')
-      }
-
-      // Enviar notificación de cancelación
-      await enviarNotificacionDefensa(defensaId, 'cancelada', [])
-
-      return { success: true, message: 'Defensa cancelada correctamente' }
-      
-    } catch (err) {
-      const errorMessage = err.message || 'Error al cancelar defensa'
-      setError(errorMessage)
-      return { success: false, error: errorMessage }
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  // Funciones auxiliares existentes simplificadas...
+  // Obtener aulas disponibles
   const obtenerAulasDisponibles = async (fecha, duracion = 60) => {
     setLoading(true)
+    setError(null)
+    
     try {
-      await new Promise(resolve => setTimeout(resolve, 500))
-      
-      const aulas = [
+      // Lista de aulas disponibles (esto podría venir de una API dedicada)
+      const todasLasAulas = [
         { id: 'aula-101', nombre: 'Aula 101', capacidad: 30, equipamiento: ['Proyector', 'Audio'] },
         { id: 'aula-102', nombre: 'Aula 102', capacidad: 25, equipamiento: ['Proyector'] },
         { id: 'aula-205', nombre: 'Aula 205', capacidad: 40, equipamiento: ['Proyector', 'Audio', 'Pizarra Digital'] },
-        { id: 'aula-301', nombre: 'Aula 301', capacidad: 35, equipamiento: ['Proyector', 'Audio'] }
+        { id: 'aula-301', nombre: 'Aula 301', capacidad: 35, equipamiento: ['Proyector', 'Audio'] },
+        { id: 'salon-actos', nombre: 'Salón de Actos', capacidad: 100, equipamiento: ['Proyector', 'Audio', 'Micrófonos'] }
       ]
       
-      return { success: true, data: aulas }
+      // Obtener eventos del día para verificar disponibilidad
+      const eventos = await obtenerEventos(fecha, fecha)
+      
+      if (eventos.success) {
+        const aulasOcupadas = eventos.data
+          .map(evento => evento.extendedProps?.aula)
+          .filter(Boolean)
+        
+        const aulasDisponibles = todasLasAulas.filter(aula => 
+          !aulasOcupadas.includes(aula.nombre)
+        )
+        
+        return { success: true, data: aulasDisponibles }
+      }
+      
+      return { success: true, data: todasLasAulas }
+      
     } catch (err) {
-      return { success: false, error: 'Error al obtener aulas' }
+      const errorMessage = err.message || 'Error al obtener aulas disponibles'
+      setError(errorMessage)
+      return { success: false, error: errorMessage }
     } finally {
       setLoading(false)
-    }
-  }
-
-  const obtenerTFGsListosParaDefensa = async () => {
-    try {
-      await new Promise(resolve => setTimeout(resolve, 600))
-      
-      const tfgs = [
-        {
-          id: 1,
-          titulo: 'Sistema de Gestión de TFGs con React y Symfony',
-          estudiante: 'Juan Pérez',
-          tutor: 'Dr. Carlos López',
-          fechaAprobacion: '2025-01-20',
-          tribunalSugerido: 'Tribunal TFG - Desarrollo Web'
-        }
-      ]
-      
-      return { success: true, data: tfgs }
-    } catch (err) {
-      return { success: false, error: 'Error al obtener TFGs' }
     }
   }
 
   return {
     loading,
     error,
-    // Funciones principales
+    // Funciones principales de calendario
+    obtenerEventos,
+    crearEvento,
+    actualizarEvento,
+    eliminarEvento,
+    moverEvento,
+    redimensionarEvento,
+    // Funciones de defensas (compatibilidad)
     obtenerDefensas,
     programarDefensa,
     modificarDefensa,
@@ -655,12 +571,9 @@ export const useCalendario = () => {
     detectarConflictos,
     obtenerDisponibilidadProfesor,
     verificarDisponibilidadAula,
-    // Notificaciones
-    enviarNotificacionDefensa,
-    programarRecordatorios,
-    // Utilidades
     obtenerAulasDisponibles,
-    obtenerTFGsListosParaDefensa,
+    obtenerTribunalesDisponibles,
+    obtenerProfesoresDisponibles,
     clearError: () => setError(null)
   }
 }

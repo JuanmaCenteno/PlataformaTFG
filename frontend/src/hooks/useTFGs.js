@@ -1,55 +1,50 @@
 import { useState } from 'react'
+import { tfgAPI } from '../services/api'
 
 export const useTFGs = () => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
-  // Simular subida de TFG (después será axios a Symfony)
-  const subirTFG = async (formData) => {
+  // Subir TFG con archivo
+  const subirTFG = async (formData, onProgress) => {
     setLoading(true)
     setError(null)
     
     try {
-      // Simular validación en servidor
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      
-      // Simular creación de FormData para envío
+      // Crear FormData para envío multipart
       const dataToSend = new FormData()
       dataToSend.append('titulo', formData.titulo)
+      dataToSend.append('descripcion', formData.descripcion || '')
       dataToSend.append('resumen', formData.resumen)
-      dataToSend.append('palabrasClave', formData.palabrasClave)
-      dataToSend.append('area', formData.area)
-      dataToSend.append('tipoTFG', formData.tipoTFG)
-      dataToSend.append('idioma', formData.idioma)
+      
+      // Convertir palabras clave a JSON si es array
+      if (Array.isArray(formData.palabrasClave)) {
+        dataToSend.append('palabras_clave', JSON.stringify(formData.palabrasClave))
+      } else {
+        dataToSend.append('palabras_clave', formData.palabrasClave)
+      }
+      
+      dataToSend.append('tutor_id', formData.tutorId)
+      if (formData.cotutorId) {
+        dataToSend.append('cotutor_id', formData.cotutorId)
+      }
+      
       if (formData.archivo) {
         dataToSend.append('archivo', formData.archivo)
       }
 
-      // Aquí iría la llamada real a Symfony:
-      // const response = await axios.post('/api/tfgs', dataToSend, {
-      //   headers: { 'Content-Type': 'multipart/form-data' },
-      //   onUploadProgress: (progressEvent) => {
-      //     const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total)
-      //     onProgress?.(progress)
-      //   }
-      // })
-
-      // Simular respuesta exitosa
-      const response = {
-        success: true,
-        data: {
-          id: Math.random().toString(36).substr(2, 9),
-          ...formData,
-          fechaSubida: new Date().toISOString(),
-          estado: 'En revisión',
-          comentarios: 0
-        }
+      const response = await tfgAPI.create(dataToSend)
+      
+      return { 
+        success: true, 
+        data: response.data,
+        message: 'TFG subido correctamente'
       }
-
-      return response
       
     } catch (err) {
-      const errorMessage = err.response?.data?.message || 'Error al subir el TFG'
+      const errorMessage = err.response?.data?.message || 
+                          err.response?.data?.error || 
+                          'Error al subir el TFG'
       setError(errorMessage)
       return { success: false, error: errorMessage }
     } finally {
@@ -57,36 +52,24 @@ export const useTFGs = () => {
     }
   }
 
-  // Obtener TFGs del estudiante
+  // Obtener TFGs del estudiante/profesor/admin
   const obtenerMisTFGs = async () => {
     setLoading(true)
     setError(null)
     
     try {
-      // Simular llamada a API
-      await new Promise(resolve => setTimeout(resolve, 500))
+      const response = await tfgAPI.getMisTFGs()
       
-      // Aquí iría la llamada real:
-      // const response = await axios.get('/api/estudiante/tfgs')
-      
-      // Datos simulados
-      const tfgs = [
-        {
-          id: 1,
-          titulo: "Sistema de Gestión de TFGs con React y Symfony",
-          estado: "En revisión",
-          fechaSubida: "2025-01-15",
-          tutor: "Dr. María García",
-          area: "Desarrollo Web",
-          comentarios: 2,
-          archivo: "tfg_juan_perez.pdf"
-        }
-      ]
-      
-      return { success: true, data: tfgs }
+      return { 
+        success: true, 
+        data: response.data.data || response.data,
+        meta: response.data.meta
+      }
       
     } catch (err) {
-      const errorMessage = err.response?.data?.message || 'Error al obtener TFGs'
+      const errorMessage = err.response?.data?.message || 
+                          err.response?.data?.error || 
+                          'Error al obtener TFGs'
       setError(errorMessage)
       return { success: false, error: errorMessage }
     } finally {
@@ -100,16 +83,68 @@ export const useTFGs = () => {
     setError(null)
     
     try {
-      // Simular guardado de borrador
-      await new Promise(resolve => setTimeout(resolve, 800))
+      const response = await tfgAPI.guardarBorrador(formData)
       
-      // Aquí iría la llamada real:
-      // const response = await axios.post('/api/tfgs/borrador', formData)
-      
-      return { success: true, message: 'Borrador guardado correctamente' }
+      return { 
+        success: true, 
+        data: response.data,
+        message: 'Borrador guardado correctamente' 
+      }
       
     } catch (err) {
-      const errorMessage = err.response?.data?.message || 'Error al guardar borrador'
+      const errorMessage = err.response?.data?.message || 
+                          err.response?.data?.error || 
+                          'Error al guardar borrador'
+      setError(errorMessage)
+      return { success: false, error: errorMessage }
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Actualizar TFG existente
+  const actualizarTFG = async (tfgId, formData) => {
+    setLoading(true)
+    setError(null)
+    
+    try {
+      const response = await tfgAPI.update(tfgId, formData)
+      
+      return { 
+        success: true, 
+        data: response.data,
+        message: 'TFG actualizado correctamente' 
+      }
+      
+    } catch (err) {
+      const errorMessage = err.response?.data?.message || 
+                          err.response?.data?.error || 
+                          'Error al actualizar TFG'
+      setError(errorMessage)
+      return { success: false, error: errorMessage }
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Cambiar estado del TFG (solo profesores/admin)
+  const cambiarEstado = async (tfgId, nuevoEstado, comentario = '') => {
+    setLoading(true)
+    setError(null)
+    
+    try {
+      const response = await tfgAPI.updateEstado(tfgId, nuevoEstado, comentario)
+      
+      return { 
+        success: true, 
+        data: response.data,
+        message: `TFG marcado como ${nuevoEstado}` 
+      }
+      
+    } catch (err) {
+      const errorMessage = err.response?.data?.message || 
+                          err.response?.data?.error || 
+                          'Error al cambiar estado del TFG'
       setError(errorMessage)
       return { success: false, error: errorMessage }
     } finally {
@@ -123,15 +158,42 @@ export const useTFGs = () => {
     setError(null)
     
     try {
-      await new Promise(resolve => setTimeout(resolve, 500))
-      
-      // Aquí iría la llamada real:
-      // await axios.delete(`/api/tfgs/${tfgId}`)
+      await tfgAPI.delete(tfgId)
       
       return { success: true, message: 'TFG eliminado correctamente' }
       
     } catch (err) {
-      const errorMessage = err.response?.data?.message || 'Error al eliminar TFG'
+      const errorMessage = err.response?.data?.message || 
+                          err.response?.data?.error || 
+                          'Error al eliminar TFG'
+      setError(errorMessage)
+      return { success: false, error: errorMessage }
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Subir archivo a TFG existente
+  const subirArchivo = async (tfgId, archivo, onProgress) => {
+    setLoading(true)
+    setError(null)
+    
+    try {
+      const response = await tfgAPI.upload(tfgId, archivo, (progressEvent) => {
+        const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+        onProgress?.(progress)
+      })
+      
+      return { 
+        success: true, 
+        data: response.data,
+        message: 'Archivo subido correctamente' 
+      }
+      
+    } catch (err) {
+      const errorMessage = err.response?.data?.message || 
+                          err.response?.data?.error || 
+                          'Error al subir archivo'
       setError(errorMessage)
       return { success: false, error: errorMessage }
     } finally {
@@ -141,33 +203,78 @@ export const useTFGs = () => {
 
   // Descargar TFG
   const descargarTFG = async (tfgId, nombreArchivo) => {
+    setError(null)
+    
     try {
-      // Aquí iría la llamada real para descargar:
-      // const response = await axios.get(`/api/tfgs/${tfgId}/download`, {
-      //   responseType: 'blob'
-      // })
-      // const url = window.URL.createObjectURL(new Blob([response.data]))
-      // const link = document.createElement('a')
-      // link.href = url
-      // link.setAttribute('download', nombreArchivo)
-      // document.body.appendChild(link)
-      // link.click()
-      // link.remove()
+      const response = await tfgAPI.download(tfgId)
       
-      // Simulación - descargar archivo de ejemplo
+      // Crear URL del blob y descargar
+      const url = window.URL.createObjectURL(new Blob([response.data]))
       const link = document.createElement('a')
-      link.href = '#'
-      link.setAttribute('download', nombreArchivo)
+      link.href = url
+      link.setAttribute('download', nombreArchivo || `tfg_${tfgId}.pdf`)
       document.body.appendChild(link)
       link.click()
       link.remove()
+      window.URL.revokeObjectURL(url)
       
-      return { success: true }
+      return { success: true, message: 'Archivo descargado correctamente' }
       
     } catch (err) {
-      const errorMessage = 'Error al descargar el archivo'
+      const errorMessage = err.response?.data?.message || 
+                          err.response?.data?.error || 
+                          'Error al descargar el archivo'
       setError(errorMessage)
       return { success: false, error: errorMessage }
+    }
+  }
+
+  // Obtener comentarios de un TFG
+  const obtenerComentarios = async (tfgId) => {
+    setLoading(true)
+    setError(null)
+    
+    try {
+      const response = await tfgAPI.getComentarios(tfgId)
+      
+      return { 
+        success: true, 
+        data: response.data.data || response.data
+      }
+      
+    } catch (err) {
+      const errorMessage = err.response?.data?.message || 
+                          err.response?.data?.error || 
+                          'Error al obtener comentarios'
+      setError(errorMessage)
+      return { success: false, error: errorMessage }
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Añadir comentario a un TFG
+  const añadirComentario = async (tfgId, comentario) => {
+    setLoading(true)
+    setError(null)
+    
+    try {
+      const response = await tfgAPI.addComentario(tfgId, comentario)
+      
+      return { 
+        success: true, 
+        data: response.data,
+        message: 'Comentario añadido correctamente' 
+      }
+      
+    } catch (err) {
+      const errorMessage = err.response?.data?.message || 
+                          err.response?.data?.error || 
+                          'Error al añadir comentario'
+      setError(errorMessage)
+      return { success: false, error: errorMessage }
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -177,8 +284,13 @@ export const useTFGs = () => {
     subirTFG,
     obtenerMisTFGs,
     guardarBorrador,
+    actualizarTFG,
+    cambiarEstado,
     eliminarTFG,
+    subirArchivo,
     descargarTFG,
+    obtenerComentarios,
+    añadirComentario,
     clearError: () => setError(null)
   }
 }
