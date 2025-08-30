@@ -1,8 +1,10 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useTFGs } from '../../hooks/useTFGs'
 
 function SubirTFG() {
   const navigate = useNavigate()
+  const { subirTFG, loading: tfgLoading, error: tfgError } = useTFGs()
   
   // Estado del formulario
   const [formData, setFormData] = useState({
@@ -16,11 +18,9 @@ function SubirTFG() {
   })
   
   // Estado de la UI
-  const [loading, setLoading] = useState(false)
   const [uploadProgress, setUploadProgress] = useState(0)
   const [errors, setErrors] = useState({})
   const [dragActive, setDragActive] = useState(false)
-  const [previewUrl, setPreviewUrl] = useState(null)
 
   // Opciones para los selects
   const areas = [
@@ -105,10 +105,6 @@ function SubirTFG() {
 
     setFormData(prev => ({ ...prev, archivo: file }))
     setErrors(prev => ({ ...prev, archivo: '' }))
-    
-    // Crear preview URL
-    const url = URL.createObjectURL(file)
-    setPreviewUrl(url)
   }
 
   // Validar formulario completo
@@ -126,20 +122,10 @@ function SubirTFG() {
     return newErrors
   }
 
-  // Simular subida con progress
-  const simulateUpload = () => {
-    return new Promise((resolve) => {
-      let progress = 0
-      const interval = setInterval(() => {
-        progress += Math.random() * 15
-        if (progress >= 100) {
-          progress = 100
-          clearInterval(interval)
-          resolve()
-        }
-        setUploadProgress(Math.min(progress, 100))
-      }, 200)
-    })
+  // Función para manejar el progress de subida
+  const handleUploadProgress = (progressEvent) => {
+    const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+    setUploadProgress(progress)
   }
 
   // Manejar envío del formulario
@@ -152,25 +138,34 @@ function SubirTFG() {
       return
     }
 
-    setLoading(true)
     setUploadProgress(0)
+    setErrors({})
 
     try {
-      // Simular subida (después será axios a Symfony)
-      await simulateUpload()
+      // Preparar datos para envío (convertir palabras clave a array)
+      const datosEnvio = {
+        ...formData,
+        palabrasClave: formData.palabrasClave.split(',').map(p => p.trim()),
+        // Campos adicionales que podría necesitar el backend
+        tutorId: 1, // TODO: obtener del contexto de usuario
+        cotutorId: null
+      }
+
+      // Usar hook real para subir TFG con progress tracking
+      const resultado = await subirTFG(datosEnvio, handleUploadProgress)
       
-      // Simular envío de datos
-      await new Promise(resolve => setTimeout(resolve, 1000))
+      if (resultado.success) {
+        // Redirigir a mis TFGs con mensaje de éxito
+        navigate('/estudiante/mis-tfgs', { 
+          state: { message: resultado.message || 'TFG subido correctamente' }
+        })
+      } else {
+        setErrors({ general: resultado.error || 'Error al subir el TFG' })
+      }
       
-      // Redirigir a mis TFGs con mensaje de éxito
-      navigate('/estudiante/mis-tfgs', { 
-        state: { message: 'TFG subido correctamente' }
-      })
-      
-    } catch (error) {
-      setErrors({ general: 'Error al subir el TFG. Inténtalo de nuevo.' })
-    } finally {
-      setLoading(false)
+    } catch (err) {
+      console.error('Error al subir TFG:', err)
+      setErrors({ general: 'Error inesperado al subir el TFG. Inténtalo de nuevo.' })
     }
   }
 
@@ -185,9 +180,9 @@ function SubirTFG() {
 
       <form onSubmit={handleSubmit} className="space-y-8">
         {/* Error general */}
-        {errors.general && (
+        {(errors.general || tfgError) && (
           <div className="bg-red-50 border border-red-200 rounded-md p-4">
-            <p className="text-sm text-red-600">{errors.general}</p>
+            <p className="text-sm text-red-600">{errors.general || tfgError}</p>
           </div>
         )}
 
@@ -366,7 +361,6 @@ function SubirTFG() {
                   type="button"
                   onClick={() => {
                     setFormData(prev => ({ ...prev, archivo: null }))
-                    setPreviewUrl(null)
                   }}
                   className="text-sm text-red-600 hover:text-red-800"
                 >
@@ -410,7 +404,7 @@ function SubirTFG() {
           </p>
 
           {/* Progress bar */}
-          {loading && uploadProgress > 0 && (
+          {tfgLoading && uploadProgress > 0 && (
             <div className="mt-4">
               <div className="flex justify-between text-sm text-gray-600 mb-1">
                 <span>Subiendo archivo...</span>
@@ -445,14 +439,14 @@ function SubirTFG() {
             </button>
             <button
               type="submit"
-              disabled={loading}
+              disabled={tfgLoading}
               className={`px-6 py-2 rounded-md text-white font-medium ${
-                loading
+                tfgLoading
                   ? 'bg-gray-400 cursor-not-allowed'
                   : 'bg-blue-600 hover:bg-blue-700'
               }`}
             >
-              {loading ? 'Subiendo...' : 'Subir TFG'}
+              {tfgLoading ? 'Subiendo...' : 'Subir TFG'}
             </button>
           </div>
         </div>
