@@ -3,7 +3,15 @@
     "allow": [
       "Bash(npm run lint:*)",
       "Bash(tree:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(./scripts/generate-pdf.sh:*)",
+      "Bash(sed:*)",
+      "Bash(pandoc:*)",
+      "Bash(docs/02_contexto_proyecto.md )",
+      "Bash(docs/03_planificacion.md )",
+      "Bash(docs/04_analisis_sistema.md )",
+      "Bash(docs/09_conclusiones.md )",
+      "Bash(./scripts/install_dependencies.sh:*)"
     ],
     "deny": [],
     "ask": []
