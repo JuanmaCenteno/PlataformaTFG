@@ -1,0 +1,115 @@
+\documentclass[12pt,a4paper,oneside]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish,english]{babel}
+\usepackage[margin=2.5cm,top=3cm,bottom=3cm]{geometry}
+\usepackage{fancyhdr}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{tocloft}
+\usepackage{titlesec}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{calc}
+\usepackage{float}
+\usepackage{setspace}
+\usepackage{parskip}
+
+% Definir tightlist si no existe
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+% Definir pandocbounded si no existe
+\providecommand{\pandocbounded}[1]{#1}
+
+% Definir passthrough si no existe
+\providecommand{\passthrough}[1]{\texttt{#1}}
+
+% Configuración de spacing
+\onehalfspacing
+\setlength{\parskip}{6pt}
+
+% Configuración de colores para código
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+% Configuración de listings
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+\lstset{style=mystyle}
+
+% Headers y footers
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[R]{\small\leftmark}
+\fancyfoot[C]{\thepage}
+
+% Configuración de títulos
+\titleformat{\chapter}[display]
+{\normalfont\huge\bfseries}{\chaptertitlename\ \thechapter}{20pt}{\Huge}
+\titlespacing*{\chapter}{0pt}{0pt}{40pt}
+
+% Configuración de hyperlinks
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    citecolor=red,
+    pdftitle={Plataforma de Gestión de TFG - Documentación Técnica},
+    pdfauthor={Juan Mariano Centeno Ariza},
+    pdfsubject={Trabajo de Fin de Grado - Ingeniería Informática},
+    pdfcreator={Pandoc with LaTeX},
+    pdfkeywords={TFG, React, Symfony, Plataforma Web}
+}
+
+% Configuración de tabla de contenidos
+\setcounter{tocdepth}{3}
+\setcounter{secnumdepth}{3}
+
+\begin{document}
+
+% Incluir portada
+\input{template/portada.tex}
+
+% Tabla de contenidos
+\tableofcontents
+\newpage
+
+% Lista de figuras
+\listoffigures
+\newpage
+
+% Lista de tablas
+\listoftables
+\newpage
+
+% Contenido principal
+$body$
+
+% Bibliografía (si existe)
+\bibliographystyle{plain}
+\bibliography{referencias}
+
+\end{document}
