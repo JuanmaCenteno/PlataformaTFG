@@ -315,7 +315,7 @@ gantt
     axisFormat %s
     
     section Fundación
-    Setup entorno          :done, setup, 0, 2
+    Configuración entorno   :done, setup, 0, 2
     Sistema autenticación   :done, auth, 1, 3
     
     section Módulos Usuario
@@ -330,7 +330,7 @@ gantt
     Backend Symfony         :active, backend, 6, 9
     
     section Finalización
-    Testing y deploy        :deploy, 8, 10
+    Pruebas y despliegue    :deploy, 8, 10
 ```
 
 **Hitos críticos identificados**:

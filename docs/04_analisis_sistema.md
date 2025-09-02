@@ -423,9 +423,9 @@ UC012 ..> UC010 : <<include>>
 participant "Estudiante" as EST
 participant "Frontend" as FE
 participant "Backend API" as BE
-participant "File Storage" as FS
-participant "Database" as DB
-participant "Notification" as NOT
+participant "Almacén Archivos" as FS
+participant "Base Datos" as DB
+participant "Notificaciones" as NOT
 
 EST -> FE: Selecciona archivo PDF
 FE -> FE: Valida tipo y tamaño
@@ -449,8 +449,8 @@ FE -> EST: Confirma subida exitosa
 participant "Profesor" as PROF
 participant "Frontend" as FE
 participant "Backend API" as BE
-participant "Database" as DB
-participant "Notification" as NOT
+participant "Base Datos" as DB
+participant "Notificaciones" as NOT
 
 PROF -> FE: Cambia estado TFG
 FE -> BE: PUT /api/tfgs/{id}/estado
@@ -477,9 +477,9 @@ end
 participant "Presidente" as PRES
 participant "Frontend" as FE
 participant "Backend API" as BE
-participant "Calendar Service" as CAL
-participant "Database" as DB
-participant "Email Service" as EMAIL
+participant "Servicio Calendario" as CAL
+participant "Base Datos" as DB
+participant "Servicio Email" as EMAIL
 
 PRES -> FE: Programa nueva defensa
 FE -> BE: POST /api/defensas

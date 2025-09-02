@@ -12,22 +12,22 @@ El frontend constituye la capa de presentación del sistema, desarrollado como u
 
 ```plantuml
 @startuml
-package "Frontend Architecture" {
+package "Arquitectura Frontend" {
   
-  package "Presentation Layer" {
-    [Layout Component]
-    [Navigation]
-    [Protected Routes]
-    [Page Components]
+  package "Capa Presentación" {
+    [Componente Layout]
+    [Navegación]
+    [Rutas Protegidas]
+    [Componentes Página]
   }
   
-  package "State Management" {
+  package "Gestión Estado" {
     [AuthContext]
     [NotificacionesContext]
-    [Custom Hooks]
+    [Hooks Personalizados]
   }
   
-  package "Business Logic" {
+  package "Lógica Negocio" {
     [useTFGs]
     [useUsuarios]
     [useTribunales]
@@ -35,28 +35,28 @@ package "Frontend Architecture" {
     [useReportes]
   }
   
-  package "Data Layer" {
-    [API Services]
-    [HTTP Client (Axios)]
-    [Error Handling]
+  package "Capa Datos" {
+    [Servicios API]
+    [Cliente HTTP (Axios)]
+    [Manejo Errores]
   }
   
-  package "UI Components" {
-    [Form Components]
-    [Calendar Components]
-    [File Upload]
-    [Notification System]
+  package "Componentes UI" {
+    [Componentes Formulario]
+    [Componentes Calendario]
+    [Subida Archivos]
+    [Sistema Notificaciones]
   }
 }
 
-[Layout Component] --> [Navigation]
-[Navigation] --> [Protected Routes]
-[Protected Routes] --> [Page Components]
-[Page Components] --> [Custom Hooks]
-[Custom Hooks] --> [API Services]
-[API Services] --> [HTTP Client (Axios)]
-[AuthContext] --> [Protected Routes]
-[NotificacionesContext] --> [Notification System]
+[Componente Layout] --> [Navegación]
+[Navegación] --> [Rutas Protegidas]
+[Rutas Protegidas] --> [Componentes Página]
+[Componentes Página] --> [Hooks Personalizados]
+[Hooks Personalizados] --> [Servicios API]
+[Servicios API] --> [Cliente HTTP (Axios)]
+[AuthContext] --> [Rutas Protegidas]
+[NotificacionesContext] --> [Sistema Notificaciones]
 
 @enduml
 ```
@@ -156,51 +156,51 @@ El backend implementa una arquitectura hexagonal (puertos y adaptadores) usando 
 
 ```plantuml
 @startuml
-package "Backend Hexagonal Architecture" {
+package "Arquitectura Hexagonal Backend" {
 
-  package "Domain Layer" {
-    [Entities]
-    [Value Objects]
-    [Domain Services]
-    [Business Rules]
+  package "Capa Dominio" {
+    [Entidades]
+    [Objetos Valor]
+    [Servicios Dominio]
+    [Reglas Negocio]
   }
 
-  package "Application Layer" {
-    [Use Cases]
-    [Application Services]
+  package "Capa Aplicación" {
+    [Casos Uso]
+    [Servicios Aplicación]
     [DTOs]
-    [Validation]
+    [Validación]
   }
 
-  package "Infrastructure Layer" {
+  package "Capa Infraestructura" {
     [Doctrine ORM]
-    [Repositories]
-    [External Services]
-    [Event Listeners]
+    [Repositorios]
+    [Servicios Externos]
+    [Escuchadores Eventos]
   }
 
-  package "Interface Layer" {
-    [API Controllers]
-    [Serializers]
-    [Security]
-    [CORS Handler]
+  package "Capa Interfaz" {
+    [Controladores API]
+    [Serializadores]
+    [Seguridad]
+    [Manejador CORS]
   }
 
-  package "Ports" {
-    interface "Repository Ports"
-    interface "Service Ports"
-    interface "Event Ports"
+  package "Puertos" {
+    interface "Puertos Repositorio"
+    interface "Puertos Servicio"
+    interface "Puertos Evento"
   }
 
 }
 
-[API Controllers] --> [Application Services]
-[Application Services] --> [Use Cases]
-[Use Cases] --> [Domain Services]
-[Domain Services] --> [Entities]
-[Repositories] ..|> "Repository Ports"
-[External Services] ..|> "Service Ports"
-[Event Listeners] ..|> "Event Ports"
+[Controladores API] --> [Servicios Aplicación]
+[Servicios Aplicación] --> [Casos Uso]
+[Casos Uso] --> [Servicios Dominio]
+[Servicios Dominio] --> [Entidades]
+[Repositorios] ..|> "Puertos Repositorio"
+[Servicios Externos] ..|> "Puertos Servicio"
+[Escuchadores Eventos] ..|> "Puertos Evento"
 
 @enduml
 ```
@@ -336,15 +336,15 @@ vich_uploader:
 - **Virus scanning**: Integración con ClamAV para escaneo de malware
 - **Access control**: URLs firmadas temporalmente para descarga segura
 
-#### 5.1.4.2. Storage Strategy
+#### 5.1.4.2. Estrategia Almacenamiento
 
 ```plantuml
 @startuml
 participant "Frontend" as FE
-participant "Upload Controller" as UC
-participant "File Service" as FS
-participant "Storage" as ST
-participant "Database" as DB
+participant "Controlador Subida" as UC
+participant "Servicio Archivos" as FS
+participant "Almacén" as ST
+participant "Base Datos" as DB
 
 FE -> UC: POST /api/tfgs/{id}/upload
 UC -> UC: Validate MIME type
