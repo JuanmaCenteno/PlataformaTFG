@@ -5,9 +5,7 @@ vich_uploader:
         tfg_documents:
             uri_prefix: /uploads/tfgs
             upload_destination: '%kernel.project_dir%/public/uploads/tfgs'
-            namer: 
-                service: 'App\Service\TFGFileNamer'
-                options: { property: 'id' }
+            namer: App\Service\TFGFileNamer
             inject_on_load: false
             delete_on_update: true
             delete_on_remove: true

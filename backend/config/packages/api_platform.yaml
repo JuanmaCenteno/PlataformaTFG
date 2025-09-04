@@ -21,6 +21,14 @@ api_platform:
     patch_formats:
         json: ['application/json']
     
+    # Deshabilitar JSON-LD en documentación y errores
+    docs_formats:
+        json: ['application/json']
+        html: ['text/html']
+    
+    error_formats:
+        json: ['application/json']
+    
     # Configuración adicional para forzar JSON
     doctrine:
         enabled: true

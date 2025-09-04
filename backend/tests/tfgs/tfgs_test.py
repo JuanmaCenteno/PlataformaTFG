@@ -141,8 +141,8 @@ class TFGTestSuite:
             payload = {
                 "titulo": "TFG Test - Desarrollo de aplicación web (ACTUALIZADO)",
                 "descripcion": "Descripción actualizada del TFG de prueba",
-                "resumen": "Resumen actualizado con más detalles",
-                "palabras_clave": ["web", "react", "symfony", "test", "actualizado"]
+                "resumen": "Este es un resumen actualizado con más detalles sobre el desarrollo de aplicación web que cumple con el mínimo de cincuenta caracteres requeridos para la validación.",
+                "palabrasClave": "desarrollo web, aplicación, react, symfony, backend, frontend, testing, actualizado"
             }
             
             response = self.session.put(
@@ -210,7 +210,7 @@ class TFGTestSuite:
         try:
             payload = {
                 "estado": "revision",
-                "comentario": "TFG en proceso de revisión por el tutor"
+                "comentarios": "TFG en proceso de revisión por el tutor"
             }
             
             response = self.session.put(
