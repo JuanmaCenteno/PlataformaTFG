@@ -368,61 +368,7 @@ $body$
     print("✅ Template LaTeX completo creado en docs/template/")
 
 def main():
-    print("🚀 Iniciando generación completa del PDF...")
-    
-    # 0. Limpiar archivos previos
-    print("🧹 Limpiando archivos previos...")
-    if os.path.exists("docs/processed"):
-        shutil.rmtree("docs/processed")
-    if os.path.exists("docs/combined_complete.md"):
-        os.remove("docs/combined_complete.md")
-    
-    # 1. Crear archivos de template y portada
-    create_portada()
-    create_latex_template()
-    
-    # 2. Procesar documentos
-    processor = DocumentProcessor()
-    processed_files = processor.process_all_documents()
-    
-    # 3. Combinar documentos como capítulos separados
-    combined_content = ""
-    for file_path in processed_files:
-        with open(file_path, 'r', encoding='utf-8') as f:
-            content = f.read()
-            
-            # 1. Procesar el título H1 principal: extraer solo el texto sin numeración
-            # "# 1. Visión general del proyecto" → "# Visión general del proyecto"
-            content = re.sub(r'^# \d+\. (.+?)$', r'# \1', content, flags=re.MULTILINE, count=1)
-            
-            # 2. Eliminar numeración manual de TODOS los subtítulos
-            # "## 1.1. Motivación" → "## Motivación"
-            # "### 1.2.1. Objetivo General" → "### Objetivo General"
-            content = re.sub(r'^(##+ )\d+\.[\d\.]*\s*(.+?)$', r'\1\2', content, flags=re.MULTILINE)
-            
-            # 3. Convertir títulos H1 internos (que no sean el primero) a H2
-            lines = content.split('\n')
-            processed_lines = []
-            first_h1_found = False
-            
-            for line in lines:
-                if line.startswith('# '):
-                    if not first_h1_found:
-                        # El primer H1 se mantiene como capítulo principal
-                        first_h1_found = True
-                        processed_lines.append(line)
-                    else:
-                        # Los demás H1 se convierten en H2 para no romper la estructura
-                        processed_lines.append('##' + line[1:])
-                else:
-                    processed_lines.append(line)
-            
-            content = '\n'.join(processed_lines)
-            # Solo agregar al contenido (sin salto de página manual)
-            combined_content += content + "\n\n"
-    
-    with open("docs/combined_complete.md", "w", encoding='utf-8') as f:
-        f.write(combined_content)
+
     
     # 4. Generar PDF
     pandoc_cmd = [

@@ -749,3 +749,9 @@ fi
 
 echo "🎉 Verificación completada"
 ```
+
+---
+
+*Fecha de elaboración: 31 de agosto de 2025*  
+*Versión: 1.0*  
+*Anexo A del documento técnico ISO/IEEE 16326*

@@ -255,90 +255,7 @@ Los requisitos funcionales se organizan por rol de usuario, definiendo las capac
 
 El siguiente diagrama representa las principales interacciones entre los actores del sistema y las funcionalidades disponibles para cada rol.
 
-```plantuml
-@startuml
-left to right direction
-skinparam packageStyle rectangle
-
-actor "Estudiante" as EST
-actor "Profesor" as PROF
-actor "Presidente Tribunal" as PRES
-actor "Administrador" as ADM
-
-rectangle "Plataforma Gestión TFG" {
-  
-  package "Gestión de TFG" {
-    usecase "Crear TFG" as UC001
-    usecase "Editar TFG" as UC002
-    usecase "Subir archivo" as UC003
-    usecase "Seguir estado" as UC004
-  }
-  
-  package "Supervisión" {
-    usecase "Revisar TFG" as UC005
-    usecase "Comentar TFG" as UC006
-    usecase "Cambiar estado" as UC007
-    usecase "Calificar TFG" as UC008
-  }
-  
-  package "Gestión Defensas" {
-    usecase "Crear tribunal" as UC009
-    usecase "Programar defensa" as UC010
-    usecase "Gestionar calendario" as UC011
-    usecase "Generar acta" as UC012
-  }
-  
-  package "Administración" {
-    usecase "Gestionar usuarios" as UC013
-    usecase "Asignar roles" as UC014
-    usecase "Generar reportes" as UC015
-    usecase "Exportar datos" as UC016
-  }
-  
-  package "Autenticación" {
-    usecase "Iniciar sesión" as UC017
-    usecase "Gestionar perfil" as UC018
-  }
-}
-
-EST --> UC001
-EST --> UC002
-EST --> UC003
-EST --> UC004
-EST --> UC017
-EST --> UC018
-
-PROF --> UC005
-PROF --> UC006
-PROF --> UC007
-PROF --> UC008
-PROF --> UC017
-PROF --> UC018
-
-PRES --> UC009
-PRES --> UC010
-PRES --> UC011
-PRES --> UC012
-PRES --> UC005
-PRES --> UC006
-PRES --> UC007
-PRES --> UC017
-PRES --> UC018
-
-ADM --> UC013
-ADM --> UC014
-ADM --> UC015
-ADM --> UC016
-ADM --> UC017
-ADM --> UC018
-
-UC007 ..> UC006 : <<include>>
-UC008 ..> UC005 : <<include>>
-UC010 ..> UC009 : <<include>>
-UC012 ..> UC010 : <<include>>
-
-@enduml
-```
+![Diagrama PlantUML 1](processed/images/04_analisis_sistema_plantuml_0.png)
 
 ### 4.1.4. Descripción de casos de uso
 
@@ -418,83 +335,15 @@ UC012 ..> UC010 : <<include>>
 
 #### 4.1.5.1. Secuencia: Subida de archivo TFG
 
-```plantuml
-@startuml
-participant "Estudiante" as EST
-participant "Frontend" as FE
-participant "Backend API" as BE
-participant "Almacén Archivos" as FS
-participant "Base Datos" as DB
-participant "Notificaciones" as NOT
-
-EST -> FE: Selecciona archivo PDF
-FE -> FE: Valida tipo y tamaño
-FE -> BE: POST /api/tfgs/{id}/upload
-BE -> BE: Autentica usuario
-BE -> BE: Valida permisos
-BE -> FS: Almacena archivo
-FS -> BE: Confirma almacenamiento
-BE -> DB: Actualiza metadata TFG
-DB -> BE: Confirma actualización
-BE -> NOT: Notifica a tutor
-BE -> FE: Respuesta exitosa
-FE -> EST: Confirma subida exitosa
-@enduml
-```
+![Diagrama PlantUML 2](processed/images/04_analisis_sistema_plantuml_1.png)
 
 #### 4.1.5.2. Secuencia: Cambio de estado de TFG
 
-```plantuml
-@startuml
-participant "Profesor" as PROF
-participant "Frontend" as FE
-participant "Backend API" as BE
-participant "Base Datos" as DB
-participant "Notificaciones" as NOT
-
-PROF -> FE: Cambia estado TFG
-FE -> BE: PUT /api/tfgs/{id}/estado
-BE -> BE: Autentica profesor
-BE -> BE: Valida permisos tutor
-BE -> BE: Valida transición estado
-BE -> DB: Actualiza estado TFG
-BE -> DB: Registra comentario
-DB -> BE: Confirma cambios
-BE -> NOT: Notifica a estudiante
-BE -> FE: Respuesta exitosa
-FE -> PROF: Confirma cambio estado
-
-alt Estado = "aprobado"
-  BE -> NOT: Notifica presidente tribunal
-end
-@enduml
-```
+![Diagrama PlantUML 3](processed/images/04_analisis_sistema_plantuml_2.png)
 
 #### 4.1.5.3. Secuencia: Programación de defensa
 
-```plantuml
-@startuml
-participant "Presidente" as PRES
-participant "Frontend" as FE
-participant "Backend API" as BE
-participant "Servicio Calendario" as CAL
-participant "Base Datos" as DB
-participant "Servicio Email" as EMAIL
-
-PRES -> FE: Programa nueva defensa
-FE -> BE: POST /api/defensas
-BE -> BE: Autentica presidente
-BE -> BE: Valida TFG aprobado
-BE -> CAL: Verifica disponibilidad tribunal
-CAL -> BE: Confirma disponibilidad
-BE -> DB: Crea defensa programada
-DB -> BE: Confirma creación
-BE -> EMAIL: Envía notificaciones
-EMAIL -> BE: Confirma envío
-BE -> FE: Respuesta exitosa
-FE -> PRES: Confirma defensa programada
-@enduml
-```
+![Diagrama PlantUML 4](processed/images/04_analisis_sistema_plantuml_3.png)
 
 ### 4.1.6. Requisitos no funcionales
 

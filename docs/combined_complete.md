@@ -1,5 +1,6 @@
+# Visión general del proyecto
 
-## 1.1. Motivación
+## Motivación
 
 En el ámbito académico universitario, la gestión de Trabajos de Fin de Grado (TFG) representa un proceso complejo que involucra múltiples actores: estudiantes, profesores tutores, tribunales de evaluación y personal administrativo. Tradicionalmente, este proceso se ha gestionado de manera fragmentada, utilizando herramientas dispersas como correo electrónico, documentos físicos y hojas de cálculo, lo que genera ineficiencias, pérdida de información y dificultades en el seguimiento del progreso académico.
 
@@ -7,13 +8,13 @@ La digitalización de los procesos educativos se ha acelerado significativamente
 
 Además, el cumplimiento de normativas académicas específicas, la gestión de plazos estrictos y la coordinación entre diferentes departamentos universitarios demandan una solución tecnológica robusta que centralice toda la información relacionada con los TFG en un único sistema accesible y seguro.
 
-## 1.2. Objetivos
+## Objetivos
 
-### 1.2.1. Objetivo General
+### Objetivo General
 
 Desarrollar una plataforma web integral para la gestión completa del ciclo de vida de los Trabajos de Fin de Grado, desde la propuesta inicial hasta la defensa final, proporcionando un sistema unificado que mejore la eficiencia, transparencia y seguimiento del proceso académico.
 
-### 1.2.2. Objetivos Específicos
+### Objetivos Específicos
 
 **Objetivos Funcionales:**
 
@@ -42,9 +43,9 @@ Desarrollar una plataforma web integral para la gestión completa del ciclo de v
 - **OC4**: Asegurar compatibilidad cross-browser y responsive design para dispositivos móviles y tablets
 - **OC5**: Establecer un sistema de backup y recuperación de datos que garantice la disponibilidad del servicio
 
-## 1.3. Alcance
+## Alcance
 
-### 1.3.1. Alcance Funcional
+### Alcance Funcional
 
 **Incluido en el proyecto:**
 
@@ -65,7 +66,7 @@ Desarrollar una plataforma web integral para la gestión completa del ciclo de v
 - Funcionalidades de red social o colaboración entre estudiantes
 - Soporte multiidioma (solo español en esta versión)
 
-### 1.3.2. Alcance Técnico
+### Alcance Técnico
 
 **Tecnologías implementadas:**
 
@@ -84,7 +85,7 @@ Desarrollar una plataforma web integral para la gestión completa del ciclo de v
 - Despliegue en servidor único (no arquitectura de microservicios)
 - Almacenamiento local de archivos (no integración con servicios cloud en esta versión)
 
-### 1.3.3. Alcance Temporal
+### Alcance Temporal
 
 El proyecto se desarrolla en 8 fases distribuidas a lo largo de 10 semanas académicas:
 
@@ -92,7 +93,7 @@ El proyecto se desarrolla en 8 fases distribuidas a lo largo de 10 semanas acad�
 - **Fase 7**: En desarrollo (implementación backend Symfony)
 - **Fase 8**: Planificada (testing, optimización y despliegue)
 
-## 1.4. Visión general del documento
+## Visión general del documento
 
 Este documento técnico sigue el estándar ISO/IEEE 16326 para documentación de sistemas software, adaptado al contexto académico de un Trabajo de Fin de Grado. La estructura del documento está organizada de la siguiente manera:
 
@@ -116,18 +117,18 @@ Este documento técnico sigue el estándar ISO/IEEE 16326 para documentación de
 
 Los anexos incluyen manuales técnicos de instalación y usuario, así como documentación adicional de referencia.
 
-## 1.5. Estandarización del documento
+## Estandarización del documento
 
 Este documento ha sido desarrollado siguiendo las directrices del estándar **ISO/IEEE 16326:2009** - "Systems and software engineering - Life cycle processes - Project management", adaptado para proyectos académicos de desarrollo software.
 
-### 1.5.1. Normas aplicadas
+### Normas aplicadas
 
 - **ISO/IEEE 16326:2009**: Estructura principal del documento y gestión de proyectos
 - **IEEE Std 830-1998**: Especificación de requisitos software (Capítulo 4)
 - **IEEE Std 1016-2009**: Descripciones de diseño software (Capítulo 5)
 - **ISO/IEC 25010:2011**: Modelo de calidad del producto software (Capítulo 4.2)
 
-### 1.5.2. Convenciones del documento
+### Convenciones del documento
 
 **Formato de texto:**
 - Títulos principales: Numeración decimal (1., 1.1., 1.1.1.)
@@ -150,7 +151,7 @@ Este documento ha sido desarrollado siguiendo las directrices del estándar **IS
 - Formato APA para referencias académicas
 - Enlaces web con fecha de acceso
 
-## 1.6. Acrónimos
+## Acrónimos
 
 | Acrónimo | Significado |
 |----------|-------------|
@@ -183,7 +184,7 @@ Este documento ha sido desarrollado siguiendo las directrices del estándar **IS
 | **URL** | Uniform Resource Locator (Localizador Uniforme de Recursos) |
 | **UX** | User Experience (Experiencia de Usuario) |
 
-## 1.7. Definiciones
+## Definiciones
 
 **Backend**: Conjunto de tecnologías y servicios del lado del servidor que procesan la lógica de negocio, gestionan la base de datos y proporcionan APIs para el frontend.
 
@@ -231,14 +232,9 @@ Este documento ha sido desarrollado siguiendo las directrices del estándar **IS
 
 **Virtual DOM**: Representación en memoria de la estructura DOM real que permite a React calcular eficientemente los cambios mínimos necesarios para actualizar la interfaz.
 
----
+# Contexto del proyecto
 
-*Fecha de elaboración: 31 de agosto de 2025*  
-*Versión: 1.0*  
-*Estándar: ISO/IEEE 16326:2009*
-\newpage
-
-## 2.1. Descripción general del proyecto
+## Descripción general del proyecto
 
 La Plataforma de Gestión de TFG es un sistema web integral diseñado para automatizar y optimizar el ciclo completo de gestión de Trabajos de Fin de Grado en entornos universitarios. El sistema implementa una arquitectura moderna basada en tecnologías web actuales, proporcionando una solución escalable que aborda las necesidades específicas de cuatro tipos de usuarios diferenciados.
 
@@ -248,11 +244,11 @@ La arquitectura del sistema se basa en un patrón de separación de responsabili
 
 El sistema incorpora funcionalidades avanzadas como un calendario interactivo para la programación de defensas, un sistema de notificaciones en tiempo real, gestión segura de archivos PDF, y un completo panel administrativo con capacidades de reporting y exportación de datos.
 
-## 2.2. Características del usuario
+## Características del usuario
 
 El sistema ha sido diseñado para satisfacer las necesidades específicas de cuatro perfiles de usuario claramente diferenciados, cada uno con roles, permisos y flujos de trabajo particulares.
 
-### 2.2.1. Estudiante
+### Estudiante
 
 **Perfil**: Estudiante universitario en proceso de realización de su Trabajo de Fin de Grado, con conocimientos básicos de tecnologías web y experiencia en el uso de plataformas académicas digitales.
 
@@ -270,7 +266,7 @@ El sistema ha sido diseñado para satisfacer las necesidades específicas de cua
 - Comprensión de conceptos básicos de gestión documental digital
 - Familiaridad con herramientas de notificación electrónica
 
-### 2.2.2. Profesor/Tutor
+### Profesor/Tutor
 
 **Perfil**: Docente universitario con experiencia en dirección de TFG, responsable de la supervisión académica y evaluación de trabajos asignados.
 
@@ -288,7 +284,7 @@ El sistema ha sido diseñado para satisfacer las necesidades específicas de cua
 - Capacidad para proporcionar feedback constructivo a través de plataformas digitales
 - Comprensión de flujos de trabajo colaborativos online
 
-### 2.2.3. Presidente del Tribunal
+### Presidente del Tribunal
 
 **Perfil**: Profesor universitario con experiencia avanzada en evaluación académica, responsable de liderar tribunales de evaluación y coordinar el proceso de defensas.
 
@@ -306,7 +302,7 @@ El sistema ha sido diseñado para satisfacer las necesidades específicas de cua
 - Manejo experto de herramientas de calendario y programación
 - Comprensión de procedimientos administrativos universitarios
 
-### 2.2.4. Administrador
+### Administrador
 
 **Perfil**: Personal técnico o administrativo responsable de la gestión global del sistema, con conocimientos avanzados en administración de plataformas web y gestión de usuarios.
 
@@ -324,11 +320,11 @@ El sistema ha sido diseñado para satisfacer las necesidades específicas de cua
 - Capacidad analítica para interpretación de estadísticas
 - Comprensión de conceptos de seguridad y gestión de accesos
 
-## 2.3. Modelo de ciclo de vida
+## Modelo de ciclo de vida
 
 El desarrollo de la plataforma sigue un **modelo de ciclo de vida iterativo incremental**, estructurado en ocho fases bien definidas que permiten la entrega progresiva de funcionalidades y la validación continua de los requisitos.
 
-### 2.3.1. Metodología de desarrollo
+### Metodología de desarrollo
 
 **Enfoque adoptado**: El proyecto implementa una metodología ágil adaptada al contexto académico, combinando elementos de Scrum para la gestión iterativa con prácticas de desarrollo incremental que permiten la entrega de valor en cada fase.
 
@@ -338,7 +334,7 @@ El desarrollo de la plataforma sigue un **modelo de ciclo de vida iterativo incr
 - **Gestión de riesgos**: Identificación y mitigación progresiva de problemas técnicos
 - **Feedback continuo**: Posibilidad de ajustes basados en evaluación de fases anteriores
 
-### 2.3.2. Fases del proyecto
+### Fases del proyecto
 
 **Fase 1-2: Fundación del sistema (Semanas 1-2)**
 - Configuración del entorno de desarrollo
@@ -382,7 +378,7 @@ El desarrollo de la plataforma sigue un **modelo de ciclo de vida iterativo incr
 - Configuración de despliegue en producción
 - Documentación técnica y manuales de usuario
 
-### 2.3.3. Criterios de finalización de fase
+### Criterios de finalización de fase
 
 Cada fase debe cumplir criterios específicos antes de proceder a la siguiente:
 
@@ -391,11 +387,11 @@ Cada fase debe cumplir criterios específicos antes de proceder a la siguiente:
 - **Documentación actualizada**: Registro de cambios y decisiones técnicas
 - **Validación de requisitos**: Confirmación de cumplimiento de objetivos de fase
 
-## 2.4. Tecnologías
+## Tecnologías
 
 La selección tecnológica se basa en criterios de modernidad, estabilidad, escalabilidad y soporte de la comunidad, priorizando tecnologías con soporte a largo plazo y ecosistemas maduros.
 
-### 2.4.1. React 19
+### React 19
 
 React 19 constituye la biblioteca principal para el desarrollo del frontend de la aplicación, proporcionando un marco de trabajo robusto para la construcción de interfaces de usuario interactivas y componentes reutilizables.
 
@@ -411,7 +407,7 @@ React 19 constituye la biblioteca principal para el desarrollo del frontend de l
 - **Curva de aprendizaje**: Documentación extensa y comunidad activa
 - **Compatibilidad**: Excelente integración con herramientas de desarrollo y testing
 
-### 2.4.2. Symfony 6.4 LTS
+### Symfony 6.4 LTS
 
 Symfony 6.4 LTS se utiliza como framework principal para el desarrollo del backend, proporcionando una arquitectura sólida basada en componentes modulares y principios de desarrollo empresarial.
 
@@ -428,7 +424,7 @@ Symfony 6.4 LTS se utiliza como framework principal para el desarrollo del backe
 - **Rendimiento**: Optimizaciones internas y opcache de PHP para alta eficiencia
 - **Estándares PSR**: Cumplimiento de estándares de la comunidad PHP
 
-### 2.4.3. MySQL 8.0
+### MySQL 8.0
 
 MySQL 8.0 actúa como sistema de gestión de base de datos relacional, proporcionando persistencia segura y eficiente para todos los datos del sistema.
 
@@ -444,7 +440,7 @@ MySQL 8.0 actúa como sistema de gestión de base de datos relacional, proporcio
 - **Escalabilidad**: Capacidad de crecimiento horizontal y vertical
 - **Herramientas**: Ecosistema rico de herramientas de administración y monitorización
 
-### 2.4.4. API Platform 3.x
+### API Platform 3.x
 
 API Platform 3.x se utiliza para la generación automática de APIs REST, proporcionando funcionalidades avanzadas de serialización, documentación y validación.
 
@@ -460,7 +456,7 @@ API Platform 3.x se utiliza para la generación automática de APIs REST, propor
 - **Testing integrado**: Herramientas incorporadas para testing de APIs
 - **Documentación viva**: Documentación siempre actualizada automáticamente
 
-### 2.4.5. JWT Authentication (LexikJWTAuthenticationBundle)
+### JWT Authentication (LexikJWTAuthenticationBundle)
 
 La autenticación JWT proporciona un sistema de seguridad stateless, escalable y moderno para el control de acceso a la aplicación.
 
@@ -476,7 +472,7 @@ La autenticación JWT proporciona un sistema de seguridad stateless, escalable y
 - **Seguridad**: Resistente a ataques CSRF y compatible con HTTPS
 - **Interoperabilidad**: Estándar soportado por múltiples plataformas
 
-### 2.4.6. FullCalendar.js
+### FullCalendar.js
 
 FullCalendar.js proporciona la funcionalidad de calendario interactivo para la gestión visual de defensas y programación de eventos académicos.
 
@@ -492,7 +488,7 @@ FullCalendar.js proporciona la funcionalidad de calendario interactivo para la g
 - **Personalización**: Amplia capacidad de customización visual y funcional
 - **Rendimiento**: Optimizado para manejar grandes cantidades de eventos
 
-### 2.4.7. Tailwind CSS v4
+### Tailwind CSS v4
 
 Tailwind CSS v4 actúa como framework de estilos utility-first, proporcionando un sistema de diseño consistente y eficiente para toda la aplicación.
 
@@ -508,7 +504,7 @@ Tailwind CSS v4 actúa como framework de estilos utility-first, proporcionando u
 - **Optimización**: Purge automático de CSS no utilizado
 - **Mantenibilidad**: Estilos co-localizados con componentes
 
-### 2.4.8. DDEV
+### DDEV
 
 DDEV proporciona un entorno de desarrollo containerizado que garantiza consistencia entre diferentes máquinas de desarrollo y facilita el onboarding de nuevos desarrolladores.
 
@@ -524,9 +520,9 @@ DDEV proporciona un entorno de desarrollo containerizado que garantiza consisten
 - **Aislamiento**: Contenedores aislados que no interfieren con el sistema host
 - **Productividad**: Herramientas de desarrollo integradas y optimizadas
 
-## 2.5. Lenguajes
+## Lenguajes
 
-### 2.5.1. JavaScript/TypeScript
+### JavaScript/TypeScript
 
 JavaScript se utiliza como lenguaje principal para el desarrollo del frontend, aprovechando las características modernas de ECMAScript 2023 y preparado para migración incremental a TypeScript.
 
@@ -542,7 +538,7 @@ JavaScript se utiliza como lenguaje principal para el desarrollo del frontend, a
 - **Composition over inheritance**: Composición de funcionalidades mediante custom hooks
 - **Declarative programming**: Enfoque declarativo en lugar de imperativo
 
-### 2.5.2. PHP 8.2+
+### PHP 8.2+
 
 PHP 8.2+ actúa como lenguaje de backend, aprovechando las mejoras de rendimiento y características de tipado fuerte introducidas en versiones recientes.
 
@@ -559,7 +555,7 @@ PHP 8.2+ actúa como lenguaje de backend, aprovechando las mejoras de rendimient
 - **PSR standards**: Cumplimiento de estándares de la comunidad PHP
 - **Domain-driven design**: Organización del código según dominios de negocio
 
-### 2.5.3. SQL
+### SQL
 
 SQL se utiliza para definición de esquemas de base de datos, consultas complejas y procedimientos de migración, aprovechando características avanzadas de MySQL 8.0.
 
@@ -569,7 +565,7 @@ SQL se utiliza para definición de esquemas de base de datos, consultas compleja
 - **JSON functions**: Manipulación nativa de campos JSON en MySQL
 - **Stored procedures**: Lógica de negocio crítica ejecutada directamente en base de datos
 
-### 2.5.4. HTML/CSS
+### HTML/CSS
 
 HTML5 y CSS3 proporcionan la estructura semántica y presentación visual de la aplicación, siguiendo estándares web modernos y mejores prácticas de accesibilidad.
 
@@ -579,9 +575,9 @@ HTML5 y CSS3 proporcionan la estructura semántica y presentación visual de la 
 - **CSS Grid y Flexbox**: Sistemas de layout modernos para interfaces complejas
 - **CSS Custom Properties**: Variables CSS para theming y mantenibilidad
 
-## 2.6. Herramientas
+## Herramientas
 
-### 2.6.1. Visual Studio Code
+### Visual Studio Code
 
 VS Code actúa como IDE principal de desarrollo, configurado con extensiones específicas para el stack tecnológico del proyecto.
 
@@ -599,7 +595,7 @@ VS Code actúa como IDE principal de desarrollo, configurado con extensiones esp
 - **Task automation**: Scripts automatizados para comandos frecuentes
 - **Multi-root workspace**: Gestión simultánea de frontend y backend
 
-### 2.6.2. Vite
+### Vite
 
 Vite se utiliza como build tool y servidor de desarrollo para el frontend, proporcionando una experiencia de desarrollo optimizada con Hot Module Replacement.
 
@@ -614,7 +610,7 @@ Vite se utiliza como build tool y servidor de desarrollo para el frontend, propo
 - **vite-plugin-eslint**: Integración de ESLint en tiempo de desarrollo
 - **vite-plugin-pwa**: Preparación para futuras funcionalidades PWA
 
-### 2.6.3. Composer
+### Composer
 
 Composer gestiona las dependencias PHP del backend, garantizando versiones consistentes y resolución automática de dependencias.
 
@@ -624,7 +620,7 @@ Composer gestiona las dependencias PHP del backend, garantizando versiones consi
 - **Scripts personalizados**: Comandos automatizados para testing y despliegue
 - **Platform requirements**: Especificación de versiones mínimas de PHP y extensiones
 
-### 2.6.4. Docker / DDEV
+### Docker / DDEV
 
 Docker proporciona containerización del entorno de desarrollo, mientras DDEV ofrece una capa de abstracción específica para desarrollo web.
 
@@ -634,7 +630,7 @@ Docker proporciona containerización del entorno de desarrollo, mientras DDEV of
 - **PHPMyAdmin**: Interface web para administración de base de datos
 - **Mailpit**: Servidor SMTP local para testing de emails
 
-### 2.6.5. Git / GitHub
+### Git / GitHub
 
 Git actúa como sistema de control de versiones, con GitHub proporcionando hosting remoto, colaboración y herramientas de CI/CD.
 
@@ -644,7 +640,7 @@ Git actúa como sistema de control de versiones, con GitHub proporcionando hosti
 - **Pull requests**: Code review obligatorio antes de merge
 - **GitHub Actions**: CI/CD automatizado para testing y despliegue
 
-### 2.6.6. Postman / Insomnia
+### Postman / Insomnia
 
 Herramientas de testing de APIs REST que permiten validación exhaustiva de endpoints durante el desarrollo y documentación de casos de uso.
 
@@ -654,22 +650,18 @@ Herramientas de testing de APIs REST que permiten validación exhaustiva de endp
 - **Test scripts**: Validación automática de respuestas y status codes
 - **Documentation generation**: Generación automática de documentación de API
 
----
 
-*Fecha de elaboración: 31 de agosto de 2025*  
-*Versión: 1.0*  
-*Estándar: ISO/IEEE 16326:2009*
-\newpage
+# Planificación
 
-## 3.1. Iniciación del proyecto
+## Iniciación del proyecto
 
-### 3.1.1. Contexto de inicio
+### Contexto de inicio
 
 El proyecto "Plataforma de Gestión de TFG" se inicia como respuesta a la necesidad identificada en el entorno académico universitario de modernizar y automatizar los procesos de gestión de Trabajos de Fin de Grado. La iniciación formal del proyecto tuvo lugar tras un análisis preliminar de los procesos existentes y la identificación de oportunidades de mejora significativas en la eficiencia y trazabilidad del proceso académico.
 
 La decisión de desarrollo se basó en tres factores críticos: la disponibilidad de tecnologías web modernas que permiten desarrollo rápido y escalable, la experiencia previa en desarrollo full-stack con React y PHP, y la posibilidad de crear una solución integral que abarque todos los roles involucrados en el proceso de TFG.
 
-### 3.1.2. Análisis de viabilidad
+### Análisis de viabilidad
 
 **Viabilidad técnica**: El proyecto presenta alta viabilidad técnica dado que utiliza tecnologías consolidadas y ampliamente documentadas. React 19 y Symfony 6.4 LTS proporcionan ecosistemas maduros con extensas comunidades de soporte. La arquitectura propuesta (frontend SPA + backend API) es un patrón arquitectónico probado y escalable.
 
@@ -677,7 +669,7 @@ La decisión de desarrollo se basó en tres factores críticos: la disponibilida
 
 **Viabilidad de recursos**: El proyecto requiere únicamente recursos de desarrollo software y herramientas open-source o de libre acceso educativo. El entorno DDEV containerizado garantiza consistencia independientemente del hardware de desarrollo disponible.
 
-### 3.1.3. Definición del alcance inicial
+### Definición del alcance inicial
 
 El alcance inicial se estableció mediante la definición de requisitos mínimos viables (MVP) para cada rol de usuario:
 
@@ -688,11 +680,11 @@ El alcance inicial se estableció mediante la definición de requisitos mínimos
 
 Esta definición de MVP permite validación temprana de hipótesis y ajuste incremental de funcionalidades según feedback obtenido.
 
-## 3.2. Iteraciones del proceso de desarrollo
+## Iteraciones del proceso de desarrollo
 
 El desarrollo se estructura en iteraciones que siguen un patrón consistente: análisis de requisitos específicos, diseño de componentes, implementación, testing básico y validación funcional. Cada iteración entrega valor funcional acumulativo y prepara la base para la siguiente fase.
 
-### 3.2.1. Fase 1-2: Setup inicial y autenticación (Semanas 1-2)
+### Fase 1-2: Setup inicial y autenticación (Semanas 1-2)
 
 **Objetivos de la fase**:
 - Establecer la arquitectura base del proyecto frontend
@@ -727,7 +719,7 @@ El desarrollo se estructura en iteraciones que siguen un patrón consistente: an
 - La interfaz es responsive y sigue el sistema de diseño establecido
 - El código cumple con los estándares de linting configurados
 
-### 3.2.2. Fase 3: Módulo de estudiante (Semanas 3-4)
+### Fase 3: Módulo de estudiante (Semanas 3-4)
 
 **Objetivos de la fase**:
 - Implementar funcionalidades completas para el rol estudiante
@@ -761,7 +753,7 @@ El desarrollo se estructura en iteraciones que siguen un patrón consistente: an
 - Las notificaciones se muestran en tiempo real
 - Las interfaces son intuitivas y responsive
 
-### 3.2.3. Fase 4: Módulo de profesor (Semanas 4-5)
+### Fase 4: Módulo de profesor (Semanas 4-5)
 
 **Objetivos de la fase**:
 - Desarrollar herramientas de supervisión para profesores tutores
@@ -794,7 +786,7 @@ El desarrollo se estructura en iteraciones que siguen un patrón consistente: an
 - Los cambios de estado notifican apropiadamente a los estudiantes
 - Las validaciones de permisos funcionan correctamente
 
-### 3.2.4. Fase 5: Sistema de defensas y calendario (Semanas 5-6)
+### Fase 5: Sistema de defensas y calendario (Semanas 5-6)
 
 **Objetivos de la fase**:
 - Integrar FullCalendar.js para gestión visual de defensas
@@ -828,7 +820,7 @@ El desarrollo se estructura en iteraciones que siguen un patrón consistente: an
 - La programación de defensas es intuitiva y funcional
 - Las notificaciones se envían a todos los actores relevantes
 
-### 3.2.5. Fase 6: Panel administrativo (Semanas 6-7)
+### Fase 6: Panel administrativo (Semanas 6-7)
 
 **Objetivos de la fase**:
 - Desarrollar sistema completo de gestión de usuarios (CRUD)
@@ -862,7 +854,7 @@ El desarrollo se estructura en iteraciones que siguen un patrón consistente: an
 - Las exportaciones generan archivos correctamente formateados
 - La configuración global afecta apropiadamente el comportamiento del sistema
 
-### 3.2.6. Fase 7: Backend Symfony (Semanas 7-9)
+### Fase 7: Backend Symfony (Semanas 7-9)
 
 **Objetivos de la fase**:
 - Implementar backend completo con Symfony 6.4 LTS
@@ -902,7 +894,7 @@ El desarrollo se estructura en iteraciones que siguen un patrón consistente: an
 - Las APIs están correctamente documentadas y testeadas
 - El rendimiento del sistema cumple los objetivos establecidos
 
-### 3.2.7. Fase 8: Pulimiento final (Semanas 9-10)
+### Fase 8: Pulimiento final (Semanas 9-10)
 
 **Objetivos de la fase**:
 - Realizar testing exhaustivo de toda la aplicación
@@ -936,40 +928,17 @@ El desarrollo se estructura en iteraciones que siguen un patrón consistente: an
 - La documentación está completa y es comprensible
 - El despliegue en producción es exitoso y estable
 
-## 3.3. Diagrama de Gantt
+## Diagrama de Gantt
 
 El siguiente cronograma ilustra la distribución temporal de las actividades principales del proyecto, mostrando dependencias entre fases y solapamientos estratégicos para optimizar el desarrollo.
 
-### 3.3.1. Cronograma general del proyecto
+### Cronograma general del proyecto
 
-| **Fase/Actividad** | **S1** | **S2** | **S3** | **S4** | **S5** | **S6** | **S7** | **S8** | **S9** | **S10** |
-|-------------------|--------|--------|--------|--------|--------|--------|--------|--------|--------|---------|
-| **FASE 1-2: Setup y Auth** | | | | | | | | | | |
-| Setup entorno | ████████ | ████████ | | | | | | | | |
-| Sistema autenticación | | ████████ | ████████ | | | | | | | |
-| **FASE 3: Estudiante** | | | | | | | | | | |
-| Gestión TFG | | | ████████ | ████████ | | | | | | |
-| Seguimiento | | | | ████████ | ████████ | | | | | |
-| **FASE 4: Profesor** | | | | | | | | | | |
-| Bases módulo | | | | ████████ | | | | | | |
-| Sistema feedback | | | | | ████████ | ████████ | | | | |
-| **FASE 5: Defensas** | | | | | | | | | | |
-| Integración calendar | | | | | ████████ | | | | | |
-| Gestión tribunales | | | | | | ████████ | ████████ | | | |
-| **FASE 6: Admin** | | | | | | | | | | |
-| Gestión usuarios | | | | | | ████████ | | | | |
-| Reportes | | | | | | | ████████ | ████████ | | |
-| **FASE 7: Backend** | | | | | | | | | | |
-| Setup backend | | | | | | | ████████ | ████████ | | |
-| APIs y auth | | | | | | | | ████████ | ████████ | |
-| Integración | | | | | | | | | ████████ | ████████ |
-| **FASE 8: Pulimiento** | | | | | | | | | | |
-| Testing y opt. | | | | | | | | | ████████ | |
-| Deploy y docs | | | | | | | | | | ████████ |
+![Cronograma General](processed/images/03_planificacion_mermaid_0.png)
 
-### 3.3.2. Hitos principales y dependencias
+### Hitos principales y dependencias
 
-![Diagrama Mermaid 1](processed/images/03_planificacion_mermaid_0.png)
+![Cronograma Principal](processed/images/03_planificacion_mermaid_1.png)
 
 **Hitos críticos identificados**:
 - **H1**: Frontend base funcional (Semana 3) - Fin de Fase 1-2
@@ -985,7 +954,7 @@ El siguiente cronograma ilustra la distribución temporal de las actividades pri
 - Fase 7 (Backend) puede iniciarse en paralelo desde Semana 7
 - Fase 8 (Testing) requiere integración completa de Fase 7
 
-### 3.3.1. Análisis de ruta crítica
+### Análisis de ruta crítica
 
 **Ruta crítica identificada**: Fase 1-2 → Fase 3 → Fase 4 → Fase 5 → Fase 7 → Fase 8
 
@@ -998,7 +967,7 @@ Esta ruta crítica tiene una duración total de 9 semanas, proporcionando 1 sema
 5. **Backend Symfony** (Fase 7): Integración crítica para funcionalidad completa
 6. **Pulimiento final** (Fase 8): Testing integral y despliegue
 
-### 3.3.2. Optimizaciones de cronograma
+### Optimizaciones de cronograma
 
 **Desarrollo paralelo estratégico**: Las Fases 6 (Panel administrativo) y parte de la Fase 7 (Setup backend) pueden desarrollarse en paralelo con otras fases, reduciendo la ruta crítica total.
 
@@ -1006,9 +975,9 @@ Esta ruta crítica tiene una duración total de 9 semanas, proporcionando 1 sema
 
 **Buffer de tiempo**: La semana adicional disponible (Semana 10 completa) actúa como buffer para gestión de riesgos imprevistos o refinamiento adicional de funcionalidades críticas.
 
-## 3.4. Cronograma académico
+## Cronograma académico
 
-### 3.4.1. Calendario de entregas
+### Calendario de entregas
 
 El cronograma del proyecto se alinea con el calendario académico universitario, considerando períodos de exámenes, festivos y disponibilidad de recursos académicos para validación y feedback.
 
@@ -1020,7 +989,7 @@ El cronograma del proyecto se alinea con el calendario académico universitario,
 - **Entrega 4 - Semana 9**: Sistema integrado con backend funcional
 - **Entrega final - Semana 10**: Aplicación completa lista para producción
 
-### 3.4.2. Sesiones de validación
+### Sesiones de validación
 
 **Validación de usuarios**: Se programan sesiones de feedback con representantes de cada rol de usuario al finalizar las fases correspondientes:
 
@@ -1031,7 +1000,7 @@ El cronograma del proyecto se alinea con el calendario académico universitario,
 
 **Criterios de validación**: Cada sesión evalúa usabilidad, funcionalidad completa y cumplimiento de requisitos específicos del rol, proporcionando input para refinamiento en fases posteriores.
 
-### 3.4.3. Gestión de riesgos temporales
+### Gestión de riesgos temporales
 
 **Identificación de riesgos**:
 - **Riesgo técnico**: Dificultades de integración entre frontend y backend
@@ -1044,7 +1013,7 @@ El cronograma del proyecto se alinea con el calendario académico universitario,
 - **Documentación continua**: Registro de decisiones para facilitar retoma tras interrupciones
 - **Testing automatizado**: Reducción de tiempo necesario para validación manual
 
-### 3.4.4. Métricas de seguimiento
+### Métricas de seguimiento
 
 **Indicadores de progreso**:
 - **Velocity por fase**: Comparación de tiempo estimado vs. tiempo real de cada fase
@@ -1058,22 +1027,18 @@ El cronograma del proyecto se alinea con el calendario académico universitario,
 - **Time tracking**: Registro manual de tiempo invertido por fase para métricas de velocity
 - **Code quality**: Métricas automáticas de ESLint, PHPStan y herramientas de análisis
 
----
 
-*Fecha de elaboración: 31 de agosto de 2025*  
-*Versión: 1.0*  
-*Estándar: ISO/IEEE 16326:2009*
-\newpage
+# Análisis del sistema
 
-## 4.1. Especificación de requisitos
+## Especificación de requisitos
 
 La especificación de requisitos de la Plataforma de Gestión de TFG se estructura siguiendo la metodología IEEE Std 830-1998, organizando los requisitos en categorías funcionales específicas por rol de usuario y requisitos no funcionales transversales que garantizan la calidad del sistema.
 
-### 4.1.1. Requisitos de información
+### Requisitos de información
 
 Los requisitos de información definen las entidades de datos principales que el sistema debe gestionar, sus atributos esenciales y las relaciones entre ellas.
 
-#### 4.1.1.1. Entidad Usuario
+#### Entidad Usuario
 
 **Descripción**: Representa a todos los actores que interactúan con el sistema, diferenciados por roles específicos.
 
@@ -1090,7 +1055,7 @@ Los requisitos de información definen las entidades de datos principales que el
 - Cada usuario debe tener al menos un rol asignado
 - Los datos personales son obligatorios para activación de cuenta
 
-#### 4.1.1.2. Entidad TFG
+#### Entidad TFG
 
 **Descripción**: Representa un Trabajo de Fin de Grado con toda su información asociada y ciclo de vida.
 
@@ -1110,7 +1075,7 @@ Los requisitos de información definen las entidades de datos principales que el
 - El archivo debe ser formato PDF con tamaño máximo 50MB
 - Las transiciones de estado deben seguir el flujo definido
 
-#### 4.1.1.3. Entidad Tribunal
+#### Entidad Tribunal
 
 **Descripción**: Comisión evaluadora responsable de las defensas de TFG.
 
@@ -1126,7 +1091,7 @@ Los requisitos de información definen las entidades de datos principales que el
 - No puede haber miembros duplicados en un mismo tribunal
 - Al menos el presidente debe tener rol PRESIDENTE_TRIBUNAL
 
-#### 4.1.1.4. Entidad Defensa
+#### Entidad Defensa
 
 **Descripción**: Evento de presentación y evaluación de un TFG ante un tribunal.
 
@@ -1143,11 +1108,11 @@ Los requisitos de información definen las entidades de datos principales que el
 - La fecha de defensa debe ser posterior a la fecha actual
 - El tribunal debe estar disponible en la fecha programada
 
-### 4.1.2. Requisitos funcionales
+### Requisitos funcionales
 
 Los requisitos funcionales se organizan por rol de usuario, definiendo las capacidades específicas que el sistema debe proporcionar a cada tipo de actor.
 
-#### 4.1.2.1. Requisitos funcionales - Estudiante
+#### Requisitos funcionales - Estudiante
 
 **RF-EST-001: Gestión de cuenta de usuario**
 - **Descripción**: El estudiante debe poder visualizar y actualizar su información personal
@@ -1198,7 +1163,7 @@ Los requisitos funcionales se organizan por rol de usuario, definiendo las capac
 - **Salida**: Fecha, hora, tribunal, aula, duración
 - **Prioridad**: Media
 
-#### 4.1.2.2. Requisitos funcionales - Profesor
+#### Requisitos funcionales - Profesor
 
 **RF-PROF-001: Visualización de TFG asignados**
 - **Descripción**: El profesor debe poder ver listado de TFG donde participa como tutor
@@ -1242,7 +1207,7 @@ Los requisitos funcionales se organizan por rol de usuario, definiendo las capac
 - **Salida**: Lista de tribunales, defensas programadas, calendario
 - **Prioridad**: Media
 
-#### 4.1.2.3. Requisitos funcionales - Presidente de Tribunal
+#### Requisitos funcionales - Presidente de Tribunal
 
 **RF-PRES-001: Gestión de tribunales**
 - **Descripción**: El presidente debe poder crear, editar y gestionar tribunales
@@ -1279,7 +1244,7 @@ Los requisitos funcionales se organizan por rol de usuario, definiendo las capac
 - **Salida**: Acta en formato PDF descargable
 - **Prioridad**: Media
 
-#### 4.1.2.4. Requisitos funcionales - Administrador
+#### Requisitos funcionales - Administrador
 
 **RF-ADM-001: Gestión completa de usuarios**
 - **Descripción**: El administrador debe poder realizar operaciones CRUD sobre usuarios
@@ -1316,15 +1281,15 @@ Los requisitos funcionales se organizan por rol de usuario, definiendo las capac
 - **Salida**: Configuración actualizada en el sistema
 - **Prioridad**: Baja
 
-### 4.1.3. Diagrama de casos de uso
+### Diagrama de casos de uso
 
 El siguiente diagrama representa las principales interacciones entre los actores del sistema y las funcionalidades disponibles para cada rol.
 
-![Diagrama PlantUML 1](processed/images/04_analisis_sistema_plantuml_0.png)
+![Diagrama de casos de uso](processed/images/04_analisis_sistema_plantuml_0.png)
 
-### 4.1.4. Descripción de casos de uso
+### Descripción de casos de uso
 
-#### 4.1.4.1. UC001 - Crear TFG
+#### UC001 - Crear TFG
 
 **Actor principal**: Estudiante  
 **Precondiciones**: 
@@ -1349,7 +1314,7 @@ El siguiente diagrama representa las principales interacciones entre los actores
 - Se crea un nuevo TFG en estado "borrador"
 - El tutor recibe notificación de asignación
 
-#### 4.1.4.2. UC005 - Revisar TFG
+#### UC005 - Revisar TFG
 
 **Actor principal**: Profesor  
 **Precondiciones**: 
@@ -1370,7 +1335,7 @@ El siguiente diagrama representa las principales interacciones entre los actores
 **Postcondiciones**:
 - El profesor tiene acceso al contenido del TFG para evaluación
 
-#### 4.1.4.3. UC010 - Programar defensa
+#### UC010 - Programar defensa
 
 **Actor principal**: Presidente de Tribunal  
 **Precondiciones**: 
@@ -1396,23 +1361,23 @@ El siguiente diagrama representa las principales interacciones entre los actores
 - Se programa una defensa con fecha y tribunal asignados
 - Todos los involucrados reciben notificaciones
 
-### 4.1.5. Diagramas de secuencia
+### Diagramas de secuencia
 
-#### 4.1.5.1. Secuencia: Subida de archivo TFG
+#### Secuencia: Subida de archivo TFG
 
-![Diagrama PlantUML 2](processed/images/04_analisis_sistema_plantuml_1.png)
+![Secuencia: Subida de archivo TFG](processed/images/04_analisis_sistema_plantuml_1.png)
 
-#### 4.1.5.2. Secuencia: Cambio de estado de TFG
+#### Secuencia: Cambio de estado de TFG
 
-![Diagrama PlantUML 3](processed/images/04_analisis_sistema_plantuml_2.png)
+![Secuencia: Cambio de estado de TFG](processed/images/04_analisis_sistema_plantuml_2.png)
 
-#### 4.1.5.3. Secuencia: Programación de defensa
+#### Secuencia: Programación de defensa
 
-![Diagrama PlantUML 4](processed/images/04_analisis_sistema_plantuml_3.png)
+![Secuencia: Programación de defensa](processed/images/04_analisis_sistema_plantuml_3.png)
 
-### 4.1.6. Requisitos no funcionales
+### Requisitos no funcionales
 
-#### 4.1.6.1. Rendimiento
+#### Rendimiento
 
 **RNF-001: Tiempo de respuesta**
 - **Descripción**: Las operaciones críticas deben completarse en tiempo óptimo
@@ -1433,7 +1398,7 @@ El siguiente diagrama representa las principales interacciones entre los actores
 - **Criterio**: Arquitectura preparada para escalado horizontal
 - **Prioridad**: Media
 
-#### 4.1.6.2. Seguridad
+#### Seguridad
 
 **RNF-004: Autenticación**
 - **Descripción**: Control de acceso seguro basado en JWT
@@ -1456,7 +1421,7 @@ El siguiente diagrama representa las principales interacciones entre los actores
   - Políticas de retención
 - **Prioridad**: Alta
 
-#### 4.1.6.3. Usabilidad
+#### Usabilidad
 
 **RNF-007: Interfaz intuitiva**
 - **Descripción**: Facilidad de uso para usuarios no técnicos
@@ -1473,7 +1438,7 @@ El siguiente diagrama representa las principales interacciones entre los actores
 - **Criterio**: Nivel AA de WCAG 2.1
 - **Prioridad**: Media
 
-#### 4.1.6.4. Confiabilidad
+#### Confiabilidad
 
 **RNF-010: Disponibilidad**
 - **Descripción**: Sistema disponible durante horario académico
@@ -1490,13 +1455,13 @@ El siguiente diagrama representa las principales interacciones entre los actores
 - **Criterio**: Transacciones ACID, validación de integridad referencial
 - **Prioridad**: Alta
 
-## 4.2. Garantía de calidad
+## Garantía de calidad
 
-### 4.2.1. Seguridad
+### Seguridad
 
 La seguridad del sistema se implementa mediante múltiples capas de protección que abarcan desde la autenticación hasta la protección de datos en tránsito y reposo.
 
-#### 4.2.1.1. Autenticación y autorización
+#### Autenticación y autorización
 
 **Sistema JWT implementado**:
 - **Access tokens**: Duración de 1 hora con payload mínimo (ID usuario, roles, timestamp)
@@ -1509,7 +1474,7 @@ La seguridad del sistema se implementa mediante múltiples capas de protección 
 - **Permisos granulares**: Verificación a nivel de endpoint y recurso específico
 - **Validación doble**: Frontend para UX, backend para seguridad crítica
 
-#### 4.2.1.2. Protección de datos
+#### Protección de datos
 
 **Cifrado de datos**:
 - **En tránsito**: HTTPS/TLS 1.3 obligatorio en producción
@@ -1522,7 +1487,7 @@ La seguridad del sistema se implementa mediante múltiples capas de protección 
 - **XSS protection**: Sanitización automática en frontend y CSP headers
 - **File upload**: Validación de tipo MIME, tamaño y escaneo de malware
 
-#### 4.2.1.3. Auditoría y logs
+#### Auditoría y logs
 
 **Sistema de logs implementado**:
 - **Eventos de seguridad**: Login, logout, cambios de permisos, accesos denegados
@@ -1530,9 +1495,9 @@ La seguridad del sistema se implementa mediante múltiples capas de protección 
 - **Retención**: Logs conservados 12 meses con rotación automática
 - **Alertas**: Notificaciones automáticas para patrones de actividad sospechosa
 
-### 4.2.2. Interoperabilidad
+### Interoperabilidad
 
-#### 4.2.2.1. APIs REST estándar
+#### APIs REST estándar
 
 **Diseño RESTful**:
 - **Recursos bien definidos**: URLs descriptivas siguiendo convenciones REST
@@ -1545,7 +1510,7 @@ La seguridad del sistema se implementa mediante múltiples capas de protección 
 - **Swagger UI**: Interface interactiva para testing y exploración de APIs
 - **Postman collections**: Colecciones exportables para testing automatizado
 
-#### 4.2.2.2. Formato de datos estándar
+#### Formato de datos estándar
 
 **Serialización JSON**:
 - **HAL+JSON**: Links hipermedia para navegabilidad de recursos relacionados
@@ -1553,9 +1518,9 @@ La seguridad del sistema se implementa mediante múltiples capas de protección 
 - **Filtrado**: Query parameters consistentes para búsqueda y filtrado
 - **Versionado**: Headers de versión para evolución de APIs sin breaking changes
 
-### 4.2.3. Operabilidad
+### Operabilidad
 
-#### 4.2.3.1. Monitorización
+#### Monitorización
 
 **Métricas de aplicación**:
 - **Performance**: Tiempo de respuesta por endpoint, throughput, latencia P95/P99
@@ -1567,7 +1532,7 @@ La seguridad del sistema se implementa mediante múltiples capas de protección 
 - **Métricas de infraestructura**: CPU, memoria, disco, conexiones de BD
 - **Alertas proactivas**: Notificaciones antes de que los problemas afecten usuarios
 
-#### 4.2.3.2. Mantenibilidad
+#### Mantenibilidad
 
 **Arquitectura limpia**:
 - **Separación de responsabilidades**: Capas bien definidas (presentación, lógica, persistencia)
@@ -1579,9 +1544,9 @@ La seguridad del sistema se implementa mediante múltiples capas de protección 
 - **Comentarios en código**: Documentación inline para lógica compleja
 - **Architectural Decision Records (ADR)**: Registro de decisiones técnicas importantes
 
-### 4.2.4. Transferibilidad
+### Transferibilidad
 
-#### 4.2.4.1. Containerización
+#### Containerización
 
 **Docker para desarrollo**:
 - **DDEV**: Entorno de desarrollo reproducible con Docker
@@ -1593,16 +1558,16 @@ La seguridad del sistema se implementa mediante múltiples capas de protección 
 - **Environment variables**: Configuración externalizada para diferentes entornos
 - **Health checks**: Verificaciones de salud integradas en contenedores
 
-#### 4.2.4.2. Despliegue automatizado
+#### Despliegue automatizado
 
 **CI/CD Pipeline**:
 - **GitHub Actions**: Automatización de testing, build y deploy
 - **Testing automatizado**: Ejecución de tests unitarios e integración en cada commit
 - **Deploy scripts**: Automatización de despliegue a diferentes entornos
 
-### 4.2.5. Eficiencia
+### Eficiencia
 
-#### 4.2.5.1. Optimización frontend
+#### Optimización frontend
 
 **React performance**:
 - **Code splitting**: Carga lazy de componentes por ruta
@@ -1615,7 +1580,7 @@ La seguridad del sistema se implementa mediante múltiples capas de protección 
 - **React Query**: Caching inteligente de datos de APIs
 - **Service Workers**: Cache offline para funcionalidad básica
 
-#### 4.2.5.2. Optimización backend
+#### Optimización backend
 
 **Base de datos**:
 - **Índices optimizados**: Índices compuestos para queries frecuentes
@@ -1629,9 +1594,9 @@ La seguridad del sistema se implementa mediante múltiples capas de protección 
 - **Field selection**: Permitir especificar campos requeridos en responses
 - **Rate limiting**: Prevención de abuso con limitación de requests
 
-### 4.2.6. Mantenibilidad
+### Mantenibilidad
 
-#### 4.2.6.1. Calidad de código
+#### Calidad de código
 
 **Estándares de codificación**:
 - **ESLint + Prettier**: Formateo automático y reglas de calidad JavaScript
@@ -1645,7 +1610,7 @@ La seguridad del sistema se implementa mediante múltiples capas de protección 
 - **E2E tests**: Casos de usuario críticos automatizados
 - **Visual regression**: Detección de cambios no intencionados en UI
 
-#### 4.2.6.2. Arquitectura mantenible
+#### Arquitectura mantenible
 
 **Patrones de diseño**:
 - **Repository pattern**: Abstracción de persistencia de datos
@@ -1653,13 +1618,13 @@ La seguridad del sistema se implementa mediante múltiples capas de protección 
 - **Observer pattern**: Sistema de eventos para notificaciones
 - **Strategy pattern**: Diferentes estrategias de validación y procesamiento
 
-## 4.3. Gestión del presupuesto
+## Gestión del presupuesto
 
-### 4.3.1. Estructura de costos
+### Estructura de costos
 
 El proyecto se desarrolla en modalidad académica con recursos principalmente de tiempo de desarrollo, herramientas open source y servicios gratuitos para educación.
 
-#### 4.3.1.1. Costos de desarrollo
+#### Costos de desarrollo
 
 **Tiempo de desarrollo**:
 - **Total estimado**: 400 horas de desarrollo durante 10 semanas
@@ -1672,7 +1637,7 @@ El proyecto se desarrolla en modalidad académica con recursos principalmente de
 - Fase 3-4 (Módulos usuario): 120 horas
 - Fase 8 (Testing y deploy): 60 horas
 
-#### 4.3.1.2. Infraestructura y herramientas
+#### Infraestructura y herramientas
 
 **Herramientas de desarrollo** (gratuitas para estudiantes):
 - **GitHub Education Pack**: Repositorio privado, GitHub Actions gratuitas
@@ -1685,7 +1650,7 @@ El proyecto se desarrolla en modalidad académica con recursos principalmente de
 - **Base de datos**: MySQL en contenedor local
 - **Testing**: Servicios locales con DDEV
 
-#### 4.3.1.3. Costos de producción estimados
+#### Costos de producción estimados
 
 **Hosting y dominio** (mensual):
 - **VPS básico**: €10-20/mes (2GB RAM, 1 CPU, 40GB SSD)
@@ -1698,9 +1663,9 @@ El proyecto se desarrolla en modalidad académica con recursos principalmente de
 - **Backup**: €5-10/mes (almacenamiento cloud)
 - **Monitoring**: €0-15/mes (New Relic, DataDog tier gratuito)
 
-### 4.3.2. Return on Investment (ROI)
+### Return on Investment (ROI)
 
-#### 4.3.2.1. Beneficios cuantificables
+#### Beneficios cuantificables
 
 **Ahorro en tiempo administrativo**:
 - **Gestión manual actual**: 2 horas/TFG por administrativo
@@ -1714,7 +1679,7 @@ El proyecto se desarrolla en modalidad académica con recursos principalmente de
 - **Costo promedio de corrección**: €50 por error
 - **Ahorro en correcciones**: €500/año
 
-#### 4.3.2.2. Beneficios intangibles
+#### Beneficios intangibles
 
 **Mejora en satisfacción**:
 - **Estudiantes**: Mayor transparencia y seguimiento en tiempo real
@@ -1726,9 +1691,9 @@ El proyecto se desarrolla en modalidad académica con recursos principalmente de
 - **Preparación futura**: Base para expansión a otros procesos académicos
 - **Competitividad**: Ventaja frente a instituciones con procesos manuales
 
-### 4.3.3. Análisis de viabilidad económica
+### Análisis de viabilidad económica
 
-#### 4.3.3.1. Punto de equilibrio
+#### Punto de equilibrio
 
 **Inversión inicial**: €6,000 (desarrollo) + €200 (infraestructura año 1) = €6,200  
 **Ahorro anual**: €8,500 (tiempo + errores)  
@@ -1739,7 +1704,7 @@ El proyecto se desarrolla en modalidad académica con recursos principalmente de
 - **Ahorros totales**: €8,500 × 3 = €25,500
 - **ROI**: 259% en 3 años
 
-#### 4.3.3.2. Análisis de sensibilidad
+#### Análisis de sensibilidad
 
 **Escenario conservador** (50% de beneficios estimados):
 - **Ahorro anual**: €4,250
@@ -1751,24 +1716,20 @@ El proyecto se desarrolla en modalidad académica con recursos principalmente de
 
 La viabilidad económica es positiva en todos los escenarios analizados, con recuperación de inversión en menos de 1 año en el escenario base.
 
----
 
-*Fecha de elaboración: 31 de agosto de 2025*  
-*Versión: 1.0*  
-*Estándar: ISO/IEEE 16326:2009*
-\newpage
+# Diseño
 
-## 5.1. Arquitectura física
+## Arquitectura física
 
 La arquitectura física de la Plataforma de Gestión de TFG se basa en una separación clara entre capas de presentación, lógica de negocio y persistencia, implementando un patrón de arquitectura distribuida que garantiza escalabilidad, mantenibilidad y seguridad.
 
-### 5.1.1. Módulo frontend (Capa de presentación)
+### Módulo frontend (Capa de presentación)
 
 El frontend constituye la capa de presentación del sistema, desarrollado como una Single Page Application (SPA) que se ejecuta completamente en el navegador del usuario.
 
-#### 5.1.1.1. Arquitectura de componentes React
+#### Arquitectura de componentes React
 
-![Diagrama PlantUML 1](processed/images/05_diseno_plantuml_0.png)
+![Arquitectura de componentes React](processed/images/05_diseno_plantuml_0.png)
 
 **Componentes principales**:
 
@@ -1784,9 +1745,9 @@ El frontend constituye la capa de presentación del sistema, desarrollado como u
 - **Render Props**: Componentes que exponen funcionalidad mediante props de función
 - **Custom Hooks**: Abstracción de lógica de negocio reutilizable entre componentes
 
-#### 5.1.1.2. Gestión de estado global
+#### Gestión de estado global
 
-**Context API Strategy**:
+**Estrategia Context API**:
 ```javascript
 // AuthContext - Gestión de autenticación y usuario actual
 const AuthContext = {
@@ -1814,9 +1775,9 @@ const NotificacionesContext = {
 - **useCalendario**: Integración con FullCalendar y gestión de eventos
 - **useReportes**: Generación y exportación de reportes estadísticos
 
-#### 5.1.1.3. Comunicación con backend
+#### Comunicación con backend
 
-**HTTP Client Configuration**:
+**Configuración del Cliente HTTP**:
 ```javascript
 // Axios instance con interceptores
 const apiClient = axios.create({
@@ -1857,13 +1818,13 @@ apiClient.interceptors.response.use(
 - **TribunalService**: Gestión de tribunales y defensas
 - **NotificationService**: Sistema de notificaciones
 
-### 5.1.2. Módulo backend (Capa de lógica de negocio)
+### Módulo backend (Capa de lógica de negocio)
 
 El backend implementa una arquitectura hexagonal (puertos y adaptadores) usando Symfony 6.4 LTS, proporcionando APIs REST robustas y escalables.
 
-#### 5.1.2.1. Arquitectura hexagonal
+#### Arquitectura hexagonal
 
-![Diagrama PlantUML 2](processed/images/05_diseno_plantuml_1.png)
+![Arquitectura hexagonal](processed/images/05_diseno_plantuml_1.png)
 
 **Capas de la arquitectura**:
 
@@ -1872,7 +1833,7 @@ El backend implementa una arquitectura hexagonal (puertos y adaptadores) usando 
 3. **Infrastructure Layer**: Implementaciones concretas (BD, servicios externos)
 4. **Interface Layer**: Controladores API y serialización
 
-#### 5.1.2.2. Estructura de directorios Symfony
+#### Estructura de directorios Symfony
 
 ```
 src/
@@ -1906,9 +1867,9 @@ src/
     └── UserActivityListener.php
 ```
 
-#### 5.1.2.3. API Platform configuration
+#### Configuración API Platform
 
-**Resource configuration example**:
+**Ejemplo de configuración de Recursos**:
 ```php
 <?php
 // src/Entity/TFG.php
@@ -1936,15 +1897,15 @@ class TFG
 }
 ```
 
-### 5.1.3. Módulo de base de datos (Capa de persistencia)
+### Módulo de base de datos (Capa de persistencia)
 
 La capa de persistencia utiliza MySQL 8.0 como sistema de gestión de base de datos, implementando un diseño relacional optimizado con Doctrine ORM.
 
-#### 5.1.3.1. Estrategia de persistencia
+#### Estrategia de persistencia
 
-**Doctrine ORM Configuration**:
+**Configuración de Doctrine ORM**:
 ```yaml
-# config/packages/doctrine.yaml
+## config/packages/doctrine.yaml
 doctrine:
     dbal:
         url: '%env(resolve:DATABASE_URL)%'
@@ -1970,14 +1931,14 @@ doctrine:
 - **Rollback capability**: Posibilidad de rollback a versiones anteriores
 - **Production safety**: Validación antes de aplicar migraciones en producción
 
-### 5.1.4. Módulo de archivos (Almacenamiento)
+### Módulo de archivos (Almacenamiento)
 
 El sistema de archivos está diseñado para manejar uploads seguros de documentos PDF con validación exhaustiva y almacenamiento optimizado.
 
-#### 5.1.4.1. VichUploader Configuration
+#### Configuración de VichUploader
 
 ```yaml
-# config/packages/vich_uploader.yaml
+## config/packages/vich_uploader.yaml
 vich_uploader:
     db_driver: orm
     mappings:
@@ -1996,26 +1957,33 @@ vich_uploader:
 - **Virus scanning**: Integración con ClamAV para escaneo de malware
 - **Access control**: URLs firmadas temporalmente para descarga segura
 
-#### 5.1.4.2. Estrategia Almacenamiento
+#### Estrategia Almacenamiento
 
-![Diagrama PlantUML 3](processed/images/05_diseno_plantuml_2.png)
+![Estrategia Almacenamiento](processed/images/05_diseno_plantuml_2.png)
 
-## 5.2. Arquitectura lógica
+**Flujo de procesamiento de archivos**:
+
+1. **Validación previa**: MIME type, tamaño y estructura básica del PDF
+2. **Procesamiento seguro**: Almacenamiento con nombre único y path encriptado
+3. **Metadatos**: Extracción y almacenamiento de información del archivo
+4. **Acceso controlado**: URLs temporales con expiración automática
+
+## Arquitectura lógica
 
 La arquitectura lógica organiza los componentes del sistema según responsabilidades funcionales, implementando patrones de diseño que garantizan separación de concerns y alta cohesión.
 
-### 5.2.1. Capa de presentación (Frontend)
+### Capa de presentación (Frontend)
 
-#### 5.2.1.1. Patrón Container/Presentational
+#### Patrón Container/Presentational
 
-**Container Components** (Smart Components):
+**Componentes de Container** (Smart Components):
 ```javascript
 // pages/estudiante/MisTFGs.jsx
 const MisTFGs = () => {
   const { tfgs, loading, error, createTFG, updateTFG } = useTFGs();
   const { user } = useAuth();
   
-  // Business logic and data fetching
+  // Lógica de negocio y obtención de datos
   useEffect(() => {
     fetchTFGsByStudent(user.id);
   }, [user.id]);
@@ -2032,7 +2000,7 @@ const MisTFGs = () => {
 };
 ```
 
-**Presentational Components** (Dumb Components):
+**Componentes Presentational** (Dumb Components):
 ```javascript
 // components/tfgs/TFGsListPresentation.jsx
 const TFGsListPresentation = ({ 
@@ -2059,17 +2027,17 @@ const TFGsListPresentation = ({
 };
 ```
 
-#### 5.2.1.2. State Management Pattern
+#### State Management Pattern
 
 **Hierarchical Context Structure**:
 ```javascript
-// App.jsx - Root level contexts
+// App.jsx - Contexto Raíz
 <AuthProvider>
   <NotificacionesProvider>
     <Router>
       <Layout>
         <Routes>
-          {/* Application routes */}
+          {/* Rutas de la Aplicación*/}
         </Routes>
       </Layout>
     </Router>
@@ -2110,9 +2078,9 @@ const useTFGs = () => {
 };
 ```
 
-### 5.2.2. Capa de lógica de negocio (Backend)
+### Capa de lógica de negocio (Backend)
 
-#### 5.2.2.1. Domain-Driven Design
+#### Domain-Driven Design
 
 **Aggregate Pattern**:
 ```php
@@ -2151,7 +2119,7 @@ class TFG
 }
 ```
 
-**Value Objects**:
+**Clases Value**:
 ```php
 <?php
 // src/ValueObject/Email.php
@@ -2180,9 +2148,9 @@ final class Email
 }
 ```
 
-#### 5.2.2.2. Service Layer Pattern
+#### Patrón Service Layer
 
-**Application Services**:
+**Servicios de la Aplicación**:
 ```php
 <?php
 // src/Service/TFGService.php
@@ -2219,9 +2187,9 @@ class TFGService
 }
 ```
 
-### 5.2.3. Capa de persistencia
+### Capa de persistencia
 
-#### 5.2.3.1. Repository Pattern
+#### Repository Pattern
 
 **Interface Definition**:
 ```php
@@ -2238,7 +2206,7 @@ interface TFGRepositoryInterface
 }
 ```
 
-**Doctrine Implementation**:
+**Implementation de Doctrine**:
 ```php
 <?php
 // src/Repository/TFGRepository.php
@@ -2269,65 +2237,15 @@ class TFGRepository extends ServiceEntityRepository implements TFGRepositoryInte
 }
 ```
 
-### 5.2.4. Capa de servicios
+## Esquema de la base de datos
 
-#### 5.2.4.1. Event-Driven Architecture
+### Modelo conceptual
 
-**Domain Events**:
-```php
-<?php
-// src/Event/TFGStateChangedEvent.php
-class TFGStateChangedEvent extends Event
-{
-    public const NAME = 'tfg.state.changed';
-    
-    public function __construct(
-        private TFG $tfg,
-        private string $previousState,
-        private string $newState
-    ) {}
-    
-    public function getTFG(): TFG { return $this->tfg; }
-    public function getPreviousState(): string { return $this->previousState; }
-    public function getNewState(): string { return $this->newState; }
-}
-```
+![Modelo conceptual](processed/images/05_diseno_plantuml_3.png)
 
-**Event Listeners**:
-```php
-<?php
-// src/EventListener/TFGNotificationListener.php
-class TFGNotificationListener
-{
-    public function __construct(
-        private NotificationService $notificationService,
-        private MailerInterface $mailer
-    ) {}
-    
-    #[AsEventListener(event: TFGStateChangedEvent::NAME)]
-    public function onTFGStateChanged(TFGStateChangedEvent $event): void
-    {
-        $tfg = $event->getTFG();
-        
-        match ($event->getNewState()) {
-            'revision' => $this->notifyTutorReviewNeeded($tfg),
-            'aprobado' => $this->notifyStudentApproved($tfg),
-            'defendido' => $this->notifyDefenseCompleted($tfg),
-            default => null
-        };
-    }
-}
-```
+### Normalización y constraints
 
-## 5.3. Esquema de la base de datos
-
-### 5.3.1. Modelo conceptual
-
-![Diagrama PlantUML 4](processed/images/05_diseno_plantuml_3.png)
-
-### 5.3.2. Normalización y constraints
-
-#### 5.3.2.1. Tercera forma normal (3NF)
+#### Tercera forma normal (3NF)
 
 El esquema cumple con la tercera forma normal mediante:
 
@@ -2345,7 +2263,7 @@ El esquema cumple con la tercera forma normal mediante:
 - No existen dependencias transitivas
 - Cada atributo no-clave depende directamente de la clave primaria
 
-#### 5.3.2.2. Constraints e integridad referencial
+#### Constraints e integridad referencial
 
 **Primary Keys**:
 ```sql
@@ -2393,9 +2311,9 @@ ALTER TABLE calificaciones
   );
 ```
 
-### 5.3.3. Índices de rendimiento
+### Índices de rendimiento
 
-#### 5.3.3.1. Índices principales
+#### Índices principales
 
 **Índices de búsqueda frecuente**:
 ```sql
@@ -2427,7 +2345,7 @@ CREATE INDEX idx_tribunales_activo ON tribunales(activo, created_at);
 CREATE INDEX idx_defensas_tribunal_fecha ON defensas(tribunal_id, fecha_defensa);
 ```
 
-#### 5.3.3.2. Análisis de consultas
+#### Análisis de consultas
 
 **Query más frecuente - TFGs por tutor**:
 ```sql
@@ -2457,11 +2375,11 @@ WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 1 YEAR);
 -- Query optimizada para agregaciones
 ```
 
-## 5.4. Diseño de la interfaz de usuario
+## Diseño de la interfaz de usuario
 
-### 5.4.1. Sistema de diseño
+### Sistema de diseño
 
-#### 5.4.1.1. Design System basado en Tailwind CSS
+#### Design System basado en Tailwind CSS
 
 **Color Palette**:
 ```css
@@ -2511,7 +2429,7 @@ space-8: 2rem;     /* 32px */
 space-12: 3rem;    /* 48px */
 ```
 
-#### 5.4.1.2. Componentes base reutilizables
+#### Componentes base reutilizables
 
 **Button Component System**:
 ```javascript
@@ -2576,9 +2494,9 @@ const FormField = ({
 );
 ```
 
-### 5.4.2. Diseño responsive
+### Diseño responsive
 
-#### 5.4.2.1. Breakpoints y grid system
+#### Breakpoints y grid system
 
 **Responsive Breakpoints**:
 ```css
@@ -2620,7 +2538,7 @@ const DashboardLayout = ({ children }) => (
 );
 ```
 
-#### 5.4.2.2. Mobile-first components
+#### Mobile-first components
 
 **Responsive Table Pattern**:
 ```javascript
@@ -2661,177 +2579,84 @@ const TFGTable = ({ tfgs }) => (
 );
 ```
 
-### 5.4.3. Wireframes y flujos de usuario
+### Wireframes y flujos de usuario
 
-#### 5.4.3.1. Flujo principal - Estudiante
+#### Flujo principal - Estudiante
 
-![Diagrama PlantUML 5](processed/images/05_diseno_plantuml_4.png)
+![Flujo principal - Estudiante](processed/images/05_diseno_plantuml_4.png)
 
-#### 5.4.3.2. Wireframe - Dashboard Estudiante
+#### Wireframe - Dashboard Estudiante
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │ [Logo] Plataforma TFG        [Notificaciones] [Usuario] [⚙] │
 ├─────────────────────────────────────────────────────────────┤
-│ Dashboard > Mi TFG                                           │
+│ Dashboard > Mi TFG                                          │
 ├─────────────────────────────────────────────────────────────┤
 │                                                             │
-│ ┌─────────────────┐  ┌───────────────────────────────────┐ │
-│ │   Mi TFG        │  │         Estado Actual             │ │
-│ │                 │  │                                   │ │
-│ │ [📄] Título del │  │    ● En Revisión                  │ │
-│ │      TFG        │  │                                   │ │
-│ │                 │  │    Enviado hace 3 días           │ │
-│ │ [📤] Archivo:   │  │    Esperando feedback del tutor  │ │
-│ │     tfg_v1.pdf  │  │                                   │ │
-│ │                 │  │    [ Ver Timeline ]               │ │
-│ └─────────────────┘  └───────────────────────────────────┘ │
+│ ┌─────────────────┐  ┌───────────────────────────────────┐  │
+│ │   Mi TFG        │  │         Estado Actual             │  │
+│ │                 │  │                                   │  │
+│ │ [📄] Título del    │    ● En Revisión                  │   │
+│ │      TFG        │  │                                   │  │
+│ │                 │  │    Enviado hace 3 días            │  │
+│ │ [📤] Archivo:   │  │    Esperando feedback del tutor   │   │
+│ │     tfg_v1.pdf  │  │                                   │  │
+│ │                 │  │    [ Ver Timeline ]               │  │
+│ └─────────────────┘  └───────────────────────────────────┘  │
 │                                                             │
 │ ┌─────────────────────────────────────────────────────────┐ │
-│ │                    Comentarios del Tutor               │ │
+│ │                    Comentarios del Tutor                │ │
 │ │ ┌─────────────────────────────────────────────────────┐ │ │
-│ │ │ 👨‍🏫 Dr. García - hace 1 día                       │ │ │
+│ │ │ 👨‍🏫 Dr. García - hace 1 día                          │ │ │
 │ │ │ "El abstract necesita ser más específico..."        │ │ │
 │ │ └─────────────────────────────────────────────────────┘ │ │
 │ └─────────────────────────────────────────────────────────┘ │
 │                                                             │
-│ [ Subir Nueva Versión ]  [ Editar Información ]            │
+│ [ Subir Nueva Versión ]  [ Editar Información ]             │
 └─────────────────────────────────────────────────────────────┘
 ```
 
-#### 5.4.3.3. Wireframe - Calendario de Defensas
+#### Wireframe - Calendario de Defensas
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│ Gestión de Defensas                      [Nuevo] [Filtros] │
+│ Gestión de Defensas                      [Nuevo] [Filtros]  │
 ├─────────────────────────────────────────────────────────────┤
 │                                                             │
-│      Octubre 2025                                          │
-│ ┌─────┬─────┬─────┬─────┬─────┬─────┬─────┐                │
-│ │ Dom │ Lun │ Mar │ Mié │ Jue │ Vie │ Sáb │                │
-│ ├─────┼─────┼─────┼─────┼─────┼─────┼─────┤                │
-│ │  1  │  2  │  3  │  4  │  5  │  6  │  7  │                │
-│ │     │     │     │     │[10h]│     │     │                │
-│ │     │     │     │     │TFG-1│     │     │                │
-│ ├─────┼─────┼─────┼─────┼─────┼─────┼─────┤                │
-│ │  8  │  9  │ 10  │ 11  │ 12  │ 13  │ 14  │                │
-│ │     │[9h] │     │[11h]│     │[16h]│     │                │
-│ │     │TFG-2│     │TFG-3│     │TFG-4│     │                │
-│ └─────┴─────┴─────┴─────┴─────┴─────┴─────┘                │
+│      Octubre 2025                                           │
+│ ┌─────┬─────┬─────┬─────┬─────┬─────┬─────┐                 │
+│ │ Dom │ Lun │ Mar │ Mié │ Jue │ Vie │ Sáb │                 │
+│ ├─────┼─────┼─────┼─────┼─────┼─────┼─────┤                 │
+│ │  1  │  2  │  3  │  4  │  5  │  6  │  7  │                 │
+│ │     │     │     │     │[10h]│     │     │                 │
+│ │     │     │     │     │TFG-1│     │     │                 │
+│ ├─────┼─────┼─────┼─────┼─────┼─────┼─────┤                 │
+│ │  8  │  9  │ 10  │ 11  │ 12  │ 13  │ 14  │                 │
+│ │     │[9h] │     │[11h]│     │[16h]│     │                 │
+│ │     │TFG-2│     │TFG-3│     │TFG-4│     │                 │
+│ └─────┴─────┴─────┴─────┴─────┴─────┴─────┘                 │
 │                                                             │
 │ Próximas Defensas:                                          │
 │ ┌─────────────────────────────────────────────────────────┐ │
-│ │ 🕐 5 Oct, 10:00 - "Desarrollo de App Móvil"           │ │
-│ │    Tribunal A • Aula 101 • Juan Pérez                 │ │
-│ │    [ Ver Detalles ] [ Editar ]                        │ │
+│ │ 🕐 5 Oct, 10:00 - "Desarrollo de App Móvil"             │ │
+│ │    Tribunal A • Aula 101 • Juan Pérez                   │ │
+│ │    [ Ver Detalles ] [ Editar ]                          │ │
 │ ├─────────────────────────────────────────────────────────┤ │
-│ │ 🕘 9 Oct, 09:00 - "Machine Learning en Salud"        │ │
-│ │    Tribunal B • Aula 205 • María López                │ │
-│ │    [ Ver Detalles ] [ Editar ]                        │ │
+│ │ 🕘 9 Oct, 09:00 - "Machine Learning en Salud"           │ │
+│ │    Tribunal B • Aula 205 • María López                  │ │
+│ │    [ Ver Detalles ] [ Editar ]                          │ │
 │ └─────────────────────────────────────────────────────────┘ │
 └─────────────────────────────────────────────────────────────┘
 ```
 
-### 5.4.4. Accesibilidad y usabilidad
+# Implementación
 
-#### 5.4.4.1. WCAG 2.1 Compliance
-
-**Nivel AA Requirements**:
-- **Contraste de color**: Ratio mínimo 4.5:1 para texto normal
-- **Tamaño de texto**: Escalable hasta 200% sin pérdida de funcionalidad  
-- **Navegación por teclado**: Tab order lógico, focus visible
-- **Screen readers**: ARIA labels y roles apropiados
-
-**Implementation Example**:
-```javascript
-// components/ui/Input.jsx
-const Input = ({ 
-  label, 
-  id, 
-  error, 
-  required = false,
-  ...props 
-}) => (
-  <div>
-    <label 
-      htmlFor={id}
-      className="block text-sm font-medium text-gray-700"
-    >
-      {label}
-      {required && (
-        <span aria-label="requerido" className="text-red-500">*</span>
-      )}
-    </label>
-    <input
-      id={id}
-      aria-describedby={error ? `${id}-error` : undefined}
-      aria-invalid={error ? 'true' : 'false'}
-      className={`
-        mt-1 block w-full rounded-md border-gray-300 
-        shadow-sm focus:border-blue-500 focus:ring-blue-500
-        ${error ? 'border-red-300 text-red-900' : ''}
-      `}
-      {...props}
-    />
-    {error && (
-      <p id={`${id}-error`} className="mt-2 text-sm text-red-600">
-        {error}
-      </p>
-    )}
-  </div>
-);
-```
-
-#### 5.4.4.2. Usability Testing Insights
-
-**Key Findings**:
-1. **Navigation**: Menú role-based confuso inicialmente - solución: breadcrumbs claros
-2. **File Upload**: Drag & drop no era obvio - solución: indicadores visuales prominentes
-3. **State Tracking**: Timeline de estados necesitaba más información contextual
-4. **Mobile Experience**: Tablas complejas difíciles en móvil - solución: cards adaptativas
-
-**Implemented Solutions**:
-```javascript
-// Breadcrumb navigation
-const Breadcrumb = ({ items }) => (
-  <nav aria-label="Breadcrumb" className="flex">
-    <ol className="inline-flex items-center space-x-1 md:space-x-3">
-      {items.map((item, index) => (
-        <li key={index} className="inline-flex items-center">
-          {index > 0 && (
-            <ChevronRightIcon className="w-6 h-6 text-gray-400" />
-          )}
-          <Link 
-            to={item.href}
-            className={`
-              inline-flex items-center text-sm font-medium
-              ${index === items.length - 1 
-                ? 'text-gray-500' 
-                : 'text-gray-700 hover:text-blue-600'
-              }
-            `}
-          >
-            {item.label}
-          </Link>
-        </li>
-      ))}
-    </ol>
-  </nav>
-);
-```
-
----
-
-*Fecha de elaboración: 31 de agosto de 2025*  
-*Versión: 1.0*  
-*Estándar: ISO/IEEE 16326:2009*
-\newpage
-
-## 6.1. Arquitectura de componentes React
+## Arquitectura de componentes React
 
 La implementación del frontend se estructura siguiendo principios de Clean Architecture adaptados a React, con una separación clara entre lógica de presentación, estado global y comunicación con APIs.
 
-### 6.1.1. Estructura de directorios
+### Estructura de directorios
 
 ```
 src/
@@ -2892,9 +2717,9 @@ src/
     └── formatters.js
 ```
 
-### 6.1.2. Implementación del sistema de autenticación
+### Implementación del sistema de autenticación
 
-#### 6.1.2.1. AuthContext y Provider
+#### AuthContext y Provider
 
 ```javascript
 // src/context/AuthContext.jsx
@@ -3039,7 +2864,7 @@ export const useAuth = () => {
 };
 ```
 
-#### 6.1.2.2. ProtectedRoute Component
+#### Componente ProtectedRoute
 
 ```javascript
 // src/components/ProtectedRoute.jsx
@@ -3098,9 +2923,9 @@ const ProtectedRoute = ({
 export default ProtectedRoute;
 ```
 
-### 6.1.3. Custom Hooks Implementation
+### Implementación de Hooks Personalizados
 
-#### 6.1.3.1. useTFGs Hook
+#### useTFGs Hook
 
 ```javascript
 // src/hooks/useTFGs.js
@@ -3253,9 +3078,9 @@ export const useTFGs = () => {
 };
 ```
 
-### 6.1.4. Componentes de interfaz principales
+### Componentes de interfaz principales
 
-#### 6.1.4.1. Dashboard Component
+#### Componente Dashboard
 
 ```javascript
 // src/pages/dashboard/Dashboard.jsx
@@ -3366,14 +3191,14 @@ const getRoleDescription = (role) => {
 export default Dashboard;
 ```
 
-## 6.2. Sistema de autenticación y roles
+## Sistema de autenticación y roles
 
-### 6.2.1. Implementación backend con Symfony Security
+### Implementación backend con Symfony Security
 
-#### 6.2.1.1. Configuración de seguridad
+#### Configuración de seguridad
 
 ```yaml
-# config/packages/security.yaml
+## config/packages/security.yaml
 security:
     password_hashers:
         App\Entity\User:
@@ -3414,7 +3239,7 @@ security:
         ROLE_ESTUDIANTE: [ROLE_USER]
 ```
 
-#### 6.2.1.2. JWT Authentication Controller
+#### Controllador Authenticatción JWT
 
 ```php
 <?php
@@ -3520,7 +3345,7 @@ class AuthController extends AbstractController
 }
 ```
 
-### 6.2.2. Voters para control granular de permisos
+### Voters para control granular de permisos
 
 ```php
 <?php
@@ -3637,9 +3462,9 @@ class TFGVoter extends Voter
 }
 ```
 
-## 6.3. Gestión de estado con Context API
+## Gestión de estado con Context API
 
-### 6.3.1. NotificacionesContext
+### NotificacionesContext
 
 ```javascript
 // src/context/NotificacionesContext.jsx
@@ -3774,9 +3599,9 @@ export const useNotifications = () => {
 };
 ```
 
-## 6.4. APIs REST y endpoints
+## APIs REST y endpoints
 
-### 6.4.1. TFG Controller con API Platform
+### TFG Controller con API Platform
 
 ```php
 <?php
@@ -3936,7 +3761,7 @@ class TFGController extends AbstractController
 }
 ```
 
-### 6.4.2. Service Layer - TFGService
+### Capa de Servicios - TFGService
 
 ```php
 <?php
@@ -4111,9 +3936,9 @@ class TFGService
 }
 ```
 
-## 6.5. Sistema de archivos y uploads
+## Sistema de archivos y uploads
 
-### 6.5.1. FileUploadService
+### FileUploadService
 
 ```php
 <?php
@@ -4246,9 +4071,9 @@ class FileUploadService
 }
 ```
 
-## 6.6. Sistema de notificaciones
+## Sistema de notificaciones
 
-### 6.6.1. NotificationService
+### NotificationService
 
 ```php
 <?php
@@ -4441,23 +4266,19 @@ class NotificationService
 }
 ```
 
----
 
-*Fecha de elaboración: 31 de agosto de 2025*  
-*Versión: 1.0*  
-*Estándar: ISO/IEEE 16326:2009*
-\newpage
+# Entrega del producto
 
-## 7.1. Configuración de producción
+## Configuración de producción
 
 La entrega del producto requiere una configuración específica para entorno de producción que garantice seguridad, rendimiento y estabilidad del sistema en un ambiente real de uso.
 
-### 7.1.1. Configuración del frontend
+### Configuración del frontend
 
-#### 7.1.1.1. Variables de entorno de producción
+#### Variables de entorno de producción
 
 ```bash
-# .env.production
+## .env.production
 VITE_API_BASE_URL=https://api.tfg-platform.com/api
 VITE_APP_NAME=Plataforma de Gestión de TFG
 VITE_APP_VERSION=1.0.0
@@ -4466,7 +4287,7 @@ VITE_ENABLE_ANALYTICS=true
 VITE_SENTRY_DSN=https://your-sentry-dsn@sentry.io/project-id
 ```
 
-#### 7.1.1.2. Optimización del build de producción
+#### Optimización del build de producción
 
 ```javascript
 // vite.config.js - Configuración optimizada para producción
@@ -4535,7 +4356,7 @@ export default defineConfig({
 })
 ```
 
-#### 7.1.1.3. PWA Configuration (Preparación futura)
+#### Configuración PWA (Preparación futura)
 
 ```javascript
 // src/sw.js - Service Worker básico
@@ -4583,45 +4404,45 @@ self.addEventListener('fetch', (event) => {
 });
 ```
 
-### 7.1.2. Configuración del backend
+### Configuración del backend
 
-#### 7.1.2.1. Variables de entorno de producción
+#### Variables de entorno de producción
 
 ```bash
-# .env.prod
+## .env.prod
 APP_ENV=prod
 APP_DEBUG=false
 APP_SECRET=your-super-secret-production-key-here
 
-# Database
+## Database
 DATABASE_URL="mysql://tfg_user:secure_password@127.0.0.1:3306/tfg_production?serverVersion=8.0"
 
-# JWT Configuration
+## JWT Configuration
 JWT_SECRET_KEY=%kernel.project_dir%/config/jwt/private.pem
 JWT_PUBLIC_KEY=%kernel.project_dir%/config/jwt/public.pem
 JWT_PASSPHRASE=your-jwt-passphrase
 
-# CORS Configuration
+## CORS Configuration
 CORS_ALLOW_ORIGIN=https://tfg-platform.com
 
-# Mailer
+## Mailer
 MAILER_DSN=smtp://smtp.gmail.com:587?username=noreply@tfg-platform.com&password=app-password
 
-# File Upload
+## File Upload
 MAX_FILE_SIZE=52428800
 UPLOAD_PATH=/var/www/uploads
 
-# Monitoring
+## Monitoring
 SENTRY_DSN=https://your-sentry-dsn@sentry.io/project-id
 
-# Cache
+## Cache
 REDIS_URL=redis://127.0.0.1:6379
 ```
 
-#### 7.1.2.2. Configuración de Symfony para producción
+#### Configuración de Symfony para producción
 
 ```yaml
-# config/packages/prod/framework.yaml
+## config/packages/prod/framework.yaml
 framework:
     cache:
         app: cache.adapter.redis
@@ -4638,7 +4459,7 @@ framework:
         enabled: true
         debug: false
 
-# config/packages/prod/doctrine.yaml
+## config/packages/prod/doctrine.yaml
 doctrine:
     dbal:
         connections:
@@ -4661,7 +4482,7 @@ doctrine:
             type: redis
             host: '%env(REDIS_URL)%'
 
-# config/packages/prod/monolog.yaml
+## config/packages/prod/monolog.yaml
 monolog:
     handlers:
         main:
@@ -4682,7 +4503,7 @@ monolog:
             level: error
 ```
 
-#### 7.1.2.3. Optimización de rendimiento
+#### Optimización de rendimiento
 
 ```php
 <?php
@@ -4705,7 +4526,7 @@ framework:
                 adapter: cache.adapter.redis
                 default_lifetime: 300 # 5 minutes
 
-# Performance optimizations
+## Performance optimizations
 parameters:
     # Database connection pooling
     database.max_connections: 20
@@ -4716,801 +4537,15 @@ parameters:
     file.max_concurrent_uploads: 5
 ```
 
-## 7.2. Despliegue con Docker
+# Procesos de soporte y pruebas
 
-### 7.2.1. Containerización del frontend
+## Gestión y toma de decisiones
 
-#### 7.2.1.1. Dockerfile multi-stage para React
-
-```dockerfile
-# Dockerfile.frontend
-# Build stage
-FROM node:18-alpine AS builder
-
-WORKDIR /app
-
-# Copy package files
-COPY package*.json ./
-RUN npm ci --only=production
-
-# Copy source code
-COPY . .
-
-# Build the application
-RUN npm run build
-
-# Production stage
-FROM nginx:alpine AS production
-
-# Copy nginx configuration
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# Copy built assets from builder stage
-COPY --from=builder /app/dist /usr/share/nginx/html
-
-# Add health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD curl -f http://localhost/ || exit 1
-
-# Expose port
-EXPOSE 80
-
-# Start nginx
-CMD ["nginx", "-g", "daemon off;"]
-```
-
-#### 7.2.1.2. Configuración de Nginx
-
-```nginx
-# nginx.conf
-server {
-    listen 80;
-    server_name localhost;
-    
-    root /usr/share/nginx/html;
-    index index.html;
-    
-    # Gzip compression
-    gzip on;
-    gzip_vary on;
-    gzip_min_length 1024;
-    gzip_proxied expired no-cache no-store private must-revalidate auth;
-    gzip_types
-        text/plain
-        text/css
-        text/xml
-        text/javascript
-        application/javascript
-        application/xml+rss
-        application/json;
-
-    # Cache static assets
-    location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2)$ {
-        expires 1y;
-        add_header Cache-Control "public, immutable";
-        add_header Vary "Accept-Encoding";
-    }
-    
-    # Handle SPA routing
-    location / {
-        try_files $uri $uri/ /index.html;
-        
-        # Security headers
-        add_header X-Frame-Options "SAMEORIGIN" always;
-        add_header X-Content-Type-Options "nosniff" always;
-        add_header X-XSS-Protection "1; mode=block" always;
-        add_header Referrer-Policy "strict-origin-when-cross-origin" always;
-        add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://api.tfg-platform.com;" always;
-    }
-    
-    # API proxy (if needed)
-    location /api/ {
-        proxy_pass http://backend:8000;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-        
-        # CORS headers
-        add_header 'Access-Control-Allow-Origin' 'https://tfg-platform.com' always;
-        add_header 'Access-Control-Allow-Methods' 'GET, POST, PUT, DELETE, OPTIONS' always;
-        add_header 'Access-Control-Allow-Headers' 'Authorization, Content-Type, X-Requested-With' always;
-    }
-}
-```
-
-### 7.2.2. Containerización del backend
-
-#### 7.2.2.1. Dockerfile para Symfony
-
-```dockerfile
-# Dockerfile.backend
-# Base image with PHP 8.2 and required extensions
-FROM php:8.2-fpm-alpine AS base
-
-# Install system dependencies
-RUN apk add --no-cache \
-    git \
-    unzip \
-    libzip-dev \
-    libpng-dev \
-    libjpeg-turbo-dev \
-    freetype-dev \
-    mysql-client \
-    supervisor \
-    nginx
-
-# Install PHP extensions
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install -j$(nproc) \
-        pdo \
-        pdo_mysql \
-        zip \
-        gd \
-        opcache
-
-# Install Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
-# Production stage
-FROM base AS production
-
-# Set working directory
-WORKDIR /var/www/html
-
-# Copy composer files
-COPY composer*.json ./
-
-# Install PHP dependencies (production only)
-RUN composer install --no-dev --optimize-autoloader --no-scripts
-
-# Copy application code
-COPY . .
-
-# Set proper permissions
-RUN chown -R www-data:www-data /var/www/html \
-    && find /var/www/html -type f -exec chmod 644 {} \; \
-    && find /var/www/html -type d -exec chmod 755 {} \;
-
-# Create required directories
-RUN mkdir -p var/cache var/log public/uploads \
-    && chown -R www-data:www-data var public/uploads
-
-# Generate JWT keys
-RUN php bin/console lexik:jwt:generate-keypair --skip-if-exists
-
-# Clear and warm up cache
-RUN php bin/console cache:clear --env=prod \
-    && php bin/console cache:warmup --env=prod
-
-# Copy supervisor configuration
-COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-
-# Copy nginx configuration for Symfony
-COPY docker/nginx-symfony.conf /etc/nginx/http.d/default.conf
-
-# Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD php bin/console debug:container --env=prod || exit 1
-
-# Expose port
-EXPOSE 80
-
-# Start supervisor
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
-```
-
-#### 7.2.2.2. Configuraciones adicionales
-
-```ini
-; docker/supervisord.conf
-[supervisord]
-nodaemon=true
-user=root
-
-[program:nginx]
-command=nginx -g "daemon off;"
-autostart=true
-autorestart=true
-stderr_logfile=/var/log/nginx.err.log
-stdout_logfile=/var/log/nginx.out.log
-
-[program:php-fpm]
-command=php-fpm -F
-autostart=true
-autorestart=true
-stderr_logfile=/var/log/php-fpm.err.log
-stdout_logfile=/var/log/php-fpm.out.log
-
-[program:messenger-consume]
-command=php bin/console messenger:consume async --time-limit=3600 --memory-limit=128M
-autostart=true
-autorestart=true
-numprocs=2
-stderr_logfile=/var/log/messenger.err.log
-stdout_logfile=/var/log/messenger.out.log
-```
-
-### 7.2.3. Docker Compose para producción
-
-```yaml
-# docker-compose.prod.yml
-version: '3.8'
-
-services:
-  # Frontend
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile.frontend
-      target: production
-    container_name: tfg-frontend
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./ssl:/etc/ssl/certs:ro
-    restart: unless-stopped
-    depends_on:
-      - backend
-    networks:
-      - tfg-network
-
-  # Backend
-  backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile.backend
-      target: production
-    container_name: tfg-backend
-    environment:
-      - APP_ENV=prod
-      - DATABASE_URL=mysql://tfg_user:${DB_PASSWORD}@database:3306/tfg_production
-      - REDIS_URL=redis://redis:6379
-    volumes:
-      - ./backend/public/uploads:/var/www/html/public/uploads
-      - ./backend/var/log:/var/www/html/var/log
-    restart: unless-stopped
-    depends_on:
-      - database
-      - redis
-    networks:
-      - tfg-network
-
-  # Database
-  database:
-    image: mysql:8.0
-    container_name: tfg-database
-    environment:
-      - MYSQL_DATABASE=tfg_production
-      - MYSQL_USER=tfg_user
-      - MYSQL_PASSWORD=${DB_PASSWORD}
-      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
-    volumes:
-      - db_data:/var/lib/mysql
-      - ./docker/mysql/init:/docker-entrypoint-initdb.d:ro
-    ports:
-      - "3306:3306"
-    restart: unless-stopped
-    networks:
-      - tfg-network
-
-  # Redis for caching
-  redis:
-    image: redis:7-alpine
-    container_name: tfg-redis
-    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD}
-    volumes:
-      - redis_data:/data
-    ports:
-      - "6379:6379"
-    restart: unless-stopped
-    networks:
-      - tfg-network
-
-  # Backup service
-  backup:
-    image: alpine:latest
-    container_name: tfg-backup
-    volumes:
-      - db_data:/data/db:ro
-      - ./backups:/backups
-      - ./docker/backup-script.sh:/backup-script.sh:ro
-    environment:
-      - DB_PASSWORD=${DB_PASSWORD}
-    command: sh -c "chmod +x /backup-script.sh && crond -f"
-    restart: unless-stopped
-    depends_on:
-      - database
-    networks:
-      - tfg-network
-
-volumes:
-  db_data:
-    driver: local
-  redis_data:
-    driver: local
-
-networks:
-  tfg-network:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 172.20.0.0/16
-```
-
-## 7.3. CI/CD Pipeline
-
-### 7.3.1. GitHub Actions workflow
-
-```yaml
-# .github/workflows/deploy.yml
-name: Deploy to Production
-
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-
-env:
-  NODE_VERSION: '18'
-  PHP_VERSION: '8.2'
-
-jobs:
-  # Testing jobs
-  test-frontend:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-          cache-dependency-path: frontend/package-lock.json
-          
-      - name: Install dependencies
-        working-directory: ./frontend
-        run: npm ci
-        
-      - name: Run linting
-        working-directory: ./frontend
-        run: npm run lint
-        
-      - name: Run tests
-        working-directory: ./frontend
-        run: npm run test -- --coverage --watchAll=false
-        
-      - name: Build application
-        working-directory: ./frontend
-        run: npm run build
-
-  test-backend:
-    runs-on: ubuntu-latest
-    
-    services:
-      mysql:
-        image: mysql:8.0
-        env:
-          MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: tfg_test
-        ports:
-          - 3306:3306
-        options: >-
-          --health-cmd="mysqladmin ping"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=3
-
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ env.PHP_VERSION }}
-          extensions: mbstring, xml, ctype, iconv, intl, pdo, pdo_mysql, dom, filter, gd, json, zip
-          coverage: xdebug
-          
-      - name: Cache Composer packages
-        uses: actions/cache@v3
-        with:
-          path: vendor
-          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-php-
-          
-      - name: Install dependencies
-        working-directory: ./backend
-        run: composer install --prefer-dist --no-progress
-        
-      - name: Run PHP CS Fixer
-        working-directory: ./backend
-        run: vendor/bin/php-cs-fixer fix --dry-run --diff
-        
-      - name: Run PHPStan
-        working-directory: ./backend
-        run: vendor/bin/phpstan analyse
-        
-      - name: Setup test database
-        working-directory: ./backend
-        run: |
-          php bin/console doctrine:database:create --env=test
-          php bin/console doctrine:migrations:migrate --no-interaction --env=test
-          php bin/console doctrine:fixtures:load --no-interaction --env=test
-        env:
-          DATABASE_URL: mysql://root:root@127.0.0.1:3306/tfg_test
-          
-      - name: Run tests
-        working-directory: ./backend
-        run: vendor/bin/phpunit --coverage-clover coverage.xml
-        env:
-          DATABASE_URL: mysql://root:root@127.0.0.1:3306/tfg_test
-
-  # Security scanning
-  security-scan:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@master
-        with:
-          scan-type: 'fs'
-          scan-ref: '.'
-          format: 'sarif'
-          output: 'trivy-results.sarif'
-          
-      - name: Upload Trivy scan results
-        uses: github/codeql-action/upload-sarif@v2
-        with:
-          sarif_file: 'trivy-results.sarif'
-
-  # Build and deploy
-  deploy:
-    needs: [test-frontend, test-backend, security-scan]
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
-    
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Setup Docker Buildx
-        uses: docker/setup-buildx-action@v3
-        
-      - name: Login to Container Registry
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-          
-      - name: Build and push Frontend image
-        uses: docker/build-push-action@v5
-        with:
-          context: ./frontend
-          file: ./frontend/Dockerfile.frontend
-          push: true
-          tags: ghcr.io/${{ github.repository }}/frontend:${{ github.sha }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          
-      - name: Build and push Backend image
-        uses: docker/build-push-action@v5
-        with:
-          context: ./backend
-          file: ./backend/Dockerfile.backend
-          push: true
-          tags: ghcr.io/${{ github.repository }}/backend:${{ github.sha }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-
-      - name: Deploy to production server
-        uses: appleboy/ssh-action@v1.0.0
-        with:
-          host: ${{ secrets.PROD_HOST }}
-          username: ${{ secrets.PROD_USER }}
-          key: ${{ secrets.PROD_SSH_KEY }}
-          script: |
-            cd /opt/tfg-platform
-            export IMAGE_TAG=${{ github.sha }}
-            docker-compose -f docker-compose.prod.yml pull
-            docker-compose -f docker-compose.prod.yml up -d
-            docker system prune -f
-            
-      - name: Run database migrations
-        uses: appleboy/ssh-action@v1.0.0
-        with:
-          host: ${{ secrets.PROD_HOST }}
-          username: ${{ secrets.PROD_USER }}
-          key: ${{ secrets.PROD_SSH_KEY }}
-          script: |
-            cd /opt/tfg-platform
-            docker-compose -f docker-compose.prod.yml exec -T backend php bin/console doctrine:migrations:migrate --no-interaction
-            
-      - name: Health check
-        run: |
-          sleep 30
-          curl -f https://tfg-platform.com/health || exit 1
-          curl -f https://api.tfg-platform.com/health || exit 1
-```
-
-### 7.3.2. Scripts de despliegue
-
-```bash
-#!/bin/bash
-# scripts/deploy.sh
-
-set -e
-
-echo "🚀 Starting deployment process..."
-
-# Configuration
-COMPOSE_FILE="docker-compose.prod.yml"
-PROJECT_NAME="tfg-platform"
-BACKUP_DIR="/opt/backups/tfg-platform"
-
-# Create backup
-echo "📦 Creating backup..."
-mkdir -p $BACKUP_DIR/$(date +%Y%m%d_%H%M%S)
-docker-compose -f $COMPOSE_FILE exec -T database mysqldump -u root -p$DB_ROOT_PASSWORD tfg_production > $BACKUP_DIR/$(date +%Y%m%d_%H%M%S)/database.sql
-
-# Pull latest images
-echo "📥 Pulling latest images..."
-docker-compose -f $COMPOSE_FILE pull
-
-# Stop services
-echo "⏹️ Stopping services..."
-docker-compose -f $COMPOSE_FILE stop
-
-# Start services
-echo "▶️ Starting services..."
-docker-compose -f $COMPOSE_FILE up -d
-
-# Wait for services to be ready
-echo "⏳ Waiting for services to be ready..."
-sleep 30
-
-# Run database migrations
-echo "🗄️ Running database migrations..."
-docker-compose -f $COMPOSE_FILE exec -T backend php bin/console doctrine:migrations:migrate --no-interaction
-
-# Clear application cache
-echo "🧹 Clearing application cache..."
-docker-compose -f $COMPOSE_FILE exec -T backend php bin/console cache:clear --env=prod
-
-# Health check
-echo "🏥 Performing health check..."
-if curl -f https://tfg-platform.com/health && curl -f https://api.tfg-platform.com/health; then
-    echo "✅ Deployment successful!"
-else
-    echo "❌ Health check failed! Rolling back..."
-    docker-compose -f $COMPOSE_FILE down
-    # Restore from backup logic here
-    exit 1
-fi
-
-# Clean up old images
-echo "🧹 Cleaning up old images..."
-docker system prune -f
-
-echo "🎉 Deployment completed successfully!"
-```
-
-## 7.4. Configuración de dominio y SSL
-
-### 7.4.1. Configuración de DNS
-
-```bash
-# DNS Records for tfg-platform.com
-# A Records
-tfg-platform.com.     300  IN  A    192.168.1.100
-www.tfg-platform.com. 300  IN  A    192.168.1.100
-api.tfg-platform.com. 300  IN  A    192.168.1.100
-
-# CNAME Records
-admin.tfg-platform.com. 300 IN CNAME tfg-platform.com.
-
-# MX Records (for email)
-tfg-platform.com. 300 IN MX 10 mail.tfg-platform.com.
-
-# TXT Records (SPF, DKIM, DMARC)
-tfg-platform.com. 300 IN TXT "v=spf1 include:_spf.google.com ~all"
-tfg-platform.com. 300 IN TXT "v=DMARC1; p=quarantine; rua=mailto:dmarc@tfg-platform.com"
-```
-
-### 7.4.2. Certificados SSL con Let's Encrypt
-
-```bash
-#!/bin/bash
-# scripts/setup-ssl.sh
-
-# Install certbot
-sudo apt-get update
-sudo apt-get install certbot python3-certbot-nginx
-
-# Generate certificates
-sudo certbot --nginx -d tfg-platform.com -d www.tfg-platform.com -d api.tfg-platform.com
-
-# Auto-renewal cron job
-echo "0 12 * * * /usr/bin/certbot renew --quiet" | sudo crontab -
-
-# Test renewal
-sudo certbot renew --dry-run
-```
-
-### 7.4.3. Nginx configuration con SSL
-
-```nginx
-# /etc/nginx/sites-available/tfg-platform
-server {
-    listen 80;
-    server_name tfg-platform.com www.tfg-platform.com;
-    return 301 https://$server_name$request_uri;
-}
-
-server {
-    listen 443 ssl http2;
-    server_name tfg-platform.com www.tfg-platform.com;
-    
-    # SSL Configuration
-    ssl_certificate /etc/letsencrypt/live/tfg-platform.com/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/tfg-platform.com/privkey.pem;
-    ssl_session_timeout 1d;
-    ssl_session_cache shared:SSL:50m;
-    ssl_session_tickets off;
-    
-    # Modern SSL configuration
-    ssl_protocols TLSv1.2 TLSv1.3;
-    ssl_ciphers ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384;
-    ssl_prefer_server_ciphers off;
-    
-    # HSTS
-    add_header Strict-Transport-Security "max-age=63072000" always;
-    
-    # Proxy to frontend container
-    location / {
-        proxy_pass http://127.0.0.1:3000;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-    }
-}
-
-# API subdomain
-server {
-    listen 443 ssl http2;
-    server_name api.tfg-platform.com;
-    
-    # SSL Configuration (same as above)
-    ssl_certificate /etc/letsencrypt/live/tfg-platform.com/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/tfg-platform.com/privkey.pem;
-    
-    # Proxy to backend container
-    location / {
-        proxy_pass http://127.0.0.1:8000;
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-        
-        # CORS headers for API
-        add_header 'Access-Control-Allow-Origin' 'https://tfg-platform.com' always;
-        add_header 'Access-Control-Allow-Methods' 'GET, POST, PUT, DELETE, OPTIONS' always;
-        add_header 'Access-Control-Allow-Headers' 'Authorization, Content-Type, X-Requested-With' always;
-    }
-}
-```
-
-## 7.5. Monitoreo y logs
-
-### 7.5.1. Configuración de Prometheus y Grafana
-
-```yaml
-# docker-compose.monitoring.yml
-version: '3.8'
-
-services:
-  prometheus:
-    image: prom/prometheus:latest
-    container_name: prometheus
-    ports:
-      - "9090:9090"
-    volumes:
-      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
-      - prometheus_data:/prometheus
-    command:
-      - '--config.file=/etc/prometheus/prometheus.yml'
-      - '--storage.tsdb.path=/prometheus'
-      - '--web.console.libraries=/etc/prometheus/console_libraries'
-      - '--web.console.templates=/etc/prometheus/consoles'
-      - '--storage.tsdb.retention.time=200h'
-      - '--web.enable-lifecycle'
-    restart: unless-stopped
-    networks:
-      - monitoring
-
-  grafana:
-    image: grafana/grafana:latest
-    container_name: grafana
-    ports:
-      - "3001:3000"
-    volumes:
-      - grafana_data:/var/lib/grafana
-      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards:ro
-      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources:ro
-    environment:
-      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
-      - GF_USERS_ALLOW_SIGN_UP=false
-    restart: unless-stopped
-    networks:
-      - monitoring
-
-volumes:
-  prometheus_data:
-  grafana_data:
-
-networks:
-  monitoring:
-    driver: bridge
-```
-
-### 7.5.2. Sistema de backup automatizado
-
-```bash
-#!/bin/bash
-# scripts/backup.sh
-
-# Configuration
-BACKUP_DIR="/opt/backups/tfg-platform"
-DATE=$(date +%Y%m%d_%H%M%S)
-RETENTION_DAYS=30
-
-# Create backup directory
-mkdir -p $BACKUP_DIR/$DATE
-
-# Database backup
-echo "Creating database backup..."
-docker-compose exec -T database mysqldump -u root -p$DB_ROOT_PASSWORD tfg_production | gzip > $BACKUP_DIR/$DATE/database.sql.gz
-
-# Files backup
-echo "Creating files backup..."
-tar -czf $BACKUP_DIR/$DATE/uploads.tar.gz -C /opt/tfg-platform/backend/public uploads/
-
-# Configuration backup
-echo "Creating configuration backup..."
-cp -r /opt/tfg-platform/docker-compose.prod.yml $BACKUP_DIR/$DATE/
-cp -r /opt/tfg-platform/.env.prod $BACKUP_DIR/$DATE/
-
-# Upload to cloud storage (optional)
-if [ ! -z "$AWS_S3_BUCKET" ]; then
-    echo "Uploading to S3..."
-    aws s3 sync $BACKUP_DIR/$DATE s3://$AWS_S3_BUCKET/backups/$DATE
-fi
-
-# Cleanup old backups
-echo "Cleaning up old backups..."
-find $BACKUP_DIR -type d -mtime +$RETENTION_DAYS -exec rm -rf {} +
-
-echo "Backup completed: $BACKUP_DIR/$DATE"
-```
-
----
-
-*Fecha de elaboración: 31 de agosto de 2025*  
-*Versión: 1.0*  
-*Estándar: ISO/IEEE 16326:2009*
-\newpage
-
-## 8.1. Gestión y toma de decisiones
-
-### 8.1.1. Metodología de gestión del proyecto
+### Metodología de gestión del proyecto
 
 El proyecto ha seguido una metodología ágil adaptada al contexto académico, con una estructura de gestión que permite flexibilidad en la toma de decisiones mientras mantiene el rigor técnico requerido.
 
-#### 8.1.1.1. Estructura de toma de decisiones
+#### Estructura de toma de decisiones
 
 **Niveles de decisión implementados**:
 
@@ -5524,10 +4559,10 @@ El proyecto ha seguido una metodología ágil adaptada al contexto académico, c
 - **Prototipado rápido**: Validación práctica de decisiones críticas
 - **Documentación**: Registro de decisiones en Architecture Decision Records (ADR)
 
-#### 8.1.1.2. Architecture Decision Records (ADR)
+#### Architecture Decision Records (ADR)
 
 ```markdown
-# ADR-001: Selección de React 19 como framework frontend
+## ADR-001: Selección de React 19 como framework frontend
 
 ## Estado
 Aceptado
@@ -5556,12 +4591,12 @@ Utilizaremos React 19 con Context API para gestión de estado y React Router v7 
 - Svelte: Prometedor pero comunidad más pequeña
 ```
 
-### 8.1.2. Control de versiones y cambios
+### Control de versiones y cambios
 
-#### 8.1.2.1. Estrategia de branching
+#### Estrategia de branching
 
 ```bash
-# Estructura de branches
+## Estructura de branches
 main                    # Producción estable
 ├── develop            # Integración de features
 ├── feature/auth       # Feature específico
@@ -5576,10 +4611,10 @@ main                    # Producción estable
 3. **Conventional commits**: Mensajes estructurados para changelog automático
 4. **Semantic versioning**: Versionado semántico (MAJOR.MINOR.PATCH)
 
-#### 8.1.2.2. Gestión de releases
+#### Gestión de releases
 
 ```bash
-# Ejemplo de conventional commits
+## Ejemplo de conventional commits
 feat(auth): add JWT refresh token functionality
 fix(tfg): resolve file upload validation error
 docs(api): update endpoint documentation
@@ -5587,14 +4622,14 @@ test(tribunal): add integration tests for tribunal creation
 chore(deps): update React to v19.0.0
 ```
 
-## 8.2. Gestión de riesgos
+## Gestión de riesgos
 
-### 8.2.1. Análisis de riesgos
+### Análisis de riesgos
 
-#### 8.2.1.1. Matriz de riesgos identificados
+#### Matriz de riesgos identificados
 
-| ID | Riesgo | Probabilidad | Impacto | Severidad | Estado |
-|----|--------|--------------|---------|-----------|--------|
+| ID | Riesgo      | Probabilidad | Impacto | Severidad | Estado |
+|----|-------------|--------------|---------|-----------|--------|
 | R001 | Incompatibilidad entre React 19 y librerías existentes | Media | Alto | Alta | Mitigado |
 | R002 | Problemas de rendimiento con archivos PDF grandes | Alta | Medio | Media | Resuelto |
 | R003 | Vulnerabilidades de seguridad en JWT implementation | Baja | Alto | Media | Mitigado |
@@ -5602,7 +4637,7 @@ chore(deps): update React to v19.0.0
 | R005 | Sobrecarga del sistema durante picos de uso (defensas) | Media | Medio | Media | Monitoreado |
 | R006 | Dependencias obsoletas o con vulnerabilidades | Alta | Bajo | Baja | Monitoreado |
 
-#### 8.2.1.2. Análisis detallado de riesgos críticos
+#### Análisis detallado de riesgos críticos
 
 **R001: Incompatibilidad tecnológica**
 - **Descripción**: React 19 es una versión muy reciente que puede tener incompatibilidades
@@ -5622,36 +4657,36 @@ chore(deps): update React to v19.0.0
   - Migración por etapas con validación
   - Rollback plan documentado
 
-### 8.2.2. Plan de contingencia
+### Plan de contingencia
 
-#### 8.2.2.1. Escenarios de contingencia
+#### Escenarios de contingencia
 
 **Escenario 1: Fallo crítico en producción**
 ```bash
-# Procedimiento de rollback automático
+## Procedimiento de rollback automático
 #!/bin/bash
-# scripts/emergency-rollback.sh
+## scripts/emergency-rollback.sh
 
 echo "🚨 EMERGENCY ROLLBACK INITIATED"
 
-# Stop current services
+## Stop current services
 docker-compose -f docker-compose.prod.yml down
 
-# Restore from last known good backup
+## Restore from last known good backup
 LAST_BACKUP=$(ls -t /opt/backups/tfg-platform/ | head -1)
 echo "Restoring from backup: $LAST_BACKUP"
 
-# Restore database
+## Restore database
 docker-compose -f docker-compose.prod.yml up -d database
 sleep 30
 docker-compose -f docker-compose.prod.yml exec -T database mysql -u root -p$DB_ROOT_PASSWORD tfg_production < /opt/backups/tfg-platform/$LAST_BACKUP/database.sql
 
-# Restore previous docker images
+## Restore previous docker images
 docker-compose -f docker-compose.prod.yml pull
 docker tag ghcr.io/repo/frontend:previous ghcr.io/repo/frontend:latest
 docker tag ghcr.io/repo/backend:previous ghcr.io/repo/backend:latest
 
-# Start services
+## Start services
 docker-compose -f docker-compose.prod.yml up -d
 
 echo "✅ Rollback completed"
@@ -5672,11 +4707,11 @@ echo "✅ Rollback completed"
   3. Notificación a usuarios sobre medidas tomadas
   4. Auditoría post-incidente
 
-## 8.3. Verificación y validación del software
+## Verificación y validación del software
 
-### 8.3.1. Testing del frontend
+### Testing del frontend
 
-#### 8.3.1.1. Testing unitario con Vitest
+#### Testing unitario con Vitest
 
 ```javascript
 // src/components/__tests__/Button.test.jsx
@@ -5717,7 +4752,7 @@ describe('Button Component', () => {
 });
 ```
 
-#### 8.3.1.2. Testing de hooks personalizados
+#### Testing de hooks personalizados
 
 ```javascript
 // src/hooks/__tests__/useTFGs.test.js
@@ -5784,7 +4819,7 @@ describe('useTFGs Hook', () => {
 });
 ```
 
-#### 8.3.1.3. Testing de integración con React Testing Library
+#### Testing de integración con React Testing Library
 
 ```javascript
 // src/pages/__tests__/Dashboard.integration.test.jsx
@@ -5854,9 +4889,9 @@ describe('Dashboard Integration', () => {
 });
 ```
 
-### 8.3.2. Testing del backend
+### Testing del backend
 
-#### 8.3.2.1. Testing unitario con PHPUnit
+#### Testing unitario con PHPUnit
 
 ```php
 <?php
@@ -5927,7 +4962,7 @@ class TFGTest extends TestCase
 }
 ```
 
-#### 8.3.2.2. Testing de servicios
+#### Testing de servicios
 
 ```php
 <?php
@@ -6043,9 +5078,9 @@ class TFGServiceTest extends TestCase
 }
 ```
 
-### 8.3.3. Testing de APIs REST
+### Testing de APIs REST
 
-#### 8.3.3.1. Testing funcional de endpoints
+#### Testing funcional de endpoints
 
 ```php
 <?php
@@ -6204,12 +5239,12 @@ class TFGControllerTest extends WebTestCase
 }
 ```
 
-### 8.3.4. Testing de rendimiento
+### Testing de rendimiento
 
-#### 8.3.4.1. Load testing con Artillery
+#### Load testing con Artillery
 
 ```yaml
-# artillery-config.yml
+## artillery-config.yml
 config:
   target: 'https://api.tfg-platform.com'
   phases:
@@ -6276,7 +5311,7 @@ scenarios:
             - statusCode: [200, 400] # 400 if file already exists
 ```
 
-#### 8.3.4.2. Métricas de rendimiento objetivo
+#### Métricas de rendimiento objetivo
 
 ```javascript
 // performance-tests/benchmarks.js
@@ -6343,35 +5378,35 @@ async function validatePerformance() {
 validatePerformance().catch(console.error);
 ```
 
-### 8.3.5. Testing de seguridad
+### Testing de seguridad
 
-#### 8.3.5.1. Automated Security Testing
+#### Automated Security Testing
 
 ```bash
 #!/bin/bash
-# scripts/security-scan.sh
+## scripts/security-scan.sh
 
 echo "🔒 Running security analysis..."
 
-# Frontend dependency vulnerabilities
+## Frontend dependency vulnerabilities
 echo "Checking frontend dependencies..."
 cd frontend && npm audit --audit-level moderate
 
-# Backend dependency vulnerabilities  
+## Backend dependency vulnerabilities  
 echo "Checking backend dependencies..."
 cd ../backend && composer audit
 
-# OWASP ZAP baseline scan
+## OWASP ZAP baseline scan
 echo "Running OWASP ZAP baseline scan..."
 docker run -t owasp/zap2docker-stable zap-baseline.py \
   -t https://tfg-platform.com \
   -J zap-report.json
 
-# SSL/TLS configuration test
+## SSL/TLS configuration test
 echo "Testing SSL configuration..."
 docker run --rm -ti drwetter/testssl.sh https://tfg-platform.com
 
-# Static analysis with SonarQube (if available)
+## Static analysis with SonarQube (if available)
 if command -v sonar-scanner &> /dev/null; then
     echo "Running SonarQube analysis..."
     sonar-scanner
@@ -6380,7 +5415,7 @@ fi
 echo "✅ Security scan completed"
 ```
 
-#### 8.3.5.2. Penetration testing checklist
+#### Penetration testing checklist
 
 **Automated tests implemented**:
 - ✅ **SQL Injection**: Parameterized queries with Doctrine ORM
@@ -6399,66 +5434,62 @@ echo "✅ Security scan completed"
 - 📋 CORS configuration testing
 - 📋 Rate limiting effectiveness
 
-## 8.4. Métricas y KPIs
+## Métricas y KPIs
 
-### 8.4.1. Métricas técnicas
+### Métricas técnicas
 
 | Métrica | Objetivo | Actual | Estado |
 |---------|----------|--------|--------|
-| **Code Coverage** | > 80% | 85% | ✅ |
-| **API Response Time** | < 500ms | 320ms | ✅ |
-| **Page Load Time** | < 3s | 2.1s | ✅ |
-| **Bundle Size** | < 1MB | 850KB | ✅ |
-| **Security Score** | A+ | A+ | ✅ |
-| **Lighthouse Score** | > 90 | 94 | ✅ |
-| **Uptime** | > 99% | 99.8% | ✅ |
+| **Code Coverage** | > 80% | 85% | OK |
+| **API Response Time** | < 500ms | 320ms | OK |
+| **Page Load Time** | < 3s | 2.1s | OK |
+| **Bundle Size** | < 1MB | 850KB | OK |
+| **Security Score** | A+ | A+ | OK |
+| **Lighthouse Score** | > 90 | 94 | OK |
+| **Uptime** | > 99% | 99.8% | OK |
 
-### 8.4.2. Métricas de calidad
+### Métricas de calidad
 
 ```bash
-# Script de métricas automatizado
+## Script de métricas automatizado
 #!/bin/bash
-# scripts/metrics-report.sh
+## scripts/metrics-report.sh
 
 echo "📊 Generating quality metrics report..."
 
-# Code coverage
+## Code coverage
 echo "## Code Coverage"
 npm --prefix frontend run test:coverage
 php backend/bin/phpunit --coverage-text
 
-# Code quality
+## Code quality
 echo "## Code Quality"
 npm --prefix frontend run lint
 cd backend && vendor/bin/phpstan analyse
 
-# Performance metrics
+## Performance metrics
 echo "## Performance"
 curl -o /dev/null -s -w "API Response Time: %{time_total}s\n" https://api.tfg-platform.com/health
 
-# Security score
+## Security score
 echo "## Security"
 docker run --rm -i returntocorp/semgrep --config=auto .
 
 echo "✅ Metrics report completed"
 ```
 
----
 
-*Fecha de elaboración: 31 de agosto de 2025*  
-*Versión: 1.0*  
-*Estándar: ISO/IEEE 16326:2009*
-\newpage
+# Conclusiones y trabajo futuro
 
-## 9.1. Valoración del proyecto
+## Valoración del proyecto
 
-### 9.1.1. Evaluación global
+### Evaluación global
 
 La Plataforma de Gestión de TFG representa un logro significativo en la modernización de procesos académicos universitarios, habiendo alcanzado los objetivos establecidos inicialmente con un grado de completitud del **95%** sobre las funcionalidades planificadas.
 
 El proyecto ha demostrado ser técnicamente viable y funcionalmente completo, proporcionando una solución integral que aborda las necesidades reales identificadas en el proceso de gestión de Trabajos de Fin de Grado. La arquitectura implementada garantiza escalabilidad, mantenibilidad y seguridad, cumpliendo con estándares profesionales de desarrollo de software.
 
-#### 9.1.1.1. Fortalezas identificadas
+#### Fortalezas identificadas
 
 **Arquitectura técnica sólida**:
 - Implementación exitosa de una arquitectura moderna con React 19 y Symfony 6.4 LTS
@@ -6483,7 +5514,7 @@ El proyecto ha demostrado ser técnicamente viable y funcionalmente completo, pr
 - Optimizaciones de rendimiento implementadas (caching, lazy loading, code splitting)
 - Métricas de rendimiento que superan los objetivos establecidos
 
-#### 9.1.1.2. Desafíos superados
+#### Desafíos superados
 
 **Complejidad de la gestión de estado**:
 El manejo de múltiples roles con permisos diferenciados requirió un diseño cuidadoso del sistema de autenticación y autorización. La implementación del Context API con reducers personalizados proporcionó una solución elegante y mantenible.
@@ -6494,9 +5525,9 @@ La adopción de React 19 (versión muy reciente) presentó desafíos de compatib
 **Workflow complejo de estados de TFG**:
 La implementación del sistema de transiciones de estado (Borrador → En Revisión → Aprobado → Defendido) con validaciones y notificaciones automáticas requirió un diseño domain-driven que resultó exitoso.
 
-### 9.1.2. Impacto esperado
+### Impacto esperado
 
-#### 9.1.2.1. Beneficios cuantificables
+#### Beneficios cuantificables
 
 **Eficiencia operacional**:
 - **Reducción del 75%** en tiempo de gestión administrativa por TFG
@@ -6513,7 +5544,7 @@ La implementación del sistema de transiciones de estado (Borrador → En Revisi
 - **Herramientas digitales avanzadas** para supervisión de profesores
 - **Reporting automático** para administradores
 
-#### 9.1.2.2. Impacto académico
+#### Impacto académico
 
 **Modernización de procesos**:
 La plataforma posiciona a la institución académica como tecnológicamente avanzada, mejorando su imagen y competitividad frente a universidades con procesos manuales.
@@ -6524,9 +5555,9 @@ Los datos estructurados generados por el sistema permiten análisis estadístico
 **Preparación para el futuro**:
 La arquitectura modular facilita la expansión a otros procesos académicos (TFM, doctorado, proyectos de investigación).
 
-## 9.2. Cumplimiento de los objetivos propuestos
+## Cumplimiento de los objetivos propuestos
 
-### 9.2.1. Objetivos funcionales
+### Objetivos funcionales
 
 **✅ OF1: Sistema de autenticación multi-rol**
 - **Estado**: Completado al 100%
@@ -6563,7 +5594,7 @@ La arquitectura modular facilita la expansión a otros procesos académicos (TFM
 - **Implementación**: Notificaciones in-app completas, emails básicos
 - **Resultado**: Sistema efectivo con posibilidad de expansión
 
-### 9.2.2. Objetivos técnicos
+### Objetivos técnicos
 
 **✅ OT1: Arquitectura frontend moderna**
 - **Estado**: Completado al 100%
@@ -6595,7 +5626,7 @@ La arquitectura modular facilita la expansión a otros procesos académicos (TFM
 - **Implementación**: DDEV completamente funcional, Docker para producción
 - **Resultado**: Entorno consistente y fácil de replicar
 
-### 9.2.3. Objetivos de calidad
+### Objetivos de calidad
 
 **✅ OC1: Rendimiento óptimo**
 - **Objetivo**: < 2 segundos para operaciones críticas
@@ -6617,11 +5648,11 @@ La arquitectura modular facilita la expansión a otros procesos académicos (TFM
 - **Estado**: En implementación (80%)
 - **Progreso**: Scripts de backup automatizados, procedimientos de recuperación documentados
 
-## 9.3. Trabajo futuro
+## Trabajo futuro
 
-### 9.3.1. Mejoras a corto plazo (1-6 meses)
+### Mejoras a corto plazo (1-6 meses)
 
-#### 9.3.1.1. Integración completa backend-frontend
+#### Integración completa backend-frontend
 
 **Prioridad**: Alta  
 **Esfuerzo estimado**: 40 horas  
@@ -6655,7 +5686,7 @@ apiClient.interceptors.response.use(
 );
 ```
 
-#### 9.3.1.2. Sistema de notificaciones por email avanzado
+#### Sistema de notificaciones por email avanzado
 
 **Prioridad**: Media  
 **Esfuerzo estimado**: 30 horas  
@@ -6666,7 +5697,7 @@ apiClient.interceptors.response.use(
 - Preferencias de notificación por usuario
 - Sistema de digest diario/semanal
 
-#### 9.3.1.3. Métricas y analytics avanzados
+#### Métricas y analytics avanzados
 
 **Prioridad**: Media  
 **Esfuerzo estimado**: 25 horas  
@@ -6677,9 +5708,9 @@ apiClient.interceptors.response.use(
 - Reportes de rendimiento académico
 - Exportación de métricas personalizadas
 
-### 9.3.2. Funcionalidades de mediano plazo (6-12 meses)
+### Funcionalidades de mediano plazo (6-12 meses)
 
-#### 9.3.2.1. Sistema de colaboración avanzado
+#### Sistema de colaboración avanzado
 
 **Descripción**: Herramientas de colaboración entre estudiantes y tutores:
 - Chat en tiempo real integrado
@@ -6692,7 +5723,7 @@ apiClient.interceptors.response.use(
 - Operational Transform para edición colaborativa
 - PDF.js para anotaciones en documentos
 
-#### 9.3.2.2. Inteligencia artificial y automatización
+#### Inteligencia artificial y automatización
 
 **Descripción**: Incorporación de IA para asistencia académica:
 - Detección automática de plagio básico
@@ -6705,7 +5736,7 @@ apiClient.interceptors.response.use(
 - TensorFlow.js para análisis en cliente
 - Elasticsearch para búsquedas semánticas
 
-#### 9.3.2.3. Aplicación móvil nativa
+#### Aplicación móvil nativa
 
 **Descripción**: Desarrollo de app móvil para funcionalidades críticas:
 - Notificaciones push nativas
@@ -6718,9 +5749,9 @@ apiClient.interceptors.response.use(
 - Firebase para notificaciones push
 - SQLite para almacenamiento offline
 
-### 9.3.3. Expansiones a largo plazo (1-2 años)
+### Expansiones a largo plazo (1-2 años)
 
-#### 9.3.3.1. Plataforma multi-institucional
+#### Plataforma multi-institucional
 
 **Visión**: Expansión del sistema para múltiples universidades:
 - Arquitectura multi-tenant
@@ -6734,7 +5765,7 @@ apiClient.interceptors.response.use(
 - Datos agregados para investigación educativa
 - Posicionamiento como líder en tecnología académica
 
-#### 9.3.3.2. Integración con sistemas académicos existentes
+#### Integración con sistemas académicos existentes
 
 **Descripción**: Conectores con sistemas universitarios:
 - Integración con SIS (Student Information Systems)
@@ -6742,7 +5773,7 @@ apiClient.interceptors.response.use(
 - Sync con calendarios académicos institucionales
 - APIs para sistemas de evaluación externos
 
-#### 9.3.3.3. Marketplace de servicios académicos
+#### Marketplace de servicios académicos
 
 **Visión**: Plataforma extendida con servicios adicionales:
 - Marketplace de tutores externos
@@ -6750,9 +5781,9 @@ apiClient.interceptors.response.use(
 - Herramientas de presentación y defensa virtual
 - Certificaciones digitales blockchain
 
-### 9.3.4. Innovaciones tecnológicas futuras
+### Innovaciones tecnológicas futuras
 
-#### 9.3.4.1. Realidad virtual para defensas
+#### Realidad virtual para defensas
 
 **Concepto**: Entornos VR para defensas remotas inmersivas:
 - Salas virtuales realistas para presentaciones
@@ -6760,7 +5791,7 @@ apiClient.interceptors.response.use(
 - Grabación y replay de defensas
 - Reducción de barreras geográficas
 
-#### 9.3.4.2. Blockchain para certificaciones
+#### Blockchain para certificaciones
 
 **Aplicación**: Registro inmutable de logros académicos:
 - Certificados de TFG en blockchain
@@ -6768,9 +5799,9 @@ apiClient.interceptors.response.use(
 - Portfolio académico descentralizado
 - Interoperabilidad global de credenciales
 
-## 9.4. Lecciones aprendidas
+## Lecciones aprendidas
 
-### 9.4.1. Decisiones arquitectónicas acertadas
+### Decisiones arquitectónicas acertadas
 
 **Adopción de React 19**: A pesar de ser una versión muy reciente, las funcionalidades de concurrencia y los hooks mejorados han proporcionado beneficios significativos en rendimiento y experiencia de desarrollo.
 
@@ -6780,7 +5811,7 @@ apiClient.interceptors.response.use(
 
 **Docker/DDEV**: El entorno containerizado ha facilitado enormemente el desarrollo y será crucial para el despliegue en producción.
 
-### 9.4.2. Desafíos técnicos y soluciones
+### Desafíos técnicos y soluciones
 
 **Gestión de archivos grandes**: Los archivos PDF de TFG pueden ser voluminosos. La implementación de upload con progress tracking y validaciones múltiples ha resuelto este desafío.
 
@@ -6788,7 +5819,7 @@ apiClient.interceptors.response.use(
 
 **Testing de integración**: La complejidad de testing con múltiples roles y estados requirió fixtures elaborados y mocking estratégico.
 
-### 9.4.3. Mejores prácticas identificadas
+### Mejores prácticas identificadas
 
 **Desarrollo incremental**: La estrategia de 8 fases con entregas funcionales ha permitido validación temprana y ajustes continuos.
 
@@ -6798,7 +5829,7 @@ apiClient.interceptors.response.use(
 
 **Security by design**: Considerar seguridad desde el diseño inicial ha resultado en un sistema robusto sin necesidad de parches posteriores.
 
-### 9.4.4. Recomendaciones para proyectos similares
+### Recomendaciones para proyectos similares
 
 **Planificación de capacidad**: Considerar desde el inicio los picos de uso estacionales (períodos de defensas).
 
@@ -6808,7 +5839,7 @@ apiClient.interceptors.response.use(
 
 **Documentación como código**: Mantener documentación en el mismo repositorio que el código garantiza sincronización.
 
-## 9.5. Reflexión final
+## Reflexión final
 
 La Plataforma de Gestión de TFG representa más que una solución técnica; es un catalizador para la modernización de procesos académicos tradicionalmente analógicos. El proyecto ha demostrado que es posible crear sistemas complejos con alta calidad técnica manteniendo un enfoque centrado en el usuario.
 
@@ -6820,25 +5851,10 @@ Este proyecto sirve como ejemplo de cómo la tecnología puede transformar proce
 
 La inversión en tiempo y recursos técnicos se justifica ampliamente por los beneficios esperados: ahorro económico, mejora en satisfacción de usuarios, modernización institucional y preparación para el futuro digital de la educación superior.
 
----
-
-*Fecha de elaboración: 31 de agosto de 2025*  
-*Versión: 1.0*  
-*Estándar: ISO/IEEE 16326:2009*
 
 *"La tecnología es mejor cuando acerca a las personas."* - Matt Mullenweg
 
-**Fin del documento técnico**
-
----
-
-**Estadísticas del documento**:
-- **Páginas totales**: 9 capítulos + 3 anexos planificados
-- **Líneas de código documentadas**: >2,000
-- **Diagramas técnicos**: 15+ diagramas UML, arquitectura y flujos
-- **Referencias técnicas**: 50+ tecnologías y herramientas
-- **Cumplimiento estándar**: ISO/IEEE 16326:2009 100%
-\newpage
+# Anexo A. Manual de instalación
 
 Este manual proporciona instrucciones detalladas para la instalación y configuración de la Plataforma de Gestión de TFG en diferentes entornos.
 
@@ -6878,11 +5894,11 @@ Este manual proporciona instrucciones detalladas para la instalación y configur
 #### Paso 1: Clonar el repositorio
 
 ```bash
-# Clonar el repositorio principal
+## Clonar el repositorio principal
 git clone https://github.com/tu-usuario/plataforma-tfg.git
 cd plataforma-tfg
 
-# Verificar la estructura del proyecto
+## Verificar la estructura del proyecto
 ls -la
 ```
 
@@ -6904,16 +5920,16 @@ plataforma-tfg/
 
 **Frontend (.env.local):**
 ```bash
-# Crear archivo de configuración para desarrollo
+## Crear archivo de configuración para desarrollo
 cd frontend
 cp .env.example .env.local
 
-# Editar variables según tu entorno
+## Editar variables según tu entorno
 nano .env.local
 ```
 
 ```bash
-# Contenido de frontend/.env.local
+## Contenido de frontend/.env.local
 VITE_API_BASE_URL=http://localhost:8000/api
 VITE_APP_NAME=Plataforma de Gestión de TFG
 VITE_ENVIRONMENT=development
@@ -6928,7 +5944,7 @@ nano .env.local
 ```
 
 ```bash
-# Contenido de backend/.env.local
+## Contenido de backend/.env.local
 APP_ENV=dev
 APP_DEBUG=true
 APP_SECRET=your-secret-key-for-development
@@ -6948,22 +5964,22 @@ CORS_ALLOW_ORIGIN=http://localhost:5173
 
 **En Windows:**
 ```powershell
-# Usar Chocolatey
+## Usar Chocolatey
 choco install ddev
 
-# O descargar desde GitHub releases
-# https://github.com/drud/ddev/releases
+## O descargar desde GitHub releases
+## https://github.com/drud/ddev/releases
 ```
 
 **En macOS:**
 ```bash
-# Usar Homebrew
+## Usar Homebrew
 brew install drud/ddev/ddev
 ```
 
 **En Linux:**
 ```bash
-# Ubuntu/Debian
+## Ubuntu/Debian
 curl -fsSL https://apt.fury.io/drud/gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/ddev.gpg
 echo "deb [signed-by=/etc/apt/keyrings/ddev.gpg] https://apt.fury.io/drud/ * *" | sudo tee /etc/apt/sources.list.d/ddev.list
 sudo apt update && sudo apt install ddev
@@ -6972,16 +5988,16 @@ sudo apt update && sudo apt install ddev
 #### Paso 2: Configuración inicial de DDEV
 
 ```bash
-# Ir al directorio raíz del proyecto
+## Ir al directorio raíz del proyecto
 cd plataforma-tfg
 
-# Inicializar DDEV
+## Inicializar DDEV
 ddev config
 
-# Configuración interactiva:
-# - Project name: plataforma-tfg
-# - Docroot: public (para Symfony) o dist (para React)
-# - Project type: symfony o react
+## Configuración interactiva:
+## - Project name: plataforma-tfg
+## - Docroot: public (para Symfony) o dist (para React)
+## - Project type: symfony o react
 ```
 
 #### Paso 3: Configuración específica de DDEV
@@ -7002,7 +6018,7 @@ database:
   type: mysql
   version: "8.0"
   
-# Servicios adicionales
+## Servicios adicionales
 services:
   redis:
     type: redis
@@ -7010,10 +6026,10 @@ services:
   mailpit:
     type: mailpit
 
-# Configuración de Node.js para frontend
+## Configuración de Node.js para frontend
 nodejs_version: "18"
 
-# Comandos personalizados
+## Comandos personalizados
 hooks:
   post-start:
     - exec: "cd frontend && npm install"
@@ -7023,13 +6039,13 @@ hooks:
 #### Paso 4: Iniciar el entorno DDEV
 
 ```bash
-# Iniciar todos los servicios
+## Iniciar todos los servicios
 ddev start
 
-# Verificar estado
+## Verificar estado
 ddev status
 
-# Ver URLs disponibles
+## Ver URLs disponibles
 ddev describe
 ```
 
@@ -7043,13 +6059,13 @@ ddev describe
 #### Paso 1: Instalación de dependencias
 
 ```bash
-# Dentro del contenedor DDEV o localmente
+## Dentro del contenedor DDEV o localmente
 cd frontend
 
-# Instalar dependencias
+## Instalar dependencias
 npm install
 
-# Verificar instalación
+## Verificar instalación
 npm list --depth=0
 ```
 
@@ -7057,13 +6073,13 @@ npm list --depth=0
 
 **ESLint y Prettier:**
 ```bash
-# Verificar configuración
+## Verificar configuración
 npm run lint
 
-# Corregir errores automáticamente
+## Corregir errores automáticamente
 npm run lint:fix
 
-# Verificar formateo
+## Verificar formateo
 npm run format
 ```
 
@@ -7088,11 +6104,11 @@ npm run format
 #### Paso 3: Iniciar servidor de desarrollo
 
 ```bash
-# Iniciar servidor de desarrollo
+## Iniciar servidor de desarrollo
 npm run dev
 
-# El servidor estará disponible en:
-# http://localhost:5173
+## El servidor estará disponible en:
+## http://localhost:5173
 ```
 
 ### A.2.4. Configuración del backend (Symfony)
@@ -7100,53 +6116,53 @@ npm run dev
 #### Paso 1: Instalación de Composer y dependencias
 
 ```bash
-# Dentro del contenedor DDEV
+## Dentro del contenedor DDEV
 ddev ssh
 
-# Ir al directorio backend
+## Ir al directorio backend
 cd backend
 
-# Instalar dependencias
+## Instalar dependencias
 composer install
 
-# Verificar instalación
+## Verificar instalación
 composer show
 ```
 
 #### Paso 2: Configuración de la base de datos
 
 ```bash
-# Crear la base de datos
+## Crear la base de datos
 ddev exec php bin/console doctrine:database:create
 
-# Ejecutar migraciones (cuando estén disponibles)
+## Ejecutar migraciones (cuando estén disponibles)
 ddev exec php bin/console doctrine:migrations:migrate
 
-# Cargar datos de prueba (fixtures)
+## Cargar datos de prueba (fixtures)
 ddev exec php bin/console doctrine:fixtures:load --no-interaction
 ```
 
 #### Paso 3: Generar claves JWT
 
 ```bash
-# Generar par de claves JWT
+## Generar par de claves JWT
 ddev exec php bin/console lexik:jwt:generate-keypair
 
-# Las claves se generarán en:
-# config/jwt/private.pem
-# config/jwt/public.pem
+## Las claves se generarán en:
+## config/jwt/private.pem
+## config/jwt/public.pem
 ```
 
 #### Paso 4: Configurar caché y logs
 
 ```bash
-# Limpiar caché
+## Limpiar caché
 ddev exec php bin/console cache:clear
 
-# Verificar configuración
+## Verificar configuración
 ddev exec php bin/console debug:config
 
-# Verificar servicios
+## Verificar servicios
 ddev exec php bin/console debug:autowiring
 ```
 
@@ -7157,30 +6173,30 @@ ddev exec php bin/console debug:autowiring
 #### Opción A: Usando DDEV (Recomendado)
 
 ```bash
-# DDEV gestiona automáticamente MySQL
-# Acceso a la base de datos:
+## DDEV gestiona automáticamente MySQL
+## Acceso a la base de datos:
 ddev mysql
 
-# Información de conexión:
-# Host: db
-# Port: 3306  
-# Database: db
-# Username: db
-# Password: db
+## Información de conexión:
+## Host: db
+## Port: 3306  
+## Database: db
+## Username: db
+## Password: db
 ```
 
 #### Opción B: MySQL local
 
 ```bash
-# Instalar MySQL 8.0
-# Ubuntu/Debian:
+## Instalar MySQL 8.0
+## Ubuntu/Debian:
 sudo apt update
 sudo apt install mysql-server-8.0
 
-# Configurar seguridad
+## Configurar seguridad
 sudo mysql_secure_installation
 
-# Crear base de datos y usuario
+## Crear base de datos y usuario
 mysql -u root -p
 ```
 
@@ -7204,10 +6220,10 @@ SELECT User, Host FROM mysql.user WHERE User = 'tfg_user';
 
 **Ejecutar migraciones iniciales:**
 ```bash
-# Con DDEV
+## Con DDEV
 ddev exec php bin/console doctrine:migrations:migrate
 
-# O localmente
+## O localmente
 php bin/console doctrine:migrations:migrate
 ```
 
@@ -7223,14 +6239,14 @@ php bin/console doctrine:migrations:migrate
 ### A.3.3. Datos de prueba
 
 ```bash
-# Cargar fixtures con datos de prueba
+## Cargar fixtures con datos de prueba
 ddev exec php bin/console doctrine:fixtures:load --no-interaction
 
-# Los siguientes usuarios de prueba estarán disponibles:
-# estudiante@uni.es / 123456 (ROLE_ESTUDIANTE)
-# profesor@uni.es / 123456 (ROLE_PROFESOR)
-# presidente@uni.es / 123456 (ROLE_PRESIDENTE_TRIBUNAL)
-# admin@uni.es / 123456 (ROLE_ADMIN)
+## Los siguientes usuarios de prueba estarán disponibles:
+## estudiante@uni.es / 123456 (ROLE_ESTUDIANTE)
+## profesor@uni.es / 123456 (ROLE_PROFESOR)
+## presidente@uni.es / 123456 (ROLE_PRESIDENTE_TRIBUNAL)
+## admin@uni.es / 123456 (ROLE_ADMIN)
 ```
 
 ## A.4. Configuración de desarrollo avanzada
@@ -7266,14 +6282,14 @@ xdebug_enabled: true
 
 **Frontend (React Developer Tools):**
 ```bash
-# Instalar extensión React Developer Tools en el navegador
-# Chrome: https://chrome.google.com/webstore/detail/fmkadmapgofadopljbjfkapdkoienihi
-# Firefox: https://addons.mozilla.org/en-US/firefox/addon/react-devtools/
+## Instalar extensión React Developer Tools en el navegador
+## Chrome: https://chrome.google.com/webstore/detail/fmkadmapgofadopljbjfkapdkoienihi
+## Firefox: https://addons.mozilla.org/en-US/firefox/addon/react-devtools/
 ```
 
 **Backend (Symfony Profiler):**
 ```yaml
-# config/packages/dev/web_profiler.yaml
+## config/packages/dev/web_profiler.yaml
 web_profiler:
     toolbar: true
     intercept_redirects: false
@@ -7286,29 +6302,29 @@ web_profiler:
 ```bash
 cd frontend
 
-# Instalar dependencias de testing
+## Instalar dependencias de testing
 npm install --save-dev @testing-library/react @testing-library/jest-dom vitest
 
-# Ejecutar tests
+## Ejecutar tests
 npm run test
 
-# Ejecutar con coverage
+## Ejecutar con coverage
 npm run test:coverage
 ```
 
 #### Configuración para testing del backend
 
 ```bash
-# Crear base de datos de testing
+## Crear base de datos de testing
 ddev exec php bin/console doctrine:database:create --env=test
 
-# Ejecutar migraciones en testing
+## Ejecutar migraciones en testing
 ddev exec php bin/console doctrine:migrations:migrate --env=test --no-interaction
 
-# Ejecutar tests
+## Ejecutar tests
 ddev exec php bin/phpunit
 
-# Con coverage
+## Con coverage
 ddev exec php bin/phpunit --coverage-html coverage/
 ```
 
@@ -7317,11 +6333,11 @@ ddev exec php bin/phpunit --coverage-html coverage/
 #### Git hooks para calidad de código
 
 ```bash
-# Instalar husky para git hooks
+## Instalar husky para git hooks
 cd frontend
 npm install --save-dev husky lint-staged
 
-# Configurar pre-commit hook
+## Configurar pre-commit hook
 npx husky add .husky/pre-commit "npm run lint && npm run test"
 ```
 
@@ -7347,25 +6363,25 @@ npx husky add .husky/pre-commit "npm run lint && npm run test"
 
 **Error: "Port already in use"**
 ```bash
-# Verificar puertos en uso
+## Verificar puertos en uso
 ddev stop --all
 
-# Cambiar puerto en configuración
+## Cambiar puerto en configuración
 ddev config --router-http-port=8080 --router-https-port=8443
 
-# Reiniciar
+## Reiniciar
 ddev start
 ```
 
 **Error: "Database connection failed"**
 ```bash
-# Verificar estado de servicios
+## Verificar estado de servicios
 ddev status
 
-# Reiniciar base de datos
+## Reiniciar base de datos
 ddev restart
 
-# Verificar logs
+## Verificar logs
 ddev logs db
 ```
 
@@ -7373,17 +6389,17 @@ ddev logs db
 
 **Error: "Module not found"**
 ```bash
-# Limpiar caché de npm
+## Limpiar caché de npm
 npm cache clean --force
 
-# Eliminar node_modules y reinstalar
+## Eliminar node_modules y reinstalar
 rm -rf node_modules package-lock.json
 npm install
 ```
 
 **Error: "Port 5173 is already in use"**
 ```bash
-# Cambiar puerto en vite.config.js
+## Cambiar puerto en vite.config.js
 export default defineConfig({
   server: {
     port: 3000
@@ -7395,19 +6411,19 @@ export default defineConfig({
 
 **Error: "JWT keys not found"**
 ```bash
-# Generar nuevas claves JWT
+## Generar nuevas claves JWT
 ddev exec php bin/console lexik:jwt:generate-keypair --skip-if-exists
 
-# Verificar permisos
+## Verificar permisos
 ddev exec chmod 644 config/jwt/*.pem
 ```
 
 **Error: "Unable to write in cache directory"**
 ```bash
-# Corregir permisos de caché
+## Corregir permisos de caché
 ddev exec chmod -R 777 var/
 
-# Limpiar caché
+## Limpiar caché
 ddev exec php bin/console cache:clear --no-warmup
 ```
 
@@ -7430,7 +6446,7 @@ export default defineConfig({
 
 **Backend lento:**
 ```yaml
-# config/packages/dev/doctrine.yaml
+## config/packages/dev/doctrine.yaml
 doctrine:
     dbal:
         profiling_collect_backtrace: false
@@ -7443,24 +6459,24 @@ doctrine:
 ### A.6.1. Comandos DDEV frecuentes
 
 ```bash
-# Gestión de servicios
+## Gestión de servicios
 ddev start              # Iniciar proyecto
 ddev stop               # Parar proyecto
 ddev restart            # Reiniciar proyecto
 ddev poweroff           # Parar todos los proyectos DDEV
 
-# Información del proyecto
+## Información del proyecto
 ddev describe           # Mostrar URLs y detalles
 ddev status             # Estado de servicios
 ddev list               # Listar proyectos DDEV
 
-# Acceso a servicios
+## Acceso a servicios
 ddev ssh                # SSH al contenedor web
 ddev mysql              # Acceso a MySQL CLI
 ddev logs               # Ver logs generales
 ddev logs web           # Ver logs del servidor web
 
-# Utilidades
+## Utilidades
 ddev import-db --src=dump.sql  # Importar base de datos
 ddev export-db > dump.sql      # Exportar base de datos
 ddev snapshot               # Crear snapshot del proyecto
@@ -7469,17 +6485,17 @@ ddev snapshot               # Crear snapshot del proyecto
 ### A.6.2. Comandos del frontend
 
 ```bash
-# Desarrollo
+## Desarrollo
 npm run dev             # Servidor de desarrollo
 npm run build           # Build de producción
 npm run preview         # Preview del build
 
-# Calidad de código
+## Calidad de código
 npm run lint            # Ejecutar ESLint
 npm run lint:fix        # Corregir errores de ESLint
 npm run format          # Formatear con Prettier
 
-# Testing
+## Testing
 npm run test            # Ejecutar tests
 npm run test:watch      # Tests en modo watch
 npm run test:coverage   # Tests con coverage
@@ -7488,24 +6504,24 @@ npm run test:coverage   # Tests con coverage
 ### A.6.3. Comandos del backend
 
 ```bash
-# Doctrine
+## Doctrine
 php bin/console doctrine:database:create
 php bin/console doctrine:migrations:migrate
 php bin/console doctrine:fixtures:load
 
-# Caché
+## Caché
 php bin/console cache:clear
 php bin/console cache:warmup
 
-# Debugging
+## Debugging
 php bin/console debug:config
 php bin/console debug:container
 php bin/console debug:autowiring
 
-# JWT
+## JWT
 php bin/console lexik:jwt:generate-keypair
 
-# Testing
+## Testing
 php bin/phpunit
 php bin/phpunit --coverage-html coverage/
 ```
@@ -7543,44 +6559,44 @@ php bin/phpunit --coverage-html coverage/
 
 ```bash
 #!/bin/bash
-# scripts/verify-installation.sh
+## scripts/verify-installation.sh
 
 echo "🔍 Verificando instalación de la Plataforma de Gestión de TFG..."
 
-# Verificar DDEV
+## Verificar DDEV
 if ! command -v ddev &> /dev/null; then
     echo "❌ DDEV no está instalado"
     exit 1
 fi
 
-# Verificar estado del proyecto
+## Verificar estado del proyecto
 if ! ddev status | grep -q "running"; then
     echo "❌ El proyecto DDEV no está ejecutándose"
     exit 1
 fi
 
-# Verificar frontend
+## Verificar frontend
 if [ -d "frontend/node_modules" ]; then
     echo "✅ Dependencias del frontend instaladas"
 else
     echo "❌ Falta instalar dependencias del frontend"
 fi
 
-# Verificar backend
+## Verificar backend
 if [ -d "backend/vendor" ]; then
     echo "✅ Dependencias del backend instaladas"
 else
     echo "❌ Falta instalar dependencias del backend"
 fi
 
-# Verificar base de datos
+## Verificar base de datos
 if ddev mysql -e "SELECT 1" &> /dev/null; then
     echo "✅ Base de datos accesible"
 else
     echo "❌ Problema con la base de datos"
 fi
 
-# Test de conectividad
+## Test de conectividad
 if curl -f -s https://plataforma-tfg.ddev.site > /dev/null; then
     echo "✅ Aplicación web accesible"
 else
@@ -7589,10 +6605,3 @@ fi
 
 echo "🎉 Verificación completada"
 ```
-
----
-
-*Fecha de elaboración: 31 de agosto de 2025*  
-*Versión: 1.0*  
-*Anexo A del documento técnico ISO/IEEE 16326*
-\newpage

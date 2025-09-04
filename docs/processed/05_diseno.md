@@ -10,56 +10,7 @@ El frontend constituye la capa de presentación del sistema, desarrollado como u
 
 #### 5.1.1.1. Arquitectura de componentes React
 
-```plantuml
-@startuml
-package "Arquitectura Frontend" {
-  
-  package "Capa Presentación" {
-    [Componente Layout]
-    [Navegación]
-    [Rutas Protegidas]
-    [Componentes Página]
-  }
-  
-  package "Gestión Estado" {
-    [AuthContext]
-    [NotificacionesContext]
-    [Hooks Personalizados]
-  }
-  
-  package "Lógica Negocio" {
-    [useTFGs]
-    [useUsuarios]
-    [useTribunales]
-    [useCalendario]
-    [useReportes]
-  }
-  
-  package "Capa Datos" {
-    [Servicios API]
-    [Cliente HTTP (Axios)]
-    [Manejo Errores]
-  }
-  
-  package "Componentes UI" {
-    [Componentes Formulario]
-    [Componentes Calendario]
-    [Subida Archivos]
-    [Sistema Notificaciones]
-  }
-}
-
-[Componente Layout] --> [Navegación]
-[Navegación] --> [Rutas Protegidas]
-[Rutas Protegidas] --> [Componentes Página]
-[Componentes Página] --> [Hooks Personalizados]
-[Hooks Personalizados] --> [Servicios API]
-[Servicios API] --> [Cliente HTTP (Axios)]
-[AuthContext] --> [Rutas Protegidas]
-[NotificacionesContext] --> [Sistema Notificaciones]
-
-@enduml
-```
+![Diagrama PlantUML 1](processed/images/05_diseno_plantuml_0.png)
 
 **Componentes principales**:
 
@@ -154,56 +105,7 @@ El backend implementa una arquitectura hexagonal (puertos y adaptadores) usando 
 
 #### 5.1.2.1. Arquitectura hexagonal
 
-```plantuml
-@startuml
-package "Arquitectura Hexagonal Backend" {
-
-  package "Capa Dominio" {
-    [Entidades]
-    [Objetos Valor]
-    [Servicios Dominio]
-    [Reglas Negocio]
-  }
-
-  package "Capa Aplicación" {
-    [Casos Uso]
-    [Servicios Aplicación]
-    [DTOs]
-    [Validación]
-  }
-
-  package "Capa Infraestructura" {
-    [Doctrine ORM]
-    [Repositorios]
-    [Servicios Externos]
-    [Escuchadores Eventos]
-  }
-
-  package "Capa Interfaz" {
-    [Controladores API]
-    [Serializadores]
-    [Seguridad]
-    [Manejador CORS]
-  }
-
-  package "Puertos" {
-    interface "Puertos Repositorio"
-    interface "Puertos Servicio"
-    interface "Puertos Evento"
-  }
-
-}
-
-[Controladores API] --> [Servicios Aplicación]
-[Servicios Aplicación] --> [Casos Uso]
-[Casos Uso] --> [Servicios Dominio]
-[Servicios Dominio] --> [Entidades]
-[Repositorios] ..|> "Puertos Repositorio"
-[Servicios Externos] ..|> "Puertos Servicio"
-[Escuchadores Eventos] ..|> "Puertos Evento"
-
-@enduml
-```
+![Diagrama PlantUML 2](processed/images/05_diseno_plantuml_1.png)
 
 **Capas de la arquitectura**:
 
@@ -338,26 +240,7 @@ vich_uploader:
 
 #### 5.1.4.2. Estrategia Almacenamiento
 
-```plantuml
-@startuml
-participant "Frontend" as FE
-participant "Controlador Subida" as UC
-participant "Servicio Archivos" as FS
-participant "Almacén" as ST
-participant "Base Datos" as DB
-
-FE -> UC: POST /api/tfgs/{id}/upload
-UC -> UC: Validate MIME type
-UC -> UC: Validate file size
-UC -> FS: Process file upload
-FS -> ST: Store file securely
-ST -> FS: Return file path
-FS -> DB: Update TFG entity
-DB -> FS: Confirm update
-FS -> UC: Upload successful
-UC -> FE: Return file metadata
-@enduml
-```
+![Diagrama PlantUML 3](processed/images/05_diseno_plantuml_2.png)
 
 **Flujo de procesamiento de archivos**:
 
@@ -639,137 +522,7 @@ class TFGRepository extends ServiceEntityRepository implements TFGRepositoryInte
 
 ### 5.3.1. Modelo conceptual
 
-```plantuml
-@startuml
-!theme plain
-
-entity "User" as user {
-  * id : INTEGER
-  --
-  * email : VARCHAR(180) UNIQUE
-  * roles : JSON
-  * password : VARCHAR(255)
-  * nombre : VARCHAR(100)
-  * apellidos : VARCHAR(100)
-  dni : VARCHAR(20)
-  telefono : VARCHAR(20)
-  universidad : VARCHAR(100)
-  departamento : VARCHAR(100)
-  especialidad : VARCHAR(100)
-  * is_active : BOOLEAN
-  * created_at : DATETIME
-  * updated_at : DATETIME
-}
-
-entity "TFG" as tfg {
-  * id : INTEGER
-  --
-  * estudiante_id : INTEGER
-  * tutor_id : INTEGER
-  cotutor_id : INTEGER
-  * titulo : VARCHAR(255)
-  descripcion : TEXT
-  resumen : TEXT
-  palabras_clave : JSON
-  * estado : ENUM
-  fecha_inicio : DATE
-  fecha_fin_estimada : DATE
-  fecha_fin_real : DATE
-  calificacion : DECIMAL(3,2)
-  archivo_path : VARCHAR(255)
-  archivo_original_name : VARCHAR(255)
-  archivo_size : INTEGER
-  archivo_mime_type : VARCHAR(100)
-  * created_at : DATETIME
-  * updated_at : DATETIME
-}
-
-entity "Tribunal" as tribunal {
-  * id : INTEGER
-  --
-  * nombre : VARCHAR(255)
-  * presidente_id : INTEGER
-  * secretario_id : INTEGER
-  * vocal_id : INTEGER
-  descripcion : TEXT
-  * activo : BOOLEAN
-  * created_at : DATETIME
-  * updated_at : DATETIME
-}
-
-entity "Defensa" as defensa {
-  * id : INTEGER
-  --
-  * tfg_id : INTEGER
-  * tribunal_id : INTEGER
-  * fecha_defensa : DATETIME
-  aula : VARCHAR(100)
-  * duracion_estimada : INTEGER
-  observaciones : TEXT
-  * estado : ENUM
-  * acta_generada : BOOLEAN
-  acta_path : VARCHAR(255)
-  * created_at : DATETIME
-  * updated_at : DATETIME
-}
-
-entity "Calificacion" as calificacion {
-  * id : INTEGER
-  --
-  * defensa_id : INTEGER
-  * evaluador_id : INTEGER
-  nota_presentacion : DECIMAL(3,2)
-  nota_contenido : DECIMAL(3,2)
-  nota_defensa : DECIMAL(3,2)
-  nota_final : DECIMAL(3,2)
-  comentarios : TEXT
-  * created_at : DATETIME
-  * updated_at : DATETIME
-}
-
-entity "Notificacion" as notificacion {
-  * id : INTEGER
-  --
-  * usuario_id : INTEGER
-  * tipo : ENUM
-  * titulo : VARCHAR(255)
-  * mensaje : TEXT
-  * leida : BOOLEAN
-  * enviada_por_email : BOOLEAN
-  metadata : JSON
-  * created_at : DATETIME
-}
-
-entity "Comentario" as comentario {
-  * id : INTEGER
-  --
-  * tfg_id : INTEGER
-  * autor_id : INTEGER
-  * comentario : TEXT
-  * tipo : ENUM
-  * created_at : DATETIME
-}
-
-' Relationships
-user ||--o{ tfg : "estudiante"
-user ||--o{ tfg : "tutor"
-user ||--o{ tfg : "cotutor"
-user ||--o{ tribunal : "presidente"
-user ||--o{ tribunal : "secretario"
-user ||--o{ tribunal : "vocal"
-user ||--o{ notificacion
-user ||--o{ comentario : "autor"
-user ||--o{ calificacion : "evaluador"
-
-tfg ||--o| defensa
-tfg ||--o{ comentario
-
-tribunal ||--o{ defensa
-
-defensa ||--o{ calificacion
-
-@enduml
-```
+![Diagrama PlantUML 4](processed/images/05_diseno_plantuml_3.png)
 
 ### 5.3.2. Normalización y constraints
 
@@ -1111,36 +864,7 @@ const TFGTable = ({ tfgs }) => (
 
 #### 5.4.3.1. Flujo principal - Estudiante
 
-```plantuml
-@startuml
-!theme plain
-
-start
-:Usuario accede a la aplicación;
-:Formulario de login;
-if (¿Credenciales válidas?) then (sí)
-  :Dashboard Estudiante;
-  if (¿Tiene TFG?) then (no)
-    :Formulario Nuevo TFG;
-    :Completar metadatos;
-    :Seleccionar tutor;
-    :Crear TFG (estado: borrador);
-  else (sí)
-    :Vista Mi TFG;
-    if (¿Estado permite edición?) then (sí)
-      :Editar información;
-      :Subir archivo PDF;
-    endif
-    :Ver comentarios tutor;
-    :Seguimiento de estado;
-  endif
-else (no)
-  :Mostrar error;
-  stop
-endif
-stop
-@enduml
-```
+![Diagrama PlantUML 5](processed/images/05_diseno_plantuml_4.png)
 
 #### 5.4.3.2. Wireframe - Dashboard Estudiante
 

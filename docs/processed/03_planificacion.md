@@ -281,68 +281,11 @@ El siguiente cronograma ilustra la distribución temporal de las actividades pri
 
 ### 3.3.1. Cronograma general del proyecto
 
-```mermaid name=CronogramaGeneral
-gantt
-    title Plataforma de Gestión de TFG - Cronograma General
-    dateFormat  X
-    axisFormat %s
-    
-    section FASE 1-2: Setup y Auth
-    Setup entorno            :setup, 0, 2
-    Sistema autenticación     :auth, 1, 3
-
-    section FASE 3: Estudiante
-    Gestión TFG               :tfg, 2, 4
-    Seguimiento               :seguimiento, 3, 5
-
-    section FASE 4: Profesor
-    Bases módulo              :bases, 3, 4
-    Sistema feedback          :feedback, 4, 6
-
-    section FASE 5: Defensas
-    Integración calendar      :calendar, 4, 5
-    Gestión tribunales        :tribunales, 5, 7
-
-    section FASE 6: Admin
-    Gestión usuarios          :usuarios, 5, 6
-    Reportes                  :reportes, 6, 8
-
-    section FASE 7: Backend
-    Setup backend             :backend1, 6, 8
-    APIs y auth               :backend2, 7, 9
-    Integración               :backend3, 8, 10
-
-    section FASE 8: Pulimiento
-    Testing y opt.            :test, 8, 9
-    Deploy y docs             :deploy, 9, 10
-```
+![Diagrama Mermaid 1](processed/images/03_planificacion_mermaid_0.png)
 
 ### 3.3.2. Hitos principales y dependencias
 
-```mermaid name=CronogramaPrincipal
-gantt
-    title Plataforma de Gestión de TFG - Cronograma Principal
-    dateFormat  X
-    axisFormat %s
-    
-    section Fundación
-    Configuración entorno   :done, setup, 0, 2
-    Sistema autenticación   :done, auth, 1, 3
-    
-    section Módulos Usuario
-    Módulo estudiante       :done, student, 2, 5
-    Módulo profesor         :done, teacher, 3, 6
-    Sistema defensas        :done, defense, 4, 7
-    
-    section Administración
-    Panel admin             :done, admin, 5, 8
-    
-    section Backend
-    Backend Symfony         :active, backend, 6, 9
-    
-    section Finalización
-    Pruebas y despliegue    :deploy, 8, 10
-```
+![Diagrama Mermaid 2](processed/images/03_planificacion_mermaid_1.png)
 
 **Hitos críticos identificados**:
 - **H1**: Frontend base funcional (Semana 3) - Fin de Fase 1-2
