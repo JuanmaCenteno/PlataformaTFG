@@ -25,18 +25,24 @@ use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
             uriTemplate: '/defensas',
             security: "is_granted('ROLE_PRESIDENTE_TRIBUNAL') or is_granted('ROLE_ADMIN')",
             paginationEnabled: true,
-            paginationItemsPerPage: 10
+            paginationItemsPerPage: 10,
+            formats: ['json' => ['application/json']]
         ),
-        new Get(),
+        new Get(
+            formats: ['json' => ['application/json']]
+        ),
         new Post(
-            security: "is_granted('ROLE_PRESIDENTE_TRIBUNAL') or is_granted('ROLE_ADMIN')"
+            security: "is_granted('ROLE_PRESIDENTE_TRIBUNAL') or is_granted('ROLE_ADMIN')",
+            formats: ['json' => ['application/json']]
         ),
         new Put(
-            security: "is_granted('ROLE_PRESIDENTE_TRIBUNAL') or is_granted('ROLE_ADMIN')"
+            security: "is_granted('ROLE_PRESIDENTE_TRIBUNAL') or is_granted('ROLE_ADMIN')",
+            formats: ['json' => ['application/json']]
         )
     ],
     normalizationContext: ['groups' => ['defensa:read']],
-    denormalizationContext: ['groups' => ['defensa:write']]
+    denormalizationContext: ['groups' => ['defensa:write']],
+    formats: ['json' => ['application/json']]
 )]
 #[ApiFilter(DateFilter::class, properties: ['fecha_defensa'])]
 #[ApiFilter(OrderFilter::class, properties: ['fecha_defensa' => 'ASC'])]

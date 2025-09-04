@@ -25,23 +25,29 @@ use ApiPlatform\Metadata\Delete;
             security: "is_granted('ROLE_ADMIN')",
             paginationEnabled: true,
             paginationItemsPerPage: 15,
-            paginationMaximumItemsPerPage: 50
+            paginationMaximumItemsPerPage: 50,
+            formats: ['json' => ['application/json']]
         ),
         new Get(
-            security: "is_granted('ROLE_ADMIN') or object == user"
+            security: "is_granted('ROLE_ADMIN') or object == user",
+            formats: ['json' => ['application/json']]
         ),
         new Post(
-            security: "is_granted('ROLE_ADMIN')"
+            security: "is_granted('ROLE_ADMIN')",
+            formats: ['json' => ['application/json']]
         ),
         new Put(
-            security: "is_granted('ROLE_ADMIN') or object == user"
+            security: "is_granted('ROLE_ADMIN') or object == user",
+            formats: ['json' => ['application/json']]
         ),
         new Delete(
-            security: "is_granted('ROLE_ADMIN')"
+            security: "is_granted('ROLE_ADMIN')",
+            formats: ['json' => ['application/json']]
         )
     ],
     normalizationContext: ['groups' => ['user:read']],
-    denormalizationContext: ['groups' => ['user:write']]
+    denormalizationContext: ['groups' => ['user:write']],
+    formats: ['json' => ['application/json']]
 )]
 #[ORM\Table(name: 'users')]
 #[ORM\HasLifecycleCallbacks]
