@@ -137,12 +137,6 @@ def create_portada():
 \begin{titlepage}
 \centering
 
-{\scshape\LARGE Universidad de Cádiz \par}
-\vspace{1cm}
-{\scshape\Large Escuela Superior de Ingeniería\par}
-{\scshape\large Departamento de Informática\par}
-\vspace{1.5cm}
-
 \includegraphics[width=0.3\textwidth]{images/logo-universidad.jpg}\par\vspace{1cm}
 
 {\huge\bfseries Plataforma de Gestión de Trabajos de Fin de Grado\par}
@@ -167,9 +161,7 @@ def create_portada():
 \begin{minipage}[t]{0.4\textwidth}
 \begin{flushright}
 \large
-\textbf{Tutor: Guadalupe Ortiz Bellot}\\
-Dr./Dra. Nombre del Tutor\\
-Departamento de Informática
+\textbf{Tutor: Guadalupe Ortiz Bellot}
 \end{flushright}
 \end{minipage}
 
@@ -180,60 +172,14 @@ Departamento de Informática
 
 \vfill
 
-\textit{``La tecnología es mejor cuando acerca a las personas.''}\\
-\textit{-- Matt Mullenweg}
-
 \end{titlepage}
-
-% Página de derechos de autor
-\newpage
-\thispagestyle{empty}
-\vspace*{\fill}
-\begin{center}
-\textcopyright\ 2025 Tu Nombre Completo
-
-\vspace{1cm}
-
-Este documento ha sido elaborado siguiendo el estándar ISO/IEEE 16326:2009 \\
-para documentación técnica de sistemas software.
-
-\vspace{1cm}
-
-\textbf{Plataforma de Gestión de TFG} \\
-Sistema desarrollado con React 19, Symfony 6.4 LTS y MySQL 8.0
-
-\vspace{1cm}
-
-Trabajo presentado para la obtención del título de \\
-\textbf{Graduado en Ingeniería Informática}
-
-\end{center}
-\vspace*{\fill}
 
 % Página de agradecimientos
 \newpage
 \chapter*{Agradecimientos}
 \addcontentsline{toc}{chapter}{Agradecimientos}
 
-Quiero expresar mi sincero agradecimiento a todas las personas que han contribuido 
-a la realización de este Trabajo de Fin de Grado:
-
-A mi tutor/a, Dr./Dra. [Nombre], por su orientación experta, paciencia y apoyo 
-continuo durante todo el proceso de desarrollo del proyecto.
-
-A los profesores del Grado en Ingeniería Informática que han contribuido a mi 
-formación técnica y académica.
-
-A mi familia y amigos por su apoyo incondicional durante estos años de estudios.
-
-A la comunidad de desarrolladores de código abierto cuyas herramientas y 
-conocimientos han hecho posible este proyecto.
-
-\vspace{2cm}
-\begin{flushright}
-Tu Nombre\\
-Septiembre 2025
-\end{flushright}
+Incluir
 
 % Resumen ejecutivo
 \newpage
@@ -274,42 +220,6 @@ tribunal y administradores.
 
 \textbf{Palabras clave:} TFG, React, Symfony, Gestión Académica, Plataforma Web, 
 Sistema de Información, Automatización Universitaria.
-
-\newpage
-\chapter*{Abstract}
-\addcontentsline{toc}{chapter}{Abstract}
-
-This Final Degree Project presents the development of a \textbf{TFG Management 
-Platform}, a comprehensive web system designed to automate and optimize the 
-complete process of managing Final Degree Projects in university environments.
-
-\textbf{Identified Problem:} Traditional TFG management processes are 
-characterized by fragmentation, use of scattered tools, and high manual 
-component, generating inefficiencies and difficulties in academic tracking.
-
-\textbf{Developed Solution:} Modern web system that integrates all TFG process 
-phases, from initial proposal to final defense, with differentiated roles for 
-students, professors, tribunal presidents, and administrators.
-
-\textbf{Implemented Technologies:}
-\begin{itemize}
-    \item \textbf{Frontend:} React 19, Vite, Tailwind CSS v4
-    \item \textbf{Backend:} Symfony 6.4 LTS, PHP 8.2+, API Platform 3.x
-    \item \textbf{Database:} MySQL 8.0 with Doctrine ORM
-    \item \textbf{Authentication:} JWT with refresh tokens
-    \item \textbf{Development:} DDEV with Docker
-\end{itemize}
-
-\textbf{Results Obtained:}
-\begin{itemize}
-    \item 75\% reduction in administrative management time
-    \item Complete system with 4 role-differentiated modules
-    \item Scalable architecture prepared for expansion
-    \item 259\% ROI projected over 3 years
-\end{itemize}
-
-\textbf{Keywords:} TFG, React, Symfony, Academic Management, Web Platform, 
-Information System, University Automation.
 """
     
     with open("docs/template/portada.tex", "w", encoding='utf-8') as f:
@@ -420,10 +330,6 @@ def create_latex_template():
 
 % Lista de figuras
 \listoffigures
-\newpage
-
-% Lista de tablas
-\listoftables
 \newpage
 
 % Contenido principal
