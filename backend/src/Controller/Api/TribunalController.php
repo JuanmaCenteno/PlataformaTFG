@@ -97,7 +97,7 @@ class TribunalController extends AbstractController
         $secretario = $this->userRepository->find($data['secretario_id']);
         $vocal = $this->userRepository->find($data['vocal_id']);
 
-        if (!$presidente || !in_array('ROLE_PROFESOR', $presidente->getRoles())) {
+        if (!$presidente || (!in_array('ROLE_PROFESOR', $presidente->getRoles()) && !in_array('ROLE_PRESIDENTE_TRIBUNAL', $presidente->getRoles()))) {
             return $this->json(['error' => 'Presidente no válido o no es profesor'], 400);
         }
         if (!$secretario || !in_array('ROLE_PROFESOR', $secretario->getRoles())) {
