@@ -105,7 +105,7 @@ class TFGTestSuite:
                 "descripcion": "Este es un TFG de prueba para testear la API",
                 "resumen": "Resumen del TFG de prueba con tecnologías modernas",
                 "palabras_clave": ["web", "react", "symfony", "test"],
-                "tutor_id": 2  # Asumimos que el profesor tiene ID 2
+                "tutor_id": 6  # Usuario profesor@uni.es con ROLE_PROFESOR
             }
             
             response = self.session.post(
