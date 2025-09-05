@@ -99,6 +99,24 @@ class TFGTestSuite:
             self.log_test("POST TFG estudiante", False, "No hay token de estudiante")
             return False
             
+        # Limpiar cualquier TFG existente del estudiante antes de crear uno nuevo
+        try:
+            existing_tfgs = self.session.get(
+                f"{BASE_URL}/api/tfgs",
+                headers=self.headers['estudiante']
+            )
+            if existing_tfgs.status_code == 200:
+                data = existing_tfgs.json()
+                if data and 'admin' in self.headers:  # Solo eliminar si tenemos permisos de admin
+                    for tfg in data:
+                        if tfg.get('id'):
+                            delete_response = self.session.delete(
+                                f"{BASE_URL}/api/tfgs/{tfg['id']}",
+                                headers=self.headers['admin']
+                            )
+        except:
+            pass  # Ignorar errores de limpieza previa
+            
         try:
             payload = {
                 "titulo": "TFG Test - Desarrollo de aplicación web",

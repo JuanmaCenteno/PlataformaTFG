@@ -37,9 +37,8 @@ class TFGCreateDto
     )]
     public ?array $palabras_clave = [];
 
-    #[Assert\NotNull(message: 'El tutor es obligatorio')]
     #[Assert\Type(type: 'integer', message: 'El ID del tutor debe ser un número')]
-    public int $tutor_id;
+    public ?int $tutor_id = null;
 
     #[Assert\Type(type: 'integer', message: 'El ID del cotutor debe ser un número')]
     public ?int $cotutor_id = null;

@@ -20,22 +20,12 @@ use ApiPlatform\Metadata\Delete;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ApiResource(
     operations: [
-        new GetCollection(
-            uriTemplate: '/users',
-            security: "is_granted('ROLE_ADMIN')",
-            paginationEnabled: true,
-            paginationItemsPerPage: 15,
-            paginationMaximumItemsPerPage: 50,
-            formats: ['json' => ['application/json']]
-        ),
+        // GetCollection removed - handled by custom UserController
         new Get(
             security: "is_granted('ROLE_ADMIN') or object == user",
             formats: ['json' => ['application/json']]
         ),
-        new Post(
-            security: "is_granted('ROLE_ADMIN')",
-            formats: ['json' => ['application/json']]
-        ),
+        // Post removed - handled by custom UserController
         new Put(
             security: "is_granted('ROLE_ADMIN') or object == user",
             formats: ['json' => ['application/json']]
