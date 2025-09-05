@@ -200,6 +200,16 @@ jest.config.js
 backend/tests/_reports/
 backend/coverage/
 
+# Python testing (backend API tests)
+backend/tests/**/__pycache__/
+backend/tests/**/*.pyc
+backend/tests/**/*.pyo
+backend/tests/**/*.pyd
+backend/tests/**/test_data_ids.txt
+backend/tests/**/FAILURE_REPORT.md
+backend/tests/**/DETAILED_FAILURE_REPORT.md
+/tmp/tfg_test_tokens.json
+
 # E2E testing
 cypress/videos/
 cypress/screenshots/
