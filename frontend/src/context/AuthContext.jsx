@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }) => {
   // Función de login con JWT
   const login = async (email, password) => {
     try {
-      const response = await authAPI.login({ email, password })
+      const response = await authAPI.login({ username: email, password })
       
       const { token, refresh_token, user: userData } = response.data
 
