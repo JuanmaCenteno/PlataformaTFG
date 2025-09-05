@@ -24,6 +24,19 @@ class DefensasTestSuite:
         self.test_results = []
         self.created_defensas = []  # Para cleanup
         
+        # Cargar IDs de test data
+        self.test_tfg_id = 10
+        self.test_tribunal_id = 9
+        try:
+            with open('../test_data_ids.txt', 'r') as f:
+                for line in f:
+                    if line.startswith('tfg_id:'):
+                        self.test_tfg_id = int(line.split(':')[1].strip())
+                    elif line.startswith('tribunal_id:'):
+                        self.test_tribunal_id = int(line.split(':')[1].strip())
+        except:
+            pass  # Use default values
+        
         # Headers para cada rol
         self.headers = {}
         if self.tokens.get('estudiante'):
@@ -57,8 +70,8 @@ class DefensasTestSuite:
             fecha_fin = (datetime.now() + timedelta(days=30)).strftime("%Y-%m-%d")
             
             params = {
-                "fecha_inicio": fecha_inicio,
-                "fecha_fin": fecha_fin
+                "start": fecha_inicio,
+                "end": fecha_fin
             }
             
             response = self.session.get(
@@ -69,7 +82,7 @@ class DefensasTestSuite:
             
             if response.status_code == 200:
                 data = response.json()
-                events_count = len(data.get('events', []))
+                events_count = len(data) if isinstance(data, list) else 0
                 self.log_test("GET calendario defensas profesor", True, f"Obtenidos {events_count} eventos de defensa")
                 return True
             else:
@@ -92,8 +105,8 @@ class DefensasTestSuite:
             fecha_fin = (datetime.now() + timedelta(days=30)).strftime("%Y-%m-%d")
             
             params = {
-                "fecha_inicio": fecha_inicio,
-                "fecha_fin": fecha_fin
+                "start": fecha_inicio,
+                "end": fecha_fin
             }
             
             response = self.session.get(
@@ -104,7 +117,7 @@ class DefensasTestSuite:
             
             if response.status_code == 200:
                 data = response.json()
-                events_count = len(data.get('events', []))
+                events_count = len(data) if isinstance(data, list) else 0
                 self.log_test("GET calendario defensas estudiante", True, f"Obtenidos {events_count} eventos de defensa")
                 return True
             else:
@@ -127,8 +140,8 @@ class DefensasTestSuite:
             fecha_fin = (datetime.now() + timedelta(days=30)).strftime("%Y-%m-%d")
             
             params = {
-                "fecha_inicio": fecha_inicio,
-                "fecha_fin": fecha_fin
+                "start": fecha_inicio,
+                "end": fecha_fin
             }
             
             response = self.session.get(
@@ -139,7 +152,7 @@ class DefensasTestSuite:
             
             if response.status_code == 200:
                 data = response.json()
-                events_count = len(data.get('events', []))
+                events_count = len(data) if isinstance(data, list) else 0
                 self.log_test("GET calendario defensas admin", True, f"Obtenidos {events_count} eventos de defensa")
                 return True
             else:
@@ -161,8 +174,8 @@ class DefensasTestSuite:
             fecha_defensa = (datetime.now() + timedelta(days=7)).replace(hour=10, minute=0, second=0, microsecond=0)
             
             payload = {
-                "tfg_id": 1,  # Asumimos que existe un TFG con ID 1
-                "tribunal_id": 1,  # Asumimos que existe un tribunal con ID 1
+                "tfg_id": self.test_tfg_id,
+                "tribunal_id": self.test_tribunal_id,
                 "fecha_defensa": fecha_defensa.isoformat() + "Z",
                 "aula": "Aula Test 101",
                 "duracion_estimada": 30,
@@ -204,8 +217,8 @@ class DefensasTestSuite:
             fecha_defensa = (datetime.now() + timedelta(days=8)).replace(hour=11, minute=0, second=0, microsecond=0)
             
             payload = {
-                "tfg_id": 2,  # Asumimos que existe un TFG con ID 2
-                "tribunal_id": 1,  # Asumimos que existe un tribunal con ID 1
+                "tfg_id": self.test_tfg_id,
+                "tribunal_id": self.test_tribunal_id,
                 "fecha_defensa": fecha_defensa.isoformat() + "Z",
                 "aula": "Aula Test 102",
                 "duracion_estimada": 45,
@@ -245,8 +258,8 @@ class DefensasTestSuite:
             fecha_defensa = (datetime.now() + timedelta(days=9)).replace(hour=12, minute=0, second=0, microsecond=0)
             
             payload = {
-                "tfg_id": 1,
-                "tribunal_id": 1,
+                "tfg_id": self.test_tfg_id,
+                "tribunal_id": self.test_tribunal_id,
                 "fecha_defensa": fecha_defensa.isoformat() + "Z",
                 "aula": "Aula Forbidden",
                 "duracion_estimada": 30,
@@ -280,8 +293,8 @@ class DefensasTestSuite:
             fecha_defensa = (datetime.now() + timedelta(days=10)).replace(hour=13, minute=0, second=0, microsecond=0)
             
             payload = {
-                "tfg_id": 1,
-                "tribunal_id": 1,
+                "tfg_id": self.test_tfg_id,
+                "tribunal_id": self.test_tribunal_id,
                 "fecha_defensa": fecha_defensa.isoformat() + "Z",
                 "aula": "Aula Estudiante",
                 "duracion_estimada": 30,
@@ -348,8 +361,8 @@ class DefensasTestSuite:
             fecha_defensa = (datetime.now() + timedelta(days=11)).replace(hour=14, minute=0, second=0, microsecond=0)
             
             payload = {
-                "tfg_id": 1,
-                "tribunal_id": 1,
+                "tfg_id": self.test_tfg_id,
+                "tribunal_id": self.test_tribunal_id,
                 "fecha_defensa": fecha_defensa.isoformat() + "Z",
                 "aula": "Aula Test Conflicto",
                 "duracion_estimada": 30,
@@ -368,8 +381,8 @@ class DefensasTestSuite:
                 if 'id' in data1:
                     self.created_defensas.append(data1['id'])
                 
-                # Intentar crear segunda defensa con el mismo horario
-                payload['tfg_id'] = 2  # Diferente TFG
+                # Intentar crear segunda defensa para el mismo TFG (debería fallar porque ya tiene defensa)
+                payload['aula'] = "Aula Test Conflicto 2"  # Cambiar aula
                 response2 = self.session.post(
                     f"{BASE_URL}/api/defensas",
                     json=payload,
@@ -377,19 +390,11 @@ class DefensasTestSuite:
                 )
                 
                 if response2.status_code in [400, 409, 422]:
-                    self.log_test("POST defensa conflicto horario", True, f"Conflicto detectado correctamente: {response2.status_code}")
+                    self.log_test("POST defensa conflicto horario", True, f"Conflicto detectado correctamente (TFG ya tiene defensa): {response2.status_code}")
                     return True
                 else:
-                    # Si se permite el conflicto, también es válido dependiendo de la implementación
-                    if response2.status_code == 201:
-                        data2 = response2.json()
-                        if 'id' in data2:
-                            self.created_defensas.append(data2['id'])
-                        self.log_test("POST defensa conflicto horario", True, "Conflicto permitido por el sistema")
-                        return True
-                    else:
-                        self.log_test("POST defensa conflicto horario", False, f"Status inesperado: {response2.status_code}")
-                        return False
+                    self.log_test("POST defensa conflicto horario", False, f"Status inesperado: {response2.status_code} - Se permitió crear segunda defensa para mismo TFG")
+                    return False
             else:
                 self.log_test("POST defensa conflicto horario", False, f"No se pudo crear primera defensa: {response1.status_code}")
                 return False
