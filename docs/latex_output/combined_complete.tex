@@ -71,6 +71,15 @@
 \fancyhf{}
 \fancyhead[R]{\small\leftmark}
 \fancyfoot[C]{\thepage}
+\setlength{\headheight}{14pt}
+
+% Configurar estilo plain para páginas de capítulo (sin espacio extra)
+\fancypagestyle{plain}{%
+  \fancyhf{}
+  \fancyfoot[C]{\thepage}
+  \renewcommand{\headrulewidth}{0pt}
+  \setlength{\headheight}{0pt}
+}
 
 % Configurar marks para mostrar nombres de capítulos correctamente
 \renewcommand{\chaptermark}[1]{\markboth{#1}{}}
@@ -78,7 +87,7 @@
 % Configuración de títulos
 \titleformat{\chapter}[hang]
 {\normalfont\huge\bfseries}{\thechapter.}{1em}{}
-\titlespacing*{\chapter}{0pt}{0pt}{40pt}
+\titlespacing*{\chapter}{0pt}{-50pt}{40pt}
 
 % Configuración de hyperlinks
 \hypersetup{
@@ -112,13 +121,13 @@
 
 % Tabla de contenidos
 \renewcommand{\contentsname}{Índice}
-\markboth{Índice}{Índice}
+\thispagestyle{plain}
 \tableofcontents
 \newpage
 
 % Lista de figuras
 \renewcommand{\listfigurename}{Lista de Figuras}
-\markboth{Lista de Figuras}{Lista de Figuras}
+\thispagestyle{plain}
 \listoffigures
 \newpage
 
@@ -3716,7 +3725,7 @@ El dashboard del estudiante constituye el punto central de interacción para los
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.9\textwidth]{/processed/images/dashboard_estudiante.png}
+\includegraphics[width=0.9\textwidth]{processed/images/dashboard_estudiante.png}
 \caption{Dashboard principal del estudiante con overview del TFG y navegación}
 \label{fig:dashboard-estudiante}
 \end{figure}
@@ -3729,7 +3738,7 @@ La interfaz de gestión de TFG para estudiantes proporciona las herramientas nec
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.9\textwidth]{/processed/images/gestion_tfg_estudiante.png}
+\includegraphics[width=0.9\textwidth]{processed/images/gestion_tfg_estudiante.png}
 \caption{Interfaz de gestión de TFG para estudiantes con formularios de carga y metadatos}
 \label{fig:gestion-tfg-estudiante}
 \end{figure}
@@ -3738,7 +3747,7 @@ La interfaz incluye un sistema de drag-and-drop para la carga de documentos PDF,
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.9\textwidth]{/processed/images/tfg-estudiante-extendido.png}
+\includegraphics[width=0.9\textwidth]{processed/images/tfg-estudiante-extendido.png}
 \caption{Vista extendida de gestión de TFG para estudiantes con detalles adicionales}
 \label{fig:tfg-estudiante-extendido}
 \end{figure}
@@ -3749,7 +3758,7 @@ El sistema de notificaciones implementa un enfoque no intrusivo que mantiene a l
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.9\textwidth]{/processed/images/sistema_notificaciones.png}
+\includegraphics[width=0.9\textwidth]{processed/images/sistema_notificaciones.png}
 \caption{Sistema de notificaciones con dropdown y estados de lectura}
 \label{fig:sistema-notificaciones}
 \end{figure}
@@ -3762,7 +3771,7 @@ La interfaz del profesor está diseñada para facilitar la supervisión eficient
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.9\textwidth]{/processed/images/dashboard_profesor.png}
+\includegraphics[width=0.9\textwidth]{processed/images/dashboard_profesor.png}
 \caption{Dashboard del profesor con lista de TFGs asignados y estados de revisión}
 \label{fig:dashboard-profesor}
 \end{figure}
@@ -3775,7 +3784,7 @@ La interfaz de evaluación proporciona a los profesores herramientas completas p
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.9\textwidth]{/processed/images/sistema_evaluacion.png}
+\includegraphics[width=0.9\textwidth]{processed/images/sistema_evaluacion.png}
 \caption{Sistema de evaluación con formularios de calificación y comentarios}
 \label{fig:sistema-evaluacion}
 \end{figure}
@@ -3784,7 +3793,7 @@ La interfaz integra formularios dinámicos que se adaptan a diferentes criterios
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.9\textwidth]{/processed/images/sistema_evaluacion_comentarios.png}
+\includegraphics[width=0.9\textwidth]{processed/images/sistema_evaluacion_comentarios.png}
 \caption{Sistema de evaluación con comentarios y calificaciones detalladas}
 \label{fig:sistema-evaluacion-comentarios}
 \end{figure}
@@ -3795,7 +3804,7 @@ La interfaz de gestión de tribunales, accesible para usuarios con rol de presid
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.9\textwidth]{/processed/images/gestion_tribunales.png}
+\includegraphics[width=0.9\textwidth]{processed/images/gestion_tribunales.png}
 \caption{Interfaz de gestión de tribunales con asignación de miembros y disponibilidad}
 \label{fig:gestion-tribunales}
 \end{figure}
@@ -3804,7 +3813,7 @@ La interfaz incluye herramientas de búsqueda y filtrado para la selección de p
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.9\textwidth]{/processed/images/detalle_tribunales.png}
+\includegraphics[width=0.9\textwidth]{processed/images/detalle_tribunales.png}
 \caption{Detalle de tribunal con miembros asignados y disponibilidad}
 \label{fig:detalle-tribunales}
 \end{figure}
@@ -3815,7 +3824,7 @@ La implementación del calendario de defensas utiliza FullCalendar.js para propo
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.9\textwidth]{/processed/images/calendario_defensas.png}
+\includegraphics[width=0.9\textwidth]{processed/images/calendario_defensas.png}
 \caption{Calendario interactivo de defensas con programación y gestión de eventos}
 \label{fig:calendario-defensas}
 \end{figure}
@@ -3828,7 +3837,7 @@ El panel de administración proporciona a los administradores del sistema herram
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.9\textwidth]{/processed/images/panel_administracion.png}
+\includegraphics[width=0.9\textwidth]{processed/images/panel_administracion.png}
 \caption{Panel de administración con métricas del sistema y herramientas de gestión}
 \label{fig:panel-administracion}
 \end{figure}
@@ -3841,7 +3850,7 @@ La interfaz de gestión de usuarios implementa funcionalidades completas de CRUD
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.9\textwidth]{/processed/images/gestion_usuarios.png}
+\includegraphics[width=0.9\textwidth]{processed/images/gestion_usuarios.png}
 \caption{Interfaz de gestión de usuarios con CRUD completo y asignación de roles}
 \label{fig:gestion-usuarios}
 \end{figure}
@@ -3854,7 +3863,7 @@ La implementación del sistema de reportes combina visualización de datos inter
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.9\textwidth]{/processed/images/sistema_reportes.png}
+\includegraphics[width=0.9\textwidth]{processed/images/sistema_reportes.png}
 \caption{Sistema de reportes con gráficos interactivos y opciones de exportación}
 \label{fig:sistema-reportes}
 \end{figure}
