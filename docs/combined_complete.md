@@ -26,30 +26,30 @@ Desarrollar una plataforma web integral para la gestión completa del ciclo de v
 
 **Objetivos Funcionales:**
 
-- **OF1**: Implementar un sistema de autenticación seguro basado en JWT que soporte múltiples roles de usuario (estudiante, profesor, presidente de tribunal, administrador)
-- **OF2**: Desarrollar un módulo completo para estudiantes que permita la subida, edición y seguimiento del estado de sus TFG
-- **OF3**: Crear un sistema de gestión para profesores tutores que facilite la supervisión, evaluación y retroalimentación de los TFG asignados
-- **OF4**: Implementar un módulo de gestión de tribunales que permita la creación, asignación y coordinación de defensas
-- **OF5**: Desarrollar un sistema de calendario integrado para la programación y gestión de defensas presenciales
-- **OF6**: Crear un panel administrativo completo para la gestión de usuarios, reportes y configuración del sistema
-- **OF7**: Implementar un sistema de notificaciones en tiempo real para mantener informados a todos los actores del proceso
+- **OF1**: Implementar un sistema de autenticación seguro basado en JWT que soporte múltiples roles de usuario (estudiante, profesor, presidente de tribunal, administrador).
+- **OF2**: Desarrollar un módulo completo para estudiantes que permita la subida, edición y seguimiento del estado de sus TFG.
+- **OF3**: Crear un sistema de gestión para profesores tutores que facilite la supervisión, evaluación y retroalimentación de los TFG asignados.
+- **OF4**: Implementar un módulo de gestión de tribunales que permita la creación, asignación y coordinación de defensas.
+- **OF5**: Desarrollar un sistema de calendario integrado para la programación y gestión de defensas presenciales.
+- **OF6**: Crear un panel administrativo completo para la gestión de usuarios, reportes y configuración del sistema.
+- **OF7**: Implementar un sistema de notificaciones en tiempo real para mantener informados a todos los actores del proceso.
 
 **Objetivos Técnicos:**
 
-- **OT1**: Diseñar una arquitectura frontend moderna basada en React 19 con componentes reutilizables y responsive design
-- **OT2**: Implementar un backend robusto con Symfony 6.4 LTS que proporcione APIs REST seguras y escalables
-- **OT3**: Establecer un sistema de base de datos optimizado con MySQL 8.0 que garantice la integridad y consistencia de los datos
-- **OT4**: Desarrollar un sistema de gestión de archivos seguro para el almacenamiento y descarga de documentos TFG
-- **OT5**: Implementar un sistema de testing automatizado que cubra tanto frontend como backend
-- **OT6**: Configurar un entorno de desarrollo containerizado con DDEV para facilitar la colaboración y despliegue
+- **OT1**: Diseñar una arquitectura frontend moderna basada en React 19 con componentes reutilizables y responsive design.
+- **OT2**: Implementar un backend robusto con Symfony 6.4 LTS que proporcione APIs REST seguras y escalables.
+- **OT3**: Establecer un sistema de base de datos optimizado con MySQL 8.0 que garantice la integridad y consistencia de los datos.
+- **OT4**: Desarrollar un sistema de gestión de archivos seguro para el almacenamiento y descarga de documentos TFG.
+- **OT5**: Implementar un sistema de testing automatizado que cubra tanto frontend como backend.
+- **OT6**: Configurar un entorno de desarrollo containerizado con DDEV para facilitar la colaboración y despliegue.
 
 **Objetivos de Calidad:**
 
-- **OC1**: Garantizar un tiempo de respuesta menor a 2 segundos para todas las operaciones críticas del sistema
-- **OC2**: Implementar medidas de seguridad que cumplan con estándares académicos de protección de datos
-- **OC3**: Diseñar una interfaz de usuario intuitiva con una curva de aprendizaje mínima para todos los roles
-- **OC4**: Asegurar compatibilidad cross-browser y responsive design para dispositivos móviles y tablets
-- **OC5**: Establecer un sistema de backup y recuperación de datos que garantice la disponibilidad del servicio
+- **OC1**: Garantizar un tiempo de respuesta menor a 2 segundos para todas las operaciones críticas del sistema.
+- **OC2**: Implementar medidas de seguridad que cumplan con estándares académicos de protección de datos.
+- **OC3**: Diseñar una interfaz de usuario intuitiva con una curva de aprendizaje mínima para todos los roles.
+- **OC4**: Asegurar compatibilidad cross-browser y responsive design para dispositivos móviles y tablets.
+- **OC5**: Establecer un sistema de backup y recuperación de datos que garantice la disponibilidad del servicio.
 
 ## Alcance
 
@@ -61,49 +61,49 @@ El alcance se estructura en tres dimensiones complementarias: funcional, técnic
 
 **Incluido en el proyecto:**
 
-- **Gestión completa del ciclo de vida del TFG**: Desde la creación inicial hasta la calificación final
-- **Sistema multi-rol**: Soporte para cuatro tipos de usuario con permisos diferenciados
-- **Gestión de archivos**: Upload, almacenamiento y descarga segura de documentos PDF
-- **Sistema de calendario**: Programación y gestión de defensas con disponibilidad de tribunales
-- **Panel de reportes**: Generación de estadísticas y exportación de datos en múltiples formatos
-- **Sistema de notificaciones**: Alertas en tiempo real y notificaciones por email
-- **API REST completa**: Endpoints documentados para todas las funcionalidades del sistema
+- **Gestión completa del ciclo de vida del TFG**: Desde la creación inicial hasta la calificación final.
+- **Sistema multi-rol**: Soporte para cuatro tipos de usuario con permisos diferenciados.
+- **Gestión de archivos**: Upload, almacenamiento y descarga segura de documentos PDF.
+- **Sistema de calendario**: Programación y gestión de defensas con disponibilidad de tribunales.
+- **Panel de reportes**: Generación de estadísticas y exportación de datos en múltiples formatos.
+- **Sistema de notificaciones**: Alertas en tiempo real y notificaciones por email.
+- **API REST completa**: Endpoints documentados para todas las funcionalidades del sistema.
 
 **No incluido en el proyecto:**
 
-- Sistema de videoconferencia integrado para defensas remotas
-- Integración con sistemas de información universitarios existentes (ERP académico)
-- Módulo de plagio o análisis de contenido automático
-- Sistema de facturación o pagos
-- Funcionalidades de red social o colaboración entre estudiantes
-- Soporte multiidioma (solo español en esta versión)
+- Sistema de videoconferencia integrado para defensas remotas.
+- Integración con sistemas de información universitarios existentes (ERP académico).
+- Módulo de plagio o análisis de contenido automático.
+- Sistema de facturación o pagos.
+- Funcionalidades de red social o colaboración entre estudiantes.
+- Soporte multiidioma (solo español en esta versión).
 
 ### Alcance Técnico
 
 **Tecnologías implementadas:**
 
-- **Frontend**: React 19, Vite, Tailwind CSS v4, React Router DOM v7
-- **Backend**: Symfony 6.4 LTS, PHP 8.2+, API Platform 3.x
-- **Base de datos**: MySQL 8.0 con Doctrine ORM
-- **Autenticación**: JWT con refresh tokens
-- **Gestión de archivos**: VichUploaderBundle con validaciones de seguridad
-- **Testing**: PHPUnit (backend), Vitest (frontend)
-- **Desarrollo**: DDEV con Docker, Composer, npm
+- **Frontend**: React 19, Vite, Tailwind CSS v4, React Router DOM v7.
+- **Backend**: Symfony 6.4 LTS, PHP 8.2+, API Platform 3.x.
+- **Base de datos**: MySQL 8.0 con Doctrine ORM.
+- **Autenticación**: JWT con refresh tokens.
+- **Gestión de archivos**: VichUploaderBundle con validaciones de seguridad.
+- **Testing**: PHPUnit (backend), Vitest (frontend).
+- **Desarrollo**: DDEV con Docker, Composer, npm.
 
 **Limitaciones técnicas:**
 
-- Soporte únicamente para archivos PDF (no otros formatos de documento)
-- Base de datos relacional (no NoSQL para este alcance)
-- Despliegue en servidor único (no arquitectura de microservicios)
-- Almacenamiento local de archivos (no integración con servicios cloud en esta versión)
+- Soporte únicamente para archivos PDF (no otros formatos de documento).
+- Base de datos relacional (no NoSQL para este alcance).
+- Despliegue en servidor único (no arquitectura de microservicios).
+- Almacenamiento local de archivos (no integración con servicios cloud en esta versión).
 
 ### Alcance Temporal
 
 El proyecto se desarrolla en 8 fases distribuidas a lo largo de 10 semanas académicas:
 
-- **Fases 1-6**: Completadas (desarrollo frontend completo)
-- **Fase 7**: En desarrollo (implementación backend Symfony)
-- **Fase 8**: Planificada (testing, optimización y despliegue)
+- **Fases 1-6**: Completadas (desarrollo frontend completo).
+- **Fase 7**: En desarrollo (implementación backend Symfony).
+- **Fase 8**: Planificada (testing, optimización y despliegue).
 
 ## Visión general del documento
 
@@ -139,33 +139,33 @@ Este documento ha sido desarrollado siguiendo las directrices del estándar **IS
 
 ### Normas aplicadas
 
-- **ISO/IEEE 16326:2009**: Estructura principal del documento y gestión de proyectos
-- **IEEE Std 830-1998**: Especificación de requisitos software (Capítulo 4)
-- **IEEE Std 1016-2009**: Descripciones de diseño software (Capítulo 5)
-- **ISO/IEC 25010:2011**: Modelo de calidad del producto software (Capítulo 4.2)
+- **ISO/IEEE 16326:2009**: Estructura principal del documento y gestión de proyectos.
+- **IEEE Std 830-1998**: Especificación de requisitos software (Capítulo 4).
+- **IEEE Std 1016-2009**: Descripciones de diseño software (Capítulo 5).
+- **ISO/IEC 25010:2011**: Modelo de calidad del producto software (Capítulo 4.2).
 
 ### Convenciones del documento
 
 **Formato de texto:**
-- Títulos principales: Numeración decimal (1., 1.1., 1.1.1.)
-- Código fuente: Bloques de código con syntax highlighting
-- Términos técnicos: Primera aparición en **negrita**
-- Acrónimos: MAYÚSCULAS con definición en primera aparición
+- Títulos principales: Numeración decimal (1., 1.1., 1.1.1.).
+- Código fuente: Bloques de código con syntax highlighting.
+- Términos técnicos: Primera aparición en **negrita**.
+- Acrónimos: MAYÚSCULAS con definición en primera aparición.
 
 **Diagramas y figuras:**
 - Numeración correlativa: Figura 1.1, Figura 1.2, etc.
-- Pie de figura descriptivo con fuente cuando corresponda
-- Formato vectorial preferible para diagramas técnicos
+- Pie de figura descriptivo con fuente cuando corresponda.
+- Formato vectorial preferible para diagramas técnicos.
 
 **Tablas:**
 - Numeración correlativa: Tabla 1.1, Tabla 1.2, etc.
-- Encabezados en negrita
-- Alineación consistente según el tipo de contenido
+- Encabezados en negrita.
+- Alineación consistente según el tipo de contenido.
 
 **Referencias:**
-- Bibliografía al final del documento
-- Formato APA para referencias académicas
-- Enlaces web con fecha de acceso
+- Bibliografía al final del documento.
+- Formato APA para referencias académicas.
+- Enlaces web con fecha de acceso.
 
 ## Acrónimos
 
@@ -206,7 +206,7 @@ Los acrónimos se presentan en orden alfabético, incluyendo tanto términos en 
 
 ## Definiciones
 
-Esta sección presenta las definiciones de los conceptos técnicos y términos especializados más relevantes utilizados a lo largo del proyecto. Estas definiciones han sido elaboradas específicamente en el contexto de la plataforma de gestión de TFG desarrollada, proporcionando claridad sobre el significado y uso de cada término.
+Esta sección presenta las definiciones de los conceptos técnicos y términos especializados más relevantes utilizados a lo largo del proyecto.. Estas definiciones han sido elaboradas específicamente en el contexto de la plataforma de gestión de TFG desarrollada, proporcionando claridad sobre el significado y uso de cada término.
 
 La comprensión de estos conceptos es fundamental para entender tanto la arquitectura técnica como las funcionalidades del sistema implementado. Cada definición incluye el contexto específico de aplicación dentro del proyecto.
 
@@ -264,7 +264,7 @@ El conocimiento del contexto tecnológico y metodológico es fundamental para co
 
 ## Descripción general del proyecto
 
-La Plataforma de Gestión de TFG es un sistema web integral diseñado para automatizar y optimizar el ciclo completo de gestión de Trabajos de Fin de Grado en entornos universitarios. El sistema implementa una arquitectura moderna basada en tecnologías web actuales, proporcionando una solución escalable que aborda las necesidades específicas de cuatro tipos de usuarios diferenciados.
+La Plataforma de Gestión de TFG es un sistema web integral diseñado para automatizar y optimizar el ciclo completo de gestión de Trabajos de Fin de Grado en entornos universitarios.. El sistema implementa una arquitectura moderna basada en tecnologías web actuales, proporcionando una solución escalable que aborda las necesidades específicas de cuatro tipos de usuarios diferenciados.
 
 La plataforma gestiona el flujo completo del proceso académico, desde la creación inicial del TFG por parte del estudiante hasta la calificación final tras la defensa ante el tribunal. El sistema implementa un modelo de estados bien definido (Borrador → En Revisión → Aprobado → Defendido) que garantiza la trazabilidad y el cumplimiento de los procedimientos académicos establecidos.
 
@@ -274,7 +274,7 @@ El sistema incorpora funcionalidades avanzadas como un calendario interactivo pa
 
 ## Características del usuario
 
-La identificación y caracterización precisa de los usuarios del sistema constituye un elemento fundamental para el diseño de una plataforma efectiva y usable. El análisis detallado de los perfiles de usuario permite definir funcionalidades específicas, interfaces adaptadas y flujos de trabajo optimizados para cada rol dentro del proceso académico.
+La identificación y caracterización precisa de los usuarios del sistema constituye un elemento fundamental para el diseño de una plataforma efectiva y usable.. El análisis detallado de los perfiles de usuario permite definir funcionalidades específicas, interfaces adaptadas y flujos de trabajo optimizados para cada rol dentro del proceso académico.
 
 El sistema ha sido diseñado para satisfacer las necesidades específicas de cuatro perfiles de usuario claramente diferenciados, cada uno con roles, permisos y flujos de trabajo particulares. Esta segmentación permite una experiencia de usuario personalizada que maximiza la eficiencia operativa de cada actor en el proceso de gestión de TFG.
 
@@ -283,76 +283,76 @@ El sistema ha sido diseñado para satisfacer las necesidades específicas de cua
 **Perfil**: Estudiante universitario en proceso de realización de su Trabajo de Fin de Grado, con conocimientos básicos de tecnologías web y experiencia en el uso de plataformas académicas digitales.
 
 **Responsabilidades principales**:
-- Creación y actualización de la información básica del TFG (título, resumen, palabras clave)
-- Subida y gestión de archivos PDF con el contenido del trabajo
-- Seguimiento del estado de progreso de su TFG a través del sistema
-- Consulta de comentarios y feedback proporcionado por el tutor
-- Visualización de información relacionada con la defensa (fecha, tribunal, aula)
-- Recepción y gestión de notificaciones sobre cambios de estado
+- Creación y actualización de la información básica del TFG (título, resumen, palabras clave).
+- Subida y gestión de archivos PDF con el contenido del trabajo.
+- Seguimiento del estado de progreso de su TFG a través del sistema.
+- Consulta de comentarios y feedback proporcionado por el tutor.
+- Visualización de información relacionada con la defensa (fecha, tribunal, aula).
+- Recepción y gestión de notificaciones sobre cambios de estado.
 
 **Competencias técnicas esperadas**:
-- Manejo básico de navegadores web y formularios online
-- Capacidad para subir y descargar archivos
-- Comprensión de conceptos básicos de gestión documental digital
-- Familiaridad con herramientas de notificación electrónica
+- Manejo básico de navegadores web y formularios online.
+- Capacidad para subir y descargar archivos.
+- Comprensión de conceptos básicos de gestión documental digital.
+- Familiaridad con herramientas de notificación electrónica.
 
 ### Profesor/Tutor
 
 **Perfil**: Docente universitario con experiencia en dirección de TFG, responsable de la supervisión académica y evaluación de trabajos asignados.
 
 **Responsabilidades principales**:
-- Supervisión y seguimiento del progreso de TFG asignados
-- Revisión y evaluación de documentos subidos por estudiantes
-- Provisión de feedback estructurado mediante sistema de comentarios
-- Gestión de cambios de estado de TFG (aprobación para defensa)
-- Participación en tribunales de evaluación como miembro
-- Coordinación con otros miembros del tribunal para programación de defensas
+- Supervisión y seguimiento del progreso de TFG asignados.
+- Revisión y evaluación de documentos subidos por estudiantes.
+- Provisión de feedback estructurado mediante sistema de comentarios.
+- Gestión de cambios de estado de TFG (aprobación para defensa).
+- Participación en tribunales de evaluación como miembro.
+- Coordinación con otros miembros del tribunal para programación de defensas.
 
 **Competencias técnicas esperadas**:
-- Experiencia en evaluación de trabajos académicos
-- Manejo avanzado de herramientas digitales de gestión académica
-- Capacidad para proporcionar feedback constructivo a través de plataformas digitales
-- Comprensión de flujos de trabajo colaborativos online
+- Experiencia en evaluación de trabajos académicos.
+- Manejo avanzado de herramientas digitales de gestión académica.
+- Capacidad para proporcionar feedback constructivo a través de plataformas digitales.
+- Comprensión de flujos de trabajo colaborativos online.
 
 ### Presidente del Tribunal
 
 **Perfil**: Profesor universitario con experiencia avanzada en evaluación académica, responsable de liderar tribunales de evaluación y coordinar el proceso de defensas.
 
 **Responsabilidades principales**:
-- Creación y configuración de tribunales de evaluación
-- Asignación de miembros de tribunal y distribución de responsabilidades
-- Programación de fechas y horarios de defensas utilizando el calendario integrado
-- Coordinación de disponibilidad entre miembros del tribunal
-- Supervisión del proceso de evaluación y calificación
-- Generación de actas de defensa y documentación oficial
+- Creación y configuración de tribunales de evaluación.
+- Asignación de miembros de tribunal y distribución de responsabilidades.
+- Programación de fechas y horarios de defensas utilizando el calendario integrado.
+- Coordinación de disponibilidad entre miembros del tribunal.
+- Supervisión del proceso de evaluación y calificación.
+- Generación de actas de defensa y documentación oficial.
 
 **Competencias técnicas esperadas**:
-- Experiencia avanzada en gestión de procesos académicos
-- Capacidad de liderazgo y coordinación de equipos de trabajo
-- Manejo experto de herramientas de calendario y programación
-- Comprensión de procedimientos administrativos universitarios
+- Experiencia avanzada en gestión de procesos académicos.
+- Capacidad de liderazgo y coordinación de equipos de trabajo.
+- Manejo experto de herramientas de calendario y programación.
+- Comprensión de procedimientos administrativos universitarios.
 
 ### Administrador
 
 **Perfil**: Personal técnico o administrativo responsable de la gestión global del sistema, con conocimientos avanzados en administración de plataformas web y gestión de usuarios.
 
 **Responsabilidades principales**:
-- Gestión completa del catálogo de usuarios del sistema (CRUD)
-- Asignación y modificación de roles y permisos de acceso
-- Generación de reportes estadísticos y analíticos del sistema
-- Exportación de datos en múltiples formatos (PDF, Excel)
-- Configuración y mantenimiento de parámetros del sistema
-- Supervisión del funcionamiento general de la plataforma
+- Gestión completa del catálogo de usuarios del sistema (CRUD).
+- Asignación y modificación de roles y permisos de acceso.
+- Generación de reportes estadísticos y analíticos del sistema.
+- Exportación de datos en múltiples formatos (PDF, Excel).
+- Configuración y mantenimiento de parámetros del sistema.
+- Supervisión del funcionamiento general de la plataforma.
 
 **Competencias técnicas esperadas**:
-- Experiencia avanzada en administración de sistemas web
-- Conocimientos en gestión de bases de datos y reportes
-- Capacidad analítica para interpretación de estadísticas
-- Comprensión de conceptos de seguridad y gestión de accesos
+- Experiencia avanzada en administración de sistemas web.
+- Conocimientos en gestión de bases de datos y reportes.
+- Capacidad analítica para interpretación de estadísticas.
+- Comprensión de conceptos de seguridad y gestión de accesos.
 
 ## Modelo de ciclo de vida
 
-La selección del modelo de ciclo de vida adecuado es una decisión estratégica que determina la estructura, organización y metodología de todo el proceso de desarrollo. Esta elección impacta directamente en la gestión de riesgos, la capacidad de adaptación a cambios y la entrega de valor a lo largo del proyecto.
+La selección del modelo de ciclo de vida adecuado es una decisión estratégica que determina la estructura, organización y metodología de todo el proceso de desarrollo.. Esta elección impacta directamente en la gestión de riesgos, la capacidad de adaptación a cambios y la entrega de valor a lo largo del proyecto.
 
 El desarrollo de la plataforma sigue un **modelo de ciclo de vida iterativo incremental**, estructurado en ocho fases bien definidas que permiten la entrega progresiva de funcionalidades y la validación continua de los requisitos. Este enfoque facilita la identificación temprana de problemas, permite ajustes metodológicos y garantiza que cada incremento del sistema aporte valor tangible al producto final.
 
@@ -361,63 +361,63 @@ El desarrollo de la plataforma sigue un **modelo de ciclo de vida iterativo incr
 **Enfoque adoptado**: El proyecto implementa una metodología ágil adaptada al contexto académico, combinando elementos de Scrum para la gestión iterativa con prácticas de desarrollo incremental que permiten la entrega de valor en cada fase.
 
 **Justificación de la metodología**:
-- **Flexibilidad**: Permite adaptarse a cambios de requisitos durante el desarrollo
-- **Validación temprana**: Cada fase entrega funcionalidades operativas
-- **Gestión de riesgos**: Identificación y mitigación progresiva de problemas técnicos
-- **Feedback continuo**: Posibilidad de ajustes basados en evaluación de fases anteriores
+- **Flexibilidad**: Permite adaptarse a cambios de requisitos durante el desarrollo.
+- **Validación temprana**: Cada fase entrega funcionalidades operativas.
+- **Gestión de riesgos**: Identificación y mitigación progresiva de problemas técnicos.
+- **Feedback continuo**: Posibilidad de ajustes basados en evaluación de fases anteriores.
 
 ### Fases del proyecto
 
 **Fase 1-2: Fundación del sistema (Semanas 1-2)**
-- Configuración del entorno de desarrollo
-- Implementación del sistema de ruteo y navegación
-- Desarrollo del sistema de autenticación básico
-- Establecimiento de la arquitectura de componentes React
+- Configuración del entorno de desarrollo.
+- Implementación del sistema de ruteo y navegación.
+- Desarrollo del sistema de autenticación básico.
+- Establecimiento de la arquitectura de componentes React.
 
 **Fase 3: Módulo de estudiante (Semanas 3-4)**
-- Implementación completa de funcionalidades para estudiantes
-- Sistema de subida y gestión de archivos
-- Interfaces de seguimiento de estado de TFG
-- Integración con sistema de notificaciones
+- Implementación completa de funcionalidades para estudiantes.
+- Sistema de subida y gestión de archivos.
+- Interfaces de seguimiento de estado de TFG.
+- Integración con sistema de notificaciones.
 
 **Fase 4: Módulo de profesor (Semanas 4-5)**
-- Desarrollo de herramientas de supervisión para tutores
-- Sistema de feedback y comentarios estructurados
-- Interfaces de gestión de TFG asignados
-- Integración con flujos de aprobación
+- Desarrollo de herramientas de supervisión para tutores.
+- Sistema de feedback y comentarios estructurados.
+- Interfaces de gestión de TFG asignados.
+- Integración con flujos de aprobación.
 
 **Fase 5: Sistema de defensas (Semanas 5-6)**
-- Implementación del calendario interactivo con FullCalendar.js
-- Sistema de gestión de tribunales
-- Programación y coordinación de defensas
-- Gestión de disponibilidad de miembros de tribunal
+- Implementación del calendario interactivo con FullCalendar.js.
+- Sistema de gestión de tribunales.
+- Programación y coordinación de defensas.
+- Gestión de disponibilidad de miembros de tribunal.
 
 **Fase 6: Panel administrativo (Semanas 6-7)**
-- Sistema completo de gestión de usuarios (CRUD)
-- Generación de reportes y estadísticas avanzadas
-- Funcionalidades de exportación de datos
-- Configuración global del sistema
+- Sistema completo de gestión de usuarios (CRUD).
+- Generación de reportes y estadísticas avanzadas.
+- Funcionalidades de exportación de datos.
+- Configuración global del sistema.
 
 **Fase 7: Backend Symfony (Semanas 7-9)**
-- Implementación completa del backend con Symfony 6.4 LTS
-- Desarrollo de APIs REST con API Platform
-- Sistema de autenticación JWT con refresh tokens
-- Migración de datos desde sistema mock a base de datos MySQL
+- Implementación completa del backend con Symfony 6.4 LTS.
+- Desarrollo de APIs REST con API Platform.
+- Sistema de autenticación JWT con refresh tokens.
+- Migración de datos desde sistema mock a base de datos MySQL.
 
 **Fase 8: Pulimiento final (Semanas 9-10)**
-- Testing exhaustivo (unitario, integración y E2E)
-- Optimización de rendimiento
-- Configuración de despliegue en producción
-- Documentación técnica y manuales de usuario
+- Testing exhaustivo (unitario, integración y E2E).
+- Optimización de rendimiento.
+- Configuración de despliegue en producción.
+- Documentación técnica y manuales de usuario.
 
 ### Criterios de finalización de fase
 
 Cada fase debe cumplir criterios específicos antes de proceder a la siguiente:
 
-- **Funcionalidades completas**: Todas las características planificadas operativas
-- **Testing básico**: Pruebas unitarias y de integración implementadas
-- **Documentación actualizada**: Registro de cambios y decisiones técnicas
-- **Validación de requisitos**: Confirmación de cumplimiento de objetivos de fase
+- **Funcionalidades completas**: Todas las características planificadas operativas.
+- **Testing básico**: Pruebas unitarias y de integración implementadas.
+- **Documentación actualizada**: Registro de cambios y decisiones técnicas.
+- **Validación de requisitos**: Confirmación de cumplimiento de objetivos de fase.
 
 ## Tecnologías
 
@@ -430,53 +430,53 @@ La selección tecnológica se basa en criterios de modernidad, estabilidad, esca
 React 19 constituye la biblioteca principal para el desarrollo del frontend de la aplicación, proporcionando un marco de trabajo robusto para la construcción de interfaces de usuario interactivas y componentes reutilizables.
 
 **Características principales utilizadas**:
-- **Componentes funcionales con hooks**: Implementación moderna que permite gestión de estado y efectos secundarios de manera declarativa
-- **Context API**: Sistema de gestión de estado global que evita el prop drilling y centraliza información crítica como autenticación y notificaciones
-- **Suspense y lazy loading**: Optimización de carga de componentes para mejorar el rendimiento percibido por el usuario
-- **Concurrent features**: Aprovechamiento de las nuevas características de renderizado concurrente para mejorar la responsividad de la aplicación
+- **Componentes funcionales con hooks**: Implementación moderna que permite gestión de estado y efectos secundarios de manera declarativa.
+- **Context API**: Sistema de gestión de estado global que evita el prop drilling y centraliza información crítica como autenticación y notificaciones.
+- **Suspense y lazy loading**: Optimización de carga de componentes para mejorar el rendimiento percibido por el usuario.
+- **Concurrent features**: Aprovechamiento de las nuevas características de renderizado concurrente para mejorar la responsividad de la aplicación.
 
 **Ventajas para el proyecto**:
-- **Ecosistema maduro**: Amplia disponibilidad de librerías y componentes de terceros
-- **Rendimiento optimizado**: Virtual DOM y algoritmos de reconciliación eficientes
-- **Curva de aprendizaje**: Documentación extensa y comunidad activa
-- **Compatibilidad**: Excelente integración con herramientas de desarrollo y testing
+- **Ecosistema maduro**: Amplia disponibilidad de librerías y componentes de terceros.
+- **Rendimiento optimizado**: Virtual DOM y algoritmos de reconciliación eficientes.
+- **Curva de aprendizaje**: Documentación extensa y comunidad activa.
+- **Compatibilidad**: Excelente integración con herramientas de desarrollo y testing.
 
 ### Symfony 6.4 LTS
 
 Symfony 6.4 LTS se utiliza como framework principal para el desarrollo del backend, proporcionando una arquitectura sólida basada en componentes modulares y principios de desarrollo empresarial.
 
 **Componentes principales utilizados**:
-- **Symfony Security**: Gestión de autenticación, autorización y control de acceso basado en roles
-- **Doctrine ORM**: Mapeo objeto-relacional para interacción con la base de datos MySQL
-- **Symfony Serializer**: Transformación de objetos PHP a JSON para APIs REST
-- **Symfony Mailer**: Sistema de envío de notificaciones por correo electrónico
-- **Symfony Messenger**: Gestión de colas de mensajes para procesamiento asíncrono
+- **Symfony Security**: Gestión de autenticación, autorización y control de acceso basado en roles.
+- **Doctrine ORM**: Mapeo objeto-relacional para interacción con la base de datos MySQL.
+- **Symfony Serializer**: Transformación de objetos PHP a JSON para APIs REST.
+- **Symfony Mailer**: Sistema de envío de notificaciones por correo electrónico.
+- **Symfony Messenger**: Gestión de colas de mensajes para procesamiento asíncrono.
 
 **Ventajas para el proyecto**:
-- **Long Term Support**: Garantía de soporte y actualizaciones de seguridad hasta 2027
-- **Arquitectura modular**: Flexibilidad para utilizar únicamente los componentes necesarios
-- **Rendimiento**: Optimizaciones internas y opcache de PHP para alta eficiencia
-- **Estándares PSR**: Cumplimiento de estándares de la comunidad PHP
+- **Long Term Support**: Garantía de soporte y actualizaciones de seguridad hasta 2027.
+- **Arquitectura modular**: Flexibilidad para utilizar únicamente los componentes necesarios.
+- **Rendimiento**: Optimizaciones internas y opcache de PHP para alta eficiencia.
+- **Estándares PSR**: Cumplimiento de estándares de la comunidad PHP.
 
 ### MySQL 8.0
 
 MySQL 8.0 actúa como sistema de gestión de base de datos relacional, proporcionando persistencia segura y eficiente para todos los datos del sistema.
 
 **Características utilizadas**:
-- **JSON data type**: Almacenamiento nativo de datos JSON para metadatos flexibles (roles, palabras clave)
-- **Window functions**: Consultas analíticas avanzadas para generación de reportes
-- **Common Table Expressions (CTE)**: Consultas recursivas para jerarquías de datos
-- **Performance Schema**: Monitorización y optimización de consultas
+- **JSON data type**: Almacenamiento nativo de datos JSON para metadatos flexibles (roles, palabras clave).
+- **Window functions**: Consultas analíticas avanzadas para generación de reportes.
+- **Common Table Expressions (CTE)**: Consultas recursivas para jerarquías de datos.
+- **Performance Schema**: Monitorización y optimización de consultas.
 
 **Ventajas para el proyecto**:
-- **Fiabilidad**: Sistema probado en entornos de producción exigentes
-- **ACID compliance**: Garantías de consistencia e integridad de datos
-- **Escalabilidad**: Capacidad de crecimiento horizontal y vertical
-- **Herramientas**: Ecosistema rico de herramientas de administración y monitorización
+- **Fiabilidad**: Sistema probado en entornos de producción exigentes.
+- **ACID compliance**: Garantías de consistencia e integridad de datos.
+- **Escalabilidad**: Capacidad de crecimiento horizontal y vertical.
+- **Herramientas**: Ecosistema rico de herramientas de administración y monitorización.
 
 ### API Platform 3.x
 
-API Platform 3.x se utiliza para la generación automática de APIs REST, proporcionando funcionalidades avanzadas de serialización, documentación y validación.
+API Platform 3.x se utiliza para la generación automática de APIs REST, proporcionando funcionalidades avanzadas de serialización, documentación y validación..
 
 **Funcionalidades implementadas**:
 - **Auto-documentación OpenAPI**: Generación automática de documentación interactiva
@@ -497,18 +497,18 @@ La autenticación JWT proporciona un sistema de seguridad stateless, escalable y
 **Implementación específica**:
 - **Access tokens**: Tokens de corta duración (1 hora) para operaciones sensibles
 - **Refresh tokens**: Tokens de larga duración (30 días) para renovación automática
-- **Role-based claims**: Información de roles embebida en el payload del token
-- **Algoritmo RS256**: Firma asimétrica para máxima seguridad
+- **Role-based claims**: Información de roles embebida en el payload del token.
+- **Algoritmo RS256**: Firma asimétrica para máxima seguridad.
 
 **Ventajas para el proyecto**:
-- **Stateless**: No requiere almacenamiento de sesiones en el servidor
-- **Escalabilidad**: Compatible con arquitecturas distribuidas
-- **Seguridad**: Resistente a ataques CSRF y compatible con HTTPS
-- **Interoperabilidad**: Estándar soportado por múltiples plataformas
+- **Stateless**: No requiere almacenamiento de sesiones en el servidor.
+- **Escalabilidad**: Compatible con arquitecturas distribuidas.
+- **Seguridad**: Resistente a ataques CSRF y compatible con HTTPS.
+- **Interoperabilidad**: Estándar soportado por múltiples plataformas.
 
 ### FullCalendar.js
 
-FullCalendar.js proporciona la funcionalidad de calendario interactivo para la gestión visual de defensas y programación de eventos académicos.
+FullCalendar.js proporciona la funcionalidad de calendario interactivo para la gestión visual de defensas y programación de eventos académicos..
 
 **Características implementadas**:
 - **Múltiples vistas**: Mensual, semanal y diaria para diferentes niveles de detalle
@@ -560,7 +560,7 @@ Los lenguajes de programación seleccionados para el desarrollo de la plataforma
 
 ### JavaScript/TypeScript
 
-JavaScript se utiliza como lenguaje principal para el desarrollo del frontend, aprovechando las características modernas de ECMAScript 2023 y preparado para migración incremental a TypeScript.
+JavaScript se utiliza como lenguaje principal para el desarrollo del frontend, aprovechando las características modernas de ECMAScript 2023 y preparado para migración incremental a TypeScript..
 
 **Características del lenguaje utilizadas**:
 - **ES6+ features**: Destructuring, arrow functions, template literals, async/await
@@ -619,7 +619,7 @@ En esta sección se detallan las principales herramientas utilizadas durante el 
 
 ### Visual Studio Code
 
-VS Code actúa como IDE principal de desarrollo, configurado con extensiones específicas para el stack tecnológico del proyecto.
+VS Code actúa como IDE principal de desarrollo, configurado con extensiones específicas para el stack tecnológico del proyecto..
 
 **Extensiones críticas configuradas**:
 - **ES7+ React/Redux/React-Native snippets**: Acelera el desarrollo de componentes React
@@ -637,7 +637,7 @@ VS Code actúa como IDE principal de desarrollo, configurado con extensiones esp
 
 ### Vite
 
-Vite se utiliza como build tool y servidor de desarrollo para el frontend, proporcionando una experiencia de desarrollo optimizada con Hot Module Replacement.
+Vite se utiliza como build tool y servidor de desarrollo para el frontend, proporcionando una experiencia de desarrollo optimizada con Hot Module Replacement..
 
 **Configuración específica**:
 - **HMR optimizado**: Recarga instantánea de componentes modificados
@@ -652,7 +652,7 @@ Vite se utiliza como build tool y servidor de desarrollo para el frontend, propo
 
 ### Composer
 
-Composer gestiona las dependencias PHP del backend, garantizando versiones consistentes y resolución automática de dependencias.
+Composer gestiona las dependencias PHP del backend, garantizando versiones consistentes y resolución automática de dependencias..
 
 **Configuración específica**:
 - **Lock file**: Versiones exactas para despliegues reproducibles
@@ -672,7 +672,7 @@ Docker proporciona containerización del entorno de desarrollo, mientras DDEV of
 
 ### Git / GitHub
 
-Git actúa como sistema de control de versiones, con GitHub proporcionando hosting remoto, colaboración y herramientas de CI/CD.
+Git actúa como sistema de control de versiones, con GitHub proporcionando hosting remoto, colaboración y herramientas de CI/CD..
 
 **Workflow configurado**:
 - **Feature branches**: Desarrollo aislado de funcionalidades
@@ -682,7 +682,7 @@ Git actúa como sistema de control de versiones, con GitHub proporcionando hosti
 
 ### Postman / Insomnia
 
-Herramientas de testing de APIs REST que permiten validación exhaustiva de endpoints durante el desarrollo y documentación de casos de uso.
+Herramientas de testing de APIs REST que permiten validación exhaustiva de endpoints durante el desarrollo y documentación de casos de uso..
 
 **Configuración de testing**:
 - **Collections organizadas**: Agrupación de endpoints por funcionalidad
@@ -719,10 +719,10 @@ La decisión de desarrollo se basó en tres factores críticos: la disponibilida
 
 El alcance inicial se estableció mediante la definición de requisitos mínimos viables (MVP) para cada rol de usuario:
 
-- **Estudiante**: Subida de TFG, seguimiento de estado, visualización de feedback
-- **Profesor**: Gestión de TFG asignados, sistema de comentarios, cambios de estado
-- **Presidente de Tribunal**: Creación de tribunales, programación de defensas
-- **Administrador**: Gestión de usuarios, reportes básicos, configuración del sistema
+- **Estudiante**: Subida de TFG, seguimiento de estado, visualización de feedback.
+- **Profesor**: Gestión de TFG asignados, sistema de comentarios, cambios de estado.
+- **Presidente de Tribunal**: Creación de tribunales, programación de defensas.
+- **Administrador**: Gestión de usuarios, reportes básicos, configuración del sistema.
 
 Esta definición de MVP permite validación temprana de hipótesis y ajuste incremental de funcionalidades según feedback obtenido.
 
@@ -735,246 +735,246 @@ El desarrollo se estructura en iteraciones que siguen un patrón consistente: an
 ### Fase 1-2: Setup inicial y autenticación (Semanas 1-2)
 
 **Objetivos de la fase**:
-- Establecer la arquitectura base del proyecto frontend
-- Implementar sistema de routing con protección por roles
-- Desarrollar sistema de autenticación mock funcional
-- Configurar herramientas de desarrollo y linting
+- Establecer la arquitectura base del proyecto frontend.
+- Implementar sistema de routing con protección por roles.
+- Desarrollar sistema de autenticación mock funcional.
+- Configurar herramientas de desarrollo y linting.
 
 **Actividades principales**:
 
 *Semana 1: Configuración del entorno*
-- Inicialización del proyecto React con Vite
-- Configuración de Tailwind CSS v4 y sistema de diseño base
-- Setup de ESLint, Prettier y herramientas de calidad de código
-- Implementación de componentes básicos de Layout y navegación
+- Inicialización del proyecto React con Vite.
+- Configuración de Tailwind CSS v4 y sistema de diseño base.
+- Setup de ESLint, Prettier y herramientas de calidad de código.
+- Implementación de componentes básicos de Layout y navegación.
 
 *Semana 2: Sistema de autenticación*
-- Desarrollo del AuthContext para gestión de estado global
-- Implementación de componentes de login y registro
-- Creación del sistema ProtectedRoute con validación de roles
-- Configuración de persistencia en localStorage
-- Testing básico de flujos de autenticación
+- Desarrollo del AuthContext para gestión de estado global.
+- Implementación de componentes de login y registro.
+- Creación del sistema ProtectedRoute con validación de roles.
+- Configuración de persistencia en localStorage.
+- Testing básico de flujos de autenticación.
 
 **Entregables**:
-- Aplicación React funcional con navegación por roles
-- Sistema de autenticación mock operativo
-- Arquitectura de componentes establecida
-- Documentación de decisiones técnicas iniciales
+- Aplicación React funcional con navegación por roles.
+- Sistema de autenticación mock operativo.
+- Arquitectura de componentes establecida.
+- Documentación de decisiones técnicas iniciales.
 
 **Criterios de aceptación**:
-- Los cuatro tipos de usuario pueden autenticarse exitosamente
-- Las rutas están protegidas según el rol del usuario
-- La interfaz es responsive y sigue el sistema de diseño establecido
-- El código cumple con los estándares de linting configurados
+- Los cuatro tipos de usuario pueden autenticarse exitosamente.
+- Las rutas están protegidas según el rol del usuario.
+- La interfaz es responsive y sigue el sistema de diseño establecido.
+- El código cumple con los estándares de linting configurados.
 
 ### Fase 3: Módulo de estudiante (Semanas 3-4)
 
 **Objetivos de la fase**:
-- Implementar funcionalidades completas para el rol estudiante
-- Desarrollar sistema de gestión de archivos mock
-- Crear interfaces de seguimiento de estado de TFG
-- Integrar sistema de notificaciones básico
+- Implementar funcionalidades completas para el rol estudiante.
+- Desarrollar sistema de gestión de archivos mock.
+- Crear interfaces de seguimiento de estado de TFG.
+- Integrar sistema de notificaciones básico.
 
 **Actividades principales**:
 
 *Semana 3: Gestión de TFG*
-- Desarrollo del custom hook useTFGs para lógica de negocio
-- Implementación de formularios de creación y edición de TFG
-- Sistema de upload de archivos con validación y progress tracking
-- Interfaz de visualización de TFG con metadatos
+- Desarrollo del custom hook useTFGs para lógica de negocio.
+- Implementación de formularios de creación y edición de TFG.
+- Sistema de upload de archivos con validación y progress tracking.
+- Interfaz de visualización de TFG con metadatos.
 
 *Semana 4: Seguimiento y notificaciones*
-- Implementación del sistema de estados (Borrador → En Revisión → Aprobado → Defendido)
-- Desarrollo de componentes de timeline para tracking de progreso
-- Integración del NotificacionesContext
-- Interfaces de visualización de comentarios del tutor
+- Implementación del sistema de estados (Borrador → En Revisión → Aprobado → Defendido).
+- Desarrollo de componentes de timeline para tracking de progreso.
+- Integración del NotificacionesContext.
+- Interfaces de visualización de comentarios del tutor.
 
 **Entregables**:
-- Módulo completo de estudiante operativo
-- Sistema de upload y gestión de archivos
-- Interfaz de seguimiento de estado implementada
-- Sistema de notificaciones integrado
+- Módulo completo de estudiante operativo.
+- Sistema de upload y gestión de archivos.
+- Interfaz de seguimiento de estado implementada.
+- Sistema de notificaciones integrado.
 
 **Criterios de aceptación**:
-- Los estudiantes pueden crear, editar y subir archivos de TFG
-- El sistema de estados funciona correctamente con validaciones apropiadas
-- Las notificaciones se muestran en tiempo real
-- Las interfaces son intuitivas y responsive
+- Los estudiantes pueden crear, editar y subir archivos de TFG.
+- El sistema de estados funciona correctamente con validaciones apropiadas.
+- Las notificaciones se muestran en tiempo real.
+- Las interfaces son intuitivas y responsive.
 
 ### Fase 4: Módulo de profesor (Semanas 4-5)
 
 **Objetivos de la fase**:
-- Desarrollar herramientas de supervisión para profesores tutores
-- Implementar sistema de feedback estructurado
-- Crear interfaces de gestión de TFG asignados
-- Integrar capacidades de cambio de estado con validaciones
+- Desarrollar herramientas de supervisión para profesores tutores.
+- Implementar sistema de feedback estructurado.
+- Crear interfaces de gestión de TFG asignados.
+- Integrar capacidades de cambio de estado con validaciones.
 
 **Actividades principales**:
 
 *Semana 4 (solapada): Bases del módulo profesor*
-- Desarrollo de interfaces de listado de TFG asignados
-- Implementación de filtros y búsqueda por estado, estudiante, fecha
-- Sistema de visualización de archivos PDF subidos por estudiantes
+- Desarrollo de interfaces de listado de TFG asignados.
+- Implementación de filtros y búsqueda por estado, estudiante, fecha.
+- Sistema de visualización de archivos PDF subidos por estudiantes.
 
 *Semana 5: Sistema de feedback y evaluación*
-- Desarrollo de formularios de comentarios estructurados
-- Implementación de sistema de calificaciones y evaluaciones
-- Interfaces de cambio de estado con validación de permisos
-- Integration con sistema de notificaciones para estudiantes
+- Desarrollo de formularios de comentarios estructurados.
+- Implementación de sistema de calificaciones y evaluaciones.
+- Interfaces de cambio de estado con validación de permisos.
+- Integration con sistema de notificaciones para estudiantes.
 
 **Entregables**:
-- Módulo completo de profesor funcional
-- Sistema de feedback y comentarios implementado
-- Interfaces de evaluación y cambio de estado
-- Validaciones de permisos por rol operativas
+- Módulo completo de profesor funcional.
+- Sistema de feedback y comentarios implementado.
+- Interfaces de evaluación y cambio de estado.
+- Validaciones de permisos por rol operativas.
 
 **Criterios de aceptación**:
-- Los profesores pueden gestionar eficientemente sus TFG asignados
-- El sistema de comentarios permite feedback estructurado
-- Los cambios de estado notifican apropiadamente a los estudiantes
-- Las validaciones de permisos funcionan correctamente
+- Los profesores pueden gestionar eficientemente sus TFG asignados.
+- El sistema de comentarios permite feedback estructurado.
+- Los cambios de estado notifican apropiadamente a los estudiantes.
+- Las validaciones de permisos funcionan correctamente.
 
 ### Fase 5: Sistema de defensas y calendario (Semanas 5-6)
 
 **Objetivos de la fase**:
-- Integrar FullCalendar.js para gestión visual de defensas
-- Implementar sistema de gestión de tribunales
-- Desarrollar funcionalidades de programación de defensas
-- Crear sistema de coordinación de disponibilidad
+- Integrar FullCalendar.js para gestión visual de defensas.
+- Implementar sistema de gestión de tribunales.
+- Desarrollar funcionalidades de programación de defensas.
+- Crear sistema de coordinación de disponibilidad.
 
 **Actividades principales**:
 
 *Semana 5 (solapada): Integración de calendario*
-- Instalación y configuración de FullCalendar.js para React
-- Desarrollo del custom hook useCalendario
-- Implementación de vistas múltiples (mensual, semanal, diaria)
-- Configuración de eventos personalizados para defensas
+- Instalación y configuración de FullCalendar.js para React.
+- Desarrollo del custom hook useCalendario.
+- Implementación de vistas múltiples (mensual, semanal, diaria).
+- Configuración de eventos personalizados para defensas.
 
 *Semana 6: Gestión de tribunales y defensas*
-- Desarrollo del módulo de creación y gestión de tribunales
-- Implementación de sistema de asignación de miembros de tribunal
-- Interfaces de programación de defensas con drag & drop
-- Sistema de notificaciones para tribunales y estudiantes
+- Desarrollo del módulo de creación y gestión de tribunales.
+- Implementación de sistema de asignación de miembros de tribunal.
+- Interfaces de programación de defensas con drag & drop.
+- Sistema de notificaciones para tribunales y estudiantes.
 
 **Entregables**:
-- Calendario interactivo completamente funcional
-- Sistema de gestión de tribunales operativo
-- Funcionalidades de programación de defensas implementadas
-- Coordinación de disponibilidad automatizada
+- Calendario interactivo completamente funcional.
+- Sistema de gestión de tribunales operativo.
+- Funcionalidades de programación de defensas implementadas.
+- Coordinación de disponibilidad automatizada.
 
 **Criterios de aceptación**:
-- El calendario muestra correctamente todas las defensas programadas
-- Los tribunales pueden crearse y gestionarse eficientemente
-- La programación de defensas es intuitiva y funcional
-- Las notificaciones se envían a todos los actores relevantes
+- El calendario muestra correctamente todas las defensas programadas.
+- Los tribunales pueden crearse y gestionarse eficientemente.
+- La programación de defensas es intuitiva y funcional.
+- Las notificaciones se envían a todos los actores relevantes.
 
 ### Fase 6: Panel administrativo (Semanas 6-7)
 
 **Objetivos de la fase**:
-- Desarrollar sistema completo de gestión de usuarios (CRUD)
-- Implementar generación de reportes y estadísticas
-- Crear funcionalidades de exportación de datos
-- Establecer configuración global del sistema
+- Desarrollar sistema completo de gestión de usuarios (CRUD).
+- Implementar generación de reportes y estadísticas.
+- Crear funcionalidades de exportación de datos.
+- Establecer configuración global del sistema.
 
 **Actividades principales**:
 
 *Semana 6 (solapada): Gestión de usuarios*
-- Desarrollo del custom hook useUsuarios
-- Implementación de interfaces CRUD para gestión de usuarios
-- Sistema de asignación de roles con validaciones
-- Filtros avanzados y búsqueda de usuarios
+- Desarrollo del custom hook useUsuarios.
+- Implementación de interfaces CRUD para gestión de usuarios.
+- Sistema de asignación de roles con validaciones.
+- Filtros avanzados y búsqueda de usuarios.
 
 *Semana 7: Reportes y configuración*
-- Desarrollo del custom hook useReportes
-- Implementación de dashboards con estadísticas visuales
-- Sistema de exportación a PDF y Excel
-- Interfaces de configuración global del sistema
+- Desarrollo del custom hook useReportes.
+- Implementación de dashboards con estadísticas visuales.
+- Sistema de exportación a PDF y Excel.
+- Interfaces de configuración global del sistema.
 
 **Entregables**:
-- Panel administrativo completo y funcional
-- Sistema de reportes con múltiples visualizaciones
-- Funcionalidades de exportación operativas
-- Sistema de configuración implementado
+- Panel administrativo completo y funcional.
+- Sistema de reportes con múltiples visualizaciones.
+- Funcionalidades de exportación operativas.
+- Sistema de configuración implementado.
 
 **Criterios de aceptación**:
-- La gestión de usuarios permite operaciones CRUD completas
-- Los reportes proporcionan insights valiosos sobre el sistema
-- Las exportaciones generan archivos correctamente formateados
-- La configuración global afecta apropiadamente el comportamiento del sistema
+- La gestión de usuarios permite operaciones CRUD completas.
+- Los reportes proporcionan insights valiosos sobre el sistema.
+- Las exportaciones generan archivos correctamente formateados.
+- La configuración global afecta apropiadamente el comportamiento del sistema.
 
 ### Fase 7: Backend Symfony (Semanas 7-9)
 
 **Objetivos de la fase**:
-- Implementar backend completo con Symfony 6.4 LTS
-- Desarrollar APIs REST con API Platform 3.x
-- Migrar de sistema mock a persistencia real con MySQL
-- Implementar autenticación JWT con refresh tokens
+- Implementar backend completo con Symfony 6.4 LTS.
+- Desarrollar APIs REST con API Platform 3.x.
+- Migrar de sistema mock a persistencia real con MySQL.
+- Implementar autenticación JWT con refresh tokens.
 
 **Actividades principales**:
 
 *Semana 7: Setup y arquitectura backend*
-- Configuración del proyecto Symfony con DDEV
-- Definición de entidades Doctrine (User, TFG, Tribunal, Defensa, etc.)
-- Configuración de base de datos MySQL con migraciones iniciales
-- Setup de API Platform y configuración de serialización
+- Configuración del proyecto Symfony con DDEV.
+- Definición de entidades Doctrine (User, TFG, Tribunal, Defensa, etc.).
+- Configuración de base de datos MySQL con migraciones iniciales.
+- Setup de API Platform y configuración de serialización.
 
 *Semana 8: APIs y autenticación*
-- Implementación completa de endpoints REST
-- Configuración de LexikJWTAuthenticationBundle
-- Sistema de roles y permisos con Symfony Security
-- Integración de VichUploaderBundle para gestión de archivos
+- Implementación completa de endpoints REST.
+- Configuración de LexikJWTAuthenticationBundle.
+- Sistema de roles y permisos con Symfony Security.
+- Integración de VichUploaderBundle para gestión de archivos.
 
 *Semana 9: Integración y testing*
-- Conexión completa frontend-backend
-- Implementación de sistema de notificaciones por email
-- Testing de APIs con PHPUnit
-- Optimización de consultas y rendimiento
+- Conexión completa frontend-backend.
+- Implementación de sistema de notificaciones por email.
+- Testing de APIs con PHPUnit.
+- Optimización de consultas y rendimiento.
 
 **Entregables**:
-- Backend Symfony completamente funcional
-- APIs REST documentadas con OpenAPI
-- Sistema de autenticación JWT operativo
-- Integración frontend-backend completada
+- Backend Symfony completamente funcional.
+- APIs REST documentadas con OpenAPI.
+- Sistema de autenticación JWT operativo.
+- Integración frontend-backend completada.
 
 **Criterios de aceptación**:
-- Todas las funcionalidades frontend funcionan con APIs reales
-- El sistema de autenticación JWT es seguro y funcional
-- Las APIs están correctamente documentadas y testeadas
-- El rendimiento del sistema cumple los objetivos establecidos
+- Todas las funcionalidades frontend funcionan con APIs reales.
+- El sistema de autenticación JWT es seguro y funcional.
+- Las APIs están correctamente documentadas y testeadas.
+- El rendimiento del sistema cumple los objetivos establecidos.
 
 ### Fase 8: Pulimiento final (Semanas 9-10)
 
 **Objetivos de la fase**:
-- Realizar testing exhaustivo de toda la aplicación
-- Optimizar rendimiento y experiencia de usuario
-- Configurar despliegue en producción
-- Completar documentación técnica y manuales
+- Realizar testing exhaustivo de toda la aplicación.
+- Optimizar rendimiento y experiencia de usuario.
+- Configurar despliegue en producción.
+- Completar documentación técnica y manuales.
 
 **Actividades principales**:
 
 *Semana 9 (solapada): Testing y optimización*
-- Implementación de testing E2E con herramientas apropiadas
-- Optimización de consultas de base de datos
-- Mejoras de UX basadas en testing de usabilidad
-- Corrección de bugs identificados durante testing integral
+- Implementación de testing E2E con herramientas apropiadas.
+- Optimización de consultas de base de datos.
+- Mejoras de UX basadas en testing de usabilidad.
+- Corrección de bugs identificados durante testing integral.
 
 *Semana 10: Despliegue y documentación*
-- Configuración de entorno de producción con Docker
-- Setup de CI/CD pipeline para despliegues automatizados
-- Finalización de documentación técnica completa
-- Creación de manuales de usuario para todos los roles
+- Configuración de entorno de producción con Docker.
+- Setup de CI/CD pipeline para despliegues automatizados.
+- Finalización de documentación técnica completa.
+- Creación de manuales de usuario para todos los roles.
 
 **Entregables**:
-- Aplicación completamente testeada y optimizada
-- Configuración de producción operativa
-- Documentación técnica y manuales completos
-- Sistema listo para despliegue en producción
+- Aplicación completamente testeada y optimizada.
+- Configuración de producción operativa.
+- Documentación técnica y manuales completos.
+- Sistema listo para despliegue en producción.
 
 **Criterios de aceptación**:
-- Todos los tests (unitarios, integración, E2E) pasan exitosamente
-- El sistema cumple todos los criterios de rendimiento establecidos
-- La documentación está completa y es comprensible
-- El despliegue en producción es exitoso y estable
+- Todos los tests (unitarios, integración, E2E) pasan exitosamente.
+- El sistema cumple todos los criterios de rendimiento establecidos.
+- La documentación está completa y es comprensible.
+- El despliegue en producción es exitoso y estable.
 
 ## Diagrama de Gantt
 
@@ -991,18 +991,18 @@ El siguiente cronograma ilustra la distribución temporal de las actividades pri
 ![Cronograma Principal](processed/images/03_planificacion_mermaid_1.png)
 
 **Hitos críticos identificados**:
-- **H1**: Frontend base funcional (Semana 3) - Fin de Fase 1-2
-- **H2**: Módulos usuario completos (Semana 6) - Fin de Fases 3-4
-- **H3**: Sistema frontend completo (Semana 8) - Fin de Fases 5-6
-- **H4**: Backend integrado (Semana 9) - Fin de Fase 7
-- **H5**: Sistema productivo (Semana 10) - Fin de Fase 8
+- **H1**: Frontend base funcional (Semana 3) - Fin de Fase 1-2.
+- **H2**: Módulos usuario completos (Semana 6) - Fin de Fases 3-4.
+- **H3**: Sistema frontend completo (Semana 8) - Fin de Fases 5-6.
+- **H4**: Backend integrado (Semana 9) - Fin de Fase 7.
+- **H5**: Sistema productivo (Semana 10) - Fin de Fase 8.
 
 **Dependencias críticas**:
-- Fase 3 (Estudiante) requiere completar Sistema de autenticación
-- Fase 4 (Profesor) depende de estados TFG de Fase 3
-- Fase 5 (Defensas) necesita roles y permisos de Fase 4
-- Fase 7 (Backend) puede iniciarse en paralelo desde Semana 7
-- Fase 8 (Testing) requiere integración completa de Fase 7
+- Fase 3 (Estudiante) requiere completar Sistema de autenticación.
+- Fase 4 (Profesor) depende de estados TFG de Fase 3.
+- Fase 5 (Defensas) necesita roles y permisos de Fase 4.
+- Fase 7 (Backend) puede iniciarse en paralelo desde Semana 7.
+- Fase 8 (Testing) requiere integración completa de Fase 7.
 
 ### Análisis de ruta crítica
 
@@ -1010,12 +1010,12 @@ El siguiente cronograma ilustra la distribución temporal de las actividades pri
 
 Esta ruta crítica tiene una duración total de 9 semanas, proporcionando 1 semana de margen para el cronograma total de 10 semanas. Los elementos que componen la ruta crítica son:
 
-1. **Sistema de autenticación** (Fase 1-2): Base fundamental para todos los módulos posteriores
-2. **Módulo de estudiante** (Fase 3): Funcionalidad core del sistema
-3. **Módulo de profesor** (Fase 4): Dependiente del flujo de estados de Fase 3
-4. **Sistema de defensas** (Fase 5): Requiere roles y permisos de fases anteriores
-5. **Backend Symfony** (Fase 7): Integración crítica para funcionalidad completa
-6. **Pulimiento final** (Fase 8): Testing integral y despliegue
+1. **Sistema de autenticación** (Fase 1-2): Base fundamental para todos los módulos posteriores.
+2. **Módulo de estudiante** (Fase 3): Funcionalidad core del sistema.
+3. **Módulo de profesor** (Fase 4): Dependiente del flujo de estados de Fase 3.
+4. **Sistema de defensas** (Fase 5): Requiere roles y permisos de fases anteriores.
+5. **Backend Symfony** (Fase 7): Integración crítica para funcionalidad completa.
+6. **Pulimiento final** (Fase 8): Testing integral y despliegue.
 
 ### Optimizaciones de cronograma
 
@@ -1037,49 +1037,49 @@ El cronograma del proyecto se alinea con el calendario académico universitario,
 
 **Entregas principales programadas**:
 
-- **Entrega 1 - Semana 3**: Demo del sistema de autenticación y módulo de estudiante básico
-- **Entrega 2 - Semana 5**: Sistema completo de gestión para estudiantes y profesores
-- **Entrega 3 - Semana 7**: Plataforma frontend completa con todas las funcionalidades
-- **Entrega 4 - Semana 9**: Sistema integrado con backend funcional
-- **Entrega final - Semana 10**: Aplicación completa lista para producción
+- **Entrega 1 - Semana 3**: Demo del sistema de autenticación y módulo de estudiante básico.
+- **Entrega 2 - Semana 5**: Sistema completo de gestión para estudiantes y profesores.
+- **Entrega 3 - Semana 7**: Plataforma frontend completa con todas las funcionalidades.
+- **Entrega 4 - Semana 9**: Sistema integrado con backend funcional.
+- **Entrega final - Semana 10**: Aplicación completa lista para producción.
 
 ### Sesiones de validación
 
 **Validación de usuarios**: Se programan sesiones de feedback con representantes de cada rol de usuario al finalizar las fases correspondientes:
 
-- **Semana 4**: Validación con estudiantes del módulo desarrollado en Fase 3
-- **Semana 6**: Validación con profesores del sistema de supervisión y feedback
-- **Semana 7**: Validación con administradores del panel de gestión
-- **Semana 9**: Validación integral con todos los tipos de usuario
+- **Semana 4**: Validación con estudiantes del módulo desarrollado en Fase 3.
+- **Semana 6**: Validación con profesores del sistema de supervisión y feedback.
+- **Semana 7**: Validación con administradores del panel de gestión.
+- **Semana 9**: Validación integral con todos los tipos de usuario.
 
 **Criterios de validación**: Cada sesión evalúa usabilidad, funcionalidad completa y cumplimiento de requisitos específicos del rol, proporcionando input para refinamiento en fases posteriores.
 
 ### Gestión de riesgos temporales
 
 **Identificación de riesgos**:
-- **Riesgo técnico**: Dificultades de integración entre frontend y backend
-- **Riesgo de alcance**: Solicitudes de funcionalidades adicionales durante desarrollo
-- **Riesgo de recursos**: Disponibilidad limitada durante períodos de exámenes
+- **Riesgo técnico**: Dificultades de integración entre frontend y backend.
+- **Riesgo de alcance**: Solicitudes de funcionalidades adicionales durante desarrollo.
+- **Riesgo de recursos**: Disponibilidad limitada durante períodos de exámenes.
 
 **Estrategias de mitigación**:
-- **Buffer temporal**: 1 semana adicional para absorber retrasos imprevistos
-- **Desarrollo incremental**: Entregas funcionales que permiten validación temprana
-- **Documentación continua**: Registro de decisiones para facilitar retoma tras interrupciones
-- **Testing automatizado**: Reducción de tiempo necesario para validación manual
+- **Buffer temporal**: 1 semana adicional para absorber retrasos imprevistos.
+- **Desarrollo incremental**: Entregas funcionales que permiten validación temprana.
+- **Documentación continua**: Registro de decisiones para facilitar retoma tras interrupciones.
+- **Testing automatizado**: Reducción de tiempo necesario para validación manual.
 
 ### Métricas de seguimiento
 
 **Indicadores de progreso**:
-- **Velocity por fase**: Comparación de tiempo estimado vs. tiempo real de cada fase
-- **Funcionalidades completadas**: Porcentaje de features implementadas vs. planificadas
-- **Debt técnico**: Cantidad de refactoring pendiente identificado durante desarrollo
-- **Coverage de testing**: Porcentaje de código cubierto por tests automatizados
+- **Velocity por fase**: Comparación de tiempo estimado vs. tiempo real de cada fase.
+- **Funcionalidades completadas**: Porcentaje de features implementadas vs. planificadas.
+- **Debt técnico**: Cantidad de refactoring pendiente identificado durante desarrollo.
+- **Coverage de testing**: Porcentaje de código cubierto por tests automatizados.
 
 **Herramientas de seguimiento**:
-- **Git commits**: Seguimiento diario de progreso mediante análisis de commits
-- **Issues tracking**: GitHub Issues para gestión de bugs y features pendientes
-- **Time tracking**: Registro manual de tiempo invertido por fase para métricas de velocity
-- **Code quality**: Métricas automáticas de ESLint, PHPStan y herramientas de análisis
+- **Git commits**: Seguimiento diario de progreso mediante análisis de commits.
+- **Issues tracking**: GitHub Issues para gestión de bugs y features pendientes.
+- **Time tracking**: Registro manual de tiempo invertido por fase para métricas de velocity.
+- **Code quality**: Métricas automáticas de ESLint, PHPStan y herramientas de análisis.
 
 
 # Análisis del sistema
@@ -1112,10 +1112,10 @@ Los requisitos de información definen las entidades de datos principales que el
 - **Control de sistema**: Rol asignado, estado activo/inactivo, fechas de creación y actualización
 
 **Restricciones**:
-- El email debe ser único en el sistema
-- El DNI debe seguir formato válido español
-- Cada usuario debe tener al menos un rol asignado
-- Los datos personales son obligatorios para activación de cuenta
+- El email debe ser único en el sistema.
+- El DNI debe seguir formato válido español.
+- Cada usuario debe tener al menos un rol asignado.
+- Los datos personales son obligatorios para activación de cuenta.
 
 #### Entidad TFG
 
@@ -1132,10 +1132,10 @@ Los requisitos de información definen las entidades de datos principales que el
 - **Evaluación**: Calificación final, comentarios de evaluación
 
 **Restricciones**:
-- Un estudiante puede tener máximo un TFG activo
-- El título debe ser único por estudiante
-- El archivo debe ser formato PDF con tamaño máximo 50MB
-- Las transiciones de estado deben seguir el flujo definido
+- Un estudiante puede tener máximo un TFG activo.
+- El título debe ser único por estudiante.
+- El archivo debe ser formato PDF con tamaño máximo 50MB.
+- Las transiciones de estado deben seguir el flujo definido.
 
 #### Entidad Tribunal
 
@@ -1149,9 +1149,9 @@ Los requisitos de información definen las entidades de datos principales que el
 - **Metadatos**: Fechas de creación y actualización
 
 **Restricciones**:
-- Los tres miembros del tribunal deben ser usuarios con rol profesor o superior
-- No puede haber miembros duplicados en un mismo tribunal
-- Al menos el presidente debe tener rol PRESIDENTE_TRIBUNAL
+- Los tres miembros del tribunal deben ser usuarios con rol profesor o superior.
+- No puede haber miembros duplicados en un mismo tribunal.
+- Al menos el presidente debe tener rol PRESIDENTE_TRIBUNAL.
 
 #### Entidad Defensa
 
@@ -1166,9 +1166,9 @@ Los requisitos de información definen las entidades de datos principales que el
 - **Metadatos**: Fechas de creación y actualización
 
 **Restricciones**:
-- Un TFG solo puede tener una defensa activa
-- La fecha de defensa debe ser posterior a la fecha actual
-- El tribunal debe estar disponible en la fecha programada
+- Un TFG solo puede tener una defensa activa.
+- La fecha de defensa debe ser posterior a la fecha actual.
+- El tribunal debe estar disponible en la fecha programada.
 
 ### Requisitos funcionales
 
@@ -1177,171 +1177,171 @@ Los requisitos funcionales se organizan por rol de usuario, definiendo las capac
 #### Requisitos funcionales - Estudiante
 
 **RF-EST-001: Gestión de cuenta de usuario**
-- **Descripción**: El estudiante debe poder visualizar y actualizar su información personal
-- **Entrada**: Datos personales (nombre, apellidos, teléfono, etc.)
-- **Procesamiento**: Validación de formato y unicidad
-- **Salida**: Confirmación de actualización exitosa
-- **Prioridad**: Alta
+- **Descripción**: El estudiante debe poder visualizar y actualizar su información personal.
+- **Entrada**: Datos personales (nombre, apellidos, teléfono, etc.).
+- **Procesamiento**: Validación de formato y unicidad.
+- **Salida**: Confirmación de actualización exitosa.
+- **Prioridad**: Alta.
 
 **RF-EST-002: Creación de TFG**
-- **Descripción**: El estudiante debe poder crear un nuevo TFG proporcionando información básica
-- **Entrada**: Título, descripción, resumen, palabras clave, tutor seleccionado
-- **Procesamiento**: Validación de datos, verificación de no duplicidad de título
-- **Salida**: TFG creado en estado "borrador"
-- **Prioridad**: Alta
+- **Descripción**: El estudiante debe poder crear un nuevo TFG proporcionando información básica.
+- **Entrada**: Título, descripción, resumen, palabras clave, tutor seleccionado.
+- **Procesamiento**: Validación de datos, verificación de no duplicidad de título.
+- **Salida**: TFG creado en estado "borrador".
+- **Prioridad**: Alta.
 
 **RF-EST-003: Edición de información de TFG**
-- **Descripción**: El estudiante debe poder modificar la información de su TFG en estado borrador
-- **Entrada**: Campos modificables del TFG
-- **Procesamiento**: Validación de permisos de edición según estado
-- **Salida**: TFG actualizado con nueva información
-- **Prioridad**: Alta
+- **Descripción**: El estudiante debe poder modificar la información de su TFG en estado borrador.
+- **Entrada**: Campos modificables del TFG.
+- **Procesamiento**: Validación de permisos de edición según estado.
+- **Salida**: TFG actualizado con nueva información.
+- **Prioridad**: Alta.
 
 **RF-EST-004: Upload de archivo TFG**
-- **Descripción**: El estudiante debe poder subir el archivo PDF de su trabajo
-- **Entrada**: Archivo PDF (máximo 50MB)
-- **Procesamiento**: Validación de formato, tipo MIME, tamaño
-- **Salida**: Archivo almacenado y vinculado al TFG
-- **Prioridad**: Alta
+- **Descripción**: El estudiante debe poder subir el archivo PDF de su trabajo.
+- **Entrada**: Archivo PDF (máximo 50MB).
+- **Procesamiento**: Validación de formato, tipo MIME, tamaño.
+- **Salida**: Archivo almacenado y vinculado al TFG.
+- **Prioridad**: Alta.
 
 **RF-EST-005: Seguimiento de estado**
-- **Descripción**: El estudiante debe poder visualizar el estado actual y histórico de su TFG
-- **Entrada**: ID del TFG del estudiante
-- **Procesamiento**: Recuperación de información de estado y timeline
-- **Salida**: Estado actual, fechas de cambios, comentarios asociados
-- **Prioridad**: Media
+- **Descripción**: El estudiante debe poder visualizar el estado actual y histórico de su TFG.
+- **Entrada**: ID del TFG del estudiante.
+- **Procesamiento**: Recuperación de información de estado y timeline.
+- **Salida**: Estado actual, fechas de cambios, comentarios asociados.
+- **Prioridad**: Media.
 
 **RF-EST-006: Visualización de comentarios**
-- **Descripción**: El estudiante debe poder leer comentarios y feedback de su tutor
-- **Entrada**: ID del TFG
-- **Procesamiento**: Filtrado de comentarios visibles para el estudiante
-- **Salida**: Lista de comentarios ordenados cronológicamente
-- **Prioridad**: Media
+- **Descripción**: El estudiante debe poder leer comentarios y feedback de su tutor.
+- **Entrada**: ID del TFG.
+- **Procesamiento**: Filtrado de comentarios visibles para el estudiante.
+- **Salida**: Lista de comentarios ordenados cronológicamente.
+- **Prioridad**: Media.
 
 **RF-EST-007: Consulta de información de defensa**
-- **Descripción**: El estudiante debe poder ver detalles de su defensa programada
-- **Entrada**: ID del TFG
-- **Procesamiento**: Búsqueda de defensa asociada
-- **Salida**: Fecha, hora, tribunal, aula, duración
-- **Prioridad**: Media
+- **Descripción**: El estudiante debe poder ver detalles de su defensa programada.
+- **Entrada**: ID del TFG.
+- **Procesamiento**: Búsqueda de defensa asociada.
+- **Salida**: Fecha, hora, tribunal, aula, duración.
+- **Prioridad**: Media.
 
 #### Requisitos funcionales - Profesor
 
 **RF-PROF-001: Visualización de TFG asignados**
-- **Descripción**: El profesor debe poder ver listado de TFG donde participa como tutor
-- **Entrada**: ID del profesor
-- **Procesamiento**: Filtrado de TFG por tutor_id o cotutor_id
-- **Salida**: Lista de TFG con información resumida y estado
-- **Prioridad**: Alta
+- **Descripción**: El profesor debe poder ver listado de TFG donde participa como tutor.
+- **Entrada**: ID del profesor.
+- **Procesamiento**: Filtrado de TFG por tutor_id o cotutor_id.
+- **Salida**: Lista de TFG con información resumida y estado.
+- **Prioridad**: Alta.
 
 **RF-PROF-002: Revisión de TFG**
-- **Descripción**: El profesor debe poder descargar y revisar archivos de TFG asignados
-- **Entrada**: ID del TFG, credenciales del profesor
-- **Procesamiento**: Verificación de permisos, generación de enlace de descarga
-- **Salida**: Archivo PDF descargable
-- **Prioridad**: Alta
+- **Descripción**: El profesor debe poder descargar y revisar archivos de TFG asignados.
+- **Entrada**: ID del TFG, credenciales del profesor.
+- **Procesamiento**: Verificación de permisos, generación de enlace de descarga.
+- **Salida**: Archivo PDF descargable.
+- **Prioridad**: Alta.
 
 **RF-PROF-003: Gestión de comentarios**
-- **Descripción**: El profesor debe poder agregar comentarios y feedback estructurado
-- **Entrada**: ID del TFG, texto del comentario, tipo de comentario
-- **Procesamiento**: Validación de permisos, almacenamiento del comentario
-- **Salida**: Comentario registrado y notificación al estudiante
-- **Prioridad**: Alta
+- **Descripción**: El profesor debe poder agregar comentarios y feedback estructurado.
+- **Entrada**: ID del TFG, texto del comentario, tipo de comentario.
+- **Procesamiento**: Validación de permisos, almacenamiento del comentario.
+- **Salida**: Comentario registrado y notificación al estudiante.
+- **Prioridad**: Alta.
 
 **RF-PROF-004: Cambio de estado de TFG**
-- **Descripción**: El profesor debe poder cambiar el estado de TFG bajo su supervisión
-- **Entrada**: ID del TFG, nuevo estado, comentario justificativo
-- **Procesamiento**: Validación de transición de estado permitida
-- **Salida**: Estado actualizado y notificaciones automáticas
-- **Prioridad**: Alta
+- **Descripción**: El profesor debe poder cambiar el estado de TFG bajo su supervisión.
+- **Entrada**: ID del TFG, nuevo estado, comentario justificativo.
+- **Procesamiento**: Validación de transición de estado permitida.
+- **Salida**: Estado actualizado y notificaciones automáticas.
+- **Prioridad**: Alta.
 
 **RF-PROF-005: Gestión de calificaciones**
-- **Descripción**: El profesor debe poder asignar calificaciones a TFG defendidos
-- **Entrada**: ID de la defensa, calificaciones por criterio, comentarios
-- **Procesamiento**: Validación de rango de calificaciones, cálculo de nota final
-- **Salida**: Calificación registrada y disponible para el estudiante
-- **Prioridad**: Media
+- **Descripción**: El profesor debe poder asignar calificaciones a TFG defendidos.
+- **Entrada**: ID de la defensa, calificaciones por criterio, comentarios.
+- **Procesamiento**: Validación de rango de calificaciones, cálculo de nota final.
+- **Salida**: Calificación registrada y disponible para el estudiante.
+- **Prioridad**: Media.
 
 **RF-PROF-006: Participación en tribunales**
-- **Descripción**: El profesor debe poder ver tribunales donde participa y defensas programadas
-- **Entrada**: ID del profesor
-- **Procesamiento**: Búsqueda de tribunales donde es miembro
-- **Salida**: Lista de tribunales, defensas programadas, calendario
-- **Prioridad**: Media
+- **Descripción**: El profesor debe poder ver tribunales donde participa y defensas programadas.
+- **Entrada**: ID del profesor.
+- **Procesamiento**: Búsqueda de tribunales donde es miembro.
+- **Salida**: Lista de tribunales, defensas programadas, calendario.
+- **Prioridad**: Media.
 
 #### Requisitos funcionales - Presidente de Tribunal
 
 **RF-PRES-001: Gestión de tribunales**
-- **Descripción**: El presidente debe poder crear, editar y gestionar tribunales
-- **Entrada**: Información del tribunal, miembros seleccionados
-- **Procesamiento**: Validación de roles, verificación de disponibilidad
-- **Salida**: Tribunal creado/actualizado con miembros asignados
-- **Prioridad**: Alta
+- **Descripción**: El presidente debe poder crear, editar y gestionar tribunales.
+- **Entrada**: Información del tribunal, miembros seleccionados.
+- **Procesamiento**: Validación de roles, verificación de disponibilidad.
+- **Salida**: Tribunal creado/actualizado con miembros asignados.
+- **Prioridad**: Alta.
 
 **RF-PRES-002: Programación de defensas**
-- **Descripción**: El presidente debe poder programar defensas en el calendario
-- **Entrada**: TFG a defender, tribunal, fecha/hora, aula
-- **Procesamiento**: Verificación de disponibilidad de tribunal y recursos
-- **Salida**: Defensa programada con notificaciones automáticas
-- **Prioridad**: Alta
+- **Descripción**: El presidente debe poder programar defensas en el calendario.
+- **Entrada**: TFG a defender, tribunal, fecha/hora, aula.
+- **Procesamiento**: Verificación de disponibilidad de tribunal y recursos.
+- **Salida**: Defensa programada con notificaciones automáticas.
+- **Prioridad**: Alta.
 
 **RF-PRES-003: Gestión de calendario**
-- **Descripción**: El presidente debe poder visualizar y gestionar el calendario de defensas
-- **Entrada**: Rango de fechas, filtros por tribunal
-- **Procesamiento**: Agregación de datos de defensas programadas
-- **Salida**: Vista de calendario con eventos de defensa
-- **Prioridad**: Alta
+- **Descripción**: El presidente debe poder visualizar y gestionar el calendario de defensas.
+- **Entrada**: Rango de fechas, filtros por tribunal.
+- **Procesamiento**: Agregación de datos de defensas programadas.
+- **Salida**: Vista de calendario con eventos de defensa.
+- **Prioridad**: Alta.
 
 **RF-PRES-004: Coordinación de disponibilidad**
-- **Descripción**: El presidente debe poder consultar disponibilidad de miembros de tribunal
-- **Entrada**: Tribunal seleccionado, rango de fechas
-- **Procesamiento**: Cruce de calendarios de miembros
-- **Salida**: Slots de tiempo disponibles para todos los miembros
-- **Prioridad**: Media
+- **Descripción**: El presidente debe poder consultar disponibilidad de miembros de tribunal.
+- **Entrada**: Tribunal seleccionado, rango de fechas.
+- **Procesamiento**: Cruce de calendarios de miembros.
+- **Salida**: Slots de tiempo disponibles para todos los miembros.
+- **Prioridad**: Media.
 
 **RF-PRES-005: Generación de actas**
-- **Descripción**: El presidente debe poder generar actas de defensa en formato PDF
-- **Entrada**: ID de la defensa completada
-- **Procesamiento**: Agregación de datos, generación de documento
-- **Salida**: Acta en formato PDF descargable
-- **Prioridad**: Media
+- **Descripción**: El presidente debe poder generar actas de defensa en formato PDF.
+- **Entrada**: ID de la defensa completada.
+- **Procesamiento**: Agregación de datos, generación de documento.
+- **Salida**: Acta en formato PDF descargable.
+- **Prioridad**: Media.
 
 #### Requisitos funcionales - Administrador
 
 **RF-ADM-001: Gestión completa de usuarios**
-- **Descripción**: El administrador debe poder realizar operaciones CRUD sobre usuarios
-- **Entrada**: Datos de usuario, rol asignado
-- **Procesamiento**: Validación de datos, gestión de permisos
-- **Salida**: Usuario creado/actualizado/eliminado
-- **Prioridad**: Alta
+- **Descripción**: El administrador debe poder realizar operaciones CRUD sobre usuarios.
+- **Entrada**: Datos de usuario, rol asignado.
+- **Procesamiento**: Validación de datos, gestión de permisos.
+- **Salida**: Usuario creado/actualizado/eliminado.
+- **Prioridad**: Alta.
 
 **RF-ADM-002: Asignación de roles**
-- **Descripción**: El administrador debe poder modificar roles y permisos de usuarios
-- **Entrada**: ID de usuario, nuevo rol
-- **Procesamiento**: Validación de permisos, actualización de privilegios
-- **Salida**: Rol actualizado con permisos correspondientes
-- **Prioridad**: Alta
+- **Descripción**: El administrador debe poder modificar roles y permisos de usuarios.
+- **Entrada**: ID de usuario, nuevo rol.
+- **Procesamiento**: Validación de permisos, actualización de privilegios.
+- **Salida**: Rol actualizado con permisos correspondientes.
+- **Prioridad**: Alta.
 
 **RF-ADM-003: Generación de reportes**
-- **Descripción**: El administrador debe poder generar reportes estadísticos del sistema
-- **Entrada**: Tipo de reporte, filtros temporales, parámetros
-- **Procesamiento**: Agregación de datos, cálculos estadísticos
-- **Salida**: Reporte con gráficos y métricas
-- **Prioridad**: Media
+- **Descripción**: El administrador debe poder generar reportes estadísticos del sistema.
+- **Entrada**: Tipo de reporte, filtros temporales, parámetros.
+- **Procesamiento**: Agregación de datos, cálculos estadísticos.
+- **Salida**: Reporte con gráficos y métricas.
+- **Prioridad**: Media.
 
 **RF-ADM-004: Exportación de datos**
-- **Descripción**: El administrador debe poder exportar datos en múltiples formatos
-- **Entrada**: Conjunto de datos seleccionado, formato de exportación
-- **Procesamiento**: Serialización de datos según formato
-- **Salida**: Archivo exportado (PDF, Excel, CSV)
-- **Prioridad**: Media
+- **Descripción**: El administrador debe poder exportar datos en múltiples formatos.
+- **Entrada**: Conjunto de datos seleccionado, formato de exportación.
+- **Procesamiento**: Serialización de datos según formato.
+- **Salida**: Archivo exportado (PDF, Excel, CSV).
+- **Prioridad**: Media.
 
 **RF-ADM-005: Configuración del sistema**
-- **Descripción**: El administrador debe poder configurar parámetros globales
-- **Entrada**: Parámetros de configuración
-- **Procesamiento**: Validación de valores, actualización de configuración
-- **Salida**: Configuración actualizada en el sistema
-- **Prioridad**: Baja
+- **Descripción**: El administrador debe poder configurar parámetros globales.
+- **Entrada**: Parámetros de configuración.
+- **Procesamiento**: Validación de valores, actualización de configuración.
+- **Salida**: Configuración actualizada en el sistema.
+- **Prioridad**: Baja.
 
 ### Diagrama de casos de uso
 
@@ -1355,73 +1355,73 @@ El siguiente diagrama representa las principales interacciones entre los actores
 
 **Actor principal**: Estudiante  
 **Precondiciones**: 
-- El usuario está autenticado con rol estudiante
-- El estudiante no tiene un TFG activo
+- El usuario está autenticado con rol estudiante.
+- El estudiante no tiene un TFG activo.
 
 **Flujo principal**:
-1. El estudiante accede a la opción "Nuevo TFG"
-2. El sistema muestra el formulario de creación
-3. El estudiante completa título, descripción, resumen y palabras clave
-4. El estudiante selecciona un tutor de la lista disponible
-5. El estudiante confirma la creación
-6. El sistema valida la información proporcionada
-7. El sistema crea el TFG en estado "borrador"
-8. El sistema notifica al tutor seleccionado
+1. El estudiante accede a la opción "Nuevo TFG".
+2. El sistema muestra el formulario de creación.
+3. El estudiante completa título, descripción, resumen y palabras clave.
+4. El estudiante selecciona un tutor de la lista disponible.
+5. El estudiante confirma la creación.
+6. El sistema valida la información proporcionada.
+7. El sistema crea el TFG en estado "borrador".
+8. El sistema notifica al tutor seleccionado.
 
 **Flujos alternativos**:
-- **6a**: Si la validación falla, el sistema muestra errores específicos
-- **7a**: Si el estudiante ya tiene un TFG activo, el sistema rechaza la operación
+- **6a**: Si la validación falla, el sistema muestra errores específicos.
+- **7a**: Si el estudiante ya tiene un TFG activo, el sistema rechaza la operación.
 
 **Postcondiciones**:
-- Se crea un nuevo TFG en estado "borrador"
-- El tutor recibe notificación de asignación
+- Se crea un nuevo TFG en estado "borrador".
+- El tutor recibe notificación de asignación.
 
 #### UC005 - Revisar TFG
 
 **Actor principal**: Profesor  
 **Precondiciones**: 
-- El usuario está autenticado con rol profesor
-- El TFG está asignado al profesor como tutor
+- El usuario está autenticado con rol profesor.
+- El TFG está asignado al profesor como tutor.
 
 **Flujo principal**:
-1. El profesor accede a su lista de TFG asignados
-2. El profesor selecciona un TFG específico
-3. El sistema muestra detalles del TFG
-4. El profesor descarga el archivo PDF si está disponible
-5. El profesor revisa el contenido del trabajo
+1. El profesor accede a su lista de TFG asignados.
+2. El profesor selecciona un TFG específico.
+3. El sistema muestra detalles del TFG.
+4. El profesor descarga el archivo PDF si está disponible.
+5. El profesor revisa el contenido del trabajo.
 
 **Flujos alternativos**:
-- **4a**: Si no hay archivo subido, el sistema informa de la situación
-- **2a**: Si el TFG no está asignado al profesor, el sistema deniega acceso
+- **4a**: Si no hay archivo subido, el sistema informa de la situación.
+- **2a**: Si el TFG no está asignado al profesor, el sistema deniega acceso.
 
 **Postcondiciones**:
-- El profesor tiene acceso al contenido del TFG para evaluación
+- El profesor tiene acceso al contenido del TFG para evaluación.
 
 #### UC010 - Programar defensa
 
 **Actor principal**: Presidente de Tribunal  
 **Precondiciones**: 
-- El usuario está autenticado con rol presidente de tribunal
-- Existe al menos un tribunal creado
-- El TFG está en estado "aprobado"
+- El usuario está autenticado con rol presidente de tribunal.
+- Existe al menos un tribunal creado.
+- El TFG está en estado "aprobado".
 
 **Flujo principal**:
-1. El presidente accede al calendario de defensas
-2. El presidente selecciona un TFG aprobado para programar
-3. El sistema muestra opciones de tribunales disponibles
-4. El presidente selecciona tribunal, fecha, hora y aula
-5. El sistema verifica disponibilidad de todos los miembros
-6. El presidente confirma la programación
-7. El sistema crea la defensa programada
-8. El sistema envía notificaciones a estudiante y miembros del tribunal
+1. El presidente accede al calendario de defensas.
+2. El presidente selecciona un TFG aprobado para programar.
+3. El sistema muestra opciones de tribunales disponibles.
+4. El presidente selecciona tribunal, fecha, hora y aula.
+5. El sistema verifica disponibilidad de todos los miembros.
+6. El presidente confirma la programación.
+7. El sistema crea la defensa programada.
+8. El sistema envía notificaciones a estudiante y miembros del tribunal.
 
 **Flujos alternativos**:
-- **5a**: Si hay conflictos de disponibilidad, el sistema sugiere alternativas
-- **4a**: Si no hay tribunales disponibles, el sistema solicita crear uno
+- **5a**: Si hay conflictos de disponibilidad, el sistema sugiere alternativas.
+- **4a**: Si no hay tribunales disponibles, el sistema solicita crear uno.
 
 **Postcondiciones**:
-- Se programa una defensa con fecha y tribunal asignados
-- Todos los involucrados reciben notificaciones
+- Se programa una defensa con fecha y tribunal asignados.
+- Todos los involucrados reciben notificaciones.
 
 ### Diagramas de secuencia
 
@@ -1442,80 +1442,80 @@ El siguiente diagrama representa las principales interacciones entre los actores
 #### Rendimiento
 
 **RNF-001: Tiempo de respuesta**
-- **Descripción**: Las operaciones críticas deben completarse en tiempo óptimo
+- **Descripción**: Las operaciones críticas deben completarse en tiempo óptimo.
 - **Criterio**: 
-  - Login y autenticación: < 2 segundos
-  - Carga de páginas principales: < 3 segundos  
-  - Upload de archivos (50MB): < 30 segundos
-  - Generación de reportes: < 10 segundos
-- **Prioridad**: Alta
+  - Login y autenticación: < 2 segundos.
+  - Carga de páginas principales: < 3 segundos.  
+  - Upload de archivos (50MB): < 30 segundos.
+  - Generación de reportes: < 10 segundos.
+- **Prioridad**: Alta.
 
 **RNF-002: Throughput**
-- **Descripción**: El sistema debe soportar carga concurrente de usuarios
-- **Criterio**: 100 usuarios concurrentes sin degradación de rendimiento
-- **Prioridad**: Media
+- **Descripción**: El sistema debe soportar carga concurrente de usuarios.
+- **Criterio**: 100 usuarios concurrentes sin degradación de rendimiento.
+- **Prioridad**: Media.
 
 **RNF-003: Escalabilidad**
-- **Descripción**: Capacidad de crecimiento con aumento de usuarios
-- **Criterio**: Arquitectura preparada para escalado horizontal
-- **Prioridad**: Media
+- **Descripción**: Capacidad de crecimiento con aumento de usuarios.
+- **Criterio**: Arquitectura preparada para escalado horizontal.
+- **Prioridad**: Media.
 
 #### Seguridad
 
 **RNF-004: Autenticación**
-- **Descripción**: Control de acceso seguro basado en JWT
+- **Descripción**: Control de acceso seguro basado en JWT.
 - **Criterio**: 
-  - Tokens con expiración de 1 hora
-  - Refresh tokens con rotación
-  - Logout que invalida tokens
-- **Prioridad**: Alta
+  - Tokens con expiración de 1 hora.
+  - Refresh tokens con rotación.
+  - Logout que invalida tokens.
+- **Prioridad**: Alta.
 
 **RNF-005: Autorización**
-- **Descripción**: Control granular de permisos por rol
-- **Criterio**: Verificación de permisos en cada operación sensible
-- **Prioridad**: Alta
+- **Descripción**: Control granular de permisos por rol.
+- **Criterio**: Verificación de permisos en cada operación sensible.
+- **Prioridad**: Alta.
 
 **RNF-006: Protección de datos**
-- **Descripción**: Cumplimiento de RGPD para datos personales
+- **Descripción**: Cumplimiento de RGPD para datos personales.
 - **Criterio**: 
-  - Cifrado de datos sensibles
-  - Logs de auditoría
-  - Políticas de retención
-- **Prioridad**: Alta
+  - Cifrado de datos sensibles.
+  - Logs de auditoría.
+  - Políticas de retención.
+- **Prioridad**: Alta.
 
 #### Usabilidad
 
 **RNF-007: Interfaz intuitiva**
-- **Descripción**: Facilidad de uso para usuarios no técnicos
-- **Criterio**: Curva de aprendizaje < 30 minutos para operaciones básicas
-- **Prioridad**: Alta
+- **Descripción**: Facilidad de uso para usuarios no técnicos.
+- **Criterio**: Curva de aprendizaje < 30 minutos para operaciones básicas.
+- **Prioridad**: Alta.
 
 **RNF-008: Responsive design**
-- **Descripción**: Adaptabilidad a diferentes dispositivos
-- **Criterio**: Funcionalidad completa en desktop, tablet y móvil
-- **Prioridad**: Media
+- **Descripción**: Adaptabilidad a diferentes dispositivos.
+- **Criterio**: Funcionalidad completa en desktop, tablet y móvil.
+- **Prioridad**: Media.
 
 **RNF-009: Accesibilidad**
-- **Descripción**: Cumplimiento de estándares de accesibilidad
-- **Criterio**: Nivel AA de WCAG 2.1
-- **Prioridad**: Media
+- **Descripción**: Cumplimiento de estándares de accesibilidad.
+- **Criterio**: Nivel AA de WCAG 2.1.
+- **Prioridad**: Media.
 
 #### Confiabilidad
 
 **RNF-010: Disponibilidad**
-- **Descripción**: Sistema disponible durante horario académico
-- **Criterio**: 99.5% uptime en horario académico (8:00-20:00)
-- **Prioridad**: Alta
+- **Descripción**: Sistema disponible durante horario académico.
+- **Criterio**: 99.5% uptime en horario académico (8:00-20:00).
+- **Prioridad**: Alta.
 
 **RNF-011: Recuperación de errores**
-- **Descripción**: Capacidad de recuperación ante fallos
-- **Criterio**: RTO < 4 horas, RPO < 1 hora
-- **Prioridad**: Media
+- **Descripción**: Capacidad de recuperación ante fallos.
+- **Criterio**: RTO < 4 horas, RPO < 1 hora.
+- **Prioridad**: Media.
 
 **RNF-012: Consistencia de datos**
-- **Descripción**: Integridad y consistencia de información
-- **Criterio**: Transacciones ACID, validación de integridad referencial
-- **Prioridad**: Alta
+- **Descripción**: Integridad y consistencia de información.
+- **Criterio**: Transacciones ACID, validación de integridad referencial.
+- **Prioridad**: Alta.
 
 ## Garantía de calidad
 
@@ -1525,164 +1525,164 @@ La garantía de calidad no se limita únicamente a la fase de desarrollo, sino q
 
 ### Seguridad
 
-La seguridad del sistema se implementa mediante múltiples capas de protección que abarcan desde la autenticación hasta la protección de datos en tránsito y reposo.
+La seguridad del sistema se implementa mediante múltiples capas de protección que abarcan desde la autenticación hasta la protección de datos en tránsito y reposo..
 
 #### Autenticación y autorización
 
 **Sistema JWT implementado**:
-- **Access tokens**: Duración de 1 hora con payload mínimo (ID usuario, roles, timestamp)
-- **Refresh tokens**: Duración de 30 días con rotación automática en cada uso
-- **Algoritmo de firma**: RS256 con claves asimétricas para máxima seguridad
-- **Revocación**: Lista negra de tokens comprometidos con limpieza automática
+- **Access tokens**: Duración de 1 hora con payload mínimo (ID usuario, roles, timestamp).
+- **Refresh tokens**: Duración de 30 días con rotación automática en cada uso.
+- **Algoritmo de firma**: RS256 con claves asimétricas para máxima seguridad.
+- **Revocación**: Lista negra de tokens comprometidos con limpieza automática.
 
 **Control de acceso basado en roles (RBAC)**:
-- **Jerarquía de roles**: ADMIN > PRESIDENTE_TRIBUNAL > PROFESOR > ESTUDIANTE
-- **Permisos granulares**: Verificación a nivel de endpoint y recurso específico
-- **Validación doble**: Frontend para UX, backend para seguridad crítica
+- **Jerarquía de roles**: ADMIN > PRESIDENTE_TRIBUNAL > PROFESOR > ESTUDIANTE.
+- **Permisos granulares**: Verificación a nivel de endpoint y recurso específico.
+- **Validación doble**: Frontend para UX, backend para seguridad crítica.
 
 #### Protección de datos
 
 **Cifrado de datos**:
-- **En tránsito**: HTTPS/TLS 1.3 obligatorio en producción
-- **En reposo**: Cifrado AES-256 para campos sensibles (passwords, datos personales)
-- **Archivos PDF**: Almacenamiento seguro con URLs firmadas temporalmente
+- **En tránsito**: HTTPS/TLS 1.3 obligatorio en producción.
+- **En reposo**: Cifrado AES-256 para campos sensibles (passwords, datos personales).
+- **Archivos PDF**: Almacenamiento seguro con URLs firmadas temporalmente.
 
 **Validación y sanitización**:
-- **Input validation**: Validación estricta en backend para todos los inputs
-- **SQL injection**: Uso exclusivo de prepared statements con Doctrine ORM
-- **XSS protection**: Sanitización automática en frontend y CSP headers
-- **File upload**: Validación de tipo MIME, tamaño y escaneo de malware
+- **Input validation**: Validación estricta en backend para todos los inputs.
+- **SQL injection**: Uso exclusivo de prepared statements con Doctrine ORM.
+- **XSS protection**: Sanitización automática en frontend y CSP headers.
+- **File upload**: Validación de tipo MIME, tamaño y escaneo de malware.
 
 #### Auditoría y logs
 
 **Sistema de logs implementado**:
-- **Eventos de seguridad**: Login, logout, cambios de permisos, accesos denegados
-- **Operaciones críticas**: Cambios de estado TFG, uploads, modificaciones de usuarios
-- **Retención**: Logs conservados 12 meses con rotación automática
-- **Alertas**: Notificaciones automáticas para patrones de actividad sospechosa
+- **Eventos de seguridad**: Login, logout, cambios de permisos, accesos denegados.
+- **Operaciones críticas**: Cambios de estado TFG, uploads, modificaciones de usuarios.
+- **Retención**: Logs conservados 12 meses con rotación automática.
+- **Alertas**: Notificaciones automáticas para patrones de actividad sospechosa.
 
 ### Interoperabilidad
 
 #### APIs REST estándar
 
 **Diseño RESTful**:
-- **Recursos bien definidos**: URLs descriptivas siguiendo convenciones REST
-- **Métodos HTTP apropiados**: GET (lectura), POST (creación), PUT (actualización), DELETE (eliminación)
-- **Códigos de estado consistentes**: 200 (OK), 201 (Created), 400 (Bad Request), 401 (Unauthorized), 403 (Forbidden), 404 (Not Found), 500 (Internal Error)
-- **Content negotiation**: Soporte para JSON con posibilidad de extensión a XML
+- **Recursos bien definidos**: URLs descriptivas siguiendo convenciones REST.
+- **Métodos HTTP apropiados**: GET (lectura), POST (creación), PUT (actualización), DELETE (eliminación).
+- **Códigos de estado consistentes**: 200 (OK), 201 (Created), 400 (Bad Request), 401 (Unauthorized), 403 (Forbidden), 404 (Not Found), 500 (Internal Error).
+- **Content negotiation**: Soporte para JSON con posibilidad de extensión a XML.
 
 **Documentación automática**:
-- **OpenAPI 3.0**: Especificación completa generada automáticamente por API Platform
-- **Swagger UI**: Interface interactiva para testing y exploración de APIs
-- **Postman collections**: Colecciones exportables para testing automatizado
+- **OpenAPI 3.0**: Especificación completa generada automáticamente por API Platform.
+- **Swagger UI**: Interface interactiva para testing y exploración de APIs.
+- **Postman collections**: Colecciones exportables para testing automatizado.
 
 #### Formato de datos estándar
 
 **Serialización JSON**:
-- **HAL+JSON**: Links hipermedia para navegabilidad de recursos relacionados
-- **Paginación**: Metadata estándar con total, página actual, enlaces siguiente/anterior
-- **Filtrado**: Query parameters consistentes para búsqueda y filtrado
-- **Versionado**: Headers de versión para evolución de APIs sin breaking changes
+- **HAL+JSON**: Links hipermedia para navegabilidad de recursos relacionados.
+- **Paginación**: Metadata estándar con total, página actual, enlaces siguiente/anterior.
+- **Filtrado**: Query parameters consistentes para búsqueda y filtrado.
+- **Versionado**: Headers de versión para evolución de APIs sin breaking changes.
 
 ### Operabilidad
 
 #### Monitorización
 
 **Métricas de aplicación**:
-- **Performance**: Tiempo de respuesta por endpoint, throughput, latencia P95/P99
-- **Errores**: Rate de errores, tipos de error más frecuentes, stack traces
-- **Uso**: Usuarios activos, operaciones más utilizadas, patrones de uso
+- **Performance**: Tiempo de respuesta por endpoint, throughput, latencia P95/P99.
+- **Errores**: Rate de errores, tipos de error más frecuentes, stack traces.
+- **Uso**: Usuarios activos, operaciones más utilizadas, patrones de uso.
 
 **Health checks**:
-- **Endpoint /health**: Estado de la aplicación, base de datos, servicios externos
-- **Métricas de infraestructura**: CPU, memoria, disco, conexiones de BD
-- **Alertas proactivas**: Notificaciones antes de que los problemas afecten usuarios
+- **Endpoint /health**: Estado de la aplicación, base de datos, servicios externos.
+- **Métricas de infraestructura**: CPU, memoria, disco, conexiones de BD.
+- **Alertas proactivas**: Notificaciones antes de que los problemas afecten usuarios.
 
 #### Mantenibilidad
 
 **Arquitectura limpia**:
-- **Separación de responsabilidades**: Capas bien definidas (presentación, lógica, persistencia)
-- **Dependency injection**: Inversión de control para testing y flexibilidad
-- **Principios SOLID**: Código mantenible y extensible
+- **Separación de responsabilidades**: Capas bien definidas (presentación, lógica, persistencia).
+- **Dependency injection**: Inversión de control para testing y flexibilidad.
+- **Principios SOLID**: Código mantenible y extensible.
 
 **Documentación técnica**:
-- **README actualizado**: Instrucciones de instalación, configuración, desarrollo
-- **Comentarios en código**: Documentación inline para lógica compleja
-- **Architectural Decision Records (ADR)**: Registro de decisiones técnicas importantes
+- **README actualizado**: Instrucciones de instalación, configuración, desarrollo.
+- **Comentarios en código**: Documentación inline para lógica compleja.
+- **Architectural Decision Records (ADR)**: Registro de decisiones técnicas importantes.
 
 ### Transferibilidad
 
 #### Containerización
 
 **Docker para desarrollo**:
-- **DDEV**: Entorno de desarrollo reproducible con Docker
-- **Servicios aislados**: Web, base de datos, email, cache en contenedores separados
-- **Configuración compartida**: docker-compose.yml versionado en repositorio
+- **DDEV**: Entorno de desarrollo reproducible con Docker.
+- **Servicios aislados**: Web, base de datos, email, cache en contenedores separados.
+- **Configuración compartida**: docker-compose.yml versionado en repositorio.
 
 **Preparación para producción**:
-- **Multistage builds**: Imágenes optimizadas para producción
-- **Environment variables**: Configuración externalizada para diferentes entornos
-- **Health checks**: Verificaciones de salud integradas en contenedores
+- **Multistage builds**: Imágenes optimizadas para producción.
+- **Environment variables**: Configuración externalizada para diferentes entornos.
+- **Health checks**: Verificaciones de salud integradas en contenedores.
 
 #### Despliegue automatizado
 
 **CI/CD Pipeline**:
-- **GitHub Actions**: Automatización de testing, build y deploy
-- **Testing automatizado**: Ejecución de tests unitarios e integración en cada commit
-- **Deploy scripts**: Automatización de despliegue a diferentes entornos
+- **GitHub Actions**: Automatización de testing, build y deploy.
+- **Testing automatizado**: Ejecución de tests unitarios e integración en cada commit.
+- **Deploy scripts**: Automatización de despliegue a diferentes entornos.
 
 ### Eficiencia
 
 #### Optimización frontend
 
 **React performance**:
-- **Code splitting**: Carga lazy de componentes por ruta
-- **Memoization**: useMemo y useCallback para optimizar re-renders
-- **Virtual scrolling**: Para listas largas de TFGs o usuarios
-- **Bundle optimization**: Tree shaking y minificación con Vite
+- **Code splitting**: Carga lazy de componentes por ruta.
+- **Memoization**: useMemo y useCallback para optimizar re-renders.
+- **Virtual scrolling**: Para listas largas de TFGs o usuarios.
+- **Bundle optimization**: Tree shaking y minificación con Vite.
 
 **Caching estratégico**:
-- **Browser caching**: Headers apropiados para assets estáticos
-- **React Query**: Caching inteligente de datos de APIs
-- **Service Workers**: Cache offline para funcionalidad básica
+- **Browser caching**: Headers apropiados para assets estáticos.
+- **React Query**: Caching inteligente de datos de APIs.
+- **Service Workers**: Cache offline para funcionalidad básica.
 
 #### Optimización backend
 
 **Base de datos**:
-- **Índices optimizados**: Índices compuestos para queries frecuentes
-- **Query optimization**: Análisis de explain plans, evitar N+1 queries
-- **Connection pooling**: Gestión eficiente de conexiones de BD
-- **Lazy loading**: Carga diferida de relaciones no críticas
+- **Índices optimizados**: Índices compuestos para queries frecuentes.
+- **Query optimization**: Análisis de explain plans, evitar N+1 queries.
+- **Connection pooling**: Gestión eficiente de conexiones de BD.
+- **Lazy loading**: Carga diferida de relaciones no críticas.
 
 **API optimization**:
-- **Response compression**: Gzip para reducir payload
-- **Pagination**: Limitación de resultados para evitar respuestas masivas
-- **Field selection**: Permitir especificar campos requeridos en responses
-- **Rate limiting**: Prevención de abuso con limitación de requests
+- **Response compression**: Gzip para reducir payload.
+- **Pagination**: Limitación de resultados para evitar respuestas masivas.
+- **Field selection**: Permitir especificar campos requeridos en responses.
+- **Rate limiting**: Prevención de abuso con limitación de requests.
 
 ### Mantenibilidad
 
 #### Calidad de código
 
 **Estándares de codificación**:
-- **ESLint + Prettier**: Formateo automático y reglas de calidad JavaScript
-- **PHP CS Fixer**: Estándares PSR-12 para código PHP
-- **PHPStan**: Análisis estático nivel 8 para detección temprana de errores
-- **Conventional commits**: Mensajes de commit estructurados para changelog automático
+- **ESLint + Prettier**: Formateo automático y reglas de calidad JavaScript.
+- **PHP CS Fixer**: Estándares PSR-12 para código PHP.
+- **PHPStan**: Análisis estático nivel 8 para detección temprana de errores.
+- **Conventional commits**: Mensajes de commit estructurados para changelog automático.
 
 **Testing estratégico**:
-- **Unit tests**: 80%+ coverage para lógica de negocio crítica
-- **Integration tests**: Validación de APIs y flujos completos
-- **E2E tests**: Casos de usuario críticos automatizados
-- **Visual regression**: Detección de cambios no intencionados en UI
+- **Unit tests**: 80%+ coverage para lógica de negocio crítica.
+- **Integration tests**: Validación de APIs y flujos completos.
+- **E2E tests**: Casos de usuario críticos automatizados.
+- **Visual regression**: Detección de cambios no intencionados en UI.
 
 #### Arquitectura mantenible
 
 **Patrones de diseño**:
-- **Repository pattern**: Abstracción de persistencia de datos
-- **Factory pattern**: Creación de objetos complejos
-- **Observer pattern**: Sistema de eventos para notificaciones
-- **Strategy pattern**: Diferentes estrategias de validación y procesamiento
+- **Repository pattern**: Abstracción de persistencia de datos.
+- **Factory pattern**: Creación de objetos complejos.
+- **Observer pattern**: Sistema de eventos para notificaciones.
+- **Strategy pattern**: Diferentes estrategias de validación y procesamiento.
 
 ## Gestión del presupuesto
 
@@ -1692,97 +1692,97 @@ En el contexto de un proyecto académico como este TFG, la gestión presupuestar
 
 ### Estructura de costos
 
-El proyecto se desarrolla en modalidad académica con recursos principalmente de tiempo de desarrollo, herramientas open source y servicios gratuitos para educación.
+El proyecto se desarrolla en modalidad académica con recursos principalmente de tiempo de desarrollo, herramientas open source y servicios gratuitos para educación..
 
 #### Costos de desarrollo
 
 **Tiempo de desarrollo**:
-- **Total estimado**: 400 horas de desarrollo durante 10 semanas
-- **Distribución semanal**: 40 horas/semana promedio con picos en fases críticas
-- **Valor hora de desarrollo junior**: €15/hora (referencia mercado)
-- **Costo total de desarrollo**: €6,000 (estimación teórica)
+- **Total estimado**: 400 horas de desarrollo durante 10 semanas.
+- **Distribución semanal**: 40 horas/semana promedio con picos en fases críticas.
+- **Valor hora de desarrollo junior**: €15/hora (referencia mercado).
+- **Costo total de desarrollo**: €6,000 (estimación teórica).
 
 **Fases con mayor intensidad**:
-- Fase 7 (Backend Symfony): 80 horas
-- Fase 3-4 (Módulos usuario): 120 horas
-- Fase 8 (Testing y deploy): 60 horas
+- Fase 7 (Backend Symfony): 80 horas.
+- Fase 3-4 (Módulos usuario): 120 horas.
+- Fase 8 (Testing y deploy): 60 horas.
 
 #### Infraestructura y herramientas
 
 **Herramientas de desarrollo** (gratuitas para estudiantes):
-- **GitHub Education Pack**: Repositorio privado, GitHub Actions gratuitas
-- **DDEV**: Herramienta open source gratuita
-- **VS Code**: IDE gratuito con extensiones
-- **Draw.io**: Diagramas UML gratuitos
+- **GitHub Education Pack**: Repositorio privado, GitHub Actions gratuitas.
+- **DDEV**: Herramienta open source gratuita.
+- **VS Code**: IDE gratuito con extensiones.
+- **Draw.io**: Diagramas UML gratuitos.
 
 **Infraestructura de desarrollo**:
-- **Desarrollo local**: Sin costo (máquina personal)
-- **Base de datos**: MySQL en contenedor local
-- **Testing**: Servicios locales con DDEV
+- **Desarrollo local**: Sin costo (máquina personal).
+- **Base de datos**: MySQL en contenedor local.
+- **Testing**: Servicios locales con DDEV.
 
 #### Costos de producción estimados
 
 **Hosting y dominio** (mensual):
-- **VPS básico**: €10-20/mes (2GB RAM, 1 CPU, 40GB SSD)
-- **Dominio**: €10/año
-- **Certificado SSL**: Gratuito (Let's Encrypt)
-- **Email transaccional**: €0 (hasta 100 emails/día con servicios gratuitos)
+- **VPS básico**: €10-20/mes (2GB RAM, 1 CPU, 40GB SSD).
+- **Dominio**: €10/año.
+- **Certificado SSL**: Gratuito (Let's Encrypt).
+- **Email transaccional**: €0 (hasta 100 emails/día con servicios gratuitos).
 
 **Escalabilidad futura**:
-- **CDN**: €0-5/mes (Cloudflare free tier)
-- **Backup**: €5-10/mes (almacenamiento cloud)
-- **Monitoring**: €0-15/mes (New Relic, DataDog tier gratuito)
+- **CDN**: €0-5/mes (Cloudflare free tier).
+- **Backup**: €5-10/mes (almacenamiento cloud).
+- **Monitoring**: €0-15/mes (New Relic, DataDog tier gratuito).
 
 ### Return on Investment (ROI)
 
 #### Beneficios cuantificables
 
 **Ahorro en tiempo administrativo**:
-- **Gestión manual actual**: 2 horas/TFG por administrativo
-- **TFG procesados anualmente**: 200 (estimación universidad media)
-- **Ahorro total**: 400 horas/año
-- **Valor por hora administrativa**: €20/hora
-- **Ahorro anual**: €8,000
+- **Gestión manual actual**: 2 horas/TFG por administrativo.
+- **TFG procesados anualmente**: 200 (estimación universidad media).
+- **Ahorro total**: 400 horas/año.
+- **Valor por hora administrativa**: €20/hora.
+- **Ahorro anual**: €8,000.
 
 **Reducción de errores**:
-- **Errores manuales**: 5% de TFG con errores de proceso
-- **Costo promedio de corrección**: €50 por error
-- **Ahorro en correcciones**: €500/año
+- **Errores manuales**: 5% de TFG con errores de proceso.
+- **Costo promedio de corrección**: €50 por error.
+- **Ahorro en correcciones**: €500/año.
 
 #### Beneficios intangibles
 
 **Mejora en satisfacción**:
-- **Estudiantes**: Mayor transparencia y seguimiento en tiempo real
-- **Profesores**: Herramientas digitales que facilitan supervisión
-- **Administración**: Reporting automático y métricas precisas
+- **Estudiantes**: Mayor transparencia y seguimiento en tiempo real.
+- **Profesores**: Herramientas digitales que facilitan supervisión.
+- **Administración**: Reporting automático y métricas precisas.
 
 **Modernización académica**:
-- **Imagen institucional**: Universidad tecnológicamente avanzada
-- **Preparación futura**: Base para expansión a otros procesos académicos
-- **Competitividad**: Ventaja frente a instituciones con procesos manuales
+- **Imagen institucional**: Universidad tecnológicamente avanzada.
+- **Preparación futura**: Base para expansión a otros procesos académicos.
+- **Competitividad**: Ventaja frente a instituciones con procesos manuales.
 
 ### Análisis de viabilidad económica
 
 #### Punto de equilibrio
 
-**Inversión inicial**: €6,000 (desarrollo) + €200 (infraestructura año 1) = €6,200  
-**Ahorro anual**: €8,500 (tiempo + errores)  
-**Tiempo de recuperación**: 8.7 meses
+**Inversión inicial**: €6,000 (desarrollo) + €200 (infraestructura año 1) = €6,200.  
+**Ahorro anual**: €8,500 (tiempo + errores).  
+**Tiempo de recuperación**: 8.7 meses.
 
 **Proyección a 3 años**:
-- **Inversión total**: €6,200 + (€300 × 3 años) = €7,100
-- **Ahorros totales**: €8,500 × 3 = €25,500
-- **ROI**: 259% en 3 años
+- **Inversión total**: €6,200 + (€300 × 3 años) = €7,100.
+- **Ahorros totales**: €8,500 × 3 = €25,500.
+- **ROI**: 259% en 3 años.
 
 #### Análisis de sensibilidad
 
 **Escenario conservador** (50% de beneficios estimados):
-- **Ahorro anual**: €4,250
-- **ROI**: 79% en 3 años
+- **Ahorro anual**: €4,250.
+- **ROI**: 79% en 3 años.
 
 **Escenario optimista** (expansión a otros procesos):
-- **Ahorro anual**: €15,000 (incluyendo otros procesos académicos)
-- **ROI**: 534% en 3 años
+- **Ahorro anual**: €15,000 (incluyendo otros procesos académicos).
+- **ROI**: 534% en 3 años.
 
 La viabilidad económica es positiva en todos los escenarios analizados, con recuperación de inversión en menos de 1 año en el escenario base.
 
@@ -1797,11 +1797,11 @@ El diseño del sistema se estructura en varias dimensiones complementarias que g
 
 Iniciando con la arquitectura física del sistema, se establece la base estructural sobre la cual se construye toda la plataforma. Esta arquitectura define la organización de los componentes de hardware y software, así como sus interacciones y dependencias, proporcionando una visión clara de cómo se despliega y ejecuta el sistema en un entorno real.
 
-La arquitectura física de la Plataforma de Gestión de TFG se basa en una separación clara entre capas de presentación, lógica de negocio y persistencia, implementando un patrón de arquitectura distribuida que garantiza escalabilidad, mantenibilidad y seguridad.
+La arquitectura física de la Plataforma de Gestión de TFG se basa en una separación clara entre capas de presentación, lógica de negocio y persistencia, implementando un patrón de arquitectura distribuida que garantiza escalabilidad, mantenibilidad y seguridad..
 
 ### Módulo frontend (Capa de presentación)
 
-El frontend constituye la capa de presentación del sistema, desarrollado como una Single Page Application (SPA) que se ejecuta completamente en el navegador del usuario.
+El frontend constituye la capa de presentación del sistema, desarrollado como una Single Page Application (SPA) que se ejecuta completamente en el navegador del usuario..
 
 #### Arquitectura de componentes React
 
@@ -1809,17 +1809,17 @@ El frontend constituye la capa de presentación del sistema, desarrollado como u
 
 **Componentes principales**:
 
-- **Layout Component**: Contenedor principal que gestiona la estructura visual global
-- **Navigation**: Sistema de navegación dinámico basado en roles de usuario
-- **Protected Routes**: Wrapper que controla acceso a rutas según autenticación y permisos
-- **Page Components**: Componentes de página específicos para cada funcionalidad
+- **Layout Component**: Contenedor principal que gestiona la estructura visual global.
+- **Navigation**: Sistema de navegación dinámico basado en roles de usuario.
+- **Protected Routes**: Wrapper que controla acceso a rutas según autenticación y permisos.
+- **Page Components**: Componentes de página específicos para cada funcionalidad.
 
 **Patrones de diseño implementados**:
 
-- **Component Composition**: Composición de funcionalidades mediante componentes reutilizables
-- **Higher-Order Components**: ProtectedRoute como HOC para control de acceso
-- **Render Props**: Componentes que exponen funcionalidad mediante props de función
-- **Custom Hooks**: Abstracción de lógica de negocio reutilizable entre componentes
+- **Component Composition**: Composición de funcionalidades mediante componentes reutilizables.
+- **Higher-Order Components**: ProtectedRoute como HOC para control de acceso.
+- **Render Props**: Componentes que exponen funcionalidad mediante props de función.
+- **Custom Hooks**: Abstracción de lógica de negocio reutilizable entre componentes.
 
 #### Gestión de estado global
 
@@ -1845,11 +1845,11 @@ const NotificacionesContext = {
 ```
 
 **Custom Hooks Architecture**:
-- **useTFGs**: Gestión completa del ciclo de vida de TFG (CRUD, estados, archivos)
-- **useUsuarios**: Administración de usuarios para rol admin
-- **useTribunales**: Gestión de tribunales y asignación de miembros
-- **useCalendario**: Integración con FullCalendar y gestión de eventos
-- **useReportes**: Generación y exportación de reportes estadísticos
+- **useTFGs**: Gestión completa del ciclo de vida de TFG (CRUD, estados, archivos).
+- **useUsuarios**: Administración de usuarios para rol admin.
+- **useTribunales**: Gestión de tribunales y asignación de miembros.
+- **useCalendario**: Integración con FullCalendar y gestión de eventos.
+- **useReportes**: Generación y exportación de reportes estadísticos.
 
 #### Comunicación con backend
 
@@ -1888,15 +1888,15 @@ apiClient.interceptors.response.use(
 ```
 
 **Service Layer Pattern**:
-- **AuthService**: Autenticación, registro, refresh tokens
-- **TFGService**: Operaciones CRUD de TFG, upload de archivos
-- **UserService**: Gestión de usuarios para administradores
-- **TribunalService**: Gestión de tribunales y defensas
-- **NotificationService**: Sistema de notificaciones
+- **AuthService**: Autenticación, registro, refresh tokens.
+- **TFGService**: Operaciones CRUD de TFG, upload de archivos.
+- **UserService**: Gestión de usuarios para administradores.
+- **TribunalService**: Gestión de tribunales y defensas.
+- **NotificationService**: Sistema de notificaciones.
 
 ### Módulo backend (Capa de lógica de negocio)
 
-El backend implementa una arquitectura hexagonal (puertos y adaptadores) usando Symfony 6.4 LTS, proporcionando APIs REST robustas y escalables.
+El backend implementa una arquitectura hexagonal (puertos y adaptadores) usando Symfony 6.4 LTS, proporcionando APIs REST robustas y escalables..
 
 #### Arquitectura hexagonal
 
@@ -1904,10 +1904,10 @@ El backend implementa una arquitectura hexagonal (puertos y adaptadores) usando 
 
 **Capas de la arquitectura**:
 
-1. **Domain Layer**: Lógica de negocio pura, independiente de frameworks
-2. **Application Layer**: Casos de uso y servicios de aplicación
-3. **Infrastructure Layer**: Implementaciones concretas (BD, servicios externos)
-4. **Interface Layer**: Controladores API y serialización
+1. **Domain Layer**: Lógica de negocio pura, independiente de frameworks.
+2. **Application Layer**: Casos de uso y servicios de aplicación.
+3. **Infrastructure Layer**: Implementaciones concretas (BD, servicios externos).
+4. **Interface Layer**: Controladores API y serialización.
 
 #### Estructura de directorios Symfony
 
@@ -1975,7 +1975,7 @@ class TFG
 
 ### Módulo de base de datos (Capa de persistencia)
 
-La capa de persistencia utiliza MySQL 8.0 como sistema de gestión de base de datos, implementando un diseño relacional optimizado con Doctrine ORM.
+La capa de persistencia utiliza MySQL 8.0 como sistema de gestión de base de datos, implementando un diseño relacional optimizado con Doctrine ORM..
 
 #### Estrategia de persistencia
 
@@ -2003,13 +2003,13 @@ doctrine:
 ```
 
 **Migration Strategy**:
-- **Versionado automático**: Doctrine Migrations para control de esquema
-- **Rollback capability**: Posibilidad de rollback a versiones anteriores
-- **Production safety**: Validación antes de aplicar migraciones en producción
+- **Versionado automático**: Doctrine Migrations para control de esquema.
+- **Rollback capability**: Posibilidad de rollback a versiones anteriores.
+- **Production safety**: Validación antes de aplicar migraciones en producción.
 
 ### Módulo de archivos (Almacenamiento)
 
-El sistema de archivos está diseñado para manejar uploads seguros de documentos PDF con validación exhaustiva y almacenamiento optimizado.
+El sistema de archivos está diseñado para manejar uploads seguros de documentos PDF con validación exhaustiva y almacenamiento optimizado..
 
 #### Configuración de VichUploader
 
@@ -2028,10 +2028,10 @@ vich_uploader:
 ```
 
 **File Security Measures**:
-- **MIME type validation**: Solo archivos PDF permitidos
-- **Size limits**: Máximo 50MB por archivo
-- **Virus scanning**: Integración con ClamAV para escaneo de malware
-- **Access control**: URLs firmadas temporalmente para descarga segura
+- **MIME type validation**: Solo archivos PDF permitidos.
+- **Size limits**: Máximo 50MB por archivo.
+- **Virus scanning**: Integración con ClamAV para escaneo de malware.
+- **Access control**: URLs firmadas temporalmente para descarga segura.
 
 #### Estrategia Almacenamiento
 
@@ -2039,10 +2039,10 @@ vich_uploader:
 
 **Flujo de procesamiento de archivos**:
 
-1. **Validación previa**: MIME type, tamaño y estructura básica del PDF
-2. **Procesamiento seguro**: Almacenamiento con nombre único y path encriptado
-3. **Metadatos**: Extracción y almacenamiento de información del archivo
-4. **Acceso controlado**: URLs temporales con expiración automática
+1. **Validación previa**: MIME type, tamaño y estructura básica del PDF.
+2. **Procesamiento seguro**: Almacenamiento con nombre único y path encriptado.
+3. **Metadatos**: Extracción y almacenamiento de información del archivo.
+4. **Acceso controlado**: URLs temporales con expiración automática.
 
 ## Arquitectura lógica
 
@@ -2050,7 +2050,7 @@ Habiendo establecido la arquitectura física del sistema, es fundamental abordar
 
 La arquitectura lógica trasciende la implementación específica para establecer principios de diseño que aseguran la mantenibilidad, extensibilidad y robustez del sistema. A través de esta organización lógica, se garantiza que cada componente tenga responsabilidades bien definidas y que las interacciones entre ellos sigan patrones establecidos y probados en la industria del software.
 
-La arquitectura lógica organiza los componentes del sistema según responsabilidades funcionales, implementando patrones de diseño que garantizan separación de concerns y alta cohesión.
+La arquitectura lógica organiza los componentes del sistema según responsabilidades funcionales, implementando patrones de diseño que garantizan separación de concerns y alta cohesión..
 
 ### Capa de presentación (Frontend)
 
@@ -2334,18 +2334,18 @@ El esquema de base de datos propuesto sigue principios de normalización que gar
 El esquema cumple con la tercera forma normal mediante:
 
 **Primera Forma Normal (1NF)**:
-- Todos los campos contienen valores atómicos
-- Campos JSON utilizados únicamente para datos semi-estructurados (roles, palabras clave, metadata)
-- No hay grupos repetitivos de columnas
+- Todos los campos contienen valores atómicos.
+- Campos JSON utilizados únicamente para datos semi-estructurados (roles, palabras clave, metadata).
+- No hay grupos repetitivos de columnas.
 
 **Segunda Forma Normal (2NF)**:
-- Todas las tablas tienen claves primarias definidas
-- Todos los atributos no-clave dependen completamente de la clave primaria
-- No hay dependencias parciales
+- Todas las tablas tienen claves primarias definidas.
+- Todos los atributos no-clave dependen completamente de la clave primaria.
+- No hay dependencias parciales.
 
 **Tercera Forma Normal (3NF)**:
-- No existen dependencias transitivas
-- Cada atributo no-clave depende directamente de la clave primaria
+- No existen dependencias transitivas.
+- Cada atributo no-clave depende directamente de la clave primaria.
 
 #### Constraints e integridad referencial
 
@@ -2877,7 +2877,7 @@ const initialState = {
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
-  // Inicialización desde localStorage
+  // Inicialización desde localStorage.
   useEffect(() => {
     const token = localStorage.getItem('access_token');
     const userData = localStorage.getItem('user_data');
@@ -2993,7 +2993,7 @@ const ProtectedRoute = ({
     );
   }
 
-  // Verificar roles requeridos
+  // Verificar roles requeridos.
   if (requireRoles.length > 0) {
     const userRoles = user?.roles || [];
     const hasRequiredRole = requireRoles.some(role => 
@@ -3110,7 +3110,7 @@ export const useTFGs = () => {
     try {
       const result = await tfgService.uploadFile(tfgId, file, onProgress);
       
-      // Actualizar el TFG en el estado local
+      // Actualizar el TFG en el estado local.
       setTFGs(prev => prev.map(tfg => 
         tfg.id === tfgId 
           ? { ...tfg, archivo: result.archivo }
@@ -3337,7 +3337,7 @@ security:
         ROLE_ESTUDIANTE: [ROLE_USER]
 ```
 
-#### Controllador Authenticatción JWT
+#### Controlador de Autenticación JWT.
 
 ```php
 <?php
@@ -3490,22 +3490,22 @@ class TFGVoter extends Voter
 
     private function canView(TFG $tfg, User $user): bool
     {
-        // Admin puede ver todos
+        // Admin puede ver todos.
         if (in_array('ROLE_ADMIN', $user->getRoles())) {
             return true;
         }
 
-        // El estudiante puede ver su propio TFG
+        // El estudiante puede ver su propio TFG.
         if ($tfg->getEstudiante() === $user) {
             return true;
         }
 
-        // El tutor puede ver TFGs asignados
+        // El tutor puede ver TFGs asignados.
         if ($tfg->getTutor() === $user || $tfg->getCotutor() === $user) {
             return true;
         }
 
-        // Miembros del tribunal pueden ver TFGs para defensas programadas
+        // Miembros del tribunal pueden ver TFGs para defensas programadas.
         if (in_array('ROLE_PROFESOR', $user->getRoles())) {
             $defensa = $tfg->getDefensa();
             if ($defensa && $this->isUserInTribunal($user, $defensa->getTribunal())) {
@@ -3518,12 +3518,12 @@ class TFGVoter extends Voter
 
     private function canEdit(TFG $tfg, User $user): bool
     {
-        // Admin puede editar todos
+        // Admin puede editar todos.
         if (in_array('ROLE_ADMIN', $user->getRoles())) {
             return true;
         }
 
-        // El estudiante solo puede editar su TFG en estado borrador
+        // El estudiante solo puede editar su TFG en estado borrador.
         if ($tfg->getEstudiante() === $user && $tfg->getEstado() === 'borrador') {
             return true;
         }
@@ -3533,12 +3533,12 @@ class TFGVoter extends Voter
 
     private function canChangeState(TFG $tfg, User $user): bool
     {
-        // Admin puede cambiar cualquier estado
+        // Admin puede cambiar cualquier estado.
         if (in_array('ROLE_ADMIN', $user->getRoles())) {
             return true;
         }
 
-        // El tutor puede cambiar estado de TFGs asignados
+        // El tutor puede cambiar estado de TFGs asignados.
         if (($tfg->getTutor() === $user || $tfg->getCotutor() === $user) 
             && in_array('ROLE_PROFESOR', $user->getRoles())) {
             return true;
@@ -3645,7 +3645,7 @@ export const NotificacionesProvider = ({ children }) => {
       payload: notification
     });
 
-    // Auto-remove success/info notifications after 5 seconds
+    // Auto-remove success/info notifications after 5 seconds.
     if (['success', 'info'].includes(notification.type)) {
       setTimeout(() => {
         removeNotification(notification.id);
@@ -3905,22 +3905,22 @@ class TFGService
 
     public function createTFG(array $data, User $estudiante): TFG
     {
-        // Validar que el estudiante no tenga ya un TFG activo
+        // Validar que el estudiante no tenga ya un TFG activo.
         $existingTFG = $this->tfgRepository->findActiveByStudent($estudiante);
         if ($existingTFG) {
             throw new \RuntimeException('Ya tienes un TFG activo');
         }
 
-        // Validar datos requeridos
+        // Validar datos requeridos.
         $this->validateTFGData($data);
 
-        // Obtener tutor
+        // Obtener tutor.
         $tutor = $this->userRepository->find($data['tutor_id']);
         if (!$tutor || !in_array('ROLE_PROFESOR', $tutor->getRoles())) {
             throw new \RuntimeException('Tutor inválido');
         }
 
-        // Crear TFG
+        // Crear TFG.
         $tfg = new TFG();
         $tfg->setTitulo($data['titulo']);
         $tfg->setDescripcion($data['descripcion'] ?? '');
@@ -3931,7 +3931,7 @@ class TFGService
         $tfg->setEstado('borrador');
         $tfg->setFechaInicio(new \DateTime());
 
-        // Cotutor opcional
+        // Cotutor opcional.
         if (!empty($data['cotutor_id'])) {
             $cotutor = $this->userRepository->find($data['cotutor_id']);
             if ($cotutor && in_array('ROLE_PROFESOR', $cotutor->getRoles())) {
@@ -3942,7 +3942,7 @@ class TFGService
         $this->entityManager->persist($tfg);
         $this->entityManager->flush();
 
-        // Dispatch events
+        // Dispatch event.s.
         $this->eventDispatcher->dispatch(
             new TFGCreatedEvent($tfg),
             TFGCreatedEvent::NAME
@@ -3953,7 +3953,7 @@ class TFGService
 
     public function updateTFG(TFG $tfg, array $data): TFG
     {
-        // Solo se puede editar en estado borrador
+        // Solo se puede editar en estado borrador.
         if ($tfg->getEstado() !== 'borrador') {
             throw new \RuntimeException('Solo se puede editar TFG en estado borrador');
         }
@@ -3990,11 +3990,11 @@ class TFGService
         $tfg->setEstado($newState);
         $tfg->setUpdatedAt(new \DateTime());
 
-        // Agregar comentario si se proporciona
+        // Agregar comentario si se proporciona.
         if (!empty($comment)) {
             $comentario = new Comentario();
             $comentario->setTfg($tfg);
-            $comentario->setAutor($tfg->getTutor()); // Asumimos que el tutor cambia el estado
+            $comentario->setAutor($tfg->getTutor()); // Asumimos que el tutor cambia el estado.
             $comentario->setComentario($comment);
             $comentario->setTipo('revision');
             
@@ -4003,7 +4003,7 @@ class TFGService
 
         $this->entityManager->flush();
 
-        // Dispatch event
+        // Dispatch event.
         $this->eventDispatcher->dispatch(
             new TFGStateChangedEvent($tfg, $previousState, $newState),
             TFGStateChangedEvent::NAME
@@ -4079,25 +4079,25 @@ class FileUploadService
     {
         $this->validateFile($file);
         
-        // Eliminar archivo anterior si existe
+        // Eliminar archivo anterior si existe.
         if ($tfg->getArchivoPath()) {
             $this->removeOldFile($tfg->getArchivoPath());
         }
 
-        // Generar nombre único
+        // Generar nombre único.
         $fileName = $this->generateUniqueFileName($file);
         $uploadPath = $this->projectDir . '/public/' . self::UPLOAD_PATH;
         
-        // Crear directorio si no existe
+        // Crear directorio si no existe.
         if (!is_dir($uploadPath)) {
             mkdir($uploadPath, 0755, true);
         }
 
-        // Mover archivo
+        // Mover archivo.
         $file->move($uploadPath, $fileName);
         $relativePath = self::UPLOAD_PATH . '/' . $fileName;
 
-        // Actualizar entidad TFG
+        // Actualizar entidad TFG.
         $tfg->setArchivoPath($relativePath);
         $tfg->setArchivoOriginalName($file->getClientOriginalName());
         $tfg->setArchivoSize($file->getSize());
@@ -4124,7 +4124,7 @@ class FileUploadService
 
         $response = new BinaryFileResponse($filePath);
         
-        // Configurar headers para descarga
+        // Configurar headers para descarga.
         $response->setContentDisposition(
             ResponseHeaderBag::DISPOSITION_ATTACHMENT,
             $tfg->getArchivoOriginalName() ?? 'tfg.pdf'
@@ -4138,7 +4138,7 @@ class FileUploadService
 
     private function validateFile(UploadedFile $file): void
     {
-        // Validar tamaño
+        // Validar tamaño.
         if ($file->getSize() > self::MAX_FILE_SIZE) {
             throw new \RuntimeException(
                 'El archivo es demasiado grande. Tamaño máximo: ' . 
@@ -4146,20 +4146,20 @@ class FileUploadService
             );
         }
 
-        // Validar tipo MIME
+        // Validar tipo MIME.
         if (!in_array($file->getMimeType(), self::ALLOWED_MIME_TYPES)) {
             throw new \RuntimeException(
                 'Tipo de archivo no permitido. Solo se permiten archivos PDF'
             );
         }
 
-        // Validar extensión
+        // Validar extensión.
         $extension = strtolower($file->getClientOriginalExtension());
         if ($extension !== 'pdf') {
             throw new \RuntimeException('Solo se permiten archivos PDF');
         }
 
-        // Validar que el archivo no esté corrupto
+        // Validar que el archivo no esté corrupto.
         if ($file->getError() !== UPLOAD_ERR_OK) {
             throw new \RuntimeException('Error al subir el archivo');
         }
@@ -4276,7 +4276,7 @@ class NotificationService
             return;
         }
 
-        // Notificar al estudiante
+        // Notificar al estudiante.
         $this->createNotification(
             user: $tfg->getEstudiante(),
             tipo: 'info',
@@ -4288,7 +4288,7 @@ class NotificationService
             ]
         );
 
-        // Notificar a los miembros del tribunal
+        // Notificar a los miembros del tribunal.
         $tribunal = $defensa->getTribunal();
         $miembros = [$tribunal->getPresidente(), $tribunal->getSecretario(), $tribunal->getVocal()];
 
@@ -4305,7 +4305,7 @@ class NotificationService
             );
         }
 
-        // Enviar emails
+        // Enviar emails.
         $this->sendEmail(
             to: $tfg->getEstudiante()->getEmail(),
             subject: 'Defensa Programada - Plataforma TFG',
@@ -4357,7 +4357,7 @@ class NotificationService
 
             $this->mailer->send($email);
         } catch (\Exception $e) {
-            // Log error but don't fail the operation
+            // Log error but don't fail the operation.
             error_log("Error sending email: " . $e->getMessage());
         }
     }
@@ -4661,33 +4661,33 @@ parameters:
 
 # Procesos de soporte y pruebas
 
-Completada la entrega del producto, es fundamental documentar los procesos de soporte y pruebas que garantizan la calidad, mantenibilidad y evolución continua del sistema desarrollado. Este capítulo aborda los aspectos metodológicos y técnicos que sustentan la operación exitosa del sistema, desde la gestión de decisiones técnicas hasta la implementación de estrategias de testing y verificación.
+Completada la entrega del producto, es fundamental documentar los procesos de soporte y pruebas que garantizan la calidad, mantenibilidad y evolución continua del sistema desarrollado. Este capítulo aborda los aspectos metodológicos y técnicos que sustentan la operación exitosa del sistema, desde la gestión de decisiones técnicas hasta la implementación de estrategias de testing y verificación..
 
-Los procesos de soporte y pruebas representan elementos críticos para el éxito a largo plazo de cualquier proyecto de software. Estos procesos no solo aseguran la calidad del código y la funcionalidad del sistema, sino que también establecen las bases para futuras mejoras, corrección de errores y adaptación a nuevos requisitos. La documentación de estos procesos facilita tanto el mantenimiento como la transferencia de conocimiento a futuros desarrolladores.
+Los procesos de soporte y pruebas representan elementos críticos para el éxito a largo plazo de cualquier proyecto de software. Estos procesos no solo aseguran la calidad del código y la funcionalidad del sistema, sino que también establecen las bases para futuras mejoras, corrección de errores y adaptación a nuevos requisitos. La documentación de estos procesos facilita tanto el mantenimiento como la transferencia de conocimiento a futuros desarrolladores..
 
 ## Gestión y toma de decisiones
 
-Para establecer las bases metodológicas de los procesos de soporte, es fundamental documentar cómo se han gestionado las decisiones técnicas y arquitectónicas durante el desarrollo del proyecto. La gestión adecuada de decisiones no solo garantiza la coherencia técnica del sistema, sino que también facilita futuras modificaciones y evoluciones del producto.
+Para establecer las bases metodológicas de los procesos de soporte, es fundamental documentar cómo se han gestionado las decisiones técnicas y arquitectónicas durante el desarrollo del proyecto. La gestión adecuada de decisiones no solo garantiza la coherencia técnica del sistema, sino que también facilita futuras modificaciones y evoluciones del producto..
 
-La documentación de decisiones técnicas mediante metodologías estructuradas como Architecture Decision Records (ADR) permite mantener un historial comprensible de las razones que llevaron a seleccionar determinadas tecnologías, patrones de diseño o estrategias de implementación. Esta información resulta invaluable tanto para el mantenimiento actual como para futuros desarrolladores que necesiten comprender el contexto de las decisiones tomadas.
+La documentación de decisiones técnicas mediante metodologías estructuradas como Architecture Decision Records (ADR) permite mantener un historial comprensible de las razones que llevaron a seleccionar determinadas tecnologías, patrones de diseño o estrategias de implementación. Esta información resulta invaluable tanto para el mantenimiento actual como para futuros desarrolladores que necesiten comprender el contexto de las decisiones tomadas..
 
 ### Metodología de gestión del proyecto
 
-El proyecto ha seguido una metodología ágil adaptada al contexto académico, con una estructura de gestión que permite flexibilidad en la toma de decisiones mientras mantiene el rigor técnico requerido.
+El proyecto ha seguido una metodología ágil adaptada al contexto académico, con una estructura de gestión que permite flexibilidad en la toma de decisiones mientras mantiene el rigor técnico requerido..
 
 #### Estructura de toma de decisiones
 
 **Niveles de decisión implementados**:
 
-1. **Decisiones arquitectónicas**: Selección de tecnologías principales (React 19, Symfony 6.4, MySQL 8.0)
-2. **Decisiones de diseño**: Patrones de implementación, estructura de componentes, APIs REST
-3. **Decisiones operacionales**: Configuración de desarrollo, herramientas, flujos de trabajo
+1. **Decisiones arquitectónicas**: Selección de tecnologías principales (React 19, Symfony 6.4, MySQL 8.0).
+2. **Decisiones de diseño**: Patrones de implementación, estructura de componentes, APIs REST.
+3. **Decisiones operacionales**: Configuración de desarrollo, herramientas, flujos de trabajo.
 
 **Proceso de evaluación de decisiones**:
-- **Análisis de requisitos**: Evaluación de necesidades técnicas y funcionales
-- **Investigación de alternativas**: Comparación de opciones tecnológicas disponibles
-- **Prototipado rápido**: Validación práctica de decisiones críticas
-- **Documentación**: Registro de decisiones en Architecture Decision Records (ADR)
+- **Análisis de requisitos**: Evaluación de necesidades técnicas y funcionales.
+- **Investigación de alternativas**: Comparación de opciones tecnológicas disponibles.
+- **Prototipado rápido**: Validación práctica de decisiones críticas.
+- **Documentación**: Registro de decisiones en Architecture Decision Records (ADR).
 
 #### Architecture Decision Records (ADR)
 
@@ -4705,20 +4705,20 @@ Utilizaremos React 19 con Context API para gestión de estado y React Router v7 
 
 ## Consecuencias
 ### Positivas
-- Ecosistema maduro con amplia documentación
-- Context API elimina necesidad de Redux para este proyecto
-- Concurrent features mejoran rendimiento
-- Excelente soporte para TypeScript (preparación futura)
+- Ecosistema maduro con amplia documentación.
+- Context API elimina necesidad de Redux para este proyecto.
+- Concurrent features mejoran rendimiento.
+- Excelente soporte para TypeScript (preparación futura).
 
 ### Negativas
-- Curva de aprendizaje para hooks avanzados
-- Bundle size mayor comparado con alternativas ligeras
-- Requiere configuración adicional para SSR (no necesario actualmente)
+- Curva de aprendizaje para hooks avanzados.
+- Bundle size mayor comparado con alternativas ligeras.
+- Requiere configuración adicional para SSR (no necesario actualmente).
 
 ## Alternativas consideradas
-- Vue.js 3: Más simple pero ecosistema menor
-- Angular: Demasiado complejo para el alcance del proyecto
-- Svelte: Prometedor pero comunidad más pequeña
+- Vue.js 3: Más simple pero ecosistema menor.
+- Angular: Demasiado complejo para el alcance del proyecto.
+- Svelte: Prometedor pero comunidad más pequeña.
 ```
 
 ### Control de versiones y cambios
@@ -4736,10 +4736,10 @@ main                    # Producción estable
 ```
 
 **Flujo de trabajo implementado**:
-1. **Feature branches**: Desarrollo aislado de funcionalidades
-2. **Pull requests**: Revisión de código obligatoria
-3. **Conventional commits**: Mensajes estructurados para changelog automático
-4. **Semantic versioning**: Versionado semántico (MAJOR.MINOR.PATCH)
+1. **Feature branches**: Desarrollo aislado de funcionalidades.
+2. **Pull requests**: Revisión de código obligatoria.
+3. **Conventional commits**: Mensajes estructurados para changelog automático.
+4. **Semantic versioning**: Versionado semántico (MAJOR.MINOR.PATCH).
 
 #### Gestión de releases
 
@@ -4770,22 +4770,22 @@ chore(deps): update React to v19.0.0
 #### Análisis detallado de riesgos críticos
 
 **R001: Incompatibilidad tecnológica**
-- **Descripción**: React 19 es una versión muy reciente que puede tener incompatibilidades
-- **Impacto**: Retraso en desarrollo, necesidad de refactoring
-- **Probabilidad**: Media (30%)
+- **Descripción**: React 19 es una versión muy reciente que puede tener incompatibilidades.
+- **Impacto**: Retraso en desarrollo, necesidad de refactoring.
+- **Probabilidad**: Media (30%).
 - **Mitigación aplicada**: 
-  - Testing exhaustivo durante Phase 1-2
-  - Versionado específico de dependencias
-  - Fallback plan con React 18 LTS
+  - Testing exhaustivo durante Phase 1-2.
+  - Versionado específico de dependencias.
+  - Fallback plan con React 18 LTS.
 
 **R004: Pérdida de datos**
-- **Descripción**: Migración incorrecta desde sistema mock puede causar pérdida de datos
-- **Impacto**: Pérdida de TFGs, información de usuarios, configuraciones
-- **Probabilidad**: Baja (15%)
+- **Descripción**: Migración incorrecta desde sistema mock puede causar pérdida de datos.
+- **Impacto**: Pérdida de TFGs, información de usuarios, configuraciones.
+- **Probabilidad**: Baja (15%).
 - **Mitigación aplicada**:
-  - Sistema de backup automatizado
-  - Migración por etapas con validación
-  - Rollback plan documentado
+  - Sistema de backup automatizado.
+  - Migración por etapas con validación.
+  - Rollback plan documentado.
 
 ### Plan de contingencia
 
@@ -4823,25 +4823,25 @@ echo "✅ Rollback completed"
 ```
 
 **Escenario 2: Sobrecarga del sistema**
-- **Trigger**: > 90% CPU usage durante > 5 minutos
+- **Trigger**: > 90% CPU usage durante > 5 minutos.
 - **Acciones automáticas**:
-  1. Activar cache agresivo (Redis TTL reducido)
-  2. Limitar uploads concurrentes
-  3. Enviar alertas al equipo técnico
-  4. Escalar contenedores automáticamente (si disponible)
+  1. Activar cache agresivo (Redis TTL reducido).
+  2. Limitar uploads concurrentes.
+  3. Enviar alertas al equipo técnico.
+  4. Escalar contenedores automáticamente (si disponible).
 
 **Escenario 3: Vulnerabilidad de seguridad crítica**
 - **Procedimiento**:
-  1. Patch inmediato en branch hotfix
-  2. Despliegue de emergencia
-  3. Notificación a usuarios sobre medidas tomadas
-  4. Auditoría post-incidente
+  1. Patch inmediato en branch hotfix.
+  2. Despliegue de emergencia.
+  3. Notificación a usuarios sobre medidas tomadas.
+  4. Auditoría post-incidente.
 
 ## Verificación y validación del software
 
-Complementando la gestión de decisiones técnicas, la verificación y validación del software constituye el núcleo de los procesos de calidad del proyecto. Estos procesos aseguran que el sistema desarrollado cumple con los requisitos especificados y funciona correctamente bajo diferentes condiciones de uso, proporcionando confianza tanto a los desarrolladores como a los usuarios finales.
+Complementando la gestión de decisiones técnicas, la verificación y validación del software constituye el núcleo de los procesos de calidad del proyecto. Estos procesos aseguran que el sistema desarrollado cumple con los requisitos especificados y funciona correctamente bajo diferentes condiciones de uso, proporcionando confianza tanto a los desarrolladores como a los usuarios finales..
 
-La estrategia de verificación y validación implementada abarca múltiples niveles de testing, desde pruebas unitarias granulares hasta pruebas de integración completas del sistema. Esta aproximación multicapa garantiza que cada componente funcione correctamente de manera aislada, y que la interacción entre componentes produzca los resultados esperados en el contexto global del sistema.
+La estrategia de verificación y validación implementada abarca múltiples niveles de testing, desde pruebas unitarias granulares hasta pruebas de integración completas del sistema. Esta aproximación multicapa garantiza que cada componente funcione correctamente de manera aislada, y que la interacción entre componentes produzca los resultados esperados en el contexto global del sistema..
 
 ### Testing del frontend
 
@@ -5552,27 +5552,27 @@ echo "✅ Security scan completed"
 #### Penetration testing checklist
 
 **Automated tests implemented**:
-- ✅ **SQL Injection**: Parameterized queries with Doctrine ORM
-- ✅ **XSS Prevention**: React JSX escaping + CSP headers
-- ✅ **CSRF Protection**: SameSite cookies + JWT tokens
-- ✅ **Authentication**: Secure JWT implementation with refresh tokens
-- ✅ **Authorization**: Granular permissions with Symfony Voters
-- ✅ **File Upload Security**: MIME validation, size limits, virus scanning
-- ✅ **HTTPS Enforcement**: Redirect + HSTS headers
-- ✅ **Input Validation**: Server-side validation for all endpoints
+- ✅ **SQL Injection**: Parameterized queries with Doctrine ORM.
+- ✅ **XSS Prevention**: React JSX escaping + CSP headers.
+- ✅ **CSRF Protection**: SameSite cookies + JWT tokens.
+- ✅ **Authentication**: Secure JWT implementation with refresh tokens.
+- ✅ **Authorization**: Granular permissions with Symfony Voters.
+- ✅ **File Upload Security**: MIME validation, size limits, virus scanning.
+- ✅ **HTTPS Enforcement**: Redirect + HSTS headers.
+- ✅ **Input Validation**: Server-side validation for all endpoints.
 
 **Manual security verification**:
-- 📋 Role escalation attempts
-- 📋 Directory traversal in file downloads  
-- 📋 JWT token manipulation
-- 📋 CORS configuration testing
-- 📋 Rate limiting effectiveness
+- 📋 Role escalation attempts.
+- 📋 Directory traversal in file downloads.
+- 📋 JWT token manipulation.
+- 📋 CORS configuration testing.
+- 📋 Rate limiting effectiveness.
 
 ## Métricas y KPIs
 
-Para completar los procesos de soporte y pruebas, es esencial establecer un sistema de métricas y KPIs (Key Performance Indicators) que permitan evaluar objetivamente la calidad, rendimiento y éxito del sistema desarrollado. Estas métricas proporcionan una base cuantitativa para la toma de decisiones y permiten identificar áreas de mejora de manera sistemática.
+Para completar los procesos de soporte y pruebas, es esencial establecer un sistema de métricas y KPIs (Key Performance Indicators) que permitan evaluar objetivamente la calidad, rendimiento y éxito del sistema desarrollado. Estas métricas proporcionan una base cuantitativa para la toma de decisiones y permiten identificar áreas de mejora de manera sistemática..
 
-La definición de métricas apropiadas va más allá de simples contadores de código, abarcando aspectos técnicos, funcionales y de experiencia de usuario que reflejan la salud general del sistema. El seguimiento continuo de estas métricas facilita la detección temprana de problemas y permite establecer objetivos medibles para futuras iteraciones del proyecto.
+La definición de métricas apropiadas va más allá de simples contadores de código, abarcando aspectos técnicos, funcionales y de experiencia de usuario que reflejan la salud general del sistema. El seguimiento continuo de estas métricas facilita la detección temprana de problemas y permite establecer objetivos medibles para futuras iteraciones del proyecto..
 
 ### Métricas técnicas
 
@@ -5696,10 +5696,10 @@ La implementación del sistema de transiciones de estado (Borrador → En Revisi
 La plataforma posiciona a la institución académica como tecnológicamente avanzada, mejorando su imagen y competitividad frente a universidades con procesos manuales.
 
 **Facilitation de investigación**:
-Los datos estructurados generados por el sistema permiten análisis estadísticos avanzados sobre tendencias en TFG, áreas de investigación populares y rendimiento académico.
+Los datos estructurados generados por el sistema permiten análisis estadísticos avanzados sobre tendencias en TFG, áreas de investigación populares y rendimiento académico..
 
 **Preparación para el futuro**:
-La arquitectura modular facilita la expansión a otros procesos académicos (TFM, doctorado, proyectos de investigación).
+La arquitectura modular facilita la expansión a otros procesos académicos (TFM, doctorado, proyectos de investigación)..
 
 ## Cumplimiento de los objetivos propuestos
 
@@ -5712,91 +5712,91 @@ El análisis del cumplimiento de objetivos se estructura considerando tanto los 
 **✅ OF1: Sistema de autenticación multi-rol**
 - **Estado**: Completado al 100%
 - **Implementación**: JWT con refresh tokens, 4 roles diferenciados, persistencia segura
-- **Resultado**: Sistema robusto que maneja correctamente la autenticación y autorización
+- **Resultado**: Sistema robusto que maneja correctamente la autenticación y autorización.
 
 **✅ OF2: Módulo completo para estudiantes**
 - **Estado**: Completado al 100%
 - **Funcionalidades**: Creación de TFG, upload de archivos, seguimiento de estado, notificaciones
-- **Resultado**: Interfaz completa e intuitiva para gestión estudiantil
+- **Resultado**: Interfaz completa e intuitiva para gestión estudiantil.
 
 **✅ OF3: Sistema de gestión para profesores**
 - **Estado**: Completado al 100%
 - **Funcionalidades**: Supervisión de TFG, sistema de comentarios, cambios de estado, evaluaciones
-- **Resultado**: Herramientas completas para supervisión académica
+- **Resultado**: Herramientas completas para supervisión académica.
 
 **✅ OF4: Módulo de gestión de tribunales**
 - **Estado**: Completado al 95%
 - **Funcionalidades**: Creación de tribunales, asignación de miembros, coordinación
-- **Resultado**: Sistema funcional con posibilidad de mejoras menores
+- **Resultado**: Sistema funcional con posibilidad de mejoras menores.
 
 **✅ OF5: Sistema de calendario integrado**
 - **Estado**: Completado al 100%
 - **Implementación**: FullCalendar.js con funcionalidades avanzadas de programación
-- **Resultado**: Calendario interactivo y funcional para defensas
+- **Resultado**: Calendario interactivo y funcional para defensas.
 
 **✅ OF6: Panel administrativo completo**
 - **Estado**: Completado al 100%
 - **Funcionalidades**: CRUD de usuarios, reportes, exportación, configuración
-- **Resultado**: Panel completo para administración del sistema
+- **Resultado**: Panel completo para administración del sistema.
 
 **✅ OF7: Sistema de notificaciones**
 - **Estado**: Completado al 90%
 - **Implementación**: Notificaciones in-app completas, emails básicos
-- **Resultado**: Sistema efectivo con posibilidad de expansión
+- **Resultado**: Sistema efectivo con posibilidad de expansión.
 
 ### Objetivos técnicos
 
 **✅ OT1: Arquitectura frontend moderna**
 - **Estado**: Completado al 100%
 - **Tecnologías**: React 19, Vite, Tailwind CSS v4, componentes reutilizables
-- **Resultado**: Arquitectura robusta y mantenible
+- **Resultado**: Arquitectura robusta y mantenible.
 
 **✅ OT2: Backend robusto con Symfony**
 - **Estado**: Completado al 85%
 - **Progreso**: APIs REST implementadas, sistema de seguridad completo
-- **Nota**: Integración completa frontend-backend en fase final de desarrollo
+- **Nota**: Integración completa frontend-backend en fase final de desarrollo.
 
 **✅ OT3: Sistema de base de datos optimizado**
 - **Estado**: Completado al 100%
 - **Implementación**: MySQL 8.0, esquema normalizado, índices optimizados
-- **Resultado**: Base de datos eficiente y escalable
+- **Resultado**: Base de datos eficiente y escalable.
 
 **✅ OT4: Sistema de gestión de archivos**
 - **Estado**: Completado al 100%
 - **Implementación**: VichUploader, validaciones de seguridad, almacenamiento optimizado
-- **Resultado**: Sistema seguro y funcional para archivos PDF
+- **Resultado**: Sistema seguro y funcional para archivos PDF.
 
 **🔄 OT5: Sistema de testing automatizado**
 - **Estado**: En progreso (70%)
 - **Implementado**: Tests unitarios frontend y backend, tests de integración
-- **Pendiente**: Tests E2E completos
+- **Pendiente**: Tests E2E completos.
 
 **✅ OT6: Entorno de desarrollo containerizado**
 - **Estado**: Completado al 100%
 - **Implementación**: DDEV completamente funcional, Docker para producción
-- **Resultado**: Entorno consistente y fácil de replicar
+- **Resultado**: Entorno consistente y fácil de replicar.
 
 ### Objetivos de calidad
 
 **✅ OC1: Rendimiento óptimo**
 - **Objetivo**: < 2 segundos para operaciones críticas
-- **Resultado**: 1.2 segundos promedio, superando el objetivo
+- **Resultado**: 1.2 segundos promedio, superando el objetivo.
 
 **✅ OC2: Seguridad robusta**
 - **Objetivo**: Cumplimiento de estándares académicos
-- **Resultado**: Implementación de mejores prácticas, auditorías de seguridad pasadas
+- **Resultado**: Implementación de mejores prácticas, auditorías de seguridad pasadas.
 
 **✅ OC3: Interfaz intuitiva**
 - **Objetivo**: Curva de aprendizaje mínima
-- **Resultado**: Interfaz auto-explicativa, feedback positivo en pruebas de usabilidad
+- **Resultado**: Interfaz auto-explicativa, feedback positivo en pruebas de usabilidad.
 
 **✅ OC4: Compatibilidad cross-browser**
 - **Objetivo**: Funcionalidad completa en navegadores principales
-- **Resultado**: Compatibilidad del 100% en Chrome, Firefox, Safari, Edge
+- **Resultado**: Compatibilidad del 100% en Chrome, Firefox, Safari, Edge.
 
 **🔄 OC5: Sistema de backup y recuperación**
 - **Estado**: En implementación (80%)
-- **Progreso**: Scripts de backup automatizados, procedimientos de recuperación documentados
+- **Progreso**: Scripts de backup automatizados, procedimientos de recuperación documentados.
 
 ## Trabajo futuro
 
@@ -5815,7 +5815,7 @@ La identificación sistemática de trabajo futuro no solo reconoce las limitacio
 - Migración completa desde sistema mock a APIs reales
 - Testing exhaustivo de integración
 - Optimización de rendimiento en llamadas API
-- Implementación de manejo de errores robusto
+- Implementación de manejo de errores robusto.
 
 ```javascript
 // Ejemplo de mejora: Retry logic para APIs
@@ -5849,7 +5849,7 @@ apiClient.interceptors.response.use(
 - Templates de email más sofisticados con HTML/CSS
 - Notificaciones programadas (recordatorios de defensas)
 - Preferencias de notificación por usuario
-- Sistema de digest diario/semanal
+- Sistema de digest diario/semanal.
 
 #### Métricas y analytics avanzados
 
@@ -5860,7 +5860,7 @@ apiClient.interceptors.response.use(
 - Gráficos interactivos con Chart.js o D3.js
 - Métricas de uso del sistema
 - Reportes de rendimiento académico
-- Exportación de métricas personalizadas
+- Exportación de métricas personalizadas.
 
 ### Funcionalidades de mediano plazo (6-12 meses)
 
@@ -5870,12 +5870,12 @@ apiClient.interceptors.response.use(
 - Chat en tiempo real integrado
 - Sistema de comentarios por secciones del documento
 - Versionado de documentos con diff visual
-- Collaborative editing básico
+- Collaborative editing básico.
 
 **Tecnologías sugeridas**:
 - Socket.io para comunicación en tiempo real
 - Operational Transform para edición colaborativa
-- PDF.js para anotaciones en documentos
+- PDF.js para anotaciones en documentos.
 
 #### Inteligencia artificial y automatización
 
@@ -5883,12 +5883,12 @@ apiClient.interceptors.response.use(
 - Detección automática de plagio básico
 - Sugerencias de mejora en resúmenes y abstracts
 - Asignación automática de tribunales basada en expertise
-- Análisis de sentimiento en comentarios de feedback
+- Análisis de sentimiento en comentarios de feedback.
 
 **Tecnologías sugeridas**:
 - OpenAI API para procesamiento de lenguaje natural
 - TensorFlow.js para análisis en cliente
-- Elasticsearch para búsquedas semánticas
+- Elasticsearch para búsquedas semánticas.
 
 #### Aplicación móvil nativa
 
@@ -5896,12 +5896,12 @@ apiClient.interceptors.response.use(
 - Notificaciones push nativas
 - Vista de calendario y defensas
 - Upload de archivos desde dispositivos móviles
-- Modo offline básico
+- Modo offline básico.
 
 **Tecnologías sugeridas**:
 - React Native para desarrollo multiplataforma
 - Firebase para notificaciones push
-- SQLite para almacenamiento offline
+- SQLite para almacenamiento offline.
 
 ### Expansiones a largo plazo (1-2 años)
 
@@ -5911,13 +5911,13 @@ apiClient.interceptors.response.use(
 - Arquitectura multi-tenant
 - Gestión centralizada con customización por institución
 - Intercambio de datos entre universidades
-- Benchmarking inter-institucional
+- Benchmarking inter-institucional.
 
 **Beneficios**:
 - Economías de escala en desarrollo y mantenimiento
 - Sharing de mejores prácticas entre instituciones
 - Datos agregados para investigación educativa
-- Posicionamiento como líder en tecnología académica
+- Posicionamiento como líder en tecnología académica.
 
 #### Integración con sistemas académicos existentes
 
@@ -5925,7 +5925,7 @@ apiClient.interceptors.response.use(
 - Integración con SIS (Student Information Systems)
 - Conexión con bibliotecas digitales
 - Sync con calendarios académicos institucionales
-- APIs para sistemas de evaluación externos
+- APIs para sistemas de evaluación externos.
 
 #### Marketplace de servicios académicos
 
@@ -5933,7 +5933,7 @@ apiClient.interceptors.response.use(
 - Marketplace de tutores externos
 - Servicios de revisión y edición profesional
 - Herramientas de presentación y defensa virtual
-- Certificaciones digitales blockchain
+- Certificaciones digitales blockchain.
 
 ### Innovaciones tecnológicas futuras
 
@@ -5943,7 +5943,7 @@ apiClient.interceptors.response.use(
 - Salas virtuales realistas para presentaciones
 - Interacción natural con documentos 3D
 - Grabación y replay de defensas
-- Reducción de barreras geográficas
+- Reducción de barreras geográficas.
 
 #### Blockchain para certificaciones
 
@@ -5951,7 +5951,7 @@ apiClient.interceptors.response.use(
 - Certificados de TFG en blockchain
 - Verificación automática de autenticidad
 - Portfolio académico descentralizado
-- Interoperabilidad global de credenciales
+- Interoperabilidad global de credenciales.
 
 ## Lecciones aprendidas
 
@@ -5961,41 +5961,41 @@ Las lecciones aprendidas abarcan tanto los aspectos técnicos como los metodoló
 
 ### Decisiones arquitectónicas acertadas
 
-**Adopción de React 19**: A pesar de ser una versión muy reciente, las funcionalidades de concurrencia y los hooks mejorados han proporcionado beneficios significativos en rendimiento y experiencia de desarrollo.
+**Adopción de React 19**: A pesar de ser una versión muy reciente, las funcionalidades de concurrencia y los hooks mejorados han proporcionado beneficios significativos en rendimiento y experiencia de desarrollo..
 
-**Context API sobre Redux**: Para el alcance de este proyecto, Context API ha demostrado ser suficiente y menos complejo que Redux, facilitando el desarrollo y mantenimiento.
+**Context API sobre Redux**: Para el alcance de este proyecto, Context API ha demostrado ser suficiente y menos complejo que Redux, facilitando el desarrollo y mantenimiento..
 
-**Symfony 6.4 LTS**: La elección de una versión LTS garantiza estabilidad y soporte a largo plazo, crítico para un sistema académico.
+**Symfony 6.4 LTS**: La elección de una versión LTS garantiza estabilidad y soporte a largo plazo, crítico para un sistema académico..
 
-**Docker/DDEV**: El entorno containerizado ha facilitado enormemente el desarrollo y será crucial para el despliegue en producción.
+**Docker/DDEV**: El entorno containerizado ha facilitado enormemente el desarrollo y será crucial para el despliegue en producción..
 
 ### Desafíos técnicos y soluciones
 
-**Gestión de archivos grandes**: Los archivos PDF de TFG pueden ser voluminosos. La implementación de upload con progress tracking y validaciones múltiples ha resuelto este desafío.
+**Gestión de archivos grandes**: Los archivos PDF de TFG pueden ser voluminosos. La implementación de upload con progress tracking y validaciones múltiples ha resuelto este desafío..
 
-**Complejidad de permisos**: El sistema de 4 roles con permisos granulares requirió un diseño cuidadoso. Los Symfony Voters proporcionaron la solución ideal.
+**Complejidad de permisos**: El sistema de 4 roles con permisos granulares requirió un diseño cuidadoso. Los Symfony Voters proporcionaron la solución ideal..
 
-**Testing de integración**: La complejidad de testing con múltiples roles y estados requirió fixtures elaborados y mocking estratégico.
+**Testing de integración**: La complejidad de testing con múltiples roles y estados requirió fixtures elaborados y mocking estratégico..
 
 ### Mejores prácticas identificadas
 
-**Desarrollo incremental**: La estrategia de 8 fases con entregas funcionales ha permitido validación temprana y ajustes continuos.
+**Desarrollo incremental**: La estrategia de 8 fases con entregas funcionales ha permitido validación temprana y ajustes continuos..
 
-**Documentación continua**: Mantener documentación técnica actualizada ha facilitado el desarrollo y será crucial para mantenimiento futuro.
+**Documentación continua**: Mantener documentación técnica actualizada ha facilitado el desarrollo y será crucial para mantenimiento futuro..
 
-**Testing desde el inicio**: Implementar testing unitario desde las primeras fases ha reducido significativamente bugs y facilitado refactoring.
+**Testing desde el inicio**: Implementar testing unitario desde las primeras fases ha reducido significativamente bugs y facilitado refactoring..
 
-**Security by design**: Considerar seguridad desde el diseño inicial ha resultado en un sistema robusto sin necesidad de parches posteriores.
+**Security by design**: Considerar seguridad desde el diseño inicial ha resultado en un sistema robusto sin necesidad de parches posteriores..
 
 ### Recomendaciones para proyectos similares
 
-**Planificación de capacidad**: Considerar desde el inicio los picos de uso estacionales (períodos de defensas).
+**Planificación de capacidad**: Considerar desde el inicio los picos de uso estacionales (períodos de defensas)..
 
-**Feedback de usuarios temprano**: Involucrar usuarios reales desde las primeras demos mejora significativamente la usabilidad final.
+**Feedback de usuarios temprano**: Involucrar usuarios reales desde las primeras demos mejora significativamente la usabilidad final..
 
-**Monitoring desde día uno**: Implementar logging y métricas desde el desarrollo facilita debugging y optimización.
+**Monitoring desde día uno**: Implementar logging y métricas desde el desarrollo facilita debugging y optimización..
 
-**Documentación como código**: Mantener documentación en el mismo repositorio que el código garantiza sincronización.
+**Documentación como código**: Mantener documentación en el mismo repositorio que el código garantiza sincronización..
 
 ## Reflexión final
 
@@ -6003,15 +6003,15 @@ Para cerrar este recorrido integral por el desarrollo de la Plataforma de Gesti�
 
 La reflexión final representa el momento de integrar todos los aprendizajes, logros y desafíos experimentados durante el proyecto, proporcionando una perspectiva holística que conecta la experiencia técnica con el crecimiento personal y profesional. Es también una oportunidad para reconocer el impacto potencial del sistema desarrollado en la comunidad académica y su contribución a la modernización de los procesos universitarios.
 
-La Plataforma de Gestión de TFG representa más que una solución técnica; es un catalizador para la modernización de procesos académicos tradicionalmente analógicos. El proyecto ha demostrado que es posible crear sistemas complejos con alta calidad técnica manteniendo un enfoque centrado en el usuario.
+La Plataforma de Gestión de TFG representa más que una solución técnica; es un catalizador para la modernización de procesos académicos tradicionalmente analógicos. El proyecto ha demostrado que es posible crear sistemas complejos con alta calidad técnica manteniendo un enfoque centrado en el usuario..
 
-El éxito del proyecto radica en la combinación de tecnologías modernas, metodologías ágiles adaptadas al contexto académico, y un diseño que prioriza la experiencia del usuario sin comprometer la seguridad o la escalabilidad.
+El éxito del proyecto radica en la combinación de tecnologías modernas, metodologías ágiles adaptadas al contexto académico, y un diseño que prioriza la experiencia del usuario sin comprometer la seguridad o la escalabilidad..
 
-La arquitectura implementada no solo resuelve las necesidades actuales, sino que establece una base sólida para futuras expansiones y mejoras. El sistema está preparado para evolucionar con las necesidades cambiantes del entorno académico y las tecnologías emergentes.
+La arquitectura implementada no solo resuelve las necesidades actuales, sino que establece una base sólida para futuras expansiones y mejoras. El sistema está preparado para evolucionar con las necesidades cambiantes del entorno académico y las tecnologías emergentes..
 
-Este proyecto sirve como ejemplo de cómo la tecnología puede transformar procesos académicos, mejorando la eficiencia operacional mientras enriquece la experiencia educativa para todos los actores involucrados.
+Este proyecto sirve como ejemplo de cómo la tecnología puede transformar procesos académicos, mejorando la eficiencia operacional mientras enriquece la experiencia educativa para todos los actores involucrados..
 
-La inversión en tiempo y recursos técnicos se justifica ampliamente por los beneficios esperados: ahorro económico, mejora en satisfacción de usuarios, modernización institucional y preparación para el futuro digital de la educación superior.
+La inversión en tiempo y recursos técnicos se justifica ampliamente por los beneficios esperados: ahorro económico, mejora en satisfacción de usuarios, modernización institucional y preparación para el futuro digital de la educación superior..
 
 
 *"La tecnología es mejor cuando acerca a las personas."* - Matt Mullenweg
@@ -6033,29 +6033,29 @@ La especificación de requisitos distingue entre entornos de desarrollo y produc
 ### A.1.1. Requisitos mínimos de hardware
 
 **Para desarrollo local:**
-- **CPU**: 4 núcleos (Intel i5 o AMD Ryzen 5 equivalente)
-- **RAM**: 8 GB mínimo, 16 GB recomendado
-- **Almacenamiento**: 50 GB de espacio libre en SSD
-- **Red**: Conexión a Internet estable (100 Mbps recomendado)
+- **CPU**: 4 núcleos (Intel i5 o AMD Ryzen 5 equivalente).
+- **RAM**: 8 GB mínimo, 16 GB recomendado.
+- **Almacenamiento**: 50 GB de espacio libre en SSD.
+- **Red**: Conexión a Internet estable (100 Mbps recomendado).
 
 **Para producción:**
-- **CPU**: 8 núcleos (Intel i7 o AMD Ryzen 7)
-- **RAM**: 16 GB mínimo, 32 GB recomendado
-- **Almacenamiento**: 200 GB SSD para sistema + almacenamiento adicional para archivos
-- **Red**: Conexión dedicada con ancho de banda adecuado
+- **CPU**: 8 núcleos (Intel i7 o AMD Ryzen 7).
+- **RAM**: 16 GB mínimo, 32 GB recomendado.
+- **Almacenamiento**: 200 GB SSD para sistema + almacenamiento adicional para archivos.
+- **Red**: Conexión dedicada con ancho de banda adecuado.
 
 ### A.1.2. Requisitos de software
 
 **Sistema operativo soportado:**
-- Windows 10/11 (desarrollo)
-- Linux Ubuntu 20.04+ (desarrollo y producción)
-- macOS 12+ (desarrollo)
+- Windows 10/11 (desarrollo).
+- Linux Ubuntu 20.04+ (desarrollo y producción).
+- macOS 12+ (desarrollo).
 
 **Software base requerido:**
-- **Docker Desktop**: Versión 4.12+
-- **Node.js**: Versión 18.x LTS
-- **Git**: Versión 2.30+
-- **Editor de código**: VS Code recomendado
+- **Docker Desktop**: Versión 4.12+.
+- **Node.js**: Versión 18.x LTS.
+- **Git**: Versión 2.30+.
+- **Editor de código**: VS Code recomendado.
 
 ## A.2. Instalación para desarrollo
 
@@ -6406,13 +6406,13 @@ php bin/console doctrine:migrations:migrate
 ```
 
 **Estructura de tablas creadas:**
-- `users` - Usuarios del sistema con roles
-- `tfgs` - Trabajos de Fin de Grado
-- `tribunales` - Tribunales evaluadores
-- `defensas` - Defensas programadas
-- `calificaciones` - Calificaciones de defensas
-- `notificaciones` - Sistema de notificaciones
-- `comentarios` - Comentarios en TFGs
+- `users` - Usuarios del sistema con roles.
+- `tfgs` - Trabajos de Fin de Grado.
+- `tribunales` - Tribunales evaluadores.
+- `defensas` - Defensas programadas.
+- `calificaciones` - Calificaciones de defensas.
+- `notificaciones` - Sistema de notificaciones.
+- `comentarios` - Comentarios en TFGs.
 
 ### A.3.3. Datos de prueba
 
@@ -6717,29 +6717,29 @@ La verificación de la instalación no solo confirma que los componentes técnic
 ### A.7.1. Checklist de verificación
 
 **✅ Entorno DDEV:**
-- [ ] DDEV instalado y funcionando
-- [ ] Proyecto iniciado sin errores
-- [ ] URLs accesibles (web, PHPMyAdmin, Mailpit)
-- [ ] Base de datos creada y accesible
+- [ ] DDEV instalado y funcionando.
+- [ ] Proyecto iniciado sin errores.
+- [ ] URLs accesibles (web, PHPMyAdmin, Mailpit).
+- [ ] Base de datos creada y accesible.
 
 **✅ Frontend:**
-- [ ] Dependencias instaladas correctamente
-- [ ] Servidor de desarrollo inicia sin errores
-- [ ] Linting y formateo funcionando
-- [ ] Tests básicos pasando
+- [ ] Dependencias instaladas correctamente.
+- [ ] Servidor de desarrollo inicia sin errores.
+- [ ] Linting y formateo funcionando.
+- [ ] Tests básicos pasando.
 
 **✅ Backend:**
-- [ ] Composer dependencies instaladas
-- [ ] Migraciones ejecutadas correctamente
-- [ ] Claves JWT generadas
-- [ ] Fixtures cargados
-- [ ] API endpoints respondiendo
+- [ ] Composer dependencies instaladas.
+- [ ] Migraciones ejecutadas correctamente.
+- [ ] Claves JWT generadas.
+- [ ] Fixtures cargados.
+- [ ] API endpoints respondiendo.
 
 **✅ Integración:**
-- [ ] Frontend puede conectar con backend
-- [ ] Autenticación JWT funcionando
-- [ ] CORS configurado correctamente
-- [ ] Logs accesibles y configurados
+- [ ] Frontend puede conectar con backend.
+- [ ] Autenticación JWT funcionando.
+- [ ] CORS configurado correctamente.
+- [ ] Logs accesibles y configurados.
 
 ### A.7.2. Script de verificación automatizada
 
