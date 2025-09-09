@@ -53,7 +53,7 @@ function DashboardAdmin({ user }) {
           Panel de Administración 🛠️
         </h1>
         <p className="text-gray-600 mt-2">
-          Bienvenido, {user.nombre}. Control general del sistema TFG
+          Bienvenido, {user?.nombre || user?.nombreCompleto || 'Administrador'}. Control general del sistema TFG
         </p>
       </div>
 

@@ -5,9 +5,9 @@ import NotificacionesDropdown from "./NotificacionesDropdown"
 function Layout({ children }) {
 	const location = useLocation()
 	const navigate = useNavigate()
-	const { user, logout } = useAuth()
+	const { user, logout, getUserRole } = useAuth()
 
-	const userRole = user?.role
+	const userRole = getUserRole()
 
 	const getNavigationItems = () => {
 		const baseItems = [
@@ -78,9 +78,10 @@ function Layout({ children }) {
 						<div className="flex items-center space-x-4">
 							<NotificacionesDropdown />
 							<span className="text-sm text-gray-500">
-								{userRole?.charAt(0).toUpperCase() +
-									userRole?.slice(1)}
-								: {user?.nombre}
+								{userRole ? (
+									userRole.charAt(0).toUpperCase() + userRole.slice(1)
+								) : 'Usuario'}
+								: {user?.nombre || user?.nombreCompleto || 'Usuario'}
 							</span>
 							<button
 								onClick={() => {
