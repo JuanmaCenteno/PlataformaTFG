@@ -2,6 +2,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage[spanish,english]{babel}
 \renewcommand{\chaptername}{Capítulo}
+\renewcommand{\figurename}{Figura}
 \usepackage[margin=2.5cm,top=3cm,bottom=3cm]{geometry}
 \usepackage{fancyhdr}
 \usepackage{graphicx}
@@ -3702,6 +3703,155 @@ Defensas}\label{wireframe---calendario-de-defensas}
 │ └─────────────────────────────────────────────────────────┘ │
 └─────────────────────────────────────────────────────────────┘
 \end{lstlisting}
+
+\subsection{Interfaces de usuario implementadas}\label{interfaces-de-usuario-implementadas}
+
+Una vez establecidos los fundamentos del diseño de la interfaz de usuario, es fundamental presentar las interfaces finales implementadas que materializan todos los conceptos y patrones de diseño descritos anteriormente. Esta sección documenta las pantallas principales del sistema, organizadas por roles de usuario, mostrando cómo se aplican los principios de usabilidad, accesibilidad y consistencia visual en cada una de las funcionalidades implementadas.
+
+Las interfaces presentadas a continuación representan el resultado de un proceso iterativo de diseño centrado en el usuario, donde cada pantalla ha sido optimizada para las tareas específicas de cada rol, manteniendo la coherencia del sistema de diseño establecido y garantizando una experiencia de usuario intuitiva y eficiente.
+
+\subsubsection{Dashboard de Estudiante}\label{dashboard-de-estudiante}
+
+El dashboard del estudiante constituye el punto central de interacción para los usuarios con rol de estudiante, proporcionando acceso directo a las funcionalidades principales del ciclo de vida del TFG. La interfaz implementa un diseño limpio y funcional que facilita la navegación y el seguimiento del progreso académico, como se muestra en la Figura~\ref{fig:dashboard-estudiante}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{PATH_TO_DASHBOARD_ESTUDIANTE_SCREENSHOT}
+\caption{Dashboard principal del estudiante con overview del TFG y navegación}
+\label{fig:dashboard-estudiante}
+\end{figure}
+
+El dashboard presenta elementos clave como el estado actual del TFG, notificaciones relevantes, accesos directos a las funciones más utilizadas y un resumen del progreso académico. La interfaz utiliza cards informativos que organizan la información de manera jerárquica, permitiendo al estudiante obtener una visión general rápida de su situación académica.
+
+\subsubsection{Gestión de TFG - Vista de Estudiante}\label{gestion-de-tfg---vista-de-estudiante}
+
+La interfaz de gestión de TFG para estudiantes proporciona las herramientas necesarias para la carga, edición y seguimiento de los trabajos de fin de grado. Esta pantalla integra funcionalidades de upload de archivos, edición de metadatos y visualización del historial de revisiones, tal como se presenta en la Figura~\ref{fig:gestion-tfg-estudiante}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{PATH_TO_GESTION_TFG_ESTUDIANTE_SCREENSHOT}
+\caption{Interfaz de gestión de TFG para estudiantes con formularios de carga y metadatos}
+\label{fig:gestion-tfg-estudiante}
+\end{figure}
+
+La interfaz incluye un sistema de drag-and-drop para la carga de documentos PDF, campos estructurados para título, resumen y palabras clave, así como indicadores visuales del progreso de carga y validación de archivos. El diseño responsivo garantiza una experiencia óptima tanto en dispositivos de escritorio como móviles.
+
+\subsubsection{Sistema de Notificaciones}\label{sistema-de-notificaciones}
+
+El sistema de notificaciones implementa un enfoque no intrusivo que mantiene a los usuarios informados sobre eventos relevantes sin interrumpir su flujo de trabajo. La interfaz combina notificaciones in-app con indicadores visuales sutiles, como se observa en la Figura~\ref{fig:sistema-notificaciones}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{PATH_TO_SISTEMA_NOTIFICACIONES_SCREENSHOT}
+\caption{Sistema de notificaciones con dropdown y estados de lectura}
+\label{fig:sistema-notificaciones}
+\end{figure}
+
+Las notificaciones se categorizan por tipo (información, éxito, advertencia, error) utilizando el sistema de colores semánticos establecido, facilitando la comprensión inmediata del tipo de mensaje. El dropdown de notificaciones incluye funcionalidades de filtrado, marcado como leído y navegación directa a las secciones relevantes.
+
+\subsubsection{Dashboard de Profesor}\label{dashboard-de-profesor}
+
+La interfaz del profesor está diseñada para facilitar la supervisión eficiente de múltiples TFGs asignados, proporcionando herramientas de gestión, evaluación y comunicación con estudiantes. El dashboard presenta una vista organizada de los trabajos pendientes de revisión y las tareas prioritarias, como se ilustra en la Figura~\ref{fig:dashboard-profesor}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{PATH_TO_DASHBOARD_PROFESOR_SCREENSHOT}
+\caption{Dashboard del profesor con lista de TFGs asignados y estados de revisión}
+\label{fig:dashboard-profesor}
+\end{figure}
+
+El diseño incluye filtros avanzados para organizar los TFGs por estado, fecha de envío o prioridad, así como acciones rápidas para cambios de estado y redacción de comentarios. La interfaz utiliza indicadores visuales claros para distinguir entre trabajos que requieren atención inmediata y aquellos en proceso normal.
+
+\subsubsection{Sistema de Evaluación y Feedback}\label{sistema-de-evaluacion-y-feedback}
+
+La interfaz de evaluación proporciona a los profesores herramientas completas para la revisión y calificación de los TFGs, incluyendo formularios estructurados de evaluación y sistemas de comentarios contextuales, tal como se presenta en la Figura~\ref{fig:sistema-evaluacion}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{PATH_TO_SISTEMA_EVALUACION_SCREENSHOT}
+\caption{Sistema de evaluación con formularios de calificación y comentarios}
+\label{fig:sistema-evaluacion}
+\end{figure}
+
+La interfaz integra formularios dinámicos que se adaptan a diferentes criterios de evaluación, sistemas de puntuación configurable y herramientas de texto enriquecido para comentarios detallados. El diseño facilita la navegación entre diferentes secciones del documento mientras se mantiene el contexto de evaluación.
+
+\subsubsection{Gestión de Tribunales}\label{gestion-de-tribunales}
+
+La interfaz de gestión de tribunales, accesible para usuarios con rol de presidente de tribunal, proporciona herramientas completas para la creación, configuración y administración de tribunales de evaluación. La pantalla integra funcionalidades de asignación de miembros y gestión de disponibilidad, como se muestra en la Figura~\ref{fig:gestion-tribunales}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{PATH_TO_GESTION_TRIBUNALES_SCREENSHOT}
+\caption{Interfaz de gestión de tribunales con asignación de miembros y disponibilidad}
+\label{fig:gestion-tribunales}
+\end{figure}
+
+La interfaz incluye herramientas de búsqueda y filtrado para la selección de profesores, validación automática de conflictos de horario y visualización de la carga de trabajo de cada miembro potencial. El diseño facilita la toma de decisiones informadas en la composición de tribunales.
+
+\subsubsection{Calendario de Defensas}\label{calendario-de-defensas}
+
+La implementación del calendario de defensas utiliza FullCalendar.js para proporcionar una interfaz interactiva y eficiente para la programación y gestión de defensas de TFG. La interfaz combina vistas de calendario con herramientas de gestión avanzada, tal como se presenta en la Figura~\ref{fig:calendario-defensas}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{PATH_TO_CALENDARIO_DEFENSAS_SCREENSHOT}
+\caption{Calendario interactivo de defensas con programación y gestión de eventos}
+\label{fig:calendario-defensas}
+\end{figure}
+
+El calendario implementa funcionalidades de arrastrar y soltar para reprogramación rápida, vistas múltiples (mensual, semanal, diaria), filtros por tribunal o estudiante, y modales contextuales para edición rápida de eventos. La interfaz incluye validaciones automáticas para evitar conflictos de programación.
+
+\subsubsection{Panel de Administración}\label{panel-de-administracion}
+
+El panel de administración proporciona a los administradores del sistema herramientas completas para la gestión de usuarios, configuración del sistema y generación de reportes. La interfaz implementa un diseño dashboard con métricas clave y accesos directos a funcionalidades administrativas, como se observa en la Figura~\ref{fig:panel-administracion}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{PATH_TO_PANEL_ADMINISTRACION_SCREENSHOT}
+\caption{Panel de administración con métricas del sistema y herramientas de gestión}
+\label{fig:panel-administracion}
+\end{figure}
+
+El panel incluye widgets informativos con estadísticas en tiempo real, gráficos interactivos para visualización de tendencias y accesos directos a las funcionalidades administrativas más utilizadas. La interfaz utiliza un sistema de permisos granular que adapta las opciones disponibles según el nivel de acceso del usuario.
+
+\subsubsection{Gestión de Usuarios}\label{gestion-de-usuarios}
+
+La interfaz de gestión de usuarios implementa funcionalidades completas de CRUD (crear, leer, actualizar, eliminar) para la administración de usuarios del sistema. La pantalla proporciona herramientas de búsqueda avanzada, filtrado por roles y edición masiva, tal como se presenta en la Figura~\ref{fig:gestion-usuarios}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{PATH_TO_GESTION_USUARIOS_SCREENSHOT}
+\caption{Interfaz de gestión de usuarios con CRUD completo y asignación de roles}
+\label{fig:gestion-usuarios}
+\end{figure}
+
+La interfaz incluye tablas de datos avanzadas con paginación eficiente, ordenamiento múltiple, filtros dinámicos y acciones en lote. Los formularios de edición implementan validaciones en tiempo real y feedback inmediato para mejorar la experiencia del administrador.
+
+\subsubsection{Sistema de Reportes y Estadísticas}\label{sistema-de-reportes-y-estadisticas}
+
+La implementación del sistema de reportes combina visualización de datos interactiva con herramientas de exportación flexibles, proporcionando a los administradores insights valiosos sobre el rendimiento del sistema y tendencias académicas, como se muestra en la Figura~\ref{fig:sistema-reportes}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{PATH_TO_SISTEMA_REPORTES_SCREENSHOT}
+\caption{Sistema de reportes con gráficos interactivos y opciones de exportación}
+\label{fig:sistema-reportes}
+\end{figure}
+
+La interfaz integra gráficos dinámicos construidos con bibliotecas de visualización modernas, filtros temporales y de categoría, así como opciones de exportación en múltiples formatos (PDF, Excel, CSV). El diseño responsivo garantiza la correcta visualización de gráficos complejos en diferentes tamaños de pantalla.
+
+\subsubsection{Diseño Responsive y Adaptabilidad}\label{diseno-responsive-y-adaptabilidad}
+
+Todas las interfaces implementadas siguen principios de diseño responsive que garantizan una experiencia óptima en dispositivos de diferentes tamaños. La adaptabilidad del sistema se demuestra en la transición fluida entre las versiones de escritorio y móvil, como se ilustra en la Figura~\ref{fig:responsive-design}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{PATH_TO_RESPONSIVE_DESIGN_SCREENSHOT}
+\caption{Comparativa del diseño responsive entre versiones desktop, tablet y móvil}
+\label{fig:responsive-design}
+\end{figure}
+
+La implementación responsive utiliza breakpoints estratégicos que reorganizan el contenido de manera inteligente, colapsando navegaciones en menús hamburguesa, adaptando tablas complejas a formatos de cards en móviles y optimizando formularios para interacción táctil. El sistema mantiene la funcionalidad completa independientemente del dispositivo utilizado.
 
 \chapter{Implementación}\label{implementaciuxf3n}
 Tras haber completado las fases de análisis y diseño del sistema,
