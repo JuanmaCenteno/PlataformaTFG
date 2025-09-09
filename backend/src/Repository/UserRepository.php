@@ -47,10 +47,10 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $qb = $this->createQueryBuilder('u')
             ->orderBy('u.createdAt', 'DESC');
 
-        // Filtro por rol
+        // Filtro por rol - Compatibilidad con MySQL sin JSON_CONTAINS
         if ($role) {
-            $qb->andWhere('JSON_CONTAINS(u.roles, :role) = 1')
-               ->setParameter('role', json_encode($role));
+            $qb->andWhere('u.roles LIKE :role')
+               ->setParameter('role', '%"' . $role . '"%');
         }
 
         // Filtro por estado activo
@@ -88,8 +88,8 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     public function findByRole(string $role, bool $activeOnly = true): array
     {
         $qb = $this->createQueryBuilder('u')
-            ->where('JSON_CONTAINS(u.roles, :role) = 1')
-            ->setParameter('role', json_encode($role))
+            ->where('u.roles LIKE :role')
+            ->setParameter('role', '%"' . $role . '"%')
             ->orderBy('u.apellidos', 'ASC')
             ->addOrderBy('u.nombre', 'ASC');
 
@@ -353,8 +353,8 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
         // Aplicar filtros
         if (!empty($filters['role'])) {
-            $qb->andWhere('JSON_CONTAINS(u.roles, :role) = 1')
-               ->setParameter('role', json_encode($filters['role']));
+            $qb->andWhere('u.roles LIKE :role')
+               ->setParameter('role', '%"' . $filters['role'] . '"%');
         }
 
         if (isset($filters['activo'])) {

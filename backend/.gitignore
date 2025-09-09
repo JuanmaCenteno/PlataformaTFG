@@ -9,6 +9,12 @@
 /vendor/
 ###< symfony/framework-bundle ###
 
+# Forzar ignorar archivos específicos del vendor
+/vendor/composer/autoload_psr4.php
+/vendor/composer/autoload_static.php
+/vendor/composer/installed.json
+/vendor/composer/installed.php
+
 ###> phpunit/phpunit ###
 /phpunit.xml
 /.phpunit.cache/
@@ -26,3 +32,56 @@
 ###> liip/imagine-bundle ###
 /public/media/cache/
 ###< liip/imagine-bundle ###
+
+# =====================================================
+# ARCHIVOS GENERADOS POR TESTS Y DESARROLLO
+# =====================================================
+
+# Python cache y archivos temporales de tests
+tests/**/__pycache__/
+tests/**/*.pyc
+tests/**/*.pyo
+tests/**/*.pyd
+tests/**/test_data_ids.txt
+tests/**/FAILURE_REPORT.md
+tests/**/DETAILED_FAILURE_REPORT.md
+/tmp/tfg_test_tokens.json
+
+# Logs de la aplicación
+*.log
+/var/log/*.log
+
+# Archivos del sistema operativo
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDEs y editores
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.settings/
+.metadata
+
+# Archivos temporales
+*.tmp
+*.temp
+*.cache
+*.pid
+*.lock
+
+# Coverage reports
+coverage/
+.coverage
+htmlcov/
+
+# Archivos de configuración local
+.env.test.local
+config/jwt/test_*.pem

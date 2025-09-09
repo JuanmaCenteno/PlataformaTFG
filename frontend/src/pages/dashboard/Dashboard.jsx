@@ -4,10 +4,10 @@ import DashboardProfesor from '../../components/dashboards/DashboardProfesor'
 import DashboardAdmin from '../../components/dashboards/DashboardAdmin'
 
 function Dashboard() {
-  const { user } = useAuth()
+  const { user, getUserRole } = useAuth()
 
   // Mostrar dashboard según el rol del usuario
-  switch (user?.role) {
+  switch (getUserRole()) {
     case 'estudiante':
       return <DashboardEstudiante user={user} />
     case 'profesor':

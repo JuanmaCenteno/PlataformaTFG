@@ -19,27 +19,15 @@ use ApiPlatform\Doctrine\Orm\Filter\DateFilter;
 use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 
 #[ORM\Entity(repositoryClass: DefensaRepository::class)]
-#[ApiResource(
-    operations: [
-        new GetCollection(
-            uriTemplate: '/defensas',
-            security: "is_granted('ROLE_PRESIDENTE_TRIBUNAL') or is_granted('ROLE_ADMIN')",
-            paginationEnabled: true,
-            paginationItemsPerPage: 10
-        ),
-        new Get(),
-        new Post(
-            security: "is_granted('ROLE_PRESIDENTE_TRIBUNAL') or is_granted('ROLE_ADMIN')"
-        ),
-        new Put(
-            security: "is_granted('ROLE_PRESIDENTE_TRIBUNAL') or is_granted('ROLE_ADMIN')"
-        )
-    ],
-    normalizationContext: ['groups' => ['defensa:read']],
-    denormalizationContext: ['groups' => ['defensa:write']]
-)]
-#[ApiFilter(DateFilter::class, properties: ['fecha_defensa'])]
-#[ApiFilter(OrderFilter::class, properties: ['fecha_defensa' => 'ASC'])]
+// Deshabilitado ApiResource para usar controlador personalizado
+// #[ApiResource(
+//     operations: [],
+//     normalizationContext: ['groups' => ['defensa:read']],
+//     denormalizationContext: ['groups' => ['defensa:write']],
+//     formats: ['json' => ['application/json']]
+// )]
+// #[ApiFilter(DateFilter::class, properties: ['fecha_defensa'])]
+// #[ApiFilter(OrderFilter::class, properties: ['fecha_defensa' => 'ASC'])]
 #[ORM\Table(name: 'defensas')]
 #[ORM\HasLifecycleCallbacks]
 class Defensa

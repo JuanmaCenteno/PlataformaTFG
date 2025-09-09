@@ -14,10 +14,24 @@ api_platform:
         pagination_client_items_per_page: true
         pagination_fetch_join_collection: true
     
-    # Formatos de serialización
+    # Deshabilitar JSON-LD completamente y usar solo JSON
     formats:
         json: ['application/json']
+    
+    patch_formats:
+        json: ['application/json']
+    
+    # Deshabilitar JSON-LD en documentación y errores
+    docs_formats:
+        json: ['application/json']
         html: ['text/html']
+    
+    error_formats:
+        json: ['application/json']
+    
+    # Configuración adicional para forzar JSON
+    doctrine:
+        enabled: true
         
     # Configuración de documentación
     swagger:

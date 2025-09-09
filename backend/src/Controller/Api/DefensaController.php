@@ -22,7 +22,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 #[Route('/api/defensas')]
-#[IsGranted('ROLE_PROFESOR')]
+#[IsGranted('ROLE_USER')]
 class DefensaController extends AbstractController
 {
     public function __construct(

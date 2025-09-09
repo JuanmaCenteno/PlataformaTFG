@@ -28,20 +28,25 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
             uriTemplate: '/tfgs',
             security: "is_granted('ROLE_ADMIN')",
             paginationEnabled: true,
-            paginationItemsPerPage: 20
+            paginationItemsPerPage: 20,
+            formats: ['json' => ['application/json']]
         ),
         new Get(
-            security: "is_granted('ROLE_ADMIN') or (is_granted('ROLE_ESTUDIANTE') and object.getEstudiante() == user) or (is_granted('ROLE_PROFESOR') and object.getTutor() == user)"
+            security: "is_granted('ROLE_ADMIN') or (is_granted('ROLE_ESTUDIANTE') and object.getEstudiante() == user) or (is_granted('ROLE_PROFESOR') and object.getTutor() == user)",
+            formats: ['json' => ['application/json']]
         ),
         new Post(
-            security: "is_granted('ROLE_ESTUDIANTE')"
+            security: "is_granted('ROLE_ESTUDIANTE')",
+            formats: ['json' => ['application/json']]
         ),
         new Put(
-            security: "is_granted('ROLE_ADMIN') or (is_granted('ROLE_ESTUDIANTE') and object.getEstudiante() == user)"
+            security: "is_granted('ROLE_ADMIN') or (is_granted('ROLE_ESTUDIANTE') and object.getEstudiante() == user)",
+            formats: ['json' => ['application/json']]
         )
     ],
     normalizationContext: ['groups' => ['tfg:read']],
-    denormalizationContext: ['groups' => ['tfg:write']]
+    denormalizationContext: ['groups' => ['tfg:write']],
+    formats: ['json' => ['application/json']]
 )]
 #[ApiFilter(SearchFilter::class, properties: [
     'titulo' => 'partial',
@@ -87,7 +92,7 @@ class TFG
 
     #[Groups(['tfg:read'])]
     #[ORM\ManyToOne(targetEntity: User::class)]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?User $tutor = null;
 
     #[Groups(['tfg:read'])]

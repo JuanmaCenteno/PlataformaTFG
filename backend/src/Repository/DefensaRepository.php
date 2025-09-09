@@ -163,10 +163,10 @@ class DefensaRepository extends ServiceEntityRepository
             // Si no es admin, solo ver defensas donde participa
             $qb->andWhere(
                 'd.tfg IN (
-                    SELECT tfg FROM App\Entity\TFG tfg 
-                    WHERE tfg.estudiante = :usuario 
-                    OR tfg.tutor = :usuario 
-                    OR tfg.cotutor = :usuario
+                    SELECT tfg2.id FROM App\Entity\TFG tfg2 
+                    WHERE tfg2.estudiante = :usuario 
+                    OR tfg2.tutor = :usuario 
+                    OR tfg2.cotutor = :usuario
                 ) OR tr.presidente = :usuario OR tr.secretario = :usuario OR tr.vocal = :usuario'
             )->setParameter('usuario', $usuario);
         }
@@ -190,14 +190,12 @@ class DefensaRepository extends ServiceEntityRepository
             ->where('d.tribunal = :tribunal')
             ->andWhere('d.estado != :cancelada')
             ->andWhere(
-                '(d.fechaDefensa BETWEEN :fechaInicio AND :fechaFin) OR 
-                 (:fechaDefensa BETWEEN d.fechaDefensa AND DATE_ADD(d.fechaDefensa, INTERVAL d.duracionEstimada MINUTE))'
+                '(d.fechaDefensa BETWEEN :fechaInicio AND :fechaFin)'
             )
             ->setParameter('tribunal', $tribunal)
             ->setParameter('cancelada', 'cancelada')
             ->setParameter('fechaInicio', $fechaInicio)
             ->setParameter('fechaFin', $fechaFin)
-            ->setParameter('fechaDefensa', $fechaDefensa)
             ->setMaxResults(1);
 
         if ($excludeDefensaId) {
@@ -224,14 +222,12 @@ class DefensaRepository extends ServiceEntityRepository
             ->where('d.aula = :aula')
             ->andWhere('d.estado != :cancelada')
             ->andWhere(
-                '(d.fechaDefensa BETWEEN :fechaInicio AND :fechaFin) OR 
-                 (:fechaDefensa BETWEEN d.fechaDefensa AND DATE_ADD(d.fechaDefensa, INTERVAL d.duracionEstimada MINUTE))'
+                '(d.fechaDefensa BETWEEN :fechaInicio AND :fechaFin)'
             )
             ->setParameter('aula', $aula)
             ->setParameter('cancelada', 'cancelada')
             ->setParameter('fechaInicio', $fechaInicio)
             ->setParameter('fechaFin', $fechaFin)
-            ->setParameter('fechaDefensa', $fechaDefensa)
             ->setMaxResults(1);
 
         if ($excludeDefensaId) {
