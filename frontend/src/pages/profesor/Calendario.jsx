@@ -27,6 +27,8 @@ function Calendario() {
   } = useCalendario()
 
   const [defensas, setDefensas] = useState([])
+  const [loadingLocal, setLoadingLocal] = useState(false)
+  const [loadingModal, setLoadingModal] = useState(false)
   const [modalActivo, setModalActivo] = useState(null)
   const [conflictosDetectados, setConflictosDetectados] = useState([])
   const [mostrarAlertaConflictos, setMostrarAlertaConflictos] = useState(false)
@@ -36,15 +38,23 @@ function Calendario() {
   const [filtros, setFiltros] = useState({
     miRol: 'todos', // todos, presidente, vocal
     estado: 'todos', // todos, programado, completado
-    periodo: 'proximo' // proximo, pasado, todos
+    periodo: 'todos' // proximo, pasado, todos - CAMBIADO A 'todos' para mostrar todas las defensas
   })
   const [eventoSeleccionado, setEventoSeleccionado] = useState(null)
+  const [formDefensa, setFormDefensa] = useState({
+    tfgId: '',
+    fecha: '',
+    hora: '',
+    duracion: '60',
+    aula: '',
+    tribunal: '',
+    observaciones: ''
+  })
   const calendarRef = useRef(null)
 
-  // Simular carga de defensas
-  useEffect(() => {
-    const cargarDefensas = async () => {
-      setLoading(true)
+  // Función para cargar defensas
+  const cargarDefensas = async () => {
+      setLoadingLocal(true)
       await new Promise(resolve => setTimeout(resolve, 1000))
       
       const defensasData = [
@@ -155,9 +165,11 @@ function Calendario() {
       ]
       
       setDefensas(defensasData)
-      setLoading(false)
+      setLoadingLocal(false)
     }
 
+  // Cargar defensas al montar el componente
+  useEffect(() => {
     cargarDefensas()
   }, [])
 
@@ -172,7 +184,7 @@ function Calendario() {
     }
     
     // Filtro por estado
-    if (filtros.estado !== 'todos' && defensa.estado.toLowerCase() !== filtros.estado) {
+    if (filtros.estado !== 'todos' && defensa.estado.toLowerCase() !== filtros.estado.toLowerCase()) {
       return false
     }
     
@@ -186,6 +198,26 @@ function Calendario() {
     
     return true
   })
+
+  // Colores según el estado
+  const obtenerColorEstado = (estado) => {
+    switch (estado) {
+      case 'Programado': return '#10b981' // green-500
+      case 'En curso': return '#f59e0b' // yellow-500
+      case 'Completado': return '#6b7280' // gray-500
+      case 'Cancelado': return '#ef4444' // red-500
+      default: return '#3b82f6' // blue-500
+    }
+  }
+
+  // Colores según el rol (para el borde)
+  const obtenerColorRol = (rol) => {
+    switch (rol) {
+      case 'Presidente': return '#1d4ed8' // blue-700
+      case 'Vocal': return '#7c3aed' // purple-600
+      default: return '#374151' // gray-700
+    }
+  }
 
   // Convertir defensas a eventos de FullCalendar
   const eventos = defensasFiltradas.map(defensa => {
@@ -211,26 +243,6 @@ function Calendario() {
       }
     }
   })
-
-  // Colores según el estado
-  const obtenerColorEstado = (estado) => {
-    switch (estado) {
-      case 'Programado': return '#10b981' // green-500
-      case 'En curso': return '#f59e0b' // yellow-500
-      case 'Completado': return '#6b7280' // gray-500
-      case 'Cancelado': return '#ef4444' // red-500
-      default: return '#3b82f6' // blue-500
-    }
-  }
-
-  // Colores según el rol (para el borde)
-  const obtenerColorRol = (rol) => {
-    switch (rol) {
-      case 'Presidente': return '#1d4ed8' // blue-700
-      case 'Vocal': return '#7c3aed' // purple-600
-      default: return '#374151' // gray-700
-    }
-  }
 
   // Manejar clic en evento
   const handleEventClick = (clickInfo) => {
@@ -390,7 +402,19 @@ function Calendario() {
               Hoy
             </button>
             <button
-              onClick={() => setModalActivo({ tipo: 'programar' })}
+              onClick={() => {
+                // Resetear formulario al abrir el modal
+                setFormDefensa({
+                  tfgId: '',
+                  fecha: '',
+                  hora: '10:00',
+                  duracion: '60',
+                  aula: '',
+                  tribunal: '',
+                  observaciones: ''
+                })
+                setModalActivo({ tipo: 'programar' })
+              }}
               className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 flex items-center space-x-2"
             >
               <span>➕</span>
@@ -807,7 +831,7 @@ function Calendario() {
 
       {/* Modal para programar defensa */}
       {modalActivo?.tipo === 'programar' && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full" style={{ zIndex: 9999 }}>
           <div className="relative top-10 mx-auto p-5 border w-full max-w-2xl shadow-lg rounded-md bg-white">
             <div className="mt-3">
               <h3 className="text-lg font-medium text-gray-900 mb-6">
@@ -819,7 +843,11 @@ function Calendario() {
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     TFG a Defender
                   </label>
-                  <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                  <select 
+                    value={formDefensa.tfgId}
+                    onChange={(e) => setFormDefensa(prev => ({ ...prev, tfgId: e.target.value }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
                     <option value="">Seleccionar TFG...</option>
                     <option value="1">Sistema de Gestión de TFGs - Juan Pérez</option>
                     <option value="2">App Móvil de Entregas - María Silva</option>
@@ -834,7 +862,8 @@ function Calendario() {
                     </label>
                     <input
                       type="date"
-                      defaultValue={modalActivo.fechaSugerida}
+                      value={formDefensa.fecha}
+                      onChange={(e) => setFormDefensa(prev => ({ ...prev, fecha: e.target.value }))}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
@@ -844,7 +873,8 @@ function Calendario() {
                     </label>
                     <input
                       type="time"
-                      defaultValue={modalActivo.horaSugerida || "10:00"}
+                      value={formDefensa.hora}
+                      onChange={(e) => setFormDefensa(prev => ({ ...prev, hora: e.target.value }))}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
                   </div>
@@ -855,9 +885,13 @@ function Calendario() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Duración (minutos)
                     </label>
-                    <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <select 
+                      value={formDefensa.duracion}
+                      onChange={(e) => setFormDefensa(prev => ({ ...prev, duracion: e.target.value }))}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
                       <option value="45">45 minutos</option>
-                      <option value="60" selected>60 minutos</option>
+                      <option value="60">60 minutos</option>
                       <option value="90">90 minutos</option>
                     </select>
                   </div>
@@ -865,7 +899,11 @@ function Calendario() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Aula
                     </label>
-                    <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <select 
+                      value={formDefensa.aula}
+                      onChange={(e) => setFormDefensa(prev => ({ ...prev, aula: e.target.value }))}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
                       <option value="">Seleccionar aula...</option>
                       <option value="Aula 101">Aula 101</option>
                       <option value="Aula 102">Aula 102</option>
@@ -880,7 +918,11 @@ function Calendario() {
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Tribunal Asignado
                   </label>
-                  <select className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                  <select 
+                    value={formDefensa.tribunal}
+                    onChange={(e) => setFormDefensa(prev => ({ ...prev, tribunal: e.target.value }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
                     <option value="">Seleccionar tribunal...</option>
                     <option value="1">Tribunal TFG - Desarrollo Web</option>
                     <option value="2">Tribunal TFG - Inteligencia Artificial</option>
@@ -893,6 +935,8 @@ function Calendario() {
                     Observaciones (opcional)
                   </label>
                   <textarea
+                    value={formDefensa.observaciones}
+                    onChange={(e) => setFormDefensa(prev => ({ ...prev, observaciones: e.target.value }))}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     rows={3}
                     placeholder="Notas adicionales sobre la defensa..."
@@ -913,20 +957,100 @@ function Calendario() {
 
               <div className="flex justify-end space-x-3 mt-6">
                 <button
-                  onClick={() => setModalActivo(null)}
+                  onClick={() => {
+                    setModalActivo(null)
+                    // Resetear formulario al cancelar
+                    setFormDefensa({
+                      tfgId: '',
+                      fecha: '',
+                      hora: '10:00',
+                      duracion: '60',
+                      aula: '',
+                      tribunal: '',
+                      observaciones: ''
+                    })
+                  }}
                   className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400"
                 >
                   Cancelar
                 </button>
                 <button 
-                  onClick={() => {
-                    // Aquí iría la lógica para crear la defensa
-                    console.log('Programando nueva defensa')
-                    setModalActivo(null)
+                  onClick={async () => {
+                    try {
+                      // Validar campos requeridos
+                      if (!formDefensa.tfgId || !formDefensa.fecha || !formDefensa.hora || !formDefensa.aula) {
+                        mostrarNotificacion('Por favor, completa todos los campos requeridos', 'error')
+                        return
+                      }
+
+                      setLoadingModal(true)
+                      
+                      // Crear nueva defensa con los datos del formulario
+                      const nuevaDefensa = {
+                        id: Date.now(), // ID temporal
+                        titulo: formDefensa.tfgId === '1' ? "Sistema de Gestión de TFGs con React y Symfony" :
+                               formDefensa.tfgId === '2' ? "App Móvil de Entregas" :
+                               formDefensa.tfgId === '3' ? "IA para Diagnóstico" : "TFG Nuevo",
+                        estudiante: {
+                          nombre: formDefensa.tfgId === '1' ? "Juan Pérez" :
+                                 formDefensa.tfgId === '2' ? "María Silva" :
+                                 formDefensa.tfgId === '3' ? "Carlos Ruiz" : "Estudiante",
+                          email: `estudiante${formDefensa.tfgId}@uni.es`
+                        },
+                        fecha: `${formDefensa.fecha}T${formDefensa.hora}:00Z`,
+                        duracion: parseInt(formDefensa.duracion),
+                        aula: formDefensa.aula,
+                        estado: "Programado",
+                        tribunal: {
+                          id: parseInt(formDefensa.tribunal) || 1,
+                          nombre: formDefensa.tribunal === '1' ? "Tribunal TFG - Desarrollo Web" :
+                                 formDefensa.tribunal === '2' ? "Tribunal TFG - Inteligencia Artificial" :
+                                 formDefensa.tribunal === '3' ? "Tribunal TFG - Desarrollo Móvil" : "Tribunal TFG",
+                          presidente: "Dr. María García",
+                          vocales: ["Dr. Carlos López", "Dra. Ana Martín"]
+                        },
+                        miRol: "Presidente",
+                        tutor: "Dr. Carlos López",
+                        tipo: "TFG",
+                        observaciones: formDefensa.observaciones,
+                        documentos: []
+                      }
+                      
+                      // Simular delay de API
+                      await new Promise(resolve => setTimeout(resolve, 1000))
+                      
+                      // Agregar la nueva defensa al estado actual
+                      setDefensas(prev => [...prev, nuevaDefensa])
+                      
+                      mostrarNotificacion('Defensa programada correctamente', 'success')
+                      
+                      // Resetear formulario
+                      setFormDefensa({
+                        tfgId: '',
+                        fecha: '',
+                        hora: '',
+                        duracion: '60',
+                        aula: '',
+                        tribunal: '',
+                        observaciones: ''
+                      })
+                      
+                      setModalActivo(null)
+                    } catch (error) {
+                      console.error('Error al programar defensa:', error)
+                      mostrarNotificacion('Error al programar la defensa', 'error')
+                    } finally {
+                      setLoadingModal(false)
+                    }
                   }}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+                  disabled={loadingModal}
+                  className={`px-4 py-2 rounded-md ${
+                    loadingModal 
+                      ? 'bg-gray-400 cursor-not-allowed' 
+                      : 'bg-blue-600 hover:bg-blue-700'
+                  } text-white`}
                 >
-                  Programar Defensa
+                  {loadingModal ? 'Programando...' : 'Programar Defensa'}
                 </button>
               </div>
             </div>

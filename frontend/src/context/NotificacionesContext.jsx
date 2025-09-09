@@ -15,6 +15,7 @@ export const useNotificaciones = () => {
 export const NotificacionesProvider = ({ children }) => {
 	const [notificaciones, setNotificaciones] = useState([])
 	const [noLeidas, setNoLeidas] = useState(0)
+	const [toast, setToast] = useState(null)
 
 	// Simular notificaciones iniciales
 	useEffect(() => {
@@ -99,17 +100,56 @@ export const NotificacionesProvider = ({ children }) => {
 		}
 	}
 
+	const mostrarNotificacion = (mensaje, tipo = 'info', duracion = 3000) => {
+		const nuevaToast = {
+			id: Date.now(),
+			mensaje,
+			tipo, // 'success', 'error', 'warning', 'info'
+			timestamp: Date.now()
+		}
+		
+		setToast(nuevaToast)
+		
+		// Auto-dismiss después de la duración especificada
+		setTimeout(() => {
+			setToast(null)
+		}, duracion)
+	}
+
 	const value = {
 		notificaciones,
 		noLeidas,
 		marcarComoLeida,
 		marcarTodasComoLeidas,
 		eliminarNotificacion,
+		mostrarNotificacion,
+		toast
 	}
 
 	return (
 		<NotificacionesContext.Provider value={value}>
 			{children}
+			{/* Toast notification */}
+			{toast && (
+				<div className="fixed top-4 right-4 z-50 max-w-sm">
+					<div className={`px-4 py-3 rounded-lg shadow-lg border-l-4 ${
+						toast.tipo === 'success' ? 'bg-green-100 border-green-500 text-green-800' :
+						toast.tipo === 'error' ? 'bg-red-100 border-red-500 text-red-800' :
+						toast.tipo === 'warning' ? 'bg-yellow-100 border-yellow-500 text-yellow-800' :
+						'bg-blue-100 border-blue-500 text-blue-800'
+					}`}>
+						<div className="flex items-center justify-between">
+							<p className="font-medium">{toast.mensaje}</p>
+							<button 
+								onClick={() => setToast(null)}
+								className="ml-3 text-lg font-bold opacity-70 hover:opacity-100"
+							>
+								×
+							</button>
+						</div>
+					</div>
+				</div>
+			)}
 		</NotificacionesContext.Provider>
 	)
 }

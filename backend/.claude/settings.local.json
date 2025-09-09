@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Users/juanariza/Juanma/plataforma-tfg/scripts/**)",
+      "Read(//Users/juanariza/Juanma/plataforma-tfg/**)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
