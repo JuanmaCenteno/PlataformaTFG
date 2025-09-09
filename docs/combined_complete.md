@@ -1,5 +1,9 @@
 # Visión general del proyecto
 
+En este capítulo se ofrecerá una visión general del proyecto desarrollado, abarcando desde la motivación que llevó a su concepción hasta los objetivos que pretende cumplir y el alcance del mismo. Se presenta también una visión general de la estructura y los contenidos del presente documento, los estándares que sigue y las convenciones utilizadas en su redacción. Por último, se incluye la definición de los conceptos más relevantes del proyecto.
+
+El desarrollo de esta plataforma de gestión de TFG surge como respuesta a las necesidades identificadas en el ámbito universitario actual, donde la digitalización de procesos académicos se ha convertido en una prioridad estratégica. A través de este capítulo, se establecerán las bases conceptuales que justifican la necesidad del sistema y se definirán los parámetros que guiarán su desarrollo e implementación.
+
 ## Motivación
 
 En el ámbito académico universitario, la gestión de Trabajos de Fin de Grado (TFG) representa un proceso complejo que involucra múltiples actores: estudiantes, profesores tutores, tribunales de evaluación y personal administrativo. Tradicionalmente, este proceso se ha gestionado de manera fragmentada, utilizando herramientas dispersas como correo electrónico, documentos físicos y hojas de cálculo, lo que genera ineficiencias, pérdida de información y dificultades en el seguimiento del progreso académico.
@@ -9,6 +13,10 @@ La digitalización de los procesos educativos se ha acelerado significativamente
 Además, el cumplimiento de normativas académicas específicas, la gestión de plazos estrictos y la coordinación entre diferentes departamentos universitarios demandan una solución tecnológica robusta que centralice toda la información relacionada con los TFG en un único sistema accesible y seguro.
 
 ## Objetivos
+
+La definición clara de objetivos constituye un elemento fundamental para el éxito de cualquier proyecto de desarrollo software. En esta sección se establecen tanto el objetivo general como los objetivos específicos que guían la implementación de la plataforma de gestión de TFG, categorizados según su naturaleza funcional, técnica y de calidad.
+
+Estos objetivos han sido formulados siguiendo la metodología SMART (Específicos, Medibles, Alcanzables, Relevantes y Temporales), asegurando que cada uno contribuya directamente al propósito general del proyecto y pueda ser evaluado objetivamente al finalizar el desarrollo.
 
 ### Objetivo General
 
@@ -44,6 +52,10 @@ Desarrollar una plataforma web integral para la gestión completa del ciclo de v
 - **OC5**: Establecer un sistema de backup y recuperación de datos que garantice la disponibilidad del servicio
 
 ## Alcance
+
+La definición del alcance del proyecto es crucial para establecer límites claros sobre qué incluye y qué excluye el desarrollo de la plataforma. Esta delimitación permite gestionar expectativas, recursos y tiempos de manera efectiva, asegurando que el proyecto se mantenga enfocado en sus objetivos principales.
+
+El alcance se estructura en tres dimensiones complementarias: funcional, técnica y temporal. Cada una de estas dimensiones aborda aspectos específicos del proyecto, desde las funcionalidades que se implementarán hasta las tecnologías que se utilizarán y los plazos de desarrollo establecidos.
 
 ### Alcance Funcional
 
@@ -95,6 +107,8 @@ El proyecto se desarrolla en 8 fases distribuidas a lo largo de 10 semanas acad�
 
 ## Visión general del documento
 
+La estructura y organización de este documento ha sido cuidadosamente diseñada para proporcionar una comprensión completa y progresiva del proyecto desarrollado. Siguiendo las mejores prácticas de documentación técnica, cada capítulo aborda aspectos específicos del desarrollo, desde la conceptualización inicial hasta la implementación final.
+
 Este documento técnico sigue el estándar ISO/IEEE 16326 para documentación de sistemas software, adaptado al contexto académico de un Trabajo de Fin de Grado. La estructura del documento está organizada de la siguiente manera:
 
 **Capítulo 1 - Visión general del proyecto**: Establece la motivación, objetivos y alcance del proyecto, proporcionando el contexto necesario para comprender la necesidad y los beneficios de la plataforma desarrollada.
@@ -118,6 +132,8 @@ Este documento técnico sigue el estándar ISO/IEEE 16326 para documentación de
 Los anexos incluyen manuales técnicos de instalación y usuario, así como documentación adicional de referencia.
 
 ## Estandarización del documento
+
+La adopción de estándares reconocidos internacionalmente garantiza la calidad, consistencia y profesionalidad de la documentación técnica. La estandarización no solo facilita la comprensión del documento por parte de diferentes audiencias, sino que también asegura que el proyecto siga metodologías probadas y reconocidas en el ámbito de la ingeniería de software.
 
 Este documento ha sido desarrollado siguiendo las directrices del estándar **ISO/IEEE 16326:2009** - "Systems and software engineering - Life cycle processes - Project management", adaptado para proyectos académicos de desarrollo software.
 
@@ -153,6 +169,10 @@ Este documento ha sido desarrollado siguiendo las directrices del estándar **IS
 
 ## Acrónimos
 
+A lo largo de este documento se utilizan diversos acrónimos y abreviaciones técnicas que son comunes en el ámbito de la ingeniería de software y el desarrollo web. Esta sección proporciona una referencia completa de todos los términos abreviados utilizados, facilitando la comprensión del contenido técnico para lectores con diferentes niveles de especialización.
+
+Los acrónimos se presentan en orden alfabético, incluyendo tanto términos en inglés como sus equivalentes en español cuando resulta apropiado. Esta lista sirve como referencia rápida durante la lectura del documento.
+
 | Acrónimo | Significado |
 |----------|-------------|
 | **API** | Application Programming Interface (Interfaz de Programación de Aplicaciones) |
@@ -185,6 +205,10 @@ Este documento ha sido desarrollado siguiendo las directrices del estándar **IS
 | **UX** | User Experience (Experiencia de Usuario) |
 
 ## Definiciones
+
+Esta sección presenta las definiciones de los conceptos técnicos y términos especializados más relevantes utilizados a lo largo del proyecto. Estas definiciones han sido elaboradas específicamente en el contexto de la plataforma de gestión de TFG desarrollada, proporcionando claridad sobre el significado y uso de cada término.
+
+La comprensión de estos conceptos es fundamental para entender tanto la arquitectura técnica como las funcionalidades del sistema implementado. Cada definición incluye el contexto específico de aplicación dentro del proyecto.
 
 **Backend**: Conjunto de tecnologías y servicios del lado del servidor que procesan la lógica de negocio, gestionan la base de datos y proporcionan APIs para el frontend.
 
@@ -234,6 +258,10 @@ Este documento ha sido desarrollado siguiendo las directrices del estándar **IS
 
 # Contexto del proyecto
 
+En este capítulo se describe el contexto del proyecto desarrollado, necesario de conocer antes de abordar la planificación del mismo y, por supuesto, antes de comenzar con el desarrollo. Se presentará una descripción general del proyecto, se realizará un análisis detallado de las características de los usuarios del sistema, se justificará el modelo de ciclo de vida elegido para el desarrollo, y se enumerarán, dando una breve explicación de en qué consisten, las tecnologías, los lenguajes y las herramientas seleccionadas para el proyecto.
+
+El conocimiento del contexto tecnológico y metodológico es fundamental para comprender las decisiones de diseño y arquitectura adoptadas. Este capítulo establece las bases técnicas sobre las cuales se sustenta todo el desarrollo posterior, proporcionando la justificación de las elecciones tecnológicas y metodológicas realizadas.
+
 ## Descripción general del proyecto
 
 La Plataforma de Gestión de TFG es un sistema web integral diseñado para automatizar y optimizar el ciclo completo de gestión de Trabajos de Fin de Grado en entornos universitarios. El sistema implementa una arquitectura moderna basada en tecnologías web actuales, proporcionando una solución escalable que aborda las necesidades específicas de cuatro tipos de usuarios diferenciados.
@@ -246,7 +274,9 @@ El sistema incorpora funcionalidades avanzadas como un calendario interactivo pa
 
 ## Características del usuario
 
-El sistema ha sido diseñado para satisfacer las necesidades específicas de cuatro perfiles de usuario claramente diferenciados, cada uno con roles, permisos y flujos de trabajo particulares.
+La identificación y caracterización precisa de los usuarios del sistema constituye un elemento fundamental para el diseño de una plataforma efectiva y usable. El análisis detallado de los perfiles de usuario permite definir funcionalidades específicas, interfaces adaptadas y flujos de trabajo optimizados para cada rol dentro del proceso académico.
+
+El sistema ha sido diseñado para satisfacer las necesidades específicas de cuatro perfiles de usuario claramente diferenciados, cada uno con roles, permisos y flujos de trabajo particulares. Esta segmentación permite una experiencia de usuario personalizada que maximiza la eficiencia operativa de cada actor en el proceso de gestión de TFG.
 
 ### Estudiante
 
@@ -322,7 +352,9 @@ El sistema ha sido diseñado para satisfacer las necesidades específicas de cua
 
 ## Modelo de ciclo de vida
 
-El desarrollo de la plataforma sigue un **modelo de ciclo de vida iterativo incremental**, estructurado en ocho fases bien definidas que permiten la entrega progresiva de funcionalidades y la validación continua de los requisitos.
+La selección del modelo de ciclo de vida adecuado es una decisión estratégica que determina la estructura, organización y metodología de todo el proceso de desarrollo. Esta elección impacta directamente en la gestión de riesgos, la capacidad de adaptación a cambios y la entrega de valor a lo largo del proyecto.
+
+El desarrollo de la plataforma sigue un **modelo de ciclo de vida iterativo incremental**, estructurado en ocho fases bien definidas que permiten la entrega progresiva de funcionalidades y la validación continua de los requisitos. Este enfoque facilita la identificación temprana de problemas, permite ajustes metodológicos y garantiza que cada incremento del sistema aporte valor tangible al producto final.
 
 ### Metodología de desarrollo
 
@@ -389,7 +421,9 @@ Cada fase debe cumplir criterios específicos antes de proceder a la siguiente:
 
 ## Tecnologías
 
-La selección tecnológica se basa en criterios de modernidad, estabilidad, escalabilidad y soporte de la comunidad, priorizando tecnologías con soporte a largo plazo y ecosistemas maduros.
+La elección de las tecnologías apropiadas constituye uno de los aspectos más críticos en el desarrollo de cualquier sistema software. Estas decisiones tecnológicas impactan directamente en la escalabilidad, mantenibilidad, rendimiento y viabilidad a largo plazo del proyecto. En esta sección se detallan las principales tecnologías utilizadas, explicando las razones de su selección y cómo contribuyen al cumplimiento de los objetivos del sistema.
+
+La selección tecnológica se basa en criterios de modernidad, estabilidad, escalabilidad y soporte de la comunidad, priorizando tecnologías con soporte a largo plazo y ecosistemas maduros. Cada tecnología elegida ha sido evaluada considerando su compatibilidad con el resto del stack tecnológico y su capacidad para satisfacer los requisitos específicos del proyecto.
 
 ### React 19
 
@@ -522,6 +556,8 @@ DDEV proporciona un entorno de desarrollo containerizado que garantiza consisten
 
 ## Lenguajes
 
+Los lenguajes de programación seleccionados para el desarrollo de la plataforma han sido elegidos considerando su madurez, rendimiento, ecosistema de desarrollo y compatibilidad con las tecnologías del stack principal. Esta sección detalla las características específicas utilizadas de cada lenguaje y los patrones de programación aplicados.
+
 ### JavaScript/TypeScript
 
 JavaScript se utiliza como lenguaje principal para el desarrollo del frontend, aprovechando las características modernas de ECMAScript 2023 y preparado para migración incremental a TypeScript.
@@ -576,6 +612,10 @@ HTML5 y CSS3 proporcionan la estructura semántica y presentación visual de la 
 - **CSS Custom Properties**: Variables CSS para theming y mantenibilidad
 
 ## Herramientas
+
+La selección apropiada de herramientas de desarrollo, testing y gestión de proyecto constituye un factor determinante en la productividad y calidad del desarrollo software. Las herramientas elegidas deben integrarse eficientemente entre sí, proporcionando un flujo de trabajo fluido que minimice la fricción y maximice la capacidad de desarrollo y debugging.
+
+En esta sección se detallan las principales herramientas utilizadas durante el ciclo de vida del proyecto, explicando su configuración específica y las ventajas que aportan al proceso de desarrollo de la plataforma.
 
 ### Visual Studio Code
 
@@ -653,6 +693,12 @@ Herramientas de testing de APIs REST que permiten validación exhaustiva de endp
 
 # Planificación
 
+En este capítulo se describirá la planificación seguida durante el desarrollo del proyecto, abordando desde la iniciación hasta la finalización del mismo. Se presentará el enfoque metodológico adoptado, la estructuración en fases iterativas, y la gestión temporal del proyecto.
+
+Como se comentó en el capítulo anterior, para el proyecto se ha utilizado un modelo de ciclo de vida iterativo incremental. Esto implica que el proceso de desarrollo se ha dividido en una serie de iteraciones bien definidas, donde en cada una de las iteraciones se han abordado todas las etapas del desarrollo de un producto software: análisis, diseño, implementación y pruebas. Además, paralelamente a la ejecución de cada iteración, se ha ido documentando todo lo realizado en la presente memoria.
+
+La planificación adecuada constituye el fundamento para el éxito de cualquier proyecto de desarrollo software, especialmente en proyectos académicos donde la gestión eficiente del tiempo es crítica. A través de este capítulo se establecerán las bases metodológicas que han guiado todo el proceso de desarrollo.
+
 ## Iniciación del proyecto
 
 ### Contexto de inicio
@@ -682,7 +728,9 @@ Esta definición de MVP permite validación temprana de hipótesis y ajuste incr
 
 ## Iteraciones del proceso de desarrollo
 
-El desarrollo se estructura en iteraciones que siguen un patrón consistente: análisis de requisitos específicos, diseño de componentes, implementación, testing básico y validación funcional. Cada iteración entrega valor funcional acumulativo y prepara la base para la siguiente fase.
+La metodología iterativa incremental adoptada para el proyecto se materializa a través de ocho fases claramente diferenciadas, cada una con objetivos específicos, criterios de aceptación bien definidos y entregables funcionales. Esta aproximación permite una gestión eficiente de la complejidad del sistema, facilitando la validación continua y la adaptación a cambios de requisitos.
+
+El desarrollo se estructura en iteraciones que siguen un patrón consistente: análisis de requisitos específicos, diseño de componentes, implementación, testing básico y validación funcional. Cada iteración entrega valor funcional acumulativo y prepara la base para la siguiente fase. Esta estructuración garantiza que al final de cada fase se disponga de un producto parcialmente funcional que puede ser evaluado y validado antes de proceder con el desarrollo posterior.
 
 ### Fase 1-2: Setup inicial y autenticación (Semanas 1-2)
 
@@ -930,7 +978,9 @@ El desarrollo se estructura en iteraciones que siguen un patrón consistente: an
 
 ## Diagrama de Gantt
 
-El siguiente cronograma ilustra la distribución temporal de las actividades principales del proyecto, mostrando dependencias entre fases y solapamientos estratégicos para optimizar el desarrollo.
+La representación visual del cronograma del proyecto mediante diagramas de Gantt constituye una herramienta fundamental para la gestión temporal y el seguimiento del progreso. Estos diagramas permiten identificar dependencias críticas, optimizar la distribución de recursos y establecer puntos de control para la evaluación del avance del proyecto.
+
+El siguiente cronograma ilustra la distribución temporal de las actividades principales del proyecto, mostrando dependencias entre fases y solapamientos estratégicos para optimizar el desarrollo. La visualización facilita la comprensión de la secuencia lógica de actividades y permite identificar tanto la ruta crítica como las oportunidades de paralelización del trabajo.
 
 ### Cronograma general del proyecto
 
@@ -976,6 +1026,10 @@ Esta ruta crítica tiene una duración total de 9 semanas, proporcionando 1 sema
 **Buffer de tiempo**: La semana adicional disponible (Semana 10 completa) actúa como buffer para gestión de riesgos imprevistos o refinamiento adicional de funcionalidades críticas.
 
 ## Cronograma académico
+
+La integración del cronograma del proyecto con el calendario académico universitario requiere una planificación cuidadosa que considere los períodos lectivos, épocas de exámenes, festivos académicos y disponibilidad de recursos universitarios. Esta sincronización es esencial para garantizar que las entregas del proyecto se realicen en momentos apropiados y que la validación por parte de usuarios académicos sea factible.
+
+El cronograma académico establece hitos de entrega que permiten la evaluación progresiva del trabajo desarrollado, facilitando el feedback temprano y la corrección de desviaciones antes de que impacten significativamente en el resultado final del proyecto.
 
 ### Calendario de entregas
 
@@ -1030,7 +1084,15 @@ El cronograma del proyecto se alinea con el calendario académico universitario,
 
 # Análisis del sistema
 
+Durante este capítulo se realizará un análisis exhaustivo del sistema que se ha desarrollado, abarcando desde la especificación completa de requisitos hasta la gestión del presupuesto del proyecto. Este análisis constituye la base fundamental sobre la cual se sustenta todo el diseño e implementación posterior del sistema.
+
+El análisis del sistema comprende varios aspectos críticos que deben ser abordados de manera sistemática y rigurosa. En primer lugar, se presenta la especificación de requisitos, tanto funcionales como no funcionales, que definen qué debe hacer el sistema y bajo qué condiciones debe operarlo. Posteriormente, se examina la garantía de calidad, estableciendo los criterios y estándares que el sistema debe cumplir para asegurar su correcto funcionamiento.
+
+Finalmente, se incluye la gestión del presupuesto, elemento esencial para la viabilidad del proyecto que permite evaluar la inversión requerida y los beneficios esperados. Este enfoque integral garantiza que el análisis cubra todas las dimensiones relevantes para el éxito del proyecto.
+
 ## Especificación de requisitos
+
+Una vez establecido el marco general del análisis del sistema, procederemos con la especificación detallada de requisitos del proyecto. Esta especificación constituye el fundamento técnico sobre el cual se construye toda la arquitectura del sistema, definiendo de manera precisa tanto las funcionalidades que debe proporcionar como las restricciones que debe cumplir.
 
 La especificación de requisitos de la Plataforma de Gestión de TFG se estructura siguiendo la metodología IEEE Std 830-1998, organizando los requisitos en categorías funcionales específicas por rol de usuario y requisitos no funcionales transversales que garantizan la calidad del sistema.
 
@@ -1457,6 +1519,10 @@ El siguiente diagrama representa las principales interacciones entre los actores
 
 ## Garantía de calidad
 
+Habiendo completado la especificación de requisitos, es fundamental abordar los aspectos relacionados con la garantía de calidad del sistema. Esta sección establece los mecanismos y procedimientos necesarios para asegurar que el sistema desarrollado cumpla con los estándares de calidad requeridos, tanto en términos de seguridad como de rendimiento y confiabilidad.
+
+La garantía de calidad no se limita únicamente a la fase de desarrollo, sino que abarca todo el ciclo de vida del sistema, incluyendo las fases de diseño, implementación, pruebas y mantenimiento. Para ello, se definen criterios específicos de seguridad, estrategias de testing y validación, así como protocolos de monitorización y mantenimiento continuo.
+
 ### Seguridad
 
 La seguridad del sistema se implementa mediante múltiples capas de protección que abarcan desde la autenticación hasta la protección de datos en tránsito y reposo.
@@ -1620,6 +1686,10 @@ La seguridad del sistema se implementa mediante múltiples capas de protección 
 
 ## Gestión del presupuesto
 
+Para completar el análisis del sistema, es esencial evaluar los aspectos económicos del proyecto. La gestión del presupuesto proporciona una perspectiva financiera que permite determinar la viabilidad económica del desarrollo y establecer las bases para la justificación de la inversión realizada.
+
+En el contexto de un proyecto académico como este TFG, la gestión presupuestaria adquiere características particulares, ya que se basa principalmente en la valorización del tiempo de desarrollo, el uso de herramientas y recursos educativos, así como en la estimación de los costos que tendría el proyecto en un entorno profesional real. Esta evaluación resulta fundamental para comprender el valor del trabajo realizado y su equivalencia en términos de mercado.
+
 ### Estructura de costos
 
 El proyecto se desarrolla en modalidad académica con recursos principalmente de tiempo de desarrollo, herramientas open source y servicios gratuitos para educación.
@@ -1719,7 +1789,13 @@ La viabilidad económica es positiva en todos los escenarios analizados, con rec
 
 # Diseño
 
+Una vez completado el análisis del sistema, procederemos con la fase de diseño, la cual constituye el puente entre los requisitos identificados y la implementación técnica del proyecto. En este capítulo se desarrollarán los aspectos fundamentales del diseño del sistema, abarcando desde la arquitectura general hasta los detalles específicos de implementación.
+
+El diseño del sistema se estructura en varias dimensiones complementarias que garantizan una solución integral y robusta. En primer lugar, se presenta la arquitectura física, que define la organización estructural de los componentes del sistema y sus interacciones. Posteriormente, se aborda la arquitectura lógica, estableciendo los patrones de diseño y las responsabilidades de cada módulo. Finalmente, se incluye el esquema de la base de datos y el diseño de la interfaz de usuario, elementos esenciales para completar la visión técnica del proyecto.
+
 ## Arquitectura física
+
+Iniciando con la arquitectura física del sistema, se establece la base estructural sobre la cual se construye toda la plataforma. Esta arquitectura define la organización de los componentes de hardware y software, así como sus interacciones y dependencias, proporcionando una visión clara de cómo se despliega y ejecuta el sistema en un entorno real.
 
 La arquitectura física de la Plataforma de Gestión de TFG se basa en una separación clara entre capas de presentación, lógica de negocio y persistencia, implementando un patrón de arquitectura distribuida que garantiza escalabilidad, mantenibilidad y seguridad.
 
@@ -1969,6 +2045,10 @@ vich_uploader:
 4. **Acceso controlado**: URLs temporales con expiración automática
 
 ## Arquitectura lógica
+
+Habiendo establecido la arquitectura física del sistema, es fundamental abordar la arquitectura lógica, la cual define la organización conceptual y funcional de los componentes de software. Esta perspectiva complementa la visión física proporcionando un entendimiento profundo de cómo se estructura el código, se organizan las responsabilidades y se implementan los patrones de diseño.
+
+La arquitectura lógica trasciende la implementación específica para establecer principios de diseño que aseguran la mantenibilidad, extensibilidad y robustez del sistema. A través de esta organización lógica, se garantiza que cada componente tenga responsabilidades bien definidas y que las interacciones entre ellos sigan patrones establecidos y probados en la industria del software.
 
 La arquitectura lógica organiza los componentes del sistema según responsabilidades funcionales, implementando patrones de diseño que garantizan separación de concerns y alta cohesión.
 
@@ -2239,6 +2319,10 @@ class TFGRepository extends ServiceEntityRepository implements TFGRepositoryInte
 
 ## Esquema de la base de datos
 
+Completando el diseño arquitectónico del sistema, es esencial definir el esquema de la base de datos, componente fundamental que sustenta toda la funcionalidad del sistema mediante el almacenamiento y gestión eficiente de la información. El diseño de la base de datos no solo determina cómo se almacenan los datos, sino que también influye directamente en el rendimiento, la integridad y la escalabilidad del sistema completo.
+
+El esquema de base de datos propuesto sigue principios de normalización que garantizan la consistencia y eliminan la redundancia, mientras que los índices y constraints aseguran tanto el rendimiento como la integridad referencial. Esta estructura de datos ha sido cuidadosamente diseñada para soportar eficientemente todas las operaciones requeridas por los diferentes módulos del sistema.
+
 ### Modelo conceptual
 
 ![Modelo conceptual](processed/images/05_diseno_plantuml_3.png)
@@ -2376,6 +2460,10 @@ WHERE created_at >= DATE_SUB(CURDATE(), INTERVAL 1 YEAR);
 ```
 
 ## Diseño de la interfaz de usuario
+
+Para completar la visión integral del diseño del sistema, es fundamental abordar el diseño de la interfaz de usuario, elemento que determina la experiencia y satisfacción de los usuarios finales. La interfaz de usuario representa el punto de contacto entre el sistema y sus usuarios, por lo que su diseño debe equilibrar funcionalidad, usabilidad y estética para proporcionar una experiencia óptima a cada tipo de usuario.
+
+El diseño de la interfaz va más allá de la simple presentación visual, abarcando aspectos como la arquitectura de la información, los patrones de interacción, la accesibilidad y la adaptabilidad a diferentes dispositivos. A través de un sistema de diseño coherente y bien estructurado, se garantiza la consistencia visual y funcional en toda la aplicación, facilitando tanto el uso como el mantenimiento futuro.
 
 ### Sistema de diseño
 
@@ -2652,7 +2740,13 @@ const TFGTable = ({ tfgs }) => (
 
 # Implementación
 
+Tras haber completado las fases de análisis y diseño del sistema, procederemos con la descripción detallada de la implementación del proyecto. Este capítulo documenta cómo se han materializado los requisitos y el diseño establecidos en las fases anteriores, proporcionando una visión técnica completa del desarrollo realizado.
+
+La implementación abarca múltiples aspectos técnicos que van desde la arquitectura de componentes del frontend hasta las configuraciones específicas de despliegue y las pruebas realizadas. Cada sección de este capítulo detalla las decisiones técnicas tomadas, las herramientas utilizadas y las buenas prácticas aplicadas durante el desarrollo, ofreciendo tanto una guía para futuras modificaciones como una base para la evaluación técnica del proyecto.
+
 ## Arquitectura de componentes React
+
+Iniciando con los aspectos técnicos más fundamentales de la implementación, se presenta la arquitectura de componentes React que constituye la base sobre la cual se construye todo el frontend de la aplicación. Esta arquitectura define la organización del código, los patrones de reutilización y la estructura general que facilita tanto el desarrollo como el mantenimiento futuro del sistema.
 
 La implementación del frontend se estructura siguiendo principios de Clean Architecture adaptados a React, con una separación clara entre lógica de presentación, estado global y comunicación con APIs.
 
@@ -3193,6 +3287,10 @@ export default Dashboard;
 
 ## Sistema de autenticación y roles
 
+Habiendo establecido la arquitectura base de componentes React, procedemos con uno de los aspectos más críticos de cualquier sistema de gestión: la implementación del sistema de autenticación y roles. Este componente determina no solo quién puede acceder al sistema, sino también qué acciones puede realizar cada usuario según su rol asignado, constituyendo la base de la seguridad de toda la plataforma.
+
+La implementación de la autenticación y autorización requiere una coordinación precisa entre el frontend y el backend, utilizando estándares de la industria como JWT (JSON Web Tokens) para el intercambio seguro de información de autenticación. El sistema debe garantizar tanto la seguridad como la usabilidad, proporcionando una experiencia fluida al usuario mientras mantiene rigurosos controles de acceso.
+
 ### Implementación backend con Symfony Security
 
 #### Configuración de seguridad
@@ -3464,6 +3562,10 @@ class TFGVoter extends Voter
 
 ## Gestión de estado con Context API
 
+Una vez implementado el sistema de autenticación y roles, es fundamental establecer una estrategia robusta de gestión de estado que permita compartir información de manera eficiente entre todos los componentes de la aplicación. La gestión de estado representa uno de los desafíos más significativos en aplicaciones React complejas, ya que debe equilibrar la facilidad de acceso a los datos con la mantenibilidad y el rendimiento del sistema.
+
+La Context API de React, junto con el patrón Reducer, proporciona una solución elegante para la gestión de estado global sin la complejidad adicional de librerías externas. Esta aproximación permite mantener el estado de la aplicación centralizado y predecible, facilitando tanto el desarrollo como las pruebas del sistema.
+
 ### NotificacionesContext
 
 ```javascript
@@ -3600,6 +3702,10 @@ export const useNotifications = () => {
 ```
 
 ## APIs REST y endpoints
+
+Con la gestión de estado del frontend establecida, es necesario implementar la capa de comunicación que conecta el frontend con el backend. Las APIs REST constituyen el mecanismo principal para el intercambio de información entre ambas capas del sistema, proporcionando una interfaz estándar y predecible para todas las operaciones de datos.
+
+La implementación de las APIs sigue los principios REST y utiliza API Platform para Symfony, lo que garantiza consistencia en el diseño de endpoints, documentación automática y cumplimiento de estándares web. Cada endpoint ha sido diseñado considerando aspectos de seguridad, rendimiento y usabilidad, asegurando que las operaciones se realicen de manera eficiente y segura.
 
 ### TFG Controller con API Platform
 
@@ -3938,6 +4044,10 @@ class TFGService
 
 ## Sistema de archivos y uploads
 
+Complementando la funcionalidad de las APIs REST, el sistema de archivos y uploads constituye un componente esencial para la gestión de documentos TFG. Esta funcionalidad debe manejar aspectos críticos como la validación de archivos, el almacenamiento seguro, la gestión de metadatos y el control de acceso, garantizando que los documentos se manejen de manera eficiente y segura.
+
+La implementación del sistema de archivos utiliza VichUploaderBundle para Symfony, proporcionando una solución robusta que abstrae la complejidad del manejo de archivos mientras mantiene flexibilidad para diferentes estrategias de almacenamiento. El sistema incluye validaciones exhaustivas, generación de nombres únicos y gestión automática de metadatos para cada documento.
+
 ### FileUploadService
 
 ```php
@@ -4072,6 +4182,10 @@ class FileUploadService
 ```
 
 ## Sistema de notificaciones
+
+Para completar los componentes core de la funcionalidad del sistema, se implementa un sistema de notificaciones que mantiene informados a todos los usuarios sobre eventos relevantes relacionados con sus TFG. Este sistema constituye una pieza fundamental para la experiencia de usuario, asegurando que las partes interesadas reciban información oportuna sobre cambios de estado, asignaciones y fechas importantes.
+
+El sistema de notificaciones opera tanto en tiempo real como mediante notificaciones persistentes, utilizando eventos del dominio para disparar las notificaciones apropiadas cuando ocurren cambios significativos en el sistema. La implementación permite diferentes canales de notificación y mantiene un historial completo para auditoría y seguimiento.
 
 ### NotificationService
 
@@ -4269,7 +4383,15 @@ class NotificationService
 
 # Entrega del producto
 
+Finalizada la fase de implementación, corresponde abordar los aspectos relacionados con la entrega del producto desarrollado. Este capítulo documenta todos los elementos necesarios para poner el sistema en funcionamiento en un entorno de producción, incluyendo configuraciones específicas, procedimientos de despliegue y estrategias de mantenimiento.
+
+La entrega del producto no se limita únicamente a la transferencia de código, sino que abarca un conjunto integral de elementos que garantizan la correcta operación del sistema. Esto incluye la configuración de entornos de producción, la documentación técnica, los procedimientos de instalación y las consideraciones de seguridad y rendimiento necesarias para un funcionamiento óptimo en condiciones reales de uso.
+
 ## Configuración de producción
+
+El elemento central de la entrega del producto es la configuración específica para el entorno de producción. Esta configuración representa la diferencia entre un sistema de desarrollo y una aplicación lista para ser utilizada por usuarios reales, abarcando aspectos críticos como la optimización del rendimiento, la configuración de seguridad avanzada y la integración con servicios de monitorización y logging.
+
+La configuración de producción debe considerar múltiples variables que no son relevantes en entornos de desarrollo, tales como la gestión de caché distribuida, la optimización de consultas a base de datos, la configuración de balanceadores de carga y la implementación de estrategias de backup y recuperación. Cada elemento de configuración ha sido cuidadosamente seleccionado para maximizar la estabilidad y el rendimiento del sistema.
 
 La entrega del producto requiere una configuración específica para entorno de producción que garantice seguridad, rendimiento y estabilidad del sistema en un ambiente real de uso.
 
@@ -4539,7 +4661,15 @@ parameters:
 
 # Procesos de soporte y pruebas
 
+Completada la entrega del producto, es fundamental documentar los procesos de soporte y pruebas que garantizan la calidad, mantenibilidad y evolución continua del sistema desarrollado. Este capítulo aborda los aspectos metodológicos y técnicos que sustentan la operación exitosa del sistema, desde la gestión de decisiones técnicas hasta la implementación de estrategias de testing y verificación.
+
+Los procesos de soporte y pruebas representan elementos críticos para el éxito a largo plazo de cualquier proyecto de software. Estos procesos no solo aseguran la calidad del código y la funcionalidad del sistema, sino que también establecen las bases para futuras mejoras, corrección de errores y adaptación a nuevos requisitos. La documentación de estos procesos facilita tanto el mantenimiento como la transferencia de conocimiento a futuros desarrolladores.
+
 ## Gestión y toma de decisiones
+
+Para establecer las bases metodológicas de los procesos de soporte, es fundamental documentar cómo se han gestionado las decisiones técnicas y arquitectónicas durante el desarrollo del proyecto. La gestión adecuada de decisiones no solo garantiza la coherencia técnica del sistema, sino que también facilita futuras modificaciones y evoluciones del producto.
+
+La documentación de decisiones técnicas mediante metodologías estructuradas como Architecture Decision Records (ADR) permite mantener un historial comprensible de las razones que llevaron a seleccionar determinadas tecnologías, patrones de diseño o estrategias de implementación. Esta información resulta invaluable tanto para el mantenimiento actual como para futuros desarrolladores que necesiten comprender el contexto de las decisiones tomadas.
 
 ### Metodología de gestión del proyecto
 
@@ -4708,6 +4838,10 @@ echo "✅ Rollback completed"
   4. Auditoría post-incidente
 
 ## Verificación y validación del software
+
+Complementando la gestión de decisiones técnicas, la verificación y validación del software constituye el núcleo de los procesos de calidad del proyecto. Estos procesos aseguran que el sistema desarrollado cumple con los requisitos especificados y funciona correctamente bajo diferentes condiciones de uso, proporcionando confianza tanto a los desarrolladores como a los usuarios finales.
+
+La estrategia de verificación y validación implementada abarca múltiples niveles de testing, desde pruebas unitarias granulares hasta pruebas de integración completas del sistema. Esta aproximación multicapa garantiza que cada componente funcione correctamente de manera aislada, y que la interacción entre componentes produzca los resultados esperados en el contexto global del sistema.
 
 ### Testing del frontend
 
@@ -5436,6 +5570,10 @@ echo "✅ Security scan completed"
 
 ## Métricas y KPIs
 
+Para completar los procesos de soporte y pruebas, es esencial establecer un sistema de métricas y KPIs (Key Performance Indicators) que permitan evaluar objetivamente la calidad, rendimiento y éxito del sistema desarrollado. Estas métricas proporcionan una base cuantitativa para la toma de decisiones y permiten identificar áreas de mejora de manera sistemática.
+
+La definición de métricas apropiadas va más allá de simples contadores de código, abarcando aspectos técnicos, funcionales y de experiencia de usuario que reflejan la salud general del sistema. El seguimiento continuo de estas métricas facilita la detección temprana de problemas y permite establecer objetivos medibles para futuras iteraciones del proyecto.
+
 ### Métricas técnicas
 
 | Métrica | Objetivo | Actual | Estado |
@@ -5481,7 +5619,15 @@ echo "✅ Metrics report completed"
 
 # Conclusiones y trabajo futuro
 
+Al llegar al final de este recorrido técnico y académico, corresponde realizar una evaluación integral del trabajo realizado y proyectar las posibles líneas de evolución futura del sistema desarrollado. Este capítulo representa la síntesis del proceso completo, desde la concepción inicial hasta la implementación final, proporcionando una perspectiva crítica y constructiva sobre los logros alcanzados y los desafíos que permanecen abiertos.
+
+Las conclusiones de un proyecto de esta magnitud trascienden la mera evaluación técnica, abarcando aspectos metodológicos, académicos y profesionales que han enriquecido significativamente la formación del desarrollador. Asimismo, la identificación de trabajo futuro no solo señala limitaciones actuales, sino que establece una hoja de ruta para la evolución continua del sistema hacia una solución aún más completa y robusta.
+
 ## Valoración del proyecto
+
+Iniciando la evaluación final del trabajo realizado, es fundamental ofrecer una valoración objetiva y comprehensiva del proyecto desarrollado. Esta valoración no se limita únicamente a los aspectos técnicos implementados, sino que abarca la totalidad de dimensiones que han influido en el desarrollo del sistema, incluyendo aspectos metodológicos, académicos y profesionales.
+
+La valoración del proyecto requiere una perspectiva equilibrada que reconozca tanto los logros alcanzados como las limitaciones encontradas durante el proceso de desarrollo. Esta evaluación honesta y crítica proporciona las bases para comprender el verdadero valor del trabajo realizado y establece el contexto apropiado para las recomendaciones de trabajo futuro.
 
 ### Evaluación global
 
@@ -5556,6 +5702,10 @@ Los datos estructurados generados por el sistema permiten análisis estadístico
 La arquitectura modular facilita la expansión a otros procesos académicos (TFM, doctorado, proyectos de investigación).
 
 ## Cumplimiento de los objetivos propuestos
+
+Habiendo presentado la valoración general del proyecto, es necesario realizar un análisis detallado y sistemático del grado de cumplimiento de los objetivos establecidos al inicio del desarrollo. Esta evaluación específica permite determinar con precisión qué aspectos del proyecto han sido completados satisfactoriamente y cuáles requieren atención adicional en futuras iteraciones.
+
+El análisis del cumplimiento de objetivos se estructura considerando tanto los objetivos funcionales como los técnicos y de calidad, proporcionando una métrica objetiva del éxito del proyecto. Esta evaluación sistemática no solo valida el trabajo realizado, sino que también identifica áreas específicas para el trabajo futuro y establece precedentes para futuros proyectos similares.
 
 ### Objetivos funcionales
 
@@ -5649,6 +5799,10 @@ La arquitectura modular facilita la expansión a otros procesos académicos (TFM
 - **Progreso**: Scripts de backup automatizados, procedimientos de recuperación documentados
 
 ## Trabajo futuro
+
+Completada la evaluación del cumplimiento de objetivos, es fundamental proyectar las líneas de evolución futura del sistema desarrollado. El trabajo futuro representa tanto las oportunidades de mejora identificadas durante el desarrollo como las posibilidades de expansión que pueden convertir el sistema actual en una solución aún más comprehensiva y valiosa.
+
+La identificación sistemática de trabajo futuro no solo reconoce las limitaciones actuales del proyecto, sino que establece una visión estratégica para su evolución continua. Esta proyección considera diferentes horizontes temporales y niveles de complejidad, desde mejoras incrementales hasta transformaciones tecnológicas disruptivas que podrían redefinir completamente la experiencia de gestión académica.
 
 ### Mejoras a corto plazo (1-6 meses)
 
@@ -5801,6 +5955,10 @@ apiClient.interceptors.response.use(
 
 ## Lecciones aprendidas
 
+Tras haber identificado las oportunidades de trabajo futuro, resulta imprescindible reflexionar sobre las lecciones aprendidas durante el proceso de desarrollo del proyecto. Estas lecciones constituyen uno de los valores más significativos del trabajo realizado, ya que representan conocimiento experiencial que trasciende la implementación técnica específica y puede aplicarse a futuros proyectos y desafíos profesionales.
+
+Las lecciones aprendidas abarcan tanto los aspectos técnicos como los metodológicos y personales del desarrollo, proporcionando insights valiosos sobre qué estrategias funcionaron efectivamente, qué decisiones resultaron problemáticas y cómo abordar mejor proyectos similares en el futuro. Esta reflexión crítica es fundamental para el crecimiento profesional y la mejora continua en el campo del desarrollo de software.
+
 ### Decisiones arquitectónicas acertadas
 
 **Adopción de React 19**: A pesar de ser una versión muy reciente, las funcionalidades de concurrencia y los hooks mejorados han proporcionado beneficios significativos en rendimiento y experiencia de desarrollo.
@@ -5841,6 +5999,10 @@ apiClient.interceptors.response.use(
 
 ## Reflexión final
 
+Para cerrar este recorrido integral por el desarrollo de la Plataforma de Gestión de TFG, corresponde ofrecer una reflexión final que sintetice no solo los aspectos técnicos del proyecto, sino también su significado en el contexto más amplio de la formación académica y el desarrollo profesional. Esta reflexión trasciende la mera descripción de funcionalidades implementadas para abordar el valor transformador del trabajo realizado.
+
+La reflexión final representa el momento de integrar todos los aprendizajes, logros y desafíos experimentados durante el proyecto, proporcionando una perspectiva holística que conecta la experiencia técnica con el crecimiento personal y profesional. Es también una oportunidad para reconocer el impacto potencial del sistema desarrollado en la comunidad académica y su contribución a la modernización de los procesos universitarios.
+
 La Plataforma de Gestión de TFG representa más que una solución técnica; es un catalizador para la modernización de procesos académicos tradicionalmente analógicos. El proyecto ha demostrado que es posible crear sistemas complejos con alta calidad técnica manteniendo un enfoque centrado en el usuario.
 
 El éxito del proyecto radica en la combinación de tecnologías modernas, metodologías ágiles adaptadas al contexto académico, y un diseño que prioriza la experiencia del usuario sin comprometer la seguridad o la escalabilidad.
@@ -5856,9 +6018,17 @@ La inversión en tiempo y recursos técnicos se justifica ampliamente por los be
 
 # Anexo A. Manual de instalación
 
+Como complemento esencial a la documentación técnica del proyecto, este anexo proporciona una guía completa y detallada para la instalación y configuración de la Plataforma de Gestión de TFG en diferentes entornos. La información contenida en este manual ha sido estructurada de manera que tanto desarrolladores experimentados como usuarios con conocimientos técnicos básicos puedan establecer un entorno de desarrollo funcional.
+
+La documentación de instalación abarca desde los requisitos mínimos del sistema hasta procedimientos avanzados de configuración, incluyendo soluciones a problemas comunes que pueden surgir durante el proceso. Cada sección ha sido validada mediante pruebas en diferentes entornos para asegurar su precisión y completitud.
+
 Este manual proporciona instrucciones detalladas para la instalación y configuración de la Plataforma de Gestión de TFG en diferentes entornos.
 
 ## A.1. Requisitos del sistema
+
+Antes de proceder con la instalación de la Plataforma de Gestión de TFG, es fundamental verificar que el entorno de destino cumple con los requisitos técnicos necesarios para el correcto funcionamiento del sistema. Estos requisitos han sido establecidos considerando tanto las necesidades de rendimiento como la estabilidad operacional del sistema en diferentes escenarios de uso.
+
+La especificación de requisitos distingue entre entornos de desarrollo y producción, reconociendo que cada uno tiene demandas diferentes en términos de recursos y configuración. El cumplimiento de estos requisitos garantiza una experiencia óptima durante la instalación y operación del sistema.
 
 ### A.1.1. Requisitos mínimos de hardware
 
@@ -5888,6 +6058,10 @@ Este manual proporciona instrucciones detalladas para la instalación y configur
 - **Editor de código**: VS Code recomendado
 
 ## A.2. Instalación para desarrollo
+
+Una vez verificados los requisitos del sistema, se procede con la instalación para desarrollo, la cual establece un entorno completo que permite modificar, probar y ejecutar la Plataforma de Gestión de TFG de manera local. Este proceso está diseñado para ser reproducible y consistente a través de diferentes sistemas operativos, utilizando DDEV como herramienta principal de containerización.
+
+El proceso de instalación para desarrollo ha sido optimizado para minimizar la configuración manual y maximizar la automatización, permitiendo que los desarrolladores puedan comenzar a trabajar con el código en el menor tiempo posible. La utilización de contenedores Docker garantiza que el entorno de desarrollo sea idéntico al entorno de producción, reduciendo significativamente los problemas relacionados con diferencias de configuración.
 
 ### A.2.1. Configuración inicial del proyecto
 
@@ -6168,6 +6342,10 @@ ddev exec php bin/console debug:autowiring
 
 ## A.3. Configuración de la base de datos
 
+La configuración de la base de datos constituye un paso crítico en la instalación de la plataforma, ya que determina tanto el rendimiento como la integridad de los datos del sistema. La Plataforma de Gestión de TFG utiliza MySQL 8.0 como sistema de gestión de base de datos, aprovechando sus características avanzadas de seguridad, rendimiento y escalabilidad.
+
+Este proceso incluye la configuración inicial de la base de datos, la creación de usuarios con permisos apropiados, y la carga de datos de prueba que facilitan el desarrollo y testing del sistema. La configuración está optimizada tanto para entornos de desarrollo como para despliegues de producción.
+
 ### A.3.1. Configuración de MySQL
 
 #### Opción A: Usando DDEV (Recomendado)
@@ -6359,6 +6537,10 @@ npx husky add .husky/pre-commit "npm run lint && npm run test"
 
 ## A.5. Solución de problemas comunes
 
+Durante el proceso de instalación y configuración de la Plataforma de Gestión de TFG, pueden surgir diversos problemas técnicos que requieren atención específica. Esta sección compila las dificultades más frecuentemente reportadas junto con sus soluciones correspondientes, facilitando una resolución rápida y eficiente de los inconvenientes más comunes.
+
+La documentación de problemas comunes se basa en experiencias reales de instalación en diferentes entornos y configuraciones, proporcionando soluciones probadas que han demostrado su efectividad. Cada problema incluye no solo la solución inmediata, sino también información contextual que ayuda a comprender las causas subyacentes y prevenir futuras ocurrencias.
+
 ### A.5.1. Problemas de DDEV
 
 **Error: "Port already in use"**
@@ -6527,6 +6709,10 @@ php bin/phpunit --coverage-html coverage/
 ```
 
 ## A.7. Verificación de la instalación
+
+Para garantizar que la Plataforma de Gestión de TFG ha sido instalada correctamente y está operativa en todos sus componentes, es esencial realizar una verificación sistemática de la instalación. Este proceso de verificación incluye pruebas de conectividad, funcionalidad básica y rendimiento del sistema, asegurando que todos los servicios estén funcionando según las especificaciones.
+
+La verificación de la instalación no solo confirma que los componentes técnicos están operativos, sino que también valida que la integración entre frontend, backend y base de datos funciona correctamente. Este paso es crítico antes de comenzar el desarrollo activo o el despliegue en producción.
 
 ### A.7.1. Checklist de verificación
 
