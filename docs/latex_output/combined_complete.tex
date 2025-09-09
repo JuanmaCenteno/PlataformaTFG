@@ -130,7 +130,6 @@
 % Contenido principal
 \chapter{Visión general del
 proyecto}\label{visiuxf3n-general-del-proyecto}
-
 En este capítulo se ofrecerá una visión general del proyecto
 desarrollado, abarcando desde la motivación que llevó a su concepción
 hasta los objetivos que pretende cumplir y el alcance del mismo. Se
@@ -666,7 +665,6 @@ real que permite a React calcular eficientemente los cambios mínimos
 necesarios para actualizar la interfaz.
 
 \chapter{Contexto del proyecto}\label{contexto-del-proyecto}
-
 En este capítulo se describe el contexto del proyecto desarrollado,
 necesario de conocer antes de abordar la planificación del mismo y, por
 supuesto, antes de comenzar con el desarrollo. Se presentará una
@@ -1255,7 +1253,6 @@ codes - \textbf{Documentation generation}: Generación automática de
 documentación de API
 
 \chapter{Planificación}\label{planificaciuxf3n}
-
 En este capítulo se describirá la planificación seguida durante el
 desarrollo del proyecto, abordando desde la iniciación hasta la
 finalización del mismo. Se presentará el enfoque metodológico adoptado,
@@ -1596,19 +1593,27 @@ oportunidades de paralelización del trabajo.
 \subsection{Cronograma general del
 proyecto}\label{cronograma-general-del-proyecto}
 
-\begin{figure}
+El cronograma general del proyecto establece una visión temporal completa de todas las fases de desarrollo, desde la inicialización hasta el despliegue en producción. La planificación temporal se ha estructurado en 8 fases distribuidas a lo largo de 10 semanas, optimizando los recursos disponibles y garantizando la entrega dentro del plazo establecido.
+
+La metodología de desarrollo adoptada permite solapamientos estratégicos entre fases, especialmente entre el desarrollo del frontend y la preparación del backend, maximizando la eficiencia del proceso de desarrollo. El cronograma contempla hitos de validación al final de cada fase, asegurando la calidad incremental del producto, como se ilustra en la Figura~\ref{fig:cronograma-general}.
+
+\begin{figure}[H]
 \centering
 \pandocbounded{\includegraphics[keepaspectratio,alt={Cronograma General}]{processed/images/03_planificacion_mermaid_0.png}}
 \caption{Cronograma General}
+\label{fig:cronograma-general}
 \end{figure}
 
 \subsection{Hitos principales y
 dependencias}\label{hitos-principales-y-dependencias}
 
-\begin{figure}
+El cronograma principal detalla los hitos críticos y las dependencias entre las diferentes fases del proyecto, facilitando la identificación de puntos de control y la gestión de riesgos temporales. Esta visualización complementaria permite un análisis más granular de la secuencia de actividades y sus interdependencias, como se muestra en la Figura~\ref{fig:cronograma-principal}.
+
+\begin{figure}[H]
 \centering
 \pandocbounded{\includegraphics[keepaspectratio,alt={Cronograma Principal}]{processed/images/03_planificacion_mermaid_1.png}}
 \caption{Cronograma Principal}
+\label{fig:cronograma-principal}
 \end{figure}
 
 \textbf{Hitos críticos identificados}: - \textbf{H1}: Frontend base
@@ -1773,7 +1778,6 @@ invertido por fase para métricas de velocity. - \textbf{Code quality}:
 Métricas automáticas de ESLint, PHPStan y herramientas de análisis.
 
 \chapter{Análisis del sistema}\label{anuxe1lisis-del-sistema}
-
 Durante este capítulo se realizará un análisis exhaustivo del sistema
 que se ha desarrollado, abarcando desde la especificación completa de
 requisitos hasta la gestión del presupuesto del proyecto. Este análisis
@@ -2066,12 +2070,13 @@ Validación de valores, actualización de configuración. -
 \subsection{Diagrama de casos de uso}\label{diagrama-de-casos-de-uso}
 
 El siguiente diagrama representa las principales interacciones entre los
-actores del sistema y las funcionalidades disponibles para cada rol.
+actores del sistema y las funcionalidades disponibles para cada rol, como se ilustra en la Figura~\ref{fig:diagrama-casos-uso}.
 
-\begin{figure}
+\begin{figure}[H]
 \centering
 \pandocbounded{\includegraphics[keepaspectratio,alt={Diagrama de casos de uso}]{processed/images/04_analisis_sistema_plantuml_0.png}}
 \caption{Diagrama de casos de uso}
+\label{fig:diagrama-casos-uso}
 \end{figure}
 
 \subsection{Descripción de casos de
@@ -2141,31 +2146,42 @@ asignados. - Todos los involucrados reciben notificaciones.
 
 \subsection{Diagramas de secuencia}\label{diagramas-de-secuencia}
 
+Los diagramas de secuencia ilustran la interacción temporal entre los diferentes componentes del sistema durante la ejecución de los casos de uso más críticos. Estas representaciones permiten comprender el flujo de mensajes, la sincronización de operaciones y las responsabilidades de cada actor en los procesos principales del sistema.
+
 \subsubsection{Secuencia: Subida de archivo
 TFG}\label{secuencia-subida-de-archivo-tfg}
 
-\begin{figure}
+El proceso de subida de archivos TFG representa una de las funcionalidades core del sistema, involucrando validación, almacenamiento seguro y notificación de cambios de estado. La secuencia completa se detalla en la Figura~\ref{fig:secuencia-subida-archivo}.
+
+\begin{figure}[H]
 \centering
 \pandocbounded{\includegraphics[keepaspectratio,alt={Secuencia: Subida de archivo TFG}]{processed/images/04_analisis_sistema_plantuml_1.png}}
 \caption{Secuencia: Subida de archivo TFG}
+\label{fig:secuencia-subida-archivo}
 \end{figure}
 
 \subsubsection{Secuencia: Cambio de estado de
 TFG}\label{secuencia-cambio-de-estado-de-tfg}
 
-\begin{figure}
+La gestión de estados del TFG requiere validación de permisos, actualización de datos y coordinación entre múltiples actores del sistema. Este flujo crítico se representa en la Figura~\ref{fig:secuencia-cambio-estado}.
+
+\begin{figure}[H]
 \centering
 \pandocbounded{\includegraphics[keepaspectratio,alt={Secuencia: Cambio de estado de TFG}]{processed/images/04_analisis_sistema_plantuml_2.png}}
 \caption{Secuencia: Cambio de estado de TFG}
+\label{fig:secuencia-cambio-estado}
 \end{figure}
 
 \subsubsection{Secuencia: Programación de
 defensa}\label{secuencia-programaciuxf3n-de-defensa}
 
-\begin{figure}
+La programación de defensas involucra la coordinación entre tribunales, verificación de disponibilidad y asignación de recursos. El proceso completo de coordinación se ilustra en la Figura~\ref{fig:secuencia-programacion-defensa}.
+
+\begin{figure}[H]
 \centering
 \pandocbounded{\includegraphics[keepaspectratio,alt={Secuencia: Programación de defensa}]{processed/images/04_analisis_sistema_plantuml_3.png}}
 \caption{Secuencia: Programación de defensa}
+\label{fig:secuencia-programacion-defensa}
 \end{figure}
 
 \subsection{Requisitos no funcionales}\label{requisitos-no-funcionales}
@@ -2546,7 +2562,6 @@ La viabilidad económica es positiva en todos los escenarios analizados,
 con recuperación de inversión en menos de 1 año en el escenario base.
 
 \chapter{Diseño}\label{diseuxf1o}
-
 Una vez completado el análisis del sistema, procederemos con la fase de
 diseño, la cual constituye el puente entre los requisitos identificados
 y la implementación técnica del proyecto. En este capítulo se
@@ -2588,10 +2603,13 @@ el navegador del usuario..
 \subsubsection{Arquitectura de componentes
 React}\label{arquitectura-de-componentes-react}
 
-\begin{figure}
+La arquitectura de componentes React implementa un patrón jerárquico que facilita la reutilización, mantenimiento y escalabilidad del código frontend. Esta estructura modular permite una clara separación de responsabilidades y optimiza el rendimiento mediante técnicas de lazy loading y memoización, como se ilustra en la Figura~\ref{fig:arquitectura-componentes-react}.
+
+\begin{figure}[H]
 \centering
 \pandocbounded{\includegraphics[keepaspectratio,alt={Arquitectura de componentes React}]{processed/images/05_diseno_plantuml_0.png}}
 \caption{Arquitectura de componentes React}
+\label{fig:arquitectura-componentes-react}
 \end{figure}
 
 \textbf{Componentes principales}:
@@ -2715,10 +2733,13 @@ usando Symfony 6.4 LTS, proporcionando APIs REST robustas y escalables..
 
 \subsubsection{Arquitectura hexagonal}\label{arquitectura-hexagonal}
 
-\begin{figure}
+La arquitectura hexagonal, también conocida como arquitectura de puertos y adaptadores, permite aislar la lógica de negocio de las dependencias externas, facilitando el testing, la mantenibilidad y la evolución del sistema. Esta aproximación garantiza que los cambios en tecnologías específicas no impacten el core del negocio, como se representa en la Figura~\ref{fig:arquitectura-hexagonal}.
+
+\begin{figure}[H]
 \centering
 \pandocbounded{\includegraphics[keepaspectratio,alt={Arquitectura hexagonal}]{processed/images/05_diseno_plantuml_1.png}}
 \caption{Arquitectura hexagonal}
+\label{fig:arquitectura-hexagonal}
 \end{figure}
 
 \textbf{Capas de la arquitectura}:
@@ -2876,10 +2897,13 @@ descarga segura.
 \subsubsection{Estrategia
 Almacenamiento}\label{estrategia-almacenamiento}
 
-\begin{figure}
+La estrategia de almacenamiento de archivos implementa un sistema robusto y escalable que garantiza la integridad, seguridad y disponibilidad de los documentos TFG. Este diseño contempla validación automática, almacenamiento seguro y mecanismos de backup, como se detalla en la Figura~\ref{fig:estrategia-almacenamiento}.
+
+\begin{figure}[H]
 \centering
 \pandocbounded{\includegraphics[keepaspectratio,alt={Estrategia Almacenamiento}]{processed/images/05_diseno_plantuml_2.png}}
 \caption{Estrategia Almacenamiento}
+\label{fig:estrategia-almacenamiento}
 \end{figure}
 
 \textbf{Flujo de procesamiento de archivos}:
@@ -3215,10 +3239,13 @@ por los diferentes módulos del sistema.
 
 \subsection{Modelo conceptual}\label{modelo-conceptual}
 
-\begin{figure}
+El modelo conceptual de la base de datos representa las entidades principales del sistema y sus relaciones, proporcionando la base para la implementación física. Este diseño garantiza la integridad referencial, optimiza las consultas más frecuentes y establece la estructura de datos necesaria para soportar todas las funcionalidades del sistema, como se ilustra en la Figura~\ref{fig:modelo-conceptual}.
+
+\begin{figure}[H]
 \centering
 \pandocbounded{\includegraphics[keepaspectratio,alt={Modelo conceptual}]{processed/images/05_diseno_plantuml_3.png}}
 \caption{Modelo conceptual}
+\label{fig:modelo-conceptual}
 \end{figure}
 
 \subsection{Normalización y
@@ -3600,10 +3627,13 @@ usuario}\label{wireframes-y-flujos-de-usuario}
 \subsubsection{Flujo principal -
 Estudiante}\label{flujo-principal---estudiante}
 
-\begin{figure}
+El flujo principal del estudiante representa el recorrido típico que realiza un usuario con este rol desde el acceso inicial al sistema hasta la finalización del proceso de TFG. Este diagrama de flujo identifica los puntos de decisión, las interacciones críticas y los estados principales del proceso académico, como se muestra en la Figura~\ref{fig:flujo-principal-estudiante}.
+
+\begin{figure}[H]
 \centering
 \pandocbounded{\includegraphics[keepaspectratio,alt={Flujo principal - Estudiante}]{processed/images/05_diseno_plantuml_4.png}}
 \caption{Flujo principal - Estudiante}
+\label{fig:flujo-principal-estudiante}
 \end{figure}
 
 \subsubsection{Wireframe - Dashboard
@@ -3674,7 +3704,6 @@ Defensas}\label{wireframe---calendario-de-defensas}
 \end{lstlisting}
 
 \chapter{Implementación}\label{implementaciuxf3n}
-
 Tras haber completado las fases de análisis y diseño del sistema,
 procederemos con la descripción detallada de la implementación del
 proyecto. Este capítulo documenta cómo se han materializado los
@@ -5397,7 +5426,6 @@ class NotificationService
 \end{lstlisting}
 
 \chapter{Entrega del producto}\label{entrega-del-producto}
-
 Finalizada la fase de implementación, corresponde abordar los aspectos
 relacionados con la entrega del producto desarrollado. Este capítulo
 documenta todos los elementos necesarios para poner el sistema en
@@ -5708,7 +5736,6 @@ parameters:
 
 \chapter{Procesos de soporte y
 pruebas}\label{procesos-de-soporte-y-pruebas}
-
 Completada la entrega del producto, es fundamental documentar los
 procesos de soporte y pruebas que garantizan la calidad, mantenibilidad
 y evolución continua del sistema desarrollado. Este capítulo aborda los
@@ -6764,7 +6791,6 @@ echo "✅ Metrics report completed"
 
 \chapter{Conclusiones y trabajo
 futuro}\label{conclusiones-y-trabajo-futuro}
-
 Al llegar al final de este recorrido técnico y académico, corresponde
 realizar una evaluación integral del trabajo realizado y proyectar las
 posibles líneas de evolución futura del sistema desarrollado. Este
@@ -7315,7 +7341,6 @@ Mullenweg
 
 \chapter{Anexo A. Manual de
 instalación}\label{anexo-a.-manual-de-instalaciuxf3n}
-
 Como complemento esencial a la documentación técnica del proyecto, este
 anexo proporciona una guía completa y detallada para la instalación y
 configuración de la Plataforma de Gestión de TFG en diferentes entornos.
