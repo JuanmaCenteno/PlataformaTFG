@@ -19,7 +19,7 @@ function Layout({ children }) {
 				return [
 					...baseItems,
 					{
-						name: "Mis TFGs",
+						name: "Mi TFG",
 						href: "/estudiante/mis-tfgs",
 						icon: "📄",
 					},

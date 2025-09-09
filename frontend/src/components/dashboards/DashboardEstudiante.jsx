@@ -43,7 +43,7 @@ function DashboardEstudiante({ user }) {
           ¡Hola, {user?.nombre || user?.nombreCompleto || 'Estudiante'}! 👋
         </h1>
         <p className="text-gray-600 mt-2">
-          Aquí tienes un resumen de tu progreso con el TFG
+          Gestiona tu Trabajo de Fin de Grado y sigue su progreso
         </p>
       </div>
 
@@ -213,7 +213,7 @@ function DashboardEstudiante({ user }) {
                   to="/estudiante/mis-tfgs"
                   className="text-blue-600 hover:text-blue-800 text-sm font-medium"
                 >
-                  Ver todas las tareas →
+                  Ver mi TFG →
                 </Link>
               </div>
             </div>

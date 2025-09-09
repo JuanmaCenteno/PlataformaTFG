@@ -105,10 +105,10 @@ function MisTFGs() {
 			<div className="flex justify-between items-center mb-8">
 				<div>
 					<h1 className="text-3xl font-bold text-gray-900">
-						Mis TFGs
+						Mi TFG
 					</h1>
 					<p className="text-gray-600 mt-2">
-						Gestiona tus Trabajos de Fin de Grado
+						Gestiona tu Trabajo de Fin de Grado
 					</p>
 				</div>
 				<Link
@@ -116,7 +116,7 @@ function MisTFGs() {
 					className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 flex items-center space-x-2"
 				>
 					<span>📎</span>
-					<span>Subir Nuevo TFG</span>
+					<span>Subir Mi TFG</span>
 				</Link>
 			</div>
 
@@ -125,17 +125,17 @@ function MisTFGs() {
 				<div className="bg-white shadow rounded-lg p-12 text-center">
 					<div className="text-6xl mb-4">📚</div>
 					<h3 className="text-lg font-medium text-gray-900 mb-2">
-						No tienes TFGs subidos
+						No tienes tu TFG subido
 					</h3>
 					<p className="text-gray-500 mb-6">
-						Sube tu primer Trabajo de Fin de Grado para comenzar el
+						Sube tu Trabajo de Fin de Grado para comenzar el
 						proceso de revisión
 					</p>
 					<Link
 						to="/estudiante/subir-tfg"
 						className="bg-blue-600 text-white px-6 py-3 rounded-md hover:bg-blue-700"
 					>
-						Subir mi primer TFG
+						Subir mi TFG
 					</Link>
 				</div>
 			) : (
@@ -308,7 +308,7 @@ function MisTFGs() {
 							{tfgs.length}
 						</div>
 						<div className="text-sm text-gray-500">
-							TFGs Totales
+							Versiones
 						</div>
 					</div>
 					<div className="bg-white shadow rounded-lg p-6 text-center">
@@ -324,7 +324,7 @@ function MisTFGs() {
 						<div className="text-2xl font-bold text-green-600">
 							{tfgs.filter((t) => t.estado === "Aprobado").length}
 						</div>
-						<div className="text-sm text-gray-500">Aprobados</div>
+						<div className="text-sm text-gray-500">Aprobado</div>
 					</div>
 					<div className="bg-white shadow rounded-lg p-6 text-center">
 						<div className="text-2xl font-bold text-gray-600">

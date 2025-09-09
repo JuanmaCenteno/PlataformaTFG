@@ -155,7 +155,7 @@ function SubirTFG() {
       const resultado = await subirTFG(datosEnvio, handleUploadProgress)
       
       if (resultado.success) {
-        // Redirigir a mis TFGs con mensaje de éxito
+        // Redirigir a mi TFG con mensaje de éxito
         navigate('/estudiante/mis-tfgs', { 
           state: { message: resultado.message || 'TFG subido correctamente' }
         })
