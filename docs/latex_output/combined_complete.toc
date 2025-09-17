@@ -242,91 +242,90 @@
 \contentsline {subsubsection}{\numberline {8.3.4.1}Load testing con Artillery}{199}{subsubsection.8.3.4.1}%
 \contentsline {subsubsection}{\numberline {8.3.4.2}Métricas de rendimiento objetivo}{201}{subsubsection.8.3.4.2}%
 \contentsline {subsection}{\numberline {8.3.5}Testing de seguridad}{203}{subsection.8.3.5}%
-\contentsline {subsubsection}{\numberline {8.3.5.1}Automated Security Testing}{203}{subsubsection.8.3.5.1}%
-\contentsline {subsubsection}{\numberline {8.3.5.2}Lista de verificación de pruebas de penetración}{204}{subsubsection.8.3.5.2}%
-\contentsline {section}{\numberline {8.4}Métricas y KPIs}{206}{section.8.4}%
-\contentsline {subsection}{\numberline {8.4.1}Métricas técnicas}{206}{subsection.8.4.1}%
+\contentsline {subsubsection}{\numberline {8.3.5.1}Lista de verificación de pruebas de penetración}{203}{subsubsection.8.3.5.1}%
+\contentsline {section}{\numberline {8.4}Métricas y KPIs}{205}{section.8.4}%
+\contentsline {subsection}{\numberline {8.4.1}Métricas técnicas}{205}{subsection.8.4.1}%
 \contentsline {subsection}{\numberline {8.4.2}Métricas de calidad}{207}{subsection.8.4.2}%
-\contentsline {chapter}{\numberline {9}Conclusiones y trabajo futuro}{210}{chapter.9}%
-\contentsline {section}{\numberline {9.1}Valoración del proyecto}{210}{section.9.1}%
-\contentsline {subsection}{\numberline {9.1.1}Evaluación global}{210}{subsection.9.1.1}%
-\contentsline {subsubsection}{\numberline {9.1.1.1}Fortalezas identificadas}{211}{subsubsection.9.1.1.1}%
-\contentsline {subsubsection}{\numberline {9.1.1.2}Desafíos superados}{212}{subsubsection.9.1.1.2}%
-\contentsline {subsection}{\numberline {9.1.2}Impacto esperado}{212}{subsection.9.1.2}%
-\contentsline {subsubsection}{\numberline {9.1.2.1}Beneficios cuantificables}{212}{subsubsection.9.1.2.1}%
-\contentsline {subsubsection}{\numberline {9.1.2.2}Impacto académico}{213}{subsubsection.9.1.2.2}%
-\contentsline {section}{\numberline {9.2}Cumplimiento de los objetivos propuestos}{214}{section.9.2}%
-\contentsline {subsection}{\numberline {9.2.1}Objetivos funcionales}{214}{subsection.9.2.1}%
-\contentsline {subsection}{\numberline {9.2.2}Objetivos técnicos}{216}{subsection.9.2.2}%
-\contentsline {subsection}{\numberline {9.2.3}Objetivos de calidad}{219}{subsection.9.2.3}%
-\contentsline {section}{\numberline {9.3}Trabajo futuro}{221}{section.9.3}%
-\contentsline {subsection}{\numberline {9.3.1}Mejoras a corto plazo (1-6 meses)}{221}{subsection.9.3.1}%
-\contentsline {subsubsection}{\numberline {9.3.1.1}Sistema de notificaciones por email avanzado}{221}{subsubsection.9.3.1.1}%
-\contentsline {subsubsection}{\numberline {9.3.1.2}Métricas y analíticas avanzadas}{221}{subsubsection.9.3.1.2}%
-\contentsline {subsection}{\numberline {9.3.2}Funcionalidades de mediano plazo (6-12 meses)}{222}{subsection.9.3.2}%
-\contentsline {subsubsection}{\numberline {9.3.2.1}Sistema de colaboración avanzado}{222}{subsubsection.9.3.2.1}%
-\contentsline {subsubsection}{\numberline {9.3.2.2}Inteligencia artificial y automatización}{222}{subsubsection.9.3.2.2}%
-\contentsline {subsubsection}{\numberline {9.3.2.3}Aplicación móvil nativa}{222}{subsubsection.9.3.2.3}%
-\contentsline {subsection}{\numberline {9.3.3}Expansiones a largo plazo (1-2 años)}{222}{subsection.9.3.3}%
-\contentsline {subsubsection}{\numberline {9.3.3.1}Plataforma multi-institucional}{222}{subsubsection.9.3.3.1}%
-\contentsline {subsubsection}{\numberline {9.3.3.2}Integración con sistemas académicos existentes}{223}{subsubsection.9.3.3.2}%
-\contentsline {subsubsection}{\numberline {9.3.3.3}Marketplace de servicios académicos}{223}{subsubsection.9.3.3.3}%
-\contentsline {subsection}{\numberline {9.3.4}Innovaciones tecnológicas futuras}{223}{subsection.9.3.4}%
-\contentsline {subsubsection}{\numberline {9.3.4.1}Realidad virtual para defensas}{223}{subsubsection.9.3.4.1}%
-\contentsline {subsubsection}{\numberline {9.3.4.2}Blockchain para certificaciones}{223}{subsubsection.9.3.4.2}%
-\contentsline {section}{\numberline {9.4}Lecciones aprendidas}{224}{section.9.4}%
-\contentsline {subsection}{\numberline {9.4.1}Decisiones arquitectónicas acertadas}{224}{subsection.9.4.1}%
-\contentsline {subsection}{\numberline {9.4.2}Desafíos técnicos y soluciones}{224}{subsection.9.4.2}%
-\contentsline {subsection}{\numberline {9.4.3}Mejores prácticas identificadas}{225}{subsection.9.4.3}%
-\contentsline {subsection}{\numberline {9.4.4}Recomendaciones para proyectos similares}{225}{subsection.9.4.4}%
-\contentsline {section}{\numberline {9.5}Reflexión final}{225}{section.9.5}%
-\contentsline {chapter}{\numberline {10}Anexo A. Manual de instalación}{227}{chapter.10}%
-\contentsline {section}{\numberline {10.1}A.1. Requisitos del sistema}{227}{section.10.1}%
-\contentsline {subsection}{\numberline {10.1.1}A.1.1. Requisitos mínimos de hardware}{227}{subsection.10.1.1}%
-\contentsline {subsection}{\numberline {10.1.2}A.1.2. Requisitos de software}{227}{subsection.10.1.2}%
-\contentsline {section}{\numberline {10.2}A.2. Instalación para desarrollo}{228}{section.10.2}%
-\contentsline {subsection}{\numberline {10.2.1}A.2.1. Configuración inicial del proyecto}{228}{subsection.10.2.1}%
-\contentsline {subsubsection}{\numberline {10.2.1.1}Paso 1: Clonar el repositorio}{228}{subsubsection.10.2.1.1}%
-\contentsline {subsubsection}{\numberline {10.2.1.2}Paso 2: Configurar variables de entorno}{229}{subsubsection.10.2.1.2}%
-\contentsline {subsection}{\numberline {10.2.2}A.2.2. Configuración con DDEV (Recomendado)}{229}{subsection.10.2.2}%
-\contentsline {subsubsection}{\numberline {10.2.2.1}Paso 1: Instalación de DDEV}{229}{subsubsection.10.2.2.1}%
-\contentsline {subsubsection}{\numberline {10.2.2.2}Paso 2: Configuración inicial de DDEV}{230}{subsubsection.10.2.2.2}%
-\contentsline {subsubsection}{\numberline {10.2.2.3}Paso 3: Configuración específica de DDEV}{230}{subsubsection.10.2.2.3}%
-\contentsline {subsubsection}{\numberline {10.2.2.4}Paso 4: Iniciar el entorno DDEV}{231}{subsubsection.10.2.2.4}%
-\contentsline {subsection}{\numberline {10.2.3}A.2.3. Configuración del frontend}{231}{subsection.10.2.3}%
-\contentsline {subsubsection}{\numberline {10.2.3.1}Paso 1: Instalación de dependencias}{231}{subsubsection.10.2.3.1}%
-\contentsline {subsubsection}{\numberline {10.2.3.2}Paso 2: Configuración de herramientas de desarrollo}{232}{subsubsection.10.2.3.2}%
-\contentsline {subsubsection}{\numberline {10.2.3.3}Paso 3: Iniciar servidor de desarrollo}{232}{subsubsection.10.2.3.3}%
-\contentsline {subsection}{\numberline {10.2.4}A.2.4. Configuración del backend (Symfony)}{233}{subsection.10.2.4}%
-\contentsline {subsubsection}{\numberline {10.2.4.1}Paso 1: Instalación de Composer y dependencias}{233}{subsubsection.10.2.4.1}%
-\contentsline {subsubsection}{\numberline {10.2.4.2}Paso 2: Configuración de la base de datos}{233}{subsubsection.10.2.4.2}%
-\contentsline {subsubsection}{\numberline {10.2.4.3}Paso 3: Generar claves JWT}{233}{subsubsection.10.2.4.3}%
-\contentsline {subsubsection}{\numberline {10.2.4.4}Paso 4: Configurar caché y logs}{233}{subsubsection.10.2.4.4}%
-\contentsline {section}{\numberline {10.3}A.3. Configuración de la base de datos}{234}{section.10.3}%
-\contentsline {subsection}{\numberline {10.3.1}A.3.1. Configuración de MySQL}{234}{subsection.10.3.1}%
-\contentsline {subsubsection}{\numberline {10.3.1.1}Opción A: Usando DDEV (Recomendado)}{234}{subsubsection.10.3.1.1}%
-\contentsline {subsubsection}{\numberline {10.3.1.2}Opción B: MySQL local}{234}{subsubsection.10.3.1.2}%
-\contentsline {subsection}{\numberline {10.3.2}A.3.2. Esquema inicial de la base de datos}{235}{subsection.10.3.2}%
-\contentsline {subsection}{\numberline {10.3.3}A.3.3. Datos de prueba}{235}{subsection.10.3.3}%
-\contentsline {section}{\numberline {10.4}A.4. Configuración de desarrollo avanzada}{236}{section.10.4}%
-\contentsline {subsection}{\numberline {10.4.1}A.4.1. Debugging y logs}{236}{subsection.10.4.1}%
-\contentsline {subsubsection}{\numberline {10.4.1.1}Configuración de Xdebug (PHP)}{236}{subsubsection.10.4.1.1}%
-\contentsline {subsubsection}{\numberline {10.4.1.2}Configuración de logs}{236}{subsubsection.10.4.1.2}%
-\contentsline {subsection}{\numberline {10.4.2}A.4.2. Testing environment}{237}{subsection.10.4.2}%
-\contentsline {subsubsection}{\numberline {10.4.2.1}Configuración para testing del frontend}{237}{subsubsection.10.4.2.1}%
-\contentsline {subsubsection}{\numberline {10.4.2.2}Configuración para testing del backend}{237}{subsubsection.10.4.2.2}%
-\contentsline {subsection}{\numberline {10.4.3}A.4.3. Herramientas de desarrollo adicionales}{237}{subsection.10.4.3}%
-\contentsline {subsubsection}{\numberline {10.4.3.1}Git hooks para calidad de código}{237}{subsubsection.10.4.3.1}%
-\contentsline {subsubsection}{\numberline {10.4.3.2}Extensiones recomendadas de VS Code}{238}{subsubsection.10.4.3.2}%
-\contentsline {section}{\numberline {10.5}A.5. Solución de problemas comunes}{238}{section.10.5}%
-\contentsline {subsection}{\numberline {10.5.1}A.5.1. Problemas de DDEV}{238}{subsection.10.5.1}%
-\contentsline {subsection}{\numberline {10.5.2}A.5.2. Problemas del frontend}{239}{subsection.10.5.2}%
-\contentsline {subsection}{\numberline {10.5.3}A.5.3. Problemas del backend}{239}{subsection.10.5.3}%
-\contentsline {subsection}{\numberline {10.5.4}A.5.4. Problemas de rendimiento}{240}{subsection.10.5.4}%
-\contentsline {section}{\numberline {10.6}A.6. Comandos útiles de desarrollo}{240}{section.10.6}%
-\contentsline {subsection}{\numberline {10.6.1}A.6.1. Comandos DDEV frecuentes}{240}{subsection.10.6.1}%
-\contentsline {subsection}{\numberline {10.6.2}A.6.2. Comandos del frontend}{241}{subsection.10.6.2}%
-\contentsline {subsection}{\numberline {10.6.3}A.6.3. Comandos del backend}{241}{subsection.10.6.3}%
-\contentsline {section}{\numberline {10.7}A.7. Verificación de la instalación}{242}{section.10.7}%
-\contentsline {subsection}{\numberline {10.7.1}A.7.1. Checklist de verificación}{242}{subsection.10.7.1}%
-\contentsline {subsection}{\numberline {10.7.2}A.7.2. Script de verificación automatizada}{243}{subsection.10.7.2}%
+\contentsline {chapter}{\numberline {9}Conclusiones y trabajo futuro}{209}{chapter.9}%
+\contentsline {section}{\numberline {9.1}Valoración del proyecto}{209}{section.9.1}%
+\contentsline {subsection}{\numberline {9.1.1}Evaluación global}{209}{subsection.9.1.1}%
+\contentsline {subsubsection}{\numberline {9.1.1.1}Fortalezas identificadas}{210}{subsubsection.9.1.1.1}%
+\contentsline {subsubsection}{\numberline {9.1.1.2}Desafíos superados}{211}{subsubsection.9.1.1.2}%
+\contentsline {subsection}{\numberline {9.1.2}Impacto esperado}{211}{subsection.9.1.2}%
+\contentsline {subsubsection}{\numberline {9.1.2.1}Beneficios cuantificables}{211}{subsubsection.9.1.2.1}%
+\contentsline {subsubsection}{\numberline {9.1.2.2}Impacto académico}{212}{subsubsection.9.1.2.2}%
+\contentsline {section}{\numberline {9.2}Cumplimiento de los objetivos propuestos}{213}{section.9.2}%
+\contentsline {subsection}{\numberline {9.2.1}Objetivos funcionales}{213}{subsection.9.2.1}%
+\contentsline {subsection}{\numberline {9.2.2}Objetivos técnicos}{215}{subsection.9.2.2}%
+\contentsline {subsection}{\numberline {9.2.3}Objetivos de calidad}{218}{subsection.9.2.3}%
+\contentsline {section}{\numberline {9.3}Trabajo futuro}{220}{section.9.3}%
+\contentsline {subsection}{\numberline {9.3.1}Mejoras a corto plazo (1-6 meses)}{220}{subsection.9.3.1}%
+\contentsline {subsubsection}{\numberline {9.3.1.1}Sistema de notificaciones por email avanzado}{220}{subsubsection.9.3.1.1}%
+\contentsline {subsubsection}{\numberline {9.3.1.2}Métricas y analíticas avanzadas}{220}{subsubsection.9.3.1.2}%
+\contentsline {subsection}{\numberline {9.3.2}Funcionalidades de mediano plazo (6-12 meses)}{221}{subsection.9.3.2}%
+\contentsline {subsubsection}{\numberline {9.3.2.1}Sistema de colaboración avanzado}{221}{subsubsection.9.3.2.1}%
+\contentsline {subsubsection}{\numberline {9.3.2.2}Inteligencia artificial y automatización}{221}{subsubsection.9.3.2.2}%
+\contentsline {subsubsection}{\numberline {9.3.2.3}Aplicación móvil nativa}{221}{subsubsection.9.3.2.3}%
+\contentsline {subsection}{\numberline {9.3.3}Expansiones a largo plazo (1-2 años)}{221}{subsection.9.3.3}%
+\contentsline {subsubsection}{\numberline {9.3.3.1}Plataforma multi-institucional}{221}{subsubsection.9.3.3.1}%
+\contentsline {subsubsection}{\numberline {9.3.3.2}Integración con sistemas académicos existentes}{222}{subsubsection.9.3.3.2}%
+\contentsline {subsubsection}{\numberline {9.3.3.3}Marketplace de servicios académicos}{222}{subsubsection.9.3.3.3}%
+\contentsline {subsection}{\numberline {9.3.4}Innovaciones tecnológicas futuras}{222}{subsection.9.3.4}%
+\contentsline {subsubsection}{\numberline {9.3.4.1}Realidad virtual para defensas}{222}{subsubsection.9.3.4.1}%
+\contentsline {subsubsection}{\numberline {9.3.4.2}Blockchain para certificaciones}{222}{subsubsection.9.3.4.2}%
+\contentsline {section}{\numberline {9.4}Lecciones aprendidas}{223}{section.9.4}%
+\contentsline {subsection}{\numberline {9.4.1}Decisiones arquitectónicas acertadas}{223}{subsection.9.4.1}%
+\contentsline {subsection}{\numberline {9.4.2}Desafíos técnicos y soluciones}{223}{subsection.9.4.2}%
+\contentsline {subsection}{\numberline {9.4.3}Mejores prácticas identificadas}{224}{subsection.9.4.3}%
+\contentsline {subsection}{\numberline {9.4.4}Recomendaciones para proyectos similares}{224}{subsection.9.4.4}%
+\contentsline {section}{\numberline {9.5}Reflexión final}{224}{section.9.5}%
+\contentsline {chapter}{\numberline {10}Anexo A. Manual de instalación}{226}{chapter.10}%
+\contentsline {section}{\numberline {10.1}A.1. Requisitos del sistema}{226}{section.10.1}%
+\contentsline {subsection}{\numberline {10.1.1}A.1.1. Requisitos mínimos de hardware}{226}{subsection.10.1.1}%
+\contentsline {subsection}{\numberline {10.1.2}A.1.2. Requisitos de software}{226}{subsection.10.1.2}%
+\contentsline {section}{\numberline {10.2}A.2. Instalación para desarrollo}{227}{section.10.2}%
+\contentsline {subsection}{\numberline {10.2.1}A.2.1. Configuración inicial del proyecto}{227}{subsection.10.2.1}%
+\contentsline {subsubsection}{\numberline {10.2.1.1}Paso 1: Clonar el repositorio}{227}{subsubsection.10.2.1.1}%
+\contentsline {subsubsection}{\numberline {10.2.1.2}Paso 2: Configurar variables de entorno}{228}{subsubsection.10.2.1.2}%
+\contentsline {subsection}{\numberline {10.2.2}A.2.2. Configuración con DDEV (Recomendado)}{228}{subsection.10.2.2}%
+\contentsline {subsubsection}{\numberline {10.2.2.1}Paso 1: Instalación de DDEV}{228}{subsubsection.10.2.2.1}%
+\contentsline {subsubsection}{\numberline {10.2.2.2}Paso 2: Configuración inicial de DDEV}{229}{subsubsection.10.2.2.2}%
+\contentsline {subsubsection}{\numberline {10.2.2.3}Paso 3: Configuración específica de DDEV}{229}{subsubsection.10.2.2.3}%
+\contentsline {subsubsection}{\numberline {10.2.2.4}Paso 4: Iniciar el entorno DDEV}{230}{subsubsection.10.2.2.4}%
+\contentsline {subsection}{\numberline {10.2.3}A.2.3. Configuración del frontend}{230}{subsection.10.2.3}%
+\contentsline {subsubsection}{\numberline {10.2.3.1}Paso 1: Instalación de dependencias}{230}{subsubsection.10.2.3.1}%
+\contentsline {subsubsection}{\numberline {10.2.3.2}Paso 2: Configuración de herramientas de desarrollo}{231}{subsubsection.10.2.3.2}%
+\contentsline {subsubsection}{\numberline {10.2.3.3}Paso 3: Iniciar servidor de desarrollo}{231}{subsubsection.10.2.3.3}%
+\contentsline {subsection}{\numberline {10.2.4}A.2.4. Configuración del backend (Symfony)}{232}{subsection.10.2.4}%
+\contentsline {subsubsection}{\numberline {10.2.4.1}Paso 1: Instalación de Composer y dependencias}{232}{subsubsection.10.2.4.1}%
+\contentsline {subsubsection}{\numberline {10.2.4.2}Paso 2: Configuración de la base de datos}{232}{subsubsection.10.2.4.2}%
+\contentsline {subsubsection}{\numberline {10.2.4.3}Paso 3: Generar claves JWT}{232}{subsubsection.10.2.4.3}%
+\contentsline {subsubsection}{\numberline {10.2.4.4}Paso 4: Configurar caché y logs}{232}{subsubsection.10.2.4.4}%
+\contentsline {section}{\numberline {10.3}A.3. Configuración de la base de datos}{233}{section.10.3}%
+\contentsline {subsection}{\numberline {10.3.1}A.3.1. Configuración de MySQL}{233}{subsection.10.3.1}%
+\contentsline {subsubsection}{\numberline {10.3.1.1}Opción A: Usando DDEV (Recomendado)}{233}{subsubsection.10.3.1.1}%
+\contentsline {subsubsection}{\numberline {10.3.1.2}Opción B: MySQL local}{233}{subsubsection.10.3.1.2}%
+\contentsline {subsection}{\numberline {10.3.2}A.3.2. Esquema inicial de la base de datos}{234}{subsection.10.3.2}%
+\contentsline {subsection}{\numberline {10.3.3}A.3.3. Datos de prueba}{234}{subsection.10.3.3}%
+\contentsline {section}{\numberline {10.4}A.4. Configuración de desarrollo avanzada}{235}{section.10.4}%
+\contentsline {subsection}{\numberline {10.4.1}A.4.1. Debugging y logs}{235}{subsection.10.4.1}%
+\contentsline {subsubsection}{\numberline {10.4.1.1}Configuración de Xdebug (PHP)}{235}{subsubsection.10.4.1.1}%
+\contentsline {subsubsection}{\numberline {10.4.1.2}Configuración de logs}{235}{subsubsection.10.4.1.2}%
+\contentsline {subsection}{\numberline {10.4.2}A.4.2. Testing environment}{236}{subsection.10.4.2}%
+\contentsline {subsubsection}{\numberline {10.4.2.1}Configuración para testing del frontend}{236}{subsubsection.10.4.2.1}%
+\contentsline {subsubsection}{\numberline {10.4.2.2}Configuración para testing del backend}{236}{subsubsection.10.4.2.2}%
+\contentsline {subsection}{\numberline {10.4.3}A.4.3. Herramientas de desarrollo adicionales}{236}{subsection.10.4.3}%
+\contentsline {subsubsection}{\numberline {10.4.3.1}Git hooks para calidad de código}{236}{subsubsection.10.4.3.1}%
+\contentsline {subsubsection}{\numberline {10.4.3.2}Extensiones recomendadas de VS Code}{237}{subsubsection.10.4.3.2}%
+\contentsline {section}{\numberline {10.5}A.5. Solución de problemas comunes}{237}{section.10.5}%
+\contentsline {subsection}{\numberline {10.5.1}A.5.1. Problemas de DDEV}{237}{subsection.10.5.1}%
+\contentsline {subsection}{\numberline {10.5.2}A.5.2. Problemas del frontend}{238}{subsection.10.5.2}%
+\contentsline {subsection}{\numberline {10.5.3}A.5.3. Problemas del backend}{238}{subsection.10.5.3}%
+\contentsline {subsection}{\numberline {10.5.4}A.5.4. Problemas de rendimiento}{239}{subsection.10.5.4}%
+\contentsline {section}{\numberline {10.6}A.6. Comandos útiles de desarrollo}{239}{section.10.6}%
+\contentsline {subsection}{\numberline {10.6.1}A.6.1. Comandos DDEV frecuentes}{239}{subsection.10.6.1}%
+\contentsline {subsection}{\numberline {10.6.2}A.6.2. Comandos del frontend}{240}{subsection.10.6.2}%
+\contentsline {subsection}{\numberline {10.6.3}A.6.3. Comandos del backend}{240}{subsection.10.6.3}%
+\contentsline {section}{\numberline {10.7}A.7. Verificación de la instalación}{241}{section.10.7}%
+\contentsline {subsection}{\numberline {10.7.1}A.7.1. Checklist de verificación}{241}{subsection.10.7.1}%
+\contentsline {subsection}{\numberline {10.7.2}A.7.2. Script de verificación automatizada}{242}{subsection.10.7.2}%

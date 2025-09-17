@@ -6031,42 +6031,6 @@ El testing de rendimiento evalúa la capacidad de respuesta y escalabilidad del 
 
 El testing de seguridad implementa una estrategia integral de evaluación de vulnerabilidades que combina escaneo automatizado con verificación manual de amenazas específicas. Los tests se organizan en dos niveles complementarios:
 
-\subsubsection{Automated Security
-Testing}\label{automated-security-testing}
-
-\begin{lstlisting}[language=bash]
-#!/bin/bash
-## scripts/security-scan.sh
-
-echo "🔒 Running security analysis..."
-
-## Frontend dependency vulnerabilities
-echo "Checking frontend dependencies..."
-cd frontend && npm audit --audit-level moderate
-
-## Backend dependency vulnerabilities  
-echo "Checking backend dependencies..."
-cd ../backend && composer audit
-
-## OWASP ZAP baseline scan
-echo "Running OWASP ZAP baseline scan..."
-docker run -t owasp/zap2docker-stable zap-baseline.py \
-  -t https://tfg-platform.com \
-  -J zap-report.json
-
-## SSL/TLS configuration test
-echo "Testing SSL configuration..."
-docker run --rm -ti drwetter/testssl.sh https://tfg-platform.com
-
-## Static analysis with SonarQube (if available)
-if command -v sonar-scanner &> /dev/null; then
-    echo "Running SonarQube analysis..."
-    sonar-scanner
-fi
-
-echo "✅ Security scan completed"
-\end{lstlisting}
-
 \subsubsection{Lista de verificación de pruebas de penetración}\label{penetration-testing-checklist}
 
 La implementación de pruebas de penetración automatizadas constituye un pilar fundamental en la estrategia de seguridad de la plataforma, proporcionando una evaluación continua de las vulnerabilidades potenciales y la efectividad de las medidas de protección implementadas. El sistema ha integrado una batería completa de pruebas automáticas que evalúan los vectores de ataque más comunes en aplicaciones web.
