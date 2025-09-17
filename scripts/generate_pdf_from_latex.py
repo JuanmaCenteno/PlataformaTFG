@@ -28,30 +28,43 @@ def compile_latex_to_pdf():
         os.chdir(latex_dir)
         
         print("📝 Primera pasada con xelatex...")
-        # Primera compilación
+        # Primera compilación - genera estructura básica
         result1 = subprocess.run([
-            'xelatex', 
+            'xelatex',
             '-interaction=nonstopmode',  # No parar por errores menores
             'combined_complete.tex'
         ], capture_output=True, text=True)
-        
+
         if result1.returncode != 0:
             print("❌ Error en primera pasada:")
             print("STDOUT:", result1.stdout[-1000:])  # Más líneas del output
             print("STDERR:", result1.stderr[-1000:])
-        
-        print("📝 Segunda pasada con xelatex (para referencias cruzadas)...")
-        # Segunda compilación para resolver referencias
+
+        print("📝 Segunda pasada con xelatex (para generar índices)...")
+        # Segunda compilación - genera archivos .toc, .lof, etc.
         result2 = subprocess.run([
             'xelatex',
             '-interaction=nonstopmode',
             'combined_complete.tex'
         ], capture_output=True, text=True)
-        
+
         if result2.returncode != 0:
             print("❌ Error en segunda pasada:")
             print("STDOUT:", result2.stdout[-1000:])
             print("STDERR:", result2.stderr[-1000:])
+
+        print("📝 Tercera pasada con xelatex (para incluir índices en el PDF)...")
+        # Tercera compilación - incluye los índices generados en el PDF final
+        result3 = subprocess.run([
+            'xelatex',
+            '-interaction=nonstopmode',
+            'combined_complete.tex'
+        ], capture_output=True, text=True)
+
+        if result3.returncode != 0:
+            print("❌ Error en tercera pasada:")
+            print("STDOUT:", result3.stdout[-1000:])
+            print("STDERR:", result3.stderr[-1000:])
         
         # Verificar que se generó el PDF
         pdf_file = Path("combined_complete.pdf")
@@ -67,7 +80,8 @@ def compile_latex_to_pdf():
             print(f"📄 PDF final guardado como: {final_pdf.resolve()}")
             print(f"📏 Tamaño del PDF: {final_pdf.stat().st_size} bytes")
             
-            # Limpiar archivos auxiliares (comentado para debug)
+            # Mantener archivos auxiliares para debugging
+            print("ℹ️  Archivos auxiliares conservados para debugging (.toc, .lof, .aux)")
             # cleanup_auxiliary_files()
             
             return True
@@ -119,9 +133,10 @@ def show_compilation_info():
     print("=" * 50)
     print("🔧 El script realiza:")
     print("   1. Primera pasada con xelatex (genera estructura básica)")
-    print("   2. Segunda pasada con xelatex (resuelve referencias cruzadas)")
-    print("   3. Limpia archivos auxiliares")
-    print("   4. Mueve el PDF final a docs/")
+    print("   2. Segunda pasada con xelatex (genera archivos de índices .toc, .lof)")
+    print("   3. Tercera pasada con xelatex (incluye índices en el PDF final)")
+    print("   4. Limpia archivos auxiliares")
+    print("   5. Mueve el PDF final a docs/")
     print("")
     print("⚙️  Configuración usada:")
     print("   - Motor: xelatex (soporta fuentes y Unicode)")

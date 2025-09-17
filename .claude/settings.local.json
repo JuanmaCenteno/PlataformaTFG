@@ -12,7 +12,8 @@
       "Bash(docs/04_analisis_sistema.md )",
       "Bash(docs/09_conclusiones.md )",
       "Bash(./scripts/install_dependencies.sh:*)",
-      "Bash(python3:*)"
+      "Bash(python3:*)",
+      "Bash(awk:*)"
     ],
     "deny": [],
     "ask": []
