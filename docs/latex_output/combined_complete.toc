@@ -1,331 +1,270 @@
 \babel@toc {english}{}\relax 
 \contentsline {chapter}{Agradecimientos}{1}{chapter*.1}%
 \contentsline {chapter}{Resumen Ejecutivo}{2}{chapter*.2}%
-\contentsline {chapter}{\numberline {1}Visión general del proyecto}{14}{chapter.1}%
-\contentsline {section}{\numberline {1.1}Motivación}{14}{section.1.1}%
-\contentsline {section}{\numberline {1.2}Objetivos}{14}{section.1.2}%
-\contentsline {subsection}{\numberline {1.2.1}Objetivo General}{15}{subsection.1.2.1}%
-\contentsline {subsection}{\numberline {1.2.2}Objetivos Específicos}{15}{subsection.1.2.2}%
-\contentsline {section}{\numberline {1.3}Alcance}{16}{section.1.3}%
-\contentsline {subsection}{\numberline {1.3.1}Alcance Funcional}{16}{subsection.1.3.1}%
-\contentsline {subsection}{\numberline {1.3.2}Alcance Técnico}{17}{subsection.1.3.2}%
-\contentsline {subsection}{\numberline {1.3.3}Alcance Temporal}{17}{subsection.1.3.3}%
-\contentsline {section}{\numberline {1.4}Visión general del documento}{18}{section.1.4}%
-\contentsline {section}{\numberline {1.5}Estandarización del documento}{19}{section.1.5}%
-\contentsline {subsection}{\numberline {1.5.1}Normas aplicadas}{19}{subsection.1.5.1}%
-\contentsline {subsection}{\numberline {1.5.2}Convenciones del documento}{19}{subsection.1.5.2}%
-\contentsline {section}{\numberline {1.6}Acrónimos}{19}{section.1.6}%
-\contentsline {section}{\numberline {1.7}Definiciones}{21}{section.1.7}%
-\contentsline {chapter}{\numberline {2}Contexto del proyecto}{24}{chapter.2}%
-\contentsline {section}{\numberline {2.1}Descripción general del proyecto}{24}{section.2.1}%
-\contentsline {section}{\numberline {2.2}Características del usuario}{25}{section.2.2}%
-\contentsline {subsection}{\numberline {2.2.1}Estudiante}{25}{subsection.2.2.1}%
-\contentsline {subsection}{\numberline {2.2.2}Profesor/Tutor}{25}{subsection.2.2.2}%
-\contentsline {subsection}{\numberline {2.2.3}Presidente del Tribunal}{26}{subsection.2.2.3}%
-\contentsline {subsection}{\numberline {2.2.4}Administrador}{26}{subsection.2.2.4}%
-\contentsline {section}{\numberline {2.3}Modelo de ciclo de vida}{27}{section.2.3}%
-\contentsline {subsection}{\numberline {2.3.1}Metodología de desarrollo}{27}{subsection.2.3.1}%
-\contentsline {subsection}{\numberline {2.3.2}Fases del proyecto}{28}{subsection.2.3.2}%
-\contentsline {subsection}{\numberline {2.3.3}Criterios de finalización de fase}{28}{subsection.2.3.3}%
-\contentsline {section}{\numberline {2.4}Tecnologías}{29}{section.2.4}%
-\contentsline {subsection}{\numberline {2.4.1}React 19}{29}{subsection.2.4.1}%
-\contentsline {subsection}{\numberline {2.4.2}Symfony 6.4 LTS}{30}{subsection.2.4.2}%
-\contentsline {subsection}{\numberline {2.4.3}MySQL 8.0}{30}{subsection.2.4.3}%
-\contentsline {subsection}{\numberline {2.4.4}API Platform 3.x}{31}{subsection.2.4.4}%
-\contentsline {subsection}{\numberline {2.4.5}JWT Authentication (LexikJWTAuthenticationBundle)}{31}{subsection.2.4.5}%
-\contentsline {subsection}{\numberline {2.4.6}FullCalendar.js}{32}{subsection.2.4.6}%
-\contentsline {subsection}{\numberline {2.4.7}Tailwind CSS v4}{32}{subsection.2.4.7}%
-\contentsline {subsection}{\numberline {2.4.8}DDEV}{33}{subsection.2.4.8}%
-\contentsline {section}{\numberline {2.5}Lenguajes}{34}{section.2.5}%
-\contentsline {subsection}{\numberline {2.5.1}JavaScript/TypeScript}{34}{subsection.2.5.1}%
-\contentsline {subsection}{\numberline {2.5.2}PHP 8.2+}{34}{subsection.2.5.2}%
-\contentsline {subsection}{\numberline {2.5.3}SQL}{35}{subsection.2.5.3}%
-\contentsline {subsection}{\numberline {2.5.4}HTML/CSS}{36}{subsection.2.5.4}%
-\contentsline {section}{\numberline {2.6}Herramientas}{36}{section.2.6}%
-\contentsline {subsection}{\numberline {2.6.1}Visual Studio Code}{36}{subsection.2.6.1}%
-\contentsline {subsection}{\numberline {2.6.2}Vite}{37}{subsection.2.6.2}%
-\contentsline {subsection}{\numberline {2.6.3}Composer}{38}{subsection.2.6.3}%
-\contentsline {subsection}{\numberline {2.6.4}Docker / DDEV}{38}{subsection.2.6.4}%
-\contentsline {subsection}{\numberline {2.6.5}Git / GitHub}{39}{subsection.2.6.5}%
-\contentsline {subsection}{\numberline {2.6.6}Postman / Insomnia}{39}{subsection.2.6.6}%
-\contentsline {chapter}{\numberline {3}Planificación}{41}{chapter.3}%
-\contentsline {section}{\numberline {3.1}Iniciación del proyecto}{41}{section.3.1}%
-\contentsline {subsection}{\numberline {3.1.1}Contexto de inicio}{41}{subsection.3.1.1}%
-\contentsline {subsection}{\numberline {3.1.2}Análisis de viabilidad}{41}{subsection.3.1.2}%
-\contentsline {subsection}{\numberline {3.1.3}Definición del alcance inicial}{42}{subsection.3.1.3}%
-\contentsline {section}{\numberline {3.2}Iteraciones del proceso de desarrollo}{42}{section.3.2}%
-\contentsline {subsection}{\numberline {3.2.1}Fase 1-2: Setup inicial y autenticación (Semanas 1-2)}{43}{subsection.3.2.1}%
-\contentsline {subsection}{\numberline {3.2.2}Fase 3: Módulo de estudiante (Semanas 3-4)}{44}{subsection.3.2.2}%
-\contentsline {subsection}{\numberline {3.2.3}Fase 4: Módulo de profesor (Semanas 4-5)}{45}{subsection.3.2.3}%
-\contentsline {subsection}{\numberline {3.2.4}Fase 5: Sistema de defensas y calendario (Semanas 5-6)}{45}{subsection.3.2.4}%
-\contentsline {subsection}{\numberline {3.2.5}Fase 6: Panel administrativo (Semanas 6-7)}{46}{subsection.3.2.5}%
-\contentsline {subsection}{\numberline {3.2.6}Fase 7: Backend Symfony (Semanas 7-9)}{47}{subsection.3.2.6}%
-\contentsline {subsection}{\numberline {3.2.7}Fase 8: Pulimiento final (Semanas 9-10)}{48}{subsection.3.2.7}%
-\contentsline {section}{\numberline {3.3}Diagrama de Gantt}{49}{section.3.3}%
-\contentsline {subsection}{\numberline {3.3.1}Cronograma general del proyecto}{50}{subsection.3.3.1}%
-\contentsline {subsection}{\numberline {3.3.2}Hitos principales y dependencias}{51}{subsection.3.3.2}%
-\contentsline {subsection}{\numberline {3.3.3}Análisis de ruta crítica}{52}{subsection.3.3.3}%
-\contentsline {subsection}{\numberline {3.3.4}Optimizaciones de cronograma}{52}{subsection.3.3.4}%
-\contentsline {section}{\numberline {3.4}Cronograma académico}{53}{section.3.4}%
-\contentsline {subsection}{\numberline {3.4.1}Calendario de entregas}{53}{subsection.3.4.1}%
-\contentsline {subsection}{\numberline {3.4.2}Sesiones de validación}{54}{subsection.3.4.2}%
-\contentsline {subsection}{\numberline {3.4.3}Gestión de riesgos temporales}{54}{subsection.3.4.3}%
-\contentsline {subsection}{\numberline {3.4.4}Métricas de seguimiento}{55}{subsection.3.4.4}%
-\contentsline {chapter}{\numberline {4}Análisis del sistema}{57}{chapter.4}%
-\contentsline {section}{\numberline {4.1}Especificación de requisitos}{57}{section.4.1}%
-\contentsline {subsection}{\numberline {4.1.1}Requisitos de información}{57}{subsection.4.1.1}%
-\contentsline {subsubsection}{\numberline {4.1.1.1}Entidad Usuario}{58}{subsubsection.4.1.1.1}%
-\contentsline {subsubsection}{\numberline {4.1.1.2}Entidad TFG}{58}{subsubsection.4.1.1.2}%
-\contentsline {subsubsection}{\numberline {4.1.1.3}Entidad Tribunal}{60}{subsubsection.4.1.1.3}%
-\contentsline {subsubsection}{\numberline {4.1.1.4}Entidad Defensa}{60}{subsubsection.4.1.1.4}%
-\contentsline {subsection}{\numberline {4.1.2}Requisitos funcionales}{61}{subsection.4.1.2}%
-\contentsline {subsubsection}{\numberline {4.1.2.1}Requisitos funcionales - Estudiante}{61}{subsubsection.4.1.2.1}%
-\contentsline {subsubsection}{\numberline {4.1.2.2}Requisitos funcionales - Profesor}{65}{subsubsection.4.1.2.2}%
-\contentsline {subsubsection}{\numberline {4.1.2.3}Requisitos funcionales - Presidente de Tribunal}{68}{subsubsection.4.1.2.3}%
-\contentsline {subsubsection}{\numberline {4.1.2.4}Requisitos funcionales - Administrador}{70}{subsubsection.4.1.2.4}%
-\contentsline {subsection}{\numberline {4.1.3}Diagrama de casos de uso}{72}{subsection.4.1.3}%
-\contentsline {subsection}{\numberline {4.1.4}Descripción de casos de uso}{74}{subsection.4.1.4}%
-\contentsline {subsubsection}{\numberline {4.1.4.1}UC001 - Crear TFG}{74}{subsubsection.4.1.4.1}%
-\contentsline {subsubsection}{\numberline {4.1.4.2}UC005 - Revisar TFG}{74}{subsubsection.4.1.4.2}%
-\contentsline {subsubsection}{\numberline {4.1.4.3}UC010 - Programar defensa}{75}{subsubsection.4.1.4.3}%
-\contentsline {subsection}{\numberline {4.1.5}Diagramas de secuencia}{76}{subsection.4.1.5}%
-\contentsline {subsubsection}{\numberline {4.1.5.1}Secuencia: Subida de archivo TFG}{76}{subsubsection.4.1.5.1}%
-\contentsline {subsubsection}{\numberline {4.1.5.2}Secuencia: Cambio de estado de TFG}{76}{subsubsection.4.1.5.2}%
-\contentsline {subsubsection}{\numberline {4.1.5.3}Secuencia: Programación de defensa}{77}{subsubsection.4.1.5.3}%
-\contentsline {subsection}{\numberline {4.1.6}Requisitos no funcionales}{78}{subsection.4.1.6}%
-\contentsline {subsubsection}{\numberline {4.1.6.1}Rendimiento}{78}{subsubsection.4.1.6.1}%
-\contentsline {subsubsection}{\numberline {4.1.6.2}Seguridad}{79}{subsubsection.4.1.6.2}%
-\contentsline {subsubsection}{\numberline {4.1.6.3}Usabilidad}{79}{subsubsection.4.1.6.3}%
-\contentsline {subsubsection}{\numberline {4.1.6.4}Confiabilidad}{80}{subsubsection.4.1.6.4}%
-\contentsline {section}{\numberline {4.2}Garantía de calidad}{81}{section.4.2}%
-\contentsline {subsection}{\numberline {4.2.1}Seguridad}{82}{subsection.4.2.1}%
-\contentsline {subsubsection}{\numberline {4.2.1.1}Autenticación y autorización}{82}{subsubsection.4.2.1.1}%
-\contentsline {subsubsection}{\numberline {4.2.1.2}Protección de datos}{82}{subsubsection.4.2.1.2}%
-\contentsline {subsubsection}{\numberline {4.2.1.3}Auditoría y logs}{83}{subsubsection.4.2.1.3}%
-\contentsline {subsection}{\numberline {4.2.2}Interoperabilidad}{83}{subsection.4.2.2}%
-\contentsline {subsubsection}{\numberline {4.2.2.1}APIs REST estándar}{83}{subsubsection.4.2.2.1}%
-\contentsline {subsubsection}{\numberline {4.2.2.2}Formato de datos estándar}{84}{subsubsection.4.2.2.2}%
-\contentsline {subsection}{\numberline {4.2.3}Operabilidad}{84}{subsection.4.2.3}%
-\contentsline {subsubsection}{\numberline {4.2.3.1}Monitorización}{84}{subsubsection.4.2.3.1}%
-\contentsline {subsubsection}{\numberline {4.2.3.2}Mantenibilidad}{85}{subsubsection.4.2.3.2}%
-\contentsline {subsection}{\numberline {4.2.4}Transferibilidad}{85}{subsection.4.2.4}%
-\contentsline {subsubsection}{\numberline {4.2.4.1}Containerización}{85}{subsubsection.4.2.4.1}%
-\contentsline {subsection}{\numberline {4.2.5}Eficiencia}{86}{subsection.4.2.5}%
-\contentsline {subsubsection}{\numberline {4.2.5.1}Optimización frontend}{86}{subsubsection.4.2.5.1}%
-\contentsline {subsubsection}{\numberline {4.2.5.2}Optimización backend}{86}{subsubsection.4.2.5.2}%
-\contentsline {subsection}{\numberline {4.2.6}Mantenibilidad}{87}{subsection.4.2.6}%
-\contentsline {subsubsection}{\numberline {4.2.6.1}Calidad de código}{87}{subsubsection.4.2.6.1}%
-\contentsline {subsubsection}{\numberline {4.2.6.2}Arquitectura mantenible}{87}{subsubsection.4.2.6.2}%
-\contentsline {section}{\numberline {4.3}Gestión del presupuesto}{88}{section.4.3}%
-\contentsline {subsection}{\numberline {4.3.1}Estructura de costos}{88}{subsection.4.3.1}%
-\contentsline {subsubsection}{\numberline {4.3.1.1}Costos de desarrollo}{88}{subsubsection.4.3.1.1}%
-\contentsline {subsubsection}{\numberline {4.3.1.2}Infraestructura y herramientas}{89}{subsubsection.4.3.1.2}%
-\contentsline {subsubsection}{\numberline {4.3.1.3}Costos de producción estimados}{89}{subsubsection.4.3.1.3}%
-\contentsline {subsection}{\numberline {4.3.2}Return on Investment (ROI)}{90}{subsection.4.3.2}%
-\contentsline {subsubsection}{\numberline {4.3.2.1}Beneficios cuantificables}{90}{subsubsection.4.3.2.1}%
-\contentsline {subsubsection}{\numberline {4.3.2.2}Beneficios intangibles}{90}{subsubsection.4.3.2.2}%
-\contentsline {subsection}{\numberline {4.3.3}Análisis de viabilidad económica}{91}{subsection.4.3.3}%
-\contentsline {subsubsection}{\numberline {4.3.3.1}Punto de equilibrio}{91}{subsubsection.4.3.3.1}%
-\contentsline {subsubsection}{\numberline {4.3.3.2}Análisis de sensibilidad}{91}{subsubsection.4.3.3.2}%
-\contentsline {chapter}{\numberline {5}Diseño}{92}{chapter.5}%
-\contentsline {section}{\numberline {5.1}Arquitectura física}{92}{section.5.1}%
-\contentsline {subsection}{\numberline {5.1.1}Módulo frontend (Capa de presentación)}{92}{subsection.5.1.1}%
-\contentsline {subsubsection}{\numberline {5.1.1.1}Arquitectura de componentes React}{93}{subsubsection.5.1.1.1}%
-\contentsline {subsubsection}{\numberline {5.1.1.2}Gestión de estado global}{94}{subsubsection.5.1.1.2}%
-\contentsline {subsubsection}{\numberline {5.1.1.3}Comunicación con backend}{95}{subsubsection.5.1.1.3}%
-\contentsline {subsection}{\numberline {5.1.2}Módulo backend (Capa de lógica de negocio)}{96}{subsection.5.1.2}%
-\contentsline {subsubsection}{\numberline {5.1.2.1}Arquitectura hexagonal}{96}{subsubsection.5.1.2.1}%
-\contentsline {subsubsection}{\numberline {5.1.2.2}Estructura de directorios Symfony}{97}{subsubsection.5.1.2.2}%
-\contentsline {subsubsection}{\numberline {5.1.2.3}Configuración API Platform}{98}{subsubsection.5.1.2.3}%
-\contentsline {subsection}{\numberline {5.1.3}Módulo de base de datos (Capa de persistencia)}{99}{subsection.5.1.3}%
-\contentsline {subsubsection}{\numberline {5.1.3.1}Estrategia de persistencia}{99}{subsubsection.5.1.3.1}%
-\contentsline {subsection}{\numberline {5.1.4}Módulo de archivos (Almacenamiento)}{100}{subsection.5.1.4}%
-\contentsline {subsubsection}{\numberline {5.1.4.1}Configuración de VichUploader}{100}{subsubsection.5.1.4.1}%
-\contentsline {subsubsection}{\numberline {5.1.4.2}Estrategia Almacenamiento}{100}{subsubsection.5.1.4.2}%
-\contentsline {section}{\numberline {5.2}Arquitectura lógica}{101}{section.5.2}%
-\contentsline {subsection}{\numberline {5.2.1}Capa de presentación (Frontend)}{102}{subsection.5.2.1}%
-\contentsline {subsubsection}{\numberline {5.2.1.1}Patrón Container/Presentational}{102}{subsubsection.5.2.1.1}%
-\contentsline {subsubsection}{\numberline {5.2.1.2}Patrón de Control de Estado}{103}{subsubsection.5.2.1.2}%
-\contentsline {subsection}{\numberline {5.2.2}Capa de lógica de negocio (Backend)}{104}{subsection.5.2.2}%
-\contentsline {subsubsection}{\numberline {5.2.2.1}Diseño Domain-Driven}{104}{subsubsection.5.2.2.1}%
-\contentsline {subsubsection}{\numberline {5.2.2.2}Patrón Service Layer}{106}{subsubsection.5.2.2.2}%
-\contentsline {subsection}{\numberline {5.2.3}Capa de persistencia}{106}{subsection.5.2.3}%
-\contentsline {subsubsection}{\numberline {5.2.3.1}Patrón de Repositorio}{106}{subsubsection.5.2.3.1}%
-\contentsline {section}{\numberline {5.3}Esquema de la base de datos}{108}{section.5.3}%
-\contentsline {subsection}{\numberline {5.3.1}Modelo conceptual}{108}{subsection.5.3.1}%
-\contentsline {subsection}{\numberline {5.3.2}Normalización y constraints}{110}{subsection.5.3.2}%
-\contentsline {subsubsection}{\numberline {5.3.2.1}Tercera forma normal (3NF)}{110}{subsubsection.5.3.2.1}%
-\contentsline {subsubsection}{\numberline {5.3.2.2}Constraints e integridad referencial}{110}{subsubsection.5.3.2.2}%
-\contentsline {subsection}{\numberline {5.3.3}Índices de rendimiento}{111}{subsection.5.3.3}%
-\contentsline {subsubsection}{\numberline {5.3.3.1}Índices principales}{111}{subsubsection.5.3.3.1}%
-\contentsline {subsubsection}{\numberline {5.3.3.2}Análisis de consultas}{112}{subsubsection.5.3.3.2}%
-\contentsline {section}{\numberline {5.4}Diseño de la interfaz de usuario}{112}{section.5.4}%
-\contentsline {subsection}{\numberline {5.4.1}Sistema de diseño}{113}{subsection.5.4.1}%
-\contentsline {subsubsection}{\numberline {5.4.1.1}Diseño del sistema basado en Tailwind CSS}{113}{subsubsection.5.4.1.1}%
-\contentsline {subsubsection}{\numberline {5.4.1.2}Componentes base reutilizables}{114}{subsubsection.5.4.1.2}%
-\contentsline {subsection}{\numberline {5.4.2}Diseño responsive}{115}{subsection.5.4.2}%
-\contentsline {subsubsection}{\numberline {5.4.2.1}Breakpoints y grid system}{115}{subsubsection.5.4.2.1}%
-\contentsline {subsubsection}{\numberline {5.4.2.2}Mobile-first components}{116}{subsubsection.5.4.2.2}%
-\contentsline {subsection}{\numberline {5.4.3}Wireframes y flujos de usuario}{117}{subsection.5.4.3}%
-\contentsline {subsubsection}{\numberline {5.4.3.1}Flujo principal - Estudiante}{117}{subsubsection.5.4.3.1}%
-\contentsline {subsubsection}{\numberline {5.4.3.2}Wireframe - Dashboard Estudiante}{118}{subsubsection.5.4.3.2}%
-\contentsline {subsubsection}{\numberline {5.4.3.3}Wireframe - Calendario de Defensas}{119}{subsubsection.5.4.3.3}%
-\contentsline {subsection}{\numberline {5.4.4}Interfaces de usuario implementadas}{120}{subsection.5.4.4}%
-\contentsline {subsubsection}{\numberline {5.4.4.1}Dashboard de Estudiante}{120}{subsubsection.5.4.4.1}%
-\contentsline {subsubsection}{\numberline {5.4.4.2}Gestión de TFG - Vista de Estudiante}{121}{subsubsection.5.4.4.2}%
-\contentsline {subsubsection}{\numberline {5.4.4.3}Sistema de Notificaciones}{123}{subsubsection.5.4.4.3}%
-\contentsline {subsubsection}{\numberline {5.4.4.4}Dashboard de Profesor}{124}{subsubsection.5.4.4.4}%
-\contentsline {subsubsection}{\numberline {5.4.4.5}Sistema de Evaluación y Feedback}{125}{subsubsection.5.4.4.5}%
-\contentsline {subsubsection}{\numberline {5.4.4.6}Gestión de Tribunales}{127}{subsubsection.5.4.4.6}%
-\contentsline {subsubsection}{\numberline {5.4.4.7}Calendario de Defensas}{129}{subsubsection.5.4.4.7}%
-\contentsline {subsubsection}{\numberline {5.4.4.8}Panel de Administración}{130}{subsubsection.5.4.4.8}%
-\contentsline {subsubsection}{\numberline {5.4.4.9}Gestión de Usuarios}{131}{subsubsection.5.4.4.9}%
-\contentsline {subsubsection}{\numberline {5.4.4.10}Sistema de Reportes y Estadísticas}{132}{subsubsection.5.4.4.10}%
-\contentsline {chapter}{\numberline {6}Implementación}{134}{chapter.6}%
-\contentsline {section}{\numberline {6.1}Arquitectura de componentes React}{134}{section.6.1}%
-\contentsline {subsection}{\numberline {6.1.1}Estructura de directorios}{134}{subsection.6.1.1}%
-\contentsline {subsection}{\numberline {6.1.2}Implementación del sistema de autenticación}{136}{subsection.6.1.2}%
-\contentsline {subsubsection}{\numberline {6.1.2.1}AuthContext y Provider}{136}{subsubsection.6.1.2.1}%
-\contentsline {subsubsection}{\numberline {6.1.2.2}Componente ProtectedRoute}{139}{subsubsection.6.1.2.2}%
-\contentsline {subsection}{\numberline {6.1.3}Implementación de Hooks Personalizados}{140}{subsection.6.1.3}%
-\contentsline {subsubsection}{\numberline {6.1.3.1}useTFGs Hook}{140}{subsubsection.6.1.3.1}%
-\contentsline {subsection}{\numberline {6.1.4}Componentes de interfaz principales}{144}{subsection.6.1.4}%
-\contentsline {subsubsection}{\numberline {6.1.4.1}Componente Dashboard}{144}{subsubsection.6.1.4.1}%
-\contentsline {section}{\numberline {6.2}Sistema de autenticación y roles}{146}{section.6.2}%
-\contentsline {subsection}{\numberline {6.2.1}Implementación backend con Symfony Security}{147}{subsection.6.2.1}%
-\contentsline {subsubsection}{\numberline {6.2.1.1}Configuración de seguridad}{147}{subsubsection.6.2.1.1}%
-\contentsline {subsubsection}{\numberline {6.2.1.2}Controlador de Autenticación JWT.}{148}{subsubsection.6.2.1.2}%
-\contentsline {subsection}{\numberline {6.2.2}Voters para control granular de permisos}{150}{subsection.6.2.2}%
-\contentsline {section}{\numberline {6.3}Gestión de estado con Context API}{153}{section.6.3}%
-\contentsline {subsection}{\numberline {6.3.1}NotificacionesContext}{153}{subsection.6.3.1}%
-\contentsline {section}{\numberline {6.4}APIs REST y endpoints}{156}{section.6.4}%
-\contentsline {subsection}{\numberline {6.4.1}TFG Controller con API Platform}{156}{subsection.6.4.1}%
-\contentsline {subsection}{\numberline {6.4.2}Capa de Servicios - TFGService}{160}{subsection.6.4.2}%
-\contentsline {section}{\numberline {6.5}Sistema de archivos y subida de documentos}{164}{section.6.5}%
-\contentsline {subsection}{\numberline {6.5.1}FileUploadService}{164}{subsection.6.5.1}%
-\contentsline {section}{\numberline {6.6}Sistema de notificaciones}{167}{section.6.6}%
-\contentsline {subsection}{\numberline {6.6.1}NotificationService}{168}{subsection.6.6.1}%
-\contentsline {chapter}{\numberline {7}Entrega del producto}{173}{chapter.7}%
-\contentsline {section}{\numberline {7.1}Configuración de producción}{173}{section.7.1}%
-\contentsline {subsection}{\numberline {7.1.1}Configuración del frontend}{173}{subsection.7.1.1}%
-\contentsline {subsubsection}{\numberline {7.1.1.1}Variables de entorno de producción}{173}{subsubsection.7.1.1.1}%
-\contentsline {subsubsection}{\numberline {7.1.1.2}Optimización del build de producción}{174}{subsubsection.7.1.1.2}%
-\contentsline {subsubsection}{\numberline {7.1.1.3}Configuración PWA (Preparación futura)}{175}{subsubsection.7.1.1.3}%
-\contentsline {subsection}{\numberline {7.1.2}Configuración del backend}{176}{subsection.7.1.2}%
-\contentsline {subsubsection}{\numberline {7.1.2.1}Variables de entorno de producción}{176}{subsubsection.7.1.2.1}%
-\contentsline {subsubsection}{\numberline {7.1.2.2}Configuración de Symfony para producción}{177}{subsubsection.7.1.2.2}%
-\contentsline {subsubsection}{\numberline {7.1.2.3}Optimización de rendimiento}{179}{subsubsection.7.1.2.3}%
-\contentsline {chapter}{\numberline {8}Procesos de soporte y pruebas}{180}{chapter.8}%
-\contentsline {section}{\numberline {8.1}Gestión y toma de decisiones}{180}{section.8.1}%
-\contentsline {subsection}{\numberline {8.1.1}Metodología de gestión del proyecto}{180}{subsection.8.1.1}%
-\contentsline {subsubsection}{\numberline {8.1.1.1}Estructura de toma de decisiones}{181}{subsubsection.8.1.1.1}%
-\contentsline {subsection}{\numberline {8.1.2}Control de versiones y cambios}{181}{subsection.8.1.2}%
-\contentsline {subsubsection}{\numberline {8.1.2.1}Estrategia de branching}{181}{subsubsection.8.1.2.1}%
-\contentsline {subsubsection}{\numberline {8.1.2.2}Gestión de releases}{182}{subsubsection.8.1.2.2}%
-\contentsline {section}{\numberline {8.2}Gestión de riesgos}{182}{section.8.2}%
-\contentsline {subsection}{\numberline {8.2.1}Análisis de riesgos}{182}{subsection.8.2.1}%
-\contentsline {subsubsection}{\numberline {8.2.1.1}Matriz de riesgos identificados}{182}{subsubsection.8.2.1.1}%
-\contentsline {subsubsection}{\numberline {8.2.1.2}Análisis detallado de riesgos críticos}{183}{subsubsection.8.2.1.2}%
-\contentsline {subsection}{\numberline {8.2.2}Plan de contingencia}{184}{subsection.8.2.2}%
-\contentsline {subsubsection}{\numberline {8.2.2.1}Escenarios de contingencia}{184}{subsubsection.8.2.2.1}%
-\contentsline {section}{\numberline {8.3}Verificación y validación del software}{185}{section.8.3}%
-\contentsline {subsection}{\numberline {8.3.1}Testing del frontend}{186}{subsection.8.3.1}%
-\contentsline {subsubsection}{\numberline {8.3.1.1}Testing unitario con Vitest}{186}{subsubsection.8.3.1.1}%
-\contentsline {subsubsection}{\numberline {8.3.1.2}Testing de hooks personalizados}{187}{subsubsection.8.3.1.2}%
-\contentsline {subsubsection}{\numberline {8.3.1.3}Testing de integración con React Testing Library}{189}{subsubsection.8.3.1.3}%
-\contentsline {subsection}{\numberline {8.3.2}Testing del backend}{190}{subsection.8.3.2}%
-\contentsline {subsubsection}{\numberline {8.3.2.1}Testing unitario con PHPUnit}{191}{subsubsection.8.3.2.1}%
-\contentsline {subsubsection}{\numberline {8.3.2.2}Testing de servicios}{192}{subsubsection.8.3.2.2}%
-\contentsline {subsection}{\numberline {8.3.3}Testing de APIs REST}{195}{subsection.8.3.3}%
-\contentsline {subsubsection}{\numberline {8.3.3.1}Testing funcional de endpoints}{195}{subsubsection.8.3.3.1}%
-\contentsline {subsection}{\numberline {8.3.4}Testing de rendimiento}{199}{subsection.8.3.4}%
-\contentsline {subsubsection}{\numberline {8.3.4.1}Load testing con Artillery}{199}{subsubsection.8.3.4.1}%
-\contentsline {subsubsection}{\numberline {8.3.4.2}Métricas de rendimiento objetivo}{201}{subsubsection.8.3.4.2}%
-\contentsline {subsection}{\numberline {8.3.5}Testing de seguridad}{203}{subsection.8.3.5}%
-\contentsline {subsubsection}{\numberline {8.3.5.1}Lista de verificación de pruebas de penetración}{203}{subsubsection.8.3.5.1}%
-\contentsline {section}{\numberline {8.4}Métricas y KPIs}{205}{section.8.4}%
-\contentsline {subsection}{\numberline {8.4.1}Métricas técnicas}{205}{subsection.8.4.1}%
-\contentsline {subsection}{\numberline {8.4.2}Métricas de calidad}{207}{subsection.8.4.2}%
-\contentsline {chapter}{\numberline {9}Conclusiones y trabajo futuro}{209}{chapter.9}%
-\contentsline {section}{\numberline {9.1}Valoración del proyecto}{209}{section.9.1}%
-\contentsline {subsection}{\numberline {9.1.1}Evaluación global}{209}{subsection.9.1.1}%
-\contentsline {subsubsection}{\numberline {9.1.1.1}Fortalezas identificadas}{210}{subsubsection.9.1.1.1}%
-\contentsline {subsubsection}{\numberline {9.1.1.2}Desafíos superados}{211}{subsubsection.9.1.1.2}%
-\contentsline {subsection}{\numberline {9.1.2}Impacto esperado}{211}{subsection.9.1.2}%
-\contentsline {subsubsection}{\numberline {9.1.2.1}Beneficios cuantificables}{211}{subsubsection.9.1.2.1}%
-\contentsline {subsubsection}{\numberline {9.1.2.2}Impacto académico}{212}{subsubsection.9.1.2.2}%
-\contentsline {section}{\numberline {9.2}Cumplimiento de los objetivos propuestos}{213}{section.9.2}%
-\contentsline {subsection}{\numberline {9.2.1}Objetivos funcionales}{213}{subsection.9.2.1}%
-\contentsline {subsection}{\numberline {9.2.2}Objetivos técnicos}{215}{subsection.9.2.2}%
-\contentsline {subsection}{\numberline {9.2.3}Objetivos de calidad}{218}{subsection.9.2.3}%
-\contentsline {section}{\numberline {9.3}Trabajo futuro}{220}{section.9.3}%
-\contentsline {subsection}{\numberline {9.3.1}Mejoras a corto plazo (1-6 meses)}{220}{subsection.9.3.1}%
-\contentsline {subsubsection}{\numberline {9.3.1.1}Sistema de notificaciones por email avanzado}{220}{subsubsection.9.3.1.1}%
-\contentsline {subsubsection}{\numberline {9.3.1.2}Métricas y analíticas avanzadas}{220}{subsubsection.9.3.1.2}%
-\contentsline {subsection}{\numberline {9.3.2}Funcionalidades de mediano plazo (6-12 meses)}{221}{subsection.9.3.2}%
-\contentsline {subsubsection}{\numberline {9.3.2.1}Sistema de colaboración avanzado}{221}{subsubsection.9.3.2.1}%
-\contentsline {subsubsection}{\numberline {9.3.2.2}Inteligencia artificial y automatización}{221}{subsubsection.9.3.2.2}%
-\contentsline {subsubsection}{\numberline {9.3.2.3}Aplicación móvil nativa}{221}{subsubsection.9.3.2.3}%
-\contentsline {subsection}{\numberline {9.3.3}Expansiones a largo plazo (1-2 años)}{221}{subsection.9.3.3}%
-\contentsline {subsubsection}{\numberline {9.3.3.1}Plataforma multi-institucional}{221}{subsubsection.9.3.3.1}%
-\contentsline {subsubsection}{\numberline {9.3.3.2}Integración con sistemas académicos existentes}{222}{subsubsection.9.3.3.2}%
-\contentsline {subsubsection}{\numberline {9.3.3.3}Marketplace de servicios académicos}{222}{subsubsection.9.3.3.3}%
-\contentsline {subsection}{\numberline {9.3.4}Innovaciones tecnológicas futuras}{222}{subsection.9.3.4}%
-\contentsline {subsubsection}{\numberline {9.3.4.1}Realidad virtual para defensas}{222}{subsubsection.9.3.4.1}%
-\contentsline {subsubsection}{\numberline {9.3.4.2}Blockchain para certificaciones}{222}{subsubsection.9.3.4.2}%
-\contentsline {section}{\numberline {9.4}Lecciones aprendidas}{223}{section.9.4}%
-\contentsline {subsection}{\numberline {9.4.1}Decisiones arquitectónicas acertadas}{223}{subsection.9.4.1}%
-\contentsline {subsection}{\numberline {9.4.2}Desafíos técnicos y soluciones}{223}{subsection.9.4.2}%
-\contentsline {subsection}{\numberline {9.4.3}Mejores prácticas identificadas}{224}{subsection.9.4.3}%
-\contentsline {subsection}{\numberline {9.4.4}Recomendaciones para proyectos similares}{224}{subsection.9.4.4}%
-\contentsline {section}{\numberline {9.5}Reflexión final}{224}{section.9.5}%
-\contentsline {chapter}{\numberline {10}Anexo A. Manual de instalación}{226}{chapter.10}%
-\contentsline {section}{\numberline {10.1}A.1. Requisitos del sistema}{226}{section.10.1}%
-\contentsline {subsection}{\numberline {10.1.1}A.1.1. Requisitos mínimos de hardware}{226}{subsection.10.1.1}%
-\contentsline {subsection}{\numberline {10.1.2}A.1.2. Requisitos de software}{226}{subsection.10.1.2}%
-\contentsline {section}{\numberline {10.2}A.2. Instalación para desarrollo}{227}{section.10.2}%
-\contentsline {subsection}{\numberline {10.2.1}A.2.1. Configuración inicial del proyecto}{227}{subsection.10.2.1}%
-\contentsline {subsubsection}{\numberline {10.2.1.1}Paso 1: Clonar el repositorio}{227}{subsubsection.10.2.1.1}%
-\contentsline {subsubsection}{\numberline {10.2.1.2}Paso 2: Configurar variables de entorno}{228}{subsubsection.10.2.1.2}%
-\contentsline {subsection}{\numberline {10.2.2}A.2.2. Configuración con DDEV (Recomendado)}{228}{subsection.10.2.2}%
-\contentsline {subsubsection}{\numberline {10.2.2.1}Paso 1: Instalación de DDEV}{228}{subsubsection.10.2.2.1}%
-\contentsline {subsubsection}{\numberline {10.2.2.2}Paso 2: Configuración inicial de DDEV}{229}{subsubsection.10.2.2.2}%
-\contentsline {subsubsection}{\numberline {10.2.2.3}Paso 3: Configuración específica de DDEV}{229}{subsubsection.10.2.2.3}%
-\contentsline {subsubsection}{\numberline {10.2.2.4}Paso 4: Iniciar el entorno DDEV}{230}{subsubsection.10.2.2.4}%
-\contentsline {subsection}{\numberline {10.2.3}A.2.3. Configuración del frontend}{230}{subsection.10.2.3}%
-\contentsline {subsubsection}{\numberline {10.2.3.1}Paso 1: Instalación de dependencias}{230}{subsubsection.10.2.3.1}%
-\contentsline {subsubsection}{\numberline {10.2.3.2}Paso 2: Configuración de herramientas de desarrollo}{231}{subsubsection.10.2.3.2}%
-\contentsline {subsubsection}{\numberline {10.2.3.3}Paso 3: Iniciar servidor de desarrollo}{231}{subsubsection.10.2.3.3}%
-\contentsline {subsection}{\numberline {10.2.4}A.2.4. Configuración del backend (Symfony)}{232}{subsection.10.2.4}%
-\contentsline {subsubsection}{\numberline {10.2.4.1}Paso 1: Instalación de Composer y dependencias}{232}{subsubsection.10.2.4.1}%
-\contentsline {subsubsection}{\numberline {10.2.4.2}Paso 2: Configuración de la base de datos}{232}{subsubsection.10.2.4.2}%
-\contentsline {subsubsection}{\numberline {10.2.4.3}Paso 3: Generar claves JWT}{232}{subsubsection.10.2.4.3}%
-\contentsline {subsubsection}{\numberline {10.2.4.4}Paso 4: Configurar caché y logs}{232}{subsubsection.10.2.4.4}%
-\contentsline {section}{\numberline {10.3}A.3. Configuración de la base de datos}{233}{section.10.3}%
-\contentsline {subsection}{\numberline {10.3.1}A.3.1. Configuración de MySQL}{233}{subsection.10.3.1}%
-\contentsline {subsubsection}{\numberline {10.3.1.1}Opción A: Usando DDEV (Recomendado)}{233}{subsubsection.10.3.1.1}%
-\contentsline {subsubsection}{\numberline {10.3.1.2}Opción B: MySQL local}{233}{subsubsection.10.3.1.2}%
-\contentsline {subsection}{\numberline {10.3.2}A.3.2. Esquema inicial de la base de datos}{234}{subsection.10.3.2}%
-\contentsline {subsection}{\numberline {10.3.3}A.3.3. Datos de prueba}{234}{subsection.10.3.3}%
-\contentsline {section}{\numberline {10.4}A.4. Configuración de desarrollo avanzada}{235}{section.10.4}%
-\contentsline {subsection}{\numberline {10.4.1}A.4.1. Debugging y logs}{235}{subsection.10.4.1}%
-\contentsline {subsubsection}{\numberline {10.4.1.1}Configuración de Xdebug (PHP)}{235}{subsubsection.10.4.1.1}%
-\contentsline {subsubsection}{\numberline {10.4.1.2}Configuración de logs}{235}{subsubsection.10.4.1.2}%
-\contentsline {subsection}{\numberline {10.4.2}A.4.2. Testing environment}{236}{subsection.10.4.2}%
-\contentsline {subsubsection}{\numberline {10.4.2.1}Configuración para testing del frontend}{236}{subsubsection.10.4.2.1}%
-\contentsline {subsubsection}{\numberline {10.4.2.2}Configuración para testing del backend}{236}{subsubsection.10.4.2.2}%
-\contentsline {subsection}{\numberline {10.4.3}A.4.3. Herramientas de desarrollo adicionales}{236}{subsection.10.4.3}%
-\contentsline {subsubsection}{\numberline {10.4.3.1}Git hooks para calidad de código}{236}{subsubsection.10.4.3.1}%
-\contentsline {subsubsection}{\numberline {10.4.3.2}Extensiones recomendadas de VS Code}{237}{subsubsection.10.4.3.2}%
-\contentsline {section}{\numberline {10.5}A.5. Solución de problemas comunes}{237}{section.10.5}%
-\contentsline {subsection}{\numberline {10.5.1}A.5.1. Problemas de DDEV}{237}{subsection.10.5.1}%
-\contentsline {subsection}{\numberline {10.5.2}A.5.2. Problemas del frontend}{238}{subsection.10.5.2}%
-\contentsline {subsection}{\numberline {10.5.3}A.5.3. Problemas del backend}{238}{subsection.10.5.3}%
-\contentsline {subsection}{\numberline {10.5.4}A.5.4. Problemas de rendimiento}{239}{subsection.10.5.4}%
-\contentsline {section}{\numberline {10.6}A.6. Comandos útiles de desarrollo}{239}{section.10.6}%
-\contentsline {subsection}{\numberline {10.6.1}A.6.1. Comandos DDEV frecuentes}{239}{subsection.10.6.1}%
-\contentsline {subsection}{\numberline {10.6.2}A.6.2. Comandos del frontend}{240}{subsection.10.6.2}%
-\contentsline {subsection}{\numberline {10.6.3}A.6.3. Comandos del backend}{240}{subsection.10.6.3}%
-\contentsline {section}{\numberline {10.7}A.7. Verificación de la instalación}{241}{section.10.7}%
-\contentsline {subsection}{\numberline {10.7.1}A.7.1. Checklist de verificación}{241}{subsection.10.7.1}%
-\contentsline {subsection}{\numberline {10.7.2}A.7.2. Script de verificación automatizada}{242}{subsection.10.7.2}%
+\contentsline {chapter}{\numberline {1}Visión general del proyecto}{12}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Motivación}{12}{section.1.1}%
+\contentsline {section}{\numberline {1.2}Objetivos}{12}{section.1.2}%
+\contentsline {subsection}{\numberline {1.2.1}Objetivo General}{13}{subsection.1.2.1}%
+\contentsline {subsection}{\numberline {1.2.2}Objetivos Específicos}{13}{subsection.1.2.2}%
+\contentsline {section}{\numberline {1.3}Alcance}{14}{section.1.3}%
+\contentsline {subsection}{\numberline {1.3.1}Alcance Funcional}{14}{subsection.1.3.1}%
+\contentsline {subsection}{\numberline {1.3.2}Alcance Técnico}{15}{subsection.1.3.2}%
+\contentsline {subsection}{\numberline {1.3.3}Alcance Temporal}{15}{subsection.1.3.3}%
+\contentsline {section}{\numberline {1.4}Visión general del documento}{16}{section.1.4}%
+\contentsline {section}{\numberline {1.5}Estandarización del documento}{17}{section.1.5}%
+\contentsline {subsection}{\numberline {1.5.1}Normas aplicadas}{17}{subsection.1.5.1}%
+\contentsline {subsection}{\numberline {1.5.2}Convenciones del documento}{17}{subsection.1.5.2}%
+\contentsline {section}{\numberline {1.6}Acrónimos}{18}{section.1.6}%
+\contentsline {section}{\numberline {1.7}Definiciones}{19}{section.1.7}%
+\contentsline {chapter}{\numberline {2}Contexto del proyecto}{22}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Descripción general del proyecto}{22}{section.2.1}%
+\contentsline {section}{\numberline {2.2}Características del usuario}{22}{section.2.2}%
+\contentsline {subsection}{\numberline {2.2.1}Estudiante}{23}{subsection.2.2.1}%
+\contentsline {subsection}{\numberline {2.2.2}Profesor/Tutor}{23}{subsection.2.2.2}%
+\contentsline {subsection}{\numberline {2.2.3}Presidente del Tribunal}{24}{subsection.2.2.3}%
+\contentsline {subsection}{\numberline {2.2.4}Administrador}{24}{subsection.2.2.4}%
+\contentsline {section}{\numberline {2.3}Modelo de ciclo de vida}{25}{section.2.3}%
+\contentsline {subsection}{\numberline {2.3.1}Metodología de desarrollo}{25}{subsection.2.3.1}%
+\contentsline {subsection}{\numberline {2.3.2}Fases del proyecto}{25}{subsection.2.3.2}%
+\contentsline {section}{\numberline {2.4}Tecnologías}{26}{section.2.4}%
+\contentsline {subsection}{\numberline {2.4.1}React 19}{26}{subsection.2.4.1}%
+\contentsline {subsection}{\numberline {2.4.2}Symfony 6.4 LTS}{27}{subsection.2.4.2}%
+\contentsline {subsection}{\numberline {2.4.3}MySQL 8.0}{27}{subsection.2.4.3}%
+\contentsline {subsection}{\numberline {2.4.4}JWT Authentication (LexikJWTAuthenticationBundle)}{27}{subsection.2.4.4}%
+\contentsline {subsection}{\numberline {2.4.5}FullCalendar.js}{28}{subsection.2.4.5}%
+\contentsline {subsection}{\numberline {2.4.6}Tailwind CSS v4}{28}{subsection.2.4.6}%
+\contentsline {subsection}{\numberline {2.4.7}DDEV}{28}{subsection.2.4.7}%
+\contentsline {section}{\numberline {2.5}Lenguajes}{29}{section.2.5}%
+\contentsline {subsection}{\numberline {2.5.1}JavaScript/TypeScript}{29}{subsection.2.5.1}%
+\contentsline {subsection}{\numberline {2.5.2}PHP 8.2+}{29}{subsection.2.5.2}%
+\contentsline {subsection}{\numberline {2.5.3}SQL}{30}{subsection.2.5.3}%
+\contentsline {subsection}{\numberline {2.5.4}HTML/CSS}{30}{subsection.2.5.4}%
+\contentsline {section}{\numberline {2.6}Herramientas}{30}{section.2.6}%
+\contentsline {subsection}{\numberline {2.6.1}Visual Studio Code}{30}{subsection.2.6.1}%
+\contentsline {subsection}{\numberline {2.6.2}Vite}{31}{subsection.2.6.2}%
+\contentsline {subsection}{\numberline {2.6.3}Composer}{31}{subsection.2.6.3}%
+\contentsline {subsection}{\numberline {2.6.4}Docker / DDEV}{31}{subsection.2.6.4}%
+\contentsline {subsection}{\numberline {2.6.5}Git / GitHub}{31}{subsection.2.6.5}%
+\contentsline {chapter}{\numberline {3}Planificación}{32}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Iniciación del proyecto}{32}{section.3.1}%
+\contentsline {subsection}{\numberline {3.1.1}Contexto de inicio}{32}{subsection.3.1.1}%
+\contentsline {subsection}{\numberline {3.1.2}Análisis de viabilidad}{32}{subsection.3.1.2}%
+\contentsline {subsection}{\numberline {3.1.3}Definición del alcance inicial}{33}{subsection.3.1.3}%
+\contentsline {section}{\numberline {3.2}Iteraciones del proceso de desarrollo}{34}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}Fase 1-2: Setup inicial y autenticación (Semanas 1-2)}{34}{subsection.3.2.1}%
+\contentsline {subsection}{\numberline {3.2.2}Fase 3: Módulo de estudiante (Semanas 3-4)}{35}{subsection.3.2.2}%
+\contentsline {subsection}{\numberline {3.2.3}Fase 4: Módulo de profesor (Semanas 4-5)}{36}{subsection.3.2.3}%
+\contentsline {subsection}{\numberline {3.2.4}Fase 5: Sistema de defensas y calendario (Semanas 5-6)}{36}{subsection.3.2.4}%
+\contentsline {subsection}{\numberline {3.2.5}Fase 6: Panel administrativo (Semanas 6-7)}{37}{subsection.3.2.5}%
+\contentsline {subsection}{\numberline {3.2.6}Fase 7: Backend Symfony (Semanas 7-9)}{38}{subsection.3.2.6}%
+\contentsline {subsection}{\numberline {3.2.7}Fase 8: Pulimiento final (Semanas 9-10)}{39}{subsection.3.2.7}%
+\contentsline {section}{\numberline {3.3}Diagrama de Gantt}{40}{section.3.3}%
+\contentsline {subsection}{\numberline {3.3.1}Cronograma general del proyecto}{41}{subsection.3.3.1}%
+\contentsline {subsection}{\numberline {3.3.2}Hitos principales y dependencias}{42}{subsection.3.3.2}%
+\contentsline {chapter}{\numberline {4}Análisis del sistema}{43}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Especificación de requisitos}{43}{section.4.1}%
+\contentsline {subsection}{\numberline {4.1.1}Requisitos de información}{43}{subsection.4.1.1}%
+\contentsline {subsubsection}{\numberline {4.1.1.1}Entidad Usuario}{44}{subsubsection.4.1.1.1}%
+\contentsline {subsubsection}{\numberline {4.1.1.2}Entidad TFG}{44}{subsubsection.4.1.1.2}%
+\contentsline {subsubsection}{\numberline {4.1.1.3}Entidad Tribunal}{45}{subsubsection.4.1.1.3}%
+\contentsline {subsubsection}{\numberline {4.1.1.4}Entidad Defensa}{45}{subsubsection.4.1.1.4}%
+\contentsline {subsection}{\numberline {4.1.2}Requisitos funcionales}{45}{subsection.4.1.2}%
+\contentsline {subsubsection}{\numberline {4.1.2.1}Requisitos funcionales - Estudiante}{46}{subsubsection.4.1.2.1}%
+\contentsline {subsubsection}{\numberline {4.1.2.2}Requisitos funcionales - Profesor}{47}{subsubsection.4.1.2.2}%
+\contentsline {subsubsection}{\numberline {4.1.2.3}Requisitos funcionales - Presidente de Tribunal}{48}{subsubsection.4.1.2.3}%
+\contentsline {subsubsection}{\numberline {4.1.2.4}Requisitos funcionales - Administrador}{48}{subsubsection.4.1.2.4}%
+\contentsline {subsection}{\numberline {4.1.3}Diagrama de casos de uso}{49}{subsection.4.1.3}%
+\contentsline {subsection}{\numberline {4.1.4}Descripción de casos de uso}{51}{subsection.4.1.4}%
+\contentsline {subsubsection}{\numberline {4.1.4.1}UC001 - Crear TFG}{51}{subsubsection.4.1.4.1}%
+\contentsline {subsubsection}{\numberline {4.1.4.2}UC005 - Revisar TFG}{51}{subsubsection.4.1.4.2}%
+\contentsline {subsubsection}{\numberline {4.1.4.3}UC010 - Programar defensa}{52}{subsubsection.4.1.4.3}%
+\contentsline {subsection}{\numberline {4.1.5}Diagramas de secuencia}{53}{subsection.4.1.5}%
+\contentsline {subsubsection}{\numberline {4.1.5.1}Secuencia: Subida de archivo TFG}{53}{subsubsection.4.1.5.1}%
+\contentsline {subsubsection}{\numberline {4.1.5.2}Secuencia: Cambio de estado de TFG}{53}{subsubsection.4.1.5.2}%
+\contentsline {subsubsection}{\numberline {4.1.5.3}Secuencia: Programación de defensa}{54}{subsubsection.4.1.5.3}%
+\contentsline {section}{\numberline {4.2}Garantía de calidad}{55}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}Rendimiento}{55}{subsection.4.2.1}%
+\contentsline {subsection}{\numberline {4.2.2}Seguridad}{55}{subsection.4.2.2}%
+\contentsline {subsection}{\numberline {4.2.3}Usabilidad}{56}{subsection.4.2.3}%
+\contentsline {subsection}{\numberline {4.2.4}Confiabilidad}{56}{subsection.4.2.4}%
+\contentsline {subsection}{\numberline {4.2.5}Interoperabilidad}{57}{subsection.4.2.5}%
+\contentsline {subsection}{\numberline {4.2.6}Operabilidad}{57}{subsection.4.2.6}%
+\contentsline {subsection}{\numberline {4.2.7}Transferibilidad}{58}{subsection.4.2.7}%
+\contentsline {subsection}{\numberline {4.2.8}Eficiencia}{58}{subsection.4.2.8}%
+\contentsline {subsection}{\numberline {4.2.9}Mantenibilidad}{58}{subsection.4.2.9}%
+\contentsline {section}{\numberline {4.3}Gestión del presupuesto}{59}{section.4.3}%
+\contentsline {subsection}{\numberline {4.3.1}Estructura de costos}{59}{subsection.4.3.1}%
+\contentsline {subsubsection}{\numberline {4.3.1.1}Costos de desarrollo}{59}{subsubsection.4.3.1.1}%
+\contentsline {subsubsection}{\numberline {4.3.1.2}Infraestructura y herramientas}{59}{subsubsection.4.3.1.2}%
+\contentsline {subsubsection}{\numberline {4.3.1.3}Costos de producción estimados}{60}{subsubsection.4.3.1.3}%
+\contentsline {chapter}{\numberline {5}Diseño}{61}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Arquitectura física}{61}{section.5.1}%
+\contentsline {subsection}{\numberline {5.1.1}Módulo frontend (Capa de presentación)}{61}{subsection.5.1.1}%
+\contentsline {subsubsection}{\numberline {5.1.1.1}Arquitectura de componentes React}{61}{subsubsection.5.1.1.1}%
+\contentsline {subsection}{\numberline {5.1.2}Módulo backend (Capa de lógica de negocio)}{63}{subsection.5.1.2}%
+\contentsline {subsubsection}{\numberline {5.1.2.1}Arquitectura hexagonal}{63}{subsubsection.5.1.2.1}%
+\contentsline {subsection}{\numberline {5.1.3}Módulo de base de datos (Capa de persistencia)}{64}{subsection.5.1.3}%
+\contentsline {subsubsection}{\numberline {5.1.3.1}Estrategia de persistencia}{64}{subsubsection.5.1.3.1}%
+\contentsline {subsection}{\numberline {5.1.4}Módulo de archivos (Almacenamiento)}{64}{subsection.5.1.4}%
+\contentsline {subsubsection}{\numberline {5.1.4.1}Estrategia Almacenamiento}{64}{subsubsection.5.1.4.1}%
+\contentsline {section}{\numberline {5.2}Arquitectura lógica}{65}{section.5.2}%
+\contentsline {subsection}{\numberline {5.2.1}Capa de presentación (Frontend)}{66}{subsection.5.2.1}%
+\contentsline {subsubsection}{\numberline {5.2.1.1}Patrón Container/Presentational}{66}{subsubsection.5.2.1.1}%
+\contentsline {subsubsection}{\numberline {5.2.1.2}Control de Estado}{66}{subsubsection.5.2.1.2}%
+\contentsline {subsection}{\numberline {5.2.2}Capa de lógica de negocio (Backend)}{66}{subsection.5.2.2}%
+\contentsline {subsubsection}{\numberline {5.2.2.1}Diseño Domain-Driven}{66}{subsubsection.5.2.2.1}%
+\contentsline {subsubsection}{\numberline {5.2.2.2}Patrón Service Layer}{66}{subsubsection.5.2.2.2}%
+\contentsline {subsection}{\numberline {5.2.3}Capa de persistencia}{67}{subsection.5.2.3}%
+\contentsline {subsubsection}{\numberline {5.2.3.1}Patrón de Repositorio}{67}{subsubsection.5.2.3.1}%
+\contentsline {section}{\numberline {5.3}Esquema de la base de datos}{67}{section.5.3}%
+\contentsline {subsection}{\numberline {5.3.1}Modelo conceptual}{67}{subsection.5.3.1}%
+\contentsline {subsection}{\numberline {5.3.2}Normalización y constraints}{69}{subsection.5.3.2}%
+\contentsline {subsubsection}{\numberline {5.3.2.1}Tercera forma normal (3NF)}{69}{subsubsection.5.3.2.1}%
+\contentsline {subsubsection}{\numberline {5.3.2.2}Constraints e integridad referencial}{69}{subsubsection.5.3.2.2}%
+\contentsline {subsection}{\numberline {5.3.3}Índices de rendimiento}{70}{subsection.5.3.3}%
+\contentsline {subsubsection}{\numberline {5.3.3.1}Índices principales}{70}{subsubsection.5.3.3.1}%
+\contentsline {subsubsection}{\numberline {5.3.3.2}Análisis de consultas}{71}{subsubsection.5.3.3.2}%
+\contentsline {section}{\numberline {5.4}Diseño de la interfaz de usuario}{71}{section.5.4}%
+\contentsline {subsection}{\numberline {5.4.1}Interfaces de usuario implementadas}{72}{subsection.5.4.1}%
+\contentsline {subsubsection}{\numberline {5.4.1.1}Dashboard de Estudiante}{72}{subsubsection.5.4.1.1}%
+\contentsline {subsubsection}{\numberline {5.4.1.2}Gestión de TFG - Vista de Estudiante}{73}{subsubsection.5.4.1.2}%
+\contentsline {subsubsection}{\numberline {5.4.1.3}Sistema de Notificaciones}{74}{subsubsection.5.4.1.3}%
+\contentsline {subsubsection}{\numberline {5.4.1.4}Dashboard de Profesor}{75}{subsubsection.5.4.1.4}%
+\contentsline {subsubsection}{\numberline {5.4.1.5}Sistema de Evaluación y Feedback}{76}{subsubsection.5.4.1.5}%
+\contentsline {subsubsection}{\numberline {5.4.1.6}Gestión de Tribunales}{78}{subsubsection.5.4.1.6}%
+\contentsline {subsubsection}{\numberline {5.4.1.7}Calendario de Defensas}{80}{subsubsection.5.4.1.7}%
+\contentsline {subsubsection}{\numberline {5.4.1.8}Panel de Administración}{81}{subsubsection.5.4.1.8}%
+\contentsline {subsubsection}{\numberline {5.4.1.9}Gestión de Usuarios}{82}{subsubsection.5.4.1.9}%
+\contentsline {subsubsection}{\numberline {5.4.1.10}Sistema de Reportes y Estadísticas}{83}{subsubsection.5.4.1.10}%
+\contentsline {chapter}{\numberline {6}Implementación}{85}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Arquitectura de componentes React}{85}{section.6.1}%
+\contentsline {subsection}{\numberline {6.1.1}Organización modular del proyecto}{85}{subsection.6.1.1}%
+\contentsline {subsection}{\numberline {6.1.2}Sistema de autenticación y autorización}{86}{subsection.6.1.2}%
+\contentsline {subsubsection}{\numberline {6.1.2.1}Gestión de estado con AuthContext}{86}{subsubsection.6.1.2.1}%
+\contentsline {subsubsection}{\numberline {6.1.2.2}Protección de rutas por roles}{86}{subsubsection.6.1.2.2}%
+\contentsline {subsection}{\numberline {6.1.3}Hooks personalizados para lógica de negocio}{87}{subsection.6.1.3}%
+\contentsline {subsubsection}{\numberline {6.1.3.1}Patrón de gestión de entidades con useTFGs}{87}{subsubsection.6.1.3.1}%
+\contentsline {subsection}{\numberline {6.1.4}Dashboard adaptativo por roles}{88}{subsection.6.1.4}%
+\contentsline {subsubsection}{\numberline {6.1.4.1}Arquitectura de dashboard dinámico}{88}{subsubsection.6.1.4.1}%
+\contentsline {section}{\numberline {6.2}Integración Backend con Symfony}{89}{section.6.2}%
+\contentsline {subsection}{\numberline {6.2.1}Arquitectura de seguridad Symfony}{89}{subsection.6.2.1}%
+\contentsline {subsubsection}{\numberline {6.2.1.1}Configuración de autenticación y autorización}{89}{subsubsection.6.2.1.1}%
+\contentsline {subsubsection}{\numberline {6.2.1.2}API de autenticación JWT}{90}{subsubsection.6.2.1.2}%
+\contentsline {subsection}{\numberline {6.2.2}Sistema de autorización por recursos con Voters}{90}{subsection.6.2.2}%
+\contentsline {section}{\numberline {6.3}Gestión de estado con Context API}{92}{section.6.3}%
+\contentsline {subsection}{\numberline {6.3.1}Sistema de notificaciones centralizado}{92}{subsection.6.3.1}%
+\contentsline {section}{\numberline {6.4}APIs REST y endpoints}{93}{section.6.4}%
+\contentsline {subsection}{\numberline {6.4.1}Controlador de gestión de TFGs}{93}{subsection.6.4.1}%
+\contentsline {subsection}{\numberline {6.4.2}Capa de servicios académicos}{94}{subsection.6.4.2}%
+\contentsline {section}{\numberline {6.5}Sistema de archivos y subida de documentos}{95}{section.6.5}%
+\contentsline {subsection}{\numberline {6.5.1}Servicio de gestión segura de archivos}{95}{subsection.6.5.1}%
+\contentsline {section}{\numberline {6.6}Sistema de notificaciones}{96}{section.6.6}%
+\contentsline {subsection}{\numberline {6.6.1}Servicio de notificaciones centralizado}{97}{subsection.6.6.1}%
+\contentsline {chapter}{\numberline {7}Entrega del producto}{99}{chapter.7}%
+\contentsline {section}{\numberline {7.1}Productos entregables del sistema}{99}{section.7.1}%
+\contentsline {subsection}{\numberline {7.1.1}Aplicación frontend React}{99}{subsection.7.1.1}%
+\contentsline {subsection}{\numberline {7.1.2}Backend API Symfony}{99}{subsection.7.1.2}%
+\contentsline {subsection}{\numberline {7.1.3}Base de datos y configuración}{99}{subsection.7.1.3}%
+\contentsline {subsection}{\numberline {7.1.4}Documentación técnica completa}{100}{subsection.7.1.4}%
+\contentsline {subsection}{\numberline {7.1.5}Recursos de evaluación y testing}{100}{subsection.7.1.5}%
+\contentsline {chapter}{\numberline {8}Procesos de soporte y pruebas}{101}{chapter.8}%
+\contentsline {section}{\numberline {8.1}Gestión y toma de decisiones}{101}{section.8.1}%
+\contentsline {subsection}{\numberline {8.1.1}Metodología de gestión del proyecto}{101}{subsection.8.1.1}%
+\contentsline {subsubsection}{\numberline {8.1.1.1}Estructura de toma de decisiones}{101}{subsubsection.8.1.1.1}%
+\contentsline {subsection}{\numberline {8.1.2}Control de versiones y cambios}{102}{subsection.8.1.2}%
+\contentsline {subsubsection}{\numberline {8.1.2.1}Estrategia de branching}{102}{subsubsection.8.1.2.1}%
+\contentsline {section}{\numberline {8.2}Gestión de riesgos}{102}{section.8.2}%
+\contentsline {subsection}{\numberline {8.2.1}Análisis de riesgos}{103}{subsection.8.2.1}%
+\contentsline {subsubsection}{\numberline {8.2.1.1}Matriz de riesgos identificados}{103}{subsubsection.8.2.1.1}%
+\contentsline {subsection}{\numberline {8.2.2}Plan de contingencia}{103}{subsection.8.2.2}%
+\contentsline {subsubsection}{\numberline {8.2.2.1}Escenarios de contingencia}{103}{subsubsection.8.2.2.1}%
+\contentsline {section}{\numberline {8.3}Verificación y validación del software}{104}{section.8.3}%
+\contentsline {subsection}{\numberline {8.3.1}Testing del frontend}{104}{subsection.8.3.1}%
+\contentsline {subsubsection}{\numberline {8.3.1.1}Testing unitario con Vitest}{104}{subsubsection.8.3.1.1}%
+\contentsline {subsubsection}{\numberline {8.3.1.2}Testing de hooks personalizados}{106}{subsubsection.8.3.1.2}%
+\contentsline {subsubsection}{\numberline {8.3.1.3}Testing de integración con React Testing Library}{107}{subsubsection.8.3.1.3}%
+\contentsline {subsection}{\numberline {8.3.2}Testing del backend}{109}{subsection.8.3.2}%
+\contentsline {subsubsection}{\numberline {8.3.2.1}Testing unitario con PHPUnit}{109}{subsubsection.8.3.2.1}%
+\contentsline {subsubsection}{\numberline {8.3.2.2}Testing de servicios}{111}{subsubsection.8.3.2.2}%
+\contentsline {subsection}{\numberline {8.3.3}Testing de APIs REST}{114}{subsection.8.3.3}%
+\contentsline {subsubsection}{\numberline {8.3.3.1}Testing funcional de endpoints}{114}{subsubsection.8.3.3.1}%
+\contentsline {subsection}{\numberline {8.3.4}Testing de seguridad}{118}{subsection.8.3.4}%
+\contentsline {subsubsection}{\numberline {8.3.4.1}Lista de verificación de pruebas de penetración}{119}{subsubsection.8.3.4.1}%
+\contentsline {section}{\numberline {8.4}Verificación de requisitos no funcionales}{119}{section.8.4}%
+\contentsline {subsection}{\numberline {8.4.1}Verificación de rendimiento}{120}{subsection.8.4.1}%
+\contentsline {subsection}{\numberline {8.4.2}Verificación de seguridad}{120}{subsection.8.4.2}%
+\contentsline {subsection}{\numberline {8.4.3}Verificación de calidad de código}{121}{subsection.8.4.3}%
+\contentsline {subsection}{\numberline {8.4.4}Verificación de usabilidad}{121}{subsection.8.4.4}%
+\contentsline {chapter}{\numberline {9}Conclusiones y trabajo futuro}{122}{chapter.9}%
+\contentsline {section}{\numberline {9.1}Valoración del proyecto}{122}{section.9.1}%
+\contentsline {section}{\numberline {9.2}Cumplimiento de los objetivos propuestos}{122}{section.9.2}%
+\contentsline {section}{\numberline {9.3}Trabajo futuro}{123}{section.9.3}%
+\contentsline {subsection}{\numberline {9.3.1}Mejoras a corto plazo (1-6 meses)}{123}{subsection.9.3.1}%
+\contentsline {subsubsection}{\numberline {9.3.1.1}Sistema de notificaciones por email avanzado}{123}{subsubsection.9.3.1.1}%
+\contentsline {subsubsection}{\numberline {9.3.1.2}Métricas y analíticas avanzadas}{124}{subsubsection.9.3.1.2}%
+\contentsline {subsection}{\numberline {9.3.2}Funcionalidades de mediano plazo (6-12 meses)}{124}{subsection.9.3.2}%
+\contentsline {subsubsection}{\numberline {9.3.2.1}Sistema de colaboración avanzado}{124}{subsubsection.9.3.2.1}%
+\contentsline {subsubsection}{\numberline {9.3.2.2}Inteligencia artificial y automatización}{124}{subsubsection.9.3.2.2}%
+\contentsline {subsubsection}{\numberline {9.3.2.3}Aplicación móvil nativa}{124}{subsubsection.9.3.2.3}%
+\contentsline {subsection}{\numberline {9.3.3}Expansiones a largo plazo (1-2 años)}{125}{subsection.9.3.3}%
+\contentsline {subsubsection}{\numberline {9.3.3.1}Plataforma multi-institucional}{125}{subsubsection.9.3.3.1}%
+\contentsline {subsubsection}{\numberline {9.3.3.2}Integración con sistemas académicos existentes}{125}{subsubsection.9.3.3.2}%
+\contentsline {subsubsection}{\numberline {9.3.3.3}Marketplace de servicios académicos}{125}{subsubsection.9.3.3.3}%
+\contentsline {subsection}{\numberline {9.3.4}Innovaciones tecnológicas futuras}{125}{subsection.9.3.4}%
+\contentsline {subsubsection}{\numberline {9.3.4.1}Realidad virtual para defensas}{125}{subsubsection.9.3.4.1}%
+\contentsline {subsubsection}{\numberline {9.3.4.2}Blockchain para certificaciones}{126}{subsubsection.9.3.4.2}%
+\contentsline {section}{\numberline {9.4}Lecciones aprendidas}{126}{section.9.4}%
+\contentsline {subsection}{\numberline {9.4.1}Decisiones arquitectónicas acertadas}{126}{subsection.9.4.1}%
+\contentsline {subsection}{\numberline {9.4.2}Mejores prácticas identificadas}{127}{subsection.9.4.2}%
+\contentsline {section}{\numberline {9.5}Reflexión final}{127}{section.9.5}%
+\contentsline {chapter}{Bibliografía}{129}{section.9.5}%
+\contentsline {chapter}{\numberline {10}Anexo A. Manual de instalación}{131}{chapter.10}%
+\contentsline {section}{\numberline {10.1}A.1. Requisitos del sistema}{131}{section.10.1}%
+\contentsline {subsection}{\numberline {10.1.1}A.1.1. Requisitos mínimos de hardware}{131}{subsection.10.1.1}%
+\contentsline {subsection}{\numberline {10.1.2}A.1.2. Requisitos de software}{131}{subsection.10.1.2}%
+\contentsline {section}{\numberline {10.2}A.2. Instalación para desarrollo}{132}{section.10.2}%
+\contentsline {subsection}{\numberline {10.2.1}A.2.1. Configuración inicial del proyecto}{132}{subsection.10.2.1}%
+\contentsline {subsubsection}{\numberline {10.2.1.1}Paso 1: Clonar el repositorio}{132}{subsubsection.10.2.1.1}%
+\contentsline {subsubsection}{\numberline {10.2.1.2}Paso 2: Configurar variables de entorno}{133}{subsubsection.10.2.1.2}%
+\contentsline {subsection}{\numberline {10.2.2}A.2.2. Configuración con DDEV (Recomendado)}{133}{subsection.10.2.2}%
+\contentsline {subsubsection}{\numberline {10.2.2.1}Paso 1: Instalación de DDEV}{133}{subsubsection.10.2.2.1}%
+\contentsline {subsubsection}{\numberline {10.2.2.2}Paso 2: Configuración inicial de DDEV}{134}{subsubsection.10.2.2.2}%
+\contentsline {subsubsection}{\numberline {10.2.2.3}Paso 3: Configuración específica de DDEV}{134}{subsubsection.10.2.2.3}%
+\contentsline {subsubsection}{\numberline {10.2.2.4}Paso 4: Iniciar el entorno DDEV}{135}{subsubsection.10.2.2.4}%
+\contentsline {subsection}{\numberline {10.2.3}A.2.3. Configuración del frontend}{135}{subsection.10.2.3}%
+\contentsline {subsubsection}{\numberline {10.2.3.1}Paso 1: Instalación de dependencias}{135}{subsubsection.10.2.3.1}%
+\contentsline {subsubsection}{\numberline {10.2.3.2}Paso 2: Configuración de herramientas de desarrollo}{136}{subsubsection.10.2.3.2}%
+\contentsline {subsubsection}{\numberline {10.2.3.3}Paso 3: Iniciar servidor de desarrollo}{136}{subsubsection.10.2.3.3}%
+\contentsline {subsection}{\numberline {10.2.4}A.2.4. Configuración del backend (Symfony)}{137}{subsection.10.2.4}%
+\contentsline {subsubsection}{\numberline {10.2.4.1}Paso 1: Instalación de Composer y dependencias}{137}{subsubsection.10.2.4.1}%
+\contentsline {subsubsection}{\numberline {10.2.4.2}Paso 2: Configuración de la base de datos}{137}{subsubsection.10.2.4.2}%
+\contentsline {subsubsection}{\numberline {10.2.4.3}Paso 3: Generar claves JWT}{137}{subsubsection.10.2.4.3}%
+\contentsline {subsubsection}{\numberline {10.2.4.4}Paso 4: Configurar caché y logs}{137}{subsubsection.10.2.4.4}%
+\contentsline {section}{\numberline {10.3}A.3. Configuración de la base de datos}{138}{section.10.3}%
+\contentsline {subsection}{\numberline {10.3.1}A.3.1. Configuración de MySQL}{138}{subsection.10.3.1}%
+\contentsline {subsubsection}{\numberline {10.3.1.1}Opción A: Usando DDEV (Recomendado)}{138}{subsubsection.10.3.1.1}%
+\contentsline {subsubsection}{\numberline {10.3.1.2}Opción B: MySQL local}{138}{subsubsection.10.3.1.2}%
+\contentsline {subsection}{\numberline {10.3.2}A.3.2. Esquema inicial de la base de datos}{139}{subsection.10.3.2}%
+\contentsline {subsection}{\numberline {10.3.3}A.3.3. Datos de prueba}{139}{subsection.10.3.3}%
+\contentsline {section}{\numberline {10.4}A.4. Configuración de desarrollo avanzada}{140}{section.10.4}%
+\contentsline {subsection}{\numberline {10.4.1}A.4.1. Debugging y logs}{140}{subsection.10.4.1}%
+\contentsline {subsubsection}{\numberline {10.4.1.1}Configuración de Xdebug (PHP)}{140}{subsubsection.10.4.1.1}%
+\contentsline {subsubsection}{\numberline {10.4.1.2}Configuración de logs}{140}{subsubsection.10.4.1.2}%
+\contentsline {subsection}{\numberline {10.4.2}A.4.2. Testing environment}{141}{subsection.10.4.2}%
+\contentsline {subsubsection}{\numberline {10.4.2.1}Configuración para testing del frontend}{141}{subsubsection.10.4.2.1}%
+\contentsline {subsubsection}{\numberline {10.4.2.2}Configuración para testing del backend}{141}{subsubsection.10.4.2.2}%
+\contentsline {subsection}{\numberline {10.4.3}A.4.3. Herramientas de desarrollo adicionales}{141}{subsection.10.4.3}%
+\contentsline {subsubsection}{\numberline {10.4.3.1}Git hooks para calidad de código}{141}{subsubsection.10.4.3.1}%
+\contentsline {subsubsection}{\numberline {10.4.3.2}Extensiones recomendadas de VS Code}{142}{subsubsection.10.4.3.2}%
+\contentsline {section}{\numberline {10.5}A.5. Solución de problemas comunes}{142}{section.10.5}%
+\contentsline {subsection}{\numberline {10.5.1}A.5.1. Problemas de DDEV}{142}{subsection.10.5.1}%
+\contentsline {subsection}{\numberline {10.5.2}A.5.2. Problemas del frontend}{143}{subsection.10.5.2}%
+\contentsline {subsection}{\numberline {10.5.3}A.5.3. Problemas del backend}{143}{subsection.10.5.3}%
+\contentsline {subsection}{\numberline {10.5.4}A.5.4. Problemas de rendimiento}{144}{subsection.10.5.4}%
+\contentsline {section}{\numberline {10.6}A.6. Comandos útiles de desarrollo}{144}{section.10.6}%
+\contentsline {subsection}{\numberline {10.6.1}A.6.1. Comandos DDEV frecuentes}{144}{subsection.10.6.1}%
+\contentsline {subsection}{\numberline {10.6.2}A.6.2. Comandos del frontend}{145}{subsection.10.6.2}%
+\contentsline {subsection}{\numberline {10.6.3}A.6.3. Comandos del backend}{145}{subsection.10.6.3}%
+\contentsline {section}{\numberline {10.7}A.7. Verificación de la instalación}{146}{section.10.7}%
+\contentsline {subsection}{\numberline {10.7.1}A.7.1. Checklist de verificación}{146}{subsection.10.7.1}%
+\contentsline {subsection}{\numberline {10.7.2}A.7.2. Script de verificación automatizada}{147}{subsection.10.7.2}%

@@ -6,15 +6,15 @@ El desarrollo de esta plataforma de gestión de TFG surge como respuesta a las n
 
 ## Motivación
 
-En el ámbito académico universitario, la gestión de Trabajos de Fin de Grado (TFG) representa un proceso complejo que involucra múltiples actores: estudiantes, profesores tutores, tribunales de evaluación y personal administrativo. Tradicionalmente, este proceso se ha gestionado de manera fragmentada, utilizando herramientas dispersas como correo electrónico, documentos físicos y hojas de cálculo, lo que genera ineficiencias, pérdida de información y dificultades en el seguimiento del progreso académico.
+En el ámbito académico universitario, la gestión de Trabajos de Fin de Grado (TFG) representa un proceso complejo que involucra múltiples participantes: estudiantes, profesores tutores, tribunales de evaluación y personal administrativo. Tradicionalmente, este proceso se ha gestionado de manera desorganizada, utilizando herramientas como correo electrónico, documentos físicos y hojas de cálculo, lo que genera ineficiencias, pérdida de información y dificultades en el seguimiento del progreso académico.
 
-La digitalización de los procesos educativos se ha acelerado significativamente, especialmente tras la pandemia de COVID-19, evidenciando la necesidad de sistemas integrados que faciliten la gestión académica remota y presencial. Las universidades requieren plataformas que no solo digitalicen los procesos existentes, sino que los optimicen mediante la automatización, el seguimiento en tiempo real y la generación de reportes analíticos.
+La digitalización de los procesos educativos se ha acelerado de manera exponencial, especialmente tras la pandemia de COVID-19, evidenciando la necesidad de sistemas digitales que faciliten la gestión académica remota y presencial. Las universidades requieren plataformas que no solo digitalicen los procesos existentes, sino que los optimicen mediante la automatización, el seguimiento en tiempo real y la generación de reportes analíticos.
 
-Además, el cumplimiento de normativas académicas específicas, la gestión de plazos estrictos y la coordinación entre diferentes departamentos universitarios demandan una solución tecnológica robusta que centralice toda la información relacionada con los TFG en un único sistema accesible y seguro.
+Además, el cumplimiento de normativas y estándares académicos específicos, la gestión de plazos estrictos y la coordinación entre diferentes departamentos universitarios demandan una solución tecnológica robusta que centralice toda la información relacionada con los TFG en un único sistema accesible y seguro.
 
 ## Objetivos
 
-La definición clara de objetivos constituye un elemento fundamental para el éxito de cualquier proyecto de desarrollo software. En esta sección se establecen tanto el objetivo general como los objetivos específicos que guían la implementación de la plataforma de gestión de TFG, categorizados según su naturaleza funcional, técnica y de calidad.
+La definición de objetivos constituye un elemento imprescindible para el éxito de cualquier proyecto de desarrollo software. En esta sección se establecen tanto el objetivo general como los objetivos específicos que guían la implementación de la plataforma de gestión de TFG, categorizados según su naturaleza funcional, técnica y de calidad.
 
 Estos objetivos han sido formulados siguiendo la metodología SMART (Específicos, Medibles, Alcanzables, Relevantes y Temporales), asegurando que cada uno contribuya directamente al propósito general del proyecto y pueda ser evaluado objetivamente al finalizar el desarrollo.
 
@@ -36,8 +36,8 @@ Desarrollar una plataforma web integral para la gestión completa del ciclo de v
 
 **Objetivos Técnicos:**
 
-- **OT1**: Diseñar una arquitectura frontend moderna basada en React 19 con componentes reutilizables y responsive design.
-- **OT2**: Implementar un backend robusto con Symfony 6.4 LTS que proporcione APIs REST seguras y escalables.
+- **OT1**: Diseñar una arquitectura frontend moderna basada en React 19 con componentes reutilizables y diseño responsivo.
+- **OT2**: Implementar un backend con Symfony 6.4 LTS que proporcione APIs REST seguras y escalables.
 - **OT3**: Establecer un sistema de base de datos optimizado con MySQL 8.0 que garantice la integridad y consistencia de los datos.
 - **OT4**: Desarrollar un sistema de gestión de archivos seguro para el almacenamiento y descarga de documentos TFG.
 - **OT5**: Implementar un sistema de testing automatizado que cubra tanto frontend como backend.
@@ -49,13 +49,13 @@ Desarrollar una plataforma web integral para la gestión completa del ciclo de v
 - **OC2**: Implementar medidas de seguridad que cumplan con estándares académicos de protección de datos.
 - **OC3**: Diseñar una interfaz de usuario intuitiva con una curva de aprendizaje mínima para todos los roles.
 - **OC4**: Asegurar compatibilidad cross-browser y responsive design para dispositivos móviles y tablets.
-- **OC5**: Establecer un sistema de backup y recuperación de datos que garantice la disponibilidad del servicio.
+- **OC5**: Establecer un sistema de copia de seguridad y recuperación de datos que garantice la disponibilidad del servicio.
 
 ## Alcance
 
-La definición del alcance del proyecto es crucial para establecer límites claros sobre qué incluye y qué excluye el desarrollo de la plataforma. Esta delimitación permite gestionar expectativas, recursos y tiempos de manera efectiva, asegurando que el proyecto se mantenga enfocado en sus objetivos principales.
+La definición del alcance del proyecto es crucial para establecer límites claros sobre qué incluye y qué excluye el desarrollo de la plataforma. Esto permite planear el proyecto de nabera efectiva, asegurando que se cumplan los objetivos propuestos.
 
-El alcance se estructura en tres dimensiones complementarias: funcional, técnica y temporal. Cada una de estas dimensiones aborda aspectos específicos del proyecto, desde las funcionalidades que se implementarán hasta las tecnologías que se utilizarán y los plazos de desarrollo establecidos.
+El alcance se estructura en tres dimensiones: funcional, técnica y temporal. Cada una de estas dimensiones aborda aspectos específicos del proyecto, desde las funcionalidades que se implementarán hasta las tecnologías que se utilizarán y los plazos de desarrollo establecidos.
 
 ### Alcance Funcional
 
