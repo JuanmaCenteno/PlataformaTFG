@@ -576,4 +576,40 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             $this->getEntityManager()->flush();
         }
     }
+
+    /**
+     * Obtiene estadísticas de usuarios por rol
+     */
+    public function getEstadisticasPorRol(): array
+    {
+        $qb = $this->createQueryBuilder('u');
+
+        $result = $qb
+            ->select('u.roles')
+            ->getQuery()
+            ->getResult();
+
+        $stats = [
+            'estudiantes' => 0,
+            'profesores' => 0,
+            'presidentes' => 0,
+            'admins' => 0
+        ];
+
+        foreach ($result as $user) {
+            $roles = $user['roles'];
+
+            if (in_array('ROLE_ADMIN', $roles)) {
+                $stats['admins']++;
+            } elseif (in_array('ROLE_PRESIDENTE_TRIBUNAL', $roles)) {
+                $stats['presidentes']++;
+            } elseif (in_array('ROLE_PROFESOR', $roles)) {
+                $stats['profesores']++;
+            } elseif (in_array('ROLE_ESTUDIANTE', $roles)) {
+                $stats['estudiantes']++;
+            }
+        }
+
+        return $stats;
+    }
 }

@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useReportes } from '../../hooks/useReportes'
+import { useUsuarios } from '../../hooks/useUsuarios'
+import { useTribunales } from '../../hooks/useTribunales'
 import { useNotificaciones } from '../../context/NotificacionesContext'
 
 function Reportes() {
@@ -16,34 +18,51 @@ function Reportes() {
     clearError
   } = useReportes()
 
+  const { obtenerProfesores } = useUsuarios()
+  const { obtenerPresidentes } = useTribunales()
+
   // Estados principales
   const [tipoReporteActivo, setTipoReporteActivo] = useState('tfgs')
   const [datosReporte, setDatosReporte] = useState(null)
   const [vistaActiva, setVistaActiva] = useState('generador') // generador, resultados, personalizado
+
+  // Función para obtener fechas por defecto
+  const obtenerFechasPorDefecto = () => {
+    const hoy = new Date()
+    const hace30Dias = new Date()
+    hace30Dias.setDate(hoy.getDate() - 30)
+
+    return {
+      fechaInicio: hace30Dias.toISOString().split('T')[0],
+      fechaFin: hoy.toISOString().split('T')[0]
+    }
+  }
+
+  const fechasDefecto = obtenerFechasPorDefecto()
 
   // Filtros por tipo de reporte
   const [filtrosTFGs, setFiltrosTFGs] = useState({
     estado: 'todos',
     tutor: 'todos',
     departamento: 'todos',
-    fechaInicio: '',
-    fechaFin: ''
+    fechaInicio: fechasDefecto.fechaInicio,
+    fechaFin: fechasDefecto.fechaFin
   })
 
   const [filtrosUsuarios, setFiltrosUsuarios] = useState({
     rol: 'todos',
     estado: 'todos',
     departamento: 'todos',
-    fechaRegistroInicio: '',
-    fechaRegistroFin: ''
+    fechaRegistroInicio: fechasDefecto.fechaInicio,
+    fechaRegistroFin: fechasDefecto.fechaFin
   })
 
   const [filtrosTribunales, setFiltrosTribunales] = useState({
     estado: 'todos',
     presidente: 'todos',
     departamento: 'todos',
-    fechaCreacionInicio: '',
-    fechaCreacionFin: ''
+    fechaCreacionInicio: fechasDefecto.fechaInicio,
+    fechaCreacionFin: fechasDefecto.fechaFin
   })
 
   // Estados para reporte personalizado
@@ -53,6 +72,40 @@ function Reportes() {
     incluirGraficos: true,
     formatoExportacion: 'pdf'
   })
+
+  // Listas dinámicas para filtros
+  const [profesoresDisponibles, setProfesoresDisponibles] = useState([])
+  const [presidentesDisponibles, setPresidentesDisponibles] = useState([])
+
+  // Cargar datos para filtros dinámicos
+  useEffect(() => {
+    cargarProfesores()
+    cargarPresidentes()
+  }, [])
+
+  const cargarProfesores = async () => {
+    try {
+      const resultado = await obtenerProfesores()
+      if (resultado.success) {
+        setProfesoresDisponibles(resultado.data || [])
+      }
+    } catch (error) {
+      console.error('Error cargando profesores para filtros:', error)
+      setProfesoresDisponibles([])
+    }
+  }
+
+  const cargarPresidentes = async () => {
+    try {
+      const resultado = await obtenerPresidentes()
+      if (resultado.success) {
+        setPresidentesDisponibles(resultado.data || [])
+      }
+    } catch (error) {
+      console.error('Error cargando presidentes para filtros:', error)
+      setPresidentesDisponibles([])
+    }
+  }
 
   // Limpiar error al cambiar de tipo
   useEffect(() => {
@@ -119,22 +172,16 @@ function Reportes() {
     }
 
     let resultado
-    const datosParaExportar = datosReporte.reportes ? datosReporte.reportes : [datosReporte]
 
     if (formato === 'pdf') {
-      resultado = await exportarAPDF(tipoReporteActivo, datosParaExportar, {
-        incluirEstadisticas: reportePersonalizado.incluirEstadisticas
-      })
+      resultado = await exportarAPDF(tipoReporteActivo, datosReporte)
     } else if (formato === 'excel') {
-      resultado = await exportarAExcel(tipoReporteActivo, datosParaExportar, {
-        incluirEstadisticas: reportePersonalizado.incluirEstadisticas
-      })
+      resultado = await exportarAExcel(tipoReporteActivo, datosReporte)
     }
 
     if (resultado.success) {
       mostrarNotificacion(`${resultado.message} - ${resultado.data.archivo}`, 'success')
       // En un caso real, aquí se iniciaría la descarga
-      console.log('Descargar archivo:', resultado.data.url)
     } else {
       mostrarNotificacion(resultado.error, 'error')
     }
@@ -168,10 +215,11 @@ function Reportes() {
                 className="w-full border border-gray-300 rounded-md px-3 py-2"
               >
                 <option value="todos">Todos los tutores</option>
-                <option value="Dr. María García">Dr. María García</option>
-                <option value="Dr. Pedro Ruiz">Dr. Pedro Ruiz</option>
-                <option value="Dra. Isabel Moreno">Dra. Isabel Moreno</option>
-                <option value="Dr. Carlos López">Dr. Carlos López</option>
+                {profesoresDisponibles.map((profesor) => (
+                  <option key={profesor.id} value={profesor.id}>
+                    {profesor.nombreCompleto || `${profesor.nombre} ${profesor.apellidos || ''}`.trim()}
+                  </option>
+                ))}
               </select>
             </div>
             <div>
@@ -296,9 +344,11 @@ function Reportes() {
                 className="w-full border border-gray-300 rounded-md px-3 py-2"
               >
                 <option value="todos">Todos los presidentes</option>
-                <option value="Dr. María García">Dr. María García</option>
-                <option value="Dr. Pedro Ruiz">Dr. Pedro Ruiz</option>
-                <option value="Dra. Isabel Moreno">Dra. Isabel Moreno</option>
+                {presidentesDisponibles.map((presidente) => (
+                  <option key={presidente.id} value={presidente.id}>
+                    {presidente.nombreCompleto || `${presidente.nombre} ${presidente.apellidos || ''}`.trim()}
+                  </option>
+                ))}
               </select>
             </div>
             <div>

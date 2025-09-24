@@ -82,11 +82,16 @@ class DefensaController extends AbstractController
     {
         /** @var User $user */
         $user = $this->getUser();
-        $fechaInicio = $request->query->get('start'); // Formato FullCalendar
-        $fechaFin = $request->query->get('end');
 
+        // Soportar tanto el formato FullCalendar (start/end) como nuestro formato (fecha_inicio/fecha_fin)
+        $fechaInicio = $request->query->get('start') ?: $request->query->get('fecha_inicio');
+        $fechaFin = $request->query->get('end') ?: $request->query->get('fecha_fin');
+
+        // Si no se proporcionan fechas, usar el mes actual
         if (!$fechaInicio || !$fechaFin) {
-            return $this->json(['error' => 'Parámetros start y end requeridos'], 400);
+            $now = new \DateTime();
+            $fechaInicio = $now->format('Y-m-01'); // Primer día del mes actual
+            $fechaFin = $now->format('Y-m-t'); // Último día del mes actual
         }
 
         try {

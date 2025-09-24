@@ -24,7 +24,7 @@ export const useTFGs = () => {
         dataToSend.append('palabras_clave', formData.palabrasClave)
       }
       
-      dataToSend.append('tutor_id', formData.tutorId)
+      dataToSend.append('tutor_id', formData.tutorId || 1) // Usar el tutorId del formulario
       if (formData.cotutorId) {
         dataToSend.append('cotutor_id', formData.cotutorId)
       }
@@ -56,20 +56,45 @@ export const useTFGs = () => {
   const obtenerMisTFGs = async () => {
     setLoading(true)
     setError(null)
-    
+
     try {
       const response = await tfgAPI.getMisTFGs()
-      
-      return { 
-        success: true, 
+
+      return {
+        success: true,
         data: response.data.data || response.data,
         meta: response.data.meta
       }
-      
+
     } catch (err) {
-      const errorMessage = err.response?.data?.message || 
-                          err.response?.data?.error || 
+      const errorMessage = err.response?.data?.message ||
+                          err.response?.data?.error ||
                           'Error al obtener TFGs'
+      setError(errorMessage)
+      return { success: false, error: errorMessage }
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Obtener TFGs asignados al profesor
+  const obtenerTFGsAsignados = async () => {
+    setLoading(true)
+    setError(null)
+
+    try {
+      const response = await tfgAPI.getTFGsAsignados()
+
+      return {
+        success: true,
+        data: response.data.data || response.data,
+        meta: response.data.meta
+      }
+
+    } catch (err) {
+      const errorMessage = err.response?.data?.message ||
+                          err.response?.data?.error ||
+                          'Error al obtener TFGs asignados'
       setError(errorMessage)
       return { success: false, error: errorMessage }
     } finally {
@@ -229,22 +254,46 @@ export const useTFGs = () => {
     }
   }
 
+  // Obtener TFG específico por ID
+  const obtenerTFG = async (tfgId) => {
+    setLoading(true)
+    setError(null)
+
+    try {
+      const response = await tfgAPI.getById(tfgId)
+
+      return {
+        success: true,
+        data: response.data.data || response.data
+      }
+
+    } catch (err) {
+      const errorMessage = err.response?.data?.message ||
+                          err.response?.data?.error ||
+                          'Error al obtener TFG'
+      setError(errorMessage)
+      return { success: false, error: errorMessage }
+    } finally {
+      setLoading(false)
+    }
+  }
+
   // Obtener comentarios de un TFG
   const obtenerComentarios = async (tfgId) => {
     setLoading(true)
     setError(null)
-    
+
     try {
       const response = await tfgAPI.getComentarios(tfgId)
-      
-      return { 
-        success: true, 
+
+      return {
+        success: true,
         data: response.data.data || response.data
       }
-      
+
     } catch (err) {
-      const errorMessage = err.response?.data?.message || 
-                          err.response?.data?.error || 
+      const errorMessage = err.response?.data?.message ||
+                          err.response?.data?.error ||
                           'Error al obtener comentarios'
       setError(errorMessage)
       return { success: false, error: errorMessage }
@@ -283,6 +332,8 @@ export const useTFGs = () => {
     error,
     subirTFG,
     obtenerMisTFGs,
+    obtenerTFGsAsignados,
+    obtenerTFG,
     guardarBorrador,
     actualizarTFG,
     cambiarEstado,

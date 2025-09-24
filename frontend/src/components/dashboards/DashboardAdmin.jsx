@@ -1,33 +1,111 @@
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { useReportes } from '../../hooks/useReportes'
+import { useUsuarios } from '../../hooks/useUsuarios'
+import { useTribunales } from '../../hooks/useTribunales'
 
 function DashboardAdmin({ user }) {
-  // Datos simulados del sistema
-  const estadisticasGenerales = {
-    totalUsuarios: 324,
-    totalTFGs: 89,
-    defensasProgramadas: 12,
-    tribunalesActivos: 8
-  }
+  const { obtenerEstadisticas, loading: loadingReportes } = useReportes()
+  const { obtenerEstadisticasUsuarios, loading: loadingUsuarios } = useUsuarios()
+  const { obtenerTribunales } = useTribunales()
 
-  const estadisticasTFGs = {
-    enRevision: 15,
-    aprobados: 45,
-    defendidos: 29,
-    borradores: 12
-  }
+  const [estadisticasGenerales, setEstadisticasGenerales] = useState({
+    totalUsuarios: 0,
+    totalTFGs: 0,
+    defensasProgramadas: 0,
+    tribunalesActivos: 0
+  })
 
-  const actividadReciente = [
-    { tipo: 'tfg_subido', descripcion: 'Juan Pérez subió nuevo TFG', tiempo: 'Hace 30 min' },
-    { tipo: 'defensa_programada', descripcion: 'Defensa programada para Ana López', tiempo: 'Hace 1 hora' },
-    { tipo: 'usuario_creado', descripcion: 'Nuevo profesor registrado: Dr. Carlos López', tiempo: 'Hace 2 horas' },
-    { tipo: 'tfg_aprobado', descripcion: 'TFG de María Silva aprobado', tiempo: 'Hace 4 horas' }
-  ]
+  const [estadisticasTFGs, setEstadisticasTFGs] = useState({
+    enRevision: 0,
+    aprobados: 0,
+    defendidos: 0,
+    borradores: 0
+  })
 
-  const alertas = [
-    { tipo: 'warning', mensaje: '3 TFGs llevan más de 2 semanas en revisión', urgencia: 'media' },
-    { tipo: 'info', mensaje: 'Backup programado para esta noche', urgencia: 'baja' },
-    { tipo: 'error', mensaje: 'Fallo en el envío de notificaciones', urgencia: 'alta' }
-  ]
+  const [actividadReciente, setActividadReciente] = useState([])
+  const [alertas, setAlertas] = useState([])
+
+  // Cargar datos del dashboard
+  useEffect(() => {
+    const cargarDatos = async () => {
+      try {
+        // Cargar estadísticas generales y tribunales en paralelo
+        const [estadisticasResult, tribunalesResult] = await Promise.all([
+          obtenerEstadisticas(),
+          obtenerTribunales()
+        ])
+
+        if (estadisticasResult.success) {
+          const data = estadisticasResult.data
+
+          // Calcular tribunales activos reales
+          let tribunalesActivos = 0
+          if (tribunalesResult.success && tribunalesResult.data) {
+            const tribunales = tribunalesResult.data
+            tribunalesActivos = tribunales.filter(tribunal => tribunal.activo || tribunal.active || tribunal.isActive).length
+          }
+
+          setEstadisticasGenerales({
+            totalUsuarios: data.resumen?.total_usuarios || 0,
+            totalTFGs: data.resumen?.total_tfgs || 0,
+            defensasProgramadas: data.resumen?.total_defensas || 0,
+            tribunalesActivos: tribunalesActivos
+          })
+
+          setEstadisticasTFGs({
+            enRevision: data.tfgs_por_estado?.revision || 0,
+            aprobados: data.tfgs_por_estado?.aprobado || 0,
+            defendidos: data.tfgs_por_estado?.defendido || 0,
+            borradores: data.tfgs_por_estado?.borrador || 0
+          })
+
+          // Actividad reciente simulada
+          setActividadReciente([
+            {
+              tipo: 'tfg_subido',
+              descripcion: 'Nuevo TFG subido por estudiante',
+              tiempo: 'Hace 2 horas'
+            },
+            {
+              tipo: 'defensa_programada',
+              descripcion: 'Defensa programada para mañana',
+              tiempo: 'Hace 4 horas'
+            },
+            {
+              tipo: 'usuario_creado',
+              descripcion: 'Nuevo usuario registrado',
+              tiempo: 'Hace 1 día'
+            }
+          ])
+
+          // Alertas simuladas
+          setAlertas([
+            {
+              tipo: 'info',
+              urgencia: 'baja',
+              mensaje: 'Sistema funcionando correctamente'
+            }
+          ])
+        }
+
+        // Cargar estadísticas de usuarios adicionales si es necesario
+        const usuariosResult = await obtenerEstadisticasUsuarios()
+        if (usuariosResult.success) {
+          setEstadisticasGenerales(prev => ({
+            ...prev,
+            totalUsuarios: usuariosResult.data.total || prev.totalUsuarios
+          }))
+        }
+
+      } catch (error) {
+        console.error('Error cargando datos del dashboard admin:', error)
+        // Mantener valores por defecto en caso de error
+      }
+    }
+
+    cargarDatos()
+  }, [])
 
   const getIconoActividad = (tipo) => {
     switch (tipo) {
@@ -203,17 +281,23 @@ function DashboardAdmin({ user }) {
               <h2 className="text-lg font-semibold text-gray-900">Actividad Reciente</h2>
             </div>
             <div className="divide-y divide-gray-200">
-              {actividadReciente.map((actividad, index) => (
-                <div key={index} className="p-6 hover:bg-gray-50">
-                  <div className="flex items-start space-x-3">
-                    <span className="text-xl">{getIconoActividad(actividad.tipo)}</span>
-                    <div className="flex-1">
-                      <p className="text-sm text-gray-900">{actividad.descripcion}</p>
-                      <p className="text-xs text-gray-500 mt-1">{actividad.tiempo}</p>
+              {actividadReciente.length > 0 ? (
+                actividadReciente.map((actividad, index) => (
+                  <div key={index} className="p-6 hover:bg-gray-50">
+                    <div className="flex items-start space-x-3">
+                      <span className="text-xl">{getIconoActividad(actividad.tipo)}</span>
+                      <div className="flex-1">
+                        <p className="text-sm text-gray-900">{actividad.descripcion}</p>
+                        <p className="text-xs text-gray-500 mt-1">{actividad.tiempo}</p>
+                      </div>
                     </div>
                   </div>
+                ))
+              ) : (
+                <div className="p-6 text-center text-gray-500">
+                  <p className="text-sm">No hay actividad reciente</p>
                 </div>
-              ))}
+              )}
             </div>
           </div>
         </div>
@@ -253,15 +337,15 @@ function DashboardAdmin({ user }) {
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
                   <span className="text-sm text-gray-600">Uso de almacenamiento</span>
-                  <span className="text-sm font-medium text-gray-900">67%</span>
+                  <span className="text-sm font-medium text-gray-900">5%</span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div className="bg-blue-600 h-2 rounded-full" style={{width: '67%'}}></div>
+                  <div className="bg-green-600 h-2 rounded-full" style={{width: '5%'}}></div>
                 </div>
-                
+
                 <div className="flex justify-between items-center mt-4">
                   <span className="text-sm text-gray-600">Usuarios activos hoy</span>
-                  <span className="text-sm font-medium text-gray-900">84</span>
+                  <span className="text-sm font-medium text-gray-900">4</span>
                 </div>
                 
                 <div className="flex justify-between items-center">

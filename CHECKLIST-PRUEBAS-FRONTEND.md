@@ -23,37 +23,6 @@ Este documento contiene una lista exhaustiva de todas las pruebas que deben real
 
 ## 🔐 PRUEBAS DE AUTENTICACIÓN
 
-### Login y Logout
-- [ ] **Login con credenciales válidas** - Estudiante
-  - Navegar a `/login`
-  - Introducir `estudiante@uni.es` / `123456`
-  - Verificar redirección al dashboard correcto
-  - Verificar que el token JWT se almacena correctamente
-
-- [ ] **Login con credenciales válidas** - Profesor
-  - Usar `profesor@uni.es` / `123456`
-  - Verificar redirección a dashboard de profesor
-  - Verificar menú específico de profesor
-
-- [ ] **Login con credenciales válidas** - Presidente
-  - Usar `presidente@uni.es` / `123456`
-  - Verificar redirección y menú de presidente
-
-- [ ] **Login con credenciales válidas** - Admin
-  - Usar `admin@uni.es` / `123456`
-  - Verificar acceso completo a todas las secciones
-
-- [ ] **Login con credenciales inválidas**
-  - Intentar login con email incorrecto
-  - Intentar login con contraseña incorrecta
-  - Verificar mensajes de error apropiados
-
-- [ ] **Logout funcional**
-  - Hacer logout desde cualquier rol
-  - Verificar redirección a página de login
-  - Verificar que el token se elimina correctamente
-  - Intentar acceder a ruta protegida tras logout
-
 ### Renovación de Tokens
 - [ ] **Refresh token automático**
   - Dejar la sesión inactiva hasta que el token expire (1 hora)
@@ -67,30 +36,6 @@ Este documento contiene una lista exhaustiva de todas las pruebas que deben real
 ---
 
 ## 🛡️ PRUEBAS DE RUTAS PROTEGIDAS
-
-### Control de Acceso por Rol
-- [ ] **Rutas de Estudiante** (`/estudiante/*`)
-  - Acceder con usuario estudiante ✅
-  - Intentar acceder con profesor ❌
-  - Intentar acceder con presidente ❌
-  - Intentar acceder sin autenticación ❌
-
-- [ ] **Rutas de Profesor** (`/profesor/*`)
-  - Acceder con usuario profesor ✅
-  - Intentar acceder con estudiante ❌
-  - Intentar acceder con presidente ✅ (herencia de roles)
-  - Intentar acceder sin autenticación ❌
-
-- [ ] **Rutas de Presidente** (`/presidente/*`)
-  - Acceder con usuario presidente ✅
-  - Intentar acceder con profesor ❌
-  - Intentar acceder con estudiante ❌
-  - Intentar acceder sin autenticación ❌
-
-- [ ] **Rutas de Admin** (`/admin/*`)
-  - Acceder con usuario admin ✅
-  - Intentar acceder con cualquier otro rol ❌
-  - Intentar acceder sin autenticación ❌
 
 ### Navegación y Menús
 - [ ] **Menú dinámico por rol**

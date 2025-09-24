@@ -20,7 +20,6 @@ function Tribunales() {
   } = useTribunales()
 
   const [tribunales, setTribunales] = useState([])
-  const [loading, setLoading] = useState(true)
   const [filtro, setFiltro] = useState('todos') // todos, presidente, vocal, proximos
   const [modalActivo, setModalActivo] = useState(null)
   const [vistaActiva, setVistaActiva] = useState('lista') // lista, presidente, actas
@@ -38,107 +37,23 @@ function Tribunales() {
     vocal2: ''
   })
 
-  // Simular carga de tribunales
+  // Cargar tribunales desde el backend
   useEffect(() => {
-    const cargarTribunales = async () => {
-      setLoading(true)
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      
-      const tribunalesData = [
-        {
-          id: 1,
-          nombre: "Tribunal TFG - Desarrollo Web",
-          descripcion: "Tribunal especializado en proyectos de desarrollo web y aplicaciones móviles",
-          fechaDefensa: "2025-02-15T10:00:00Z",
-          aula: "Aula 301",
-          estado: "Programado",
-          tfg: {
-            id: 1,
-            titulo: "Sistema de Gestión de TFGs con React y Symfony",
-            estudiante: "Juan Pérez"
-          },
-          miembros: [
-            { id: 1, nombre: "Dr. María García", rol: "Presidente", email: "maria.garcia@uni.edu", esYo: true },
-            { id: 2, nombre: "Dr. Carlos López", rol: "Vocal", email: "carlos.lopez@uni.edu", esYo: false },
-            { id: 3, nombre: "Dra. Ana Martín", rol: "Vocal", email: "ana.martin@uni.edu", esYo: false }
-          ],
-          calificaciones: {
-            originalidad: null,
-            metodologia: null,
-            implementacion: null,
-            presentacion: null,
-            final: null
-          },
-          acta: {
-            generada: false,
-            observaciones: ""
-          }
-        },
-        {
-          id: 2,
-          nombre: "Tribunal TFG - Inteligencia Artificial",
-          descripcion: "Tribunal para proyectos de IA y Machine Learning",
-          fechaDefensa: "2025-02-17T12:00:00Z",
-          aula: "Aula 205",
-          estado: "Pendiente",
-          tfg: {
-            id: 3,
-            titulo: "Sistema de Recomendación basado en IA",
-            estudiante: "María Silva"
-          },
-          miembros: [
-            { id: 4, nombre: "Dr. Pedro Ruiz", rol: "Presidente", email: "pedro.ruiz@uni.edu", esYo: false },
-            { id: 1, nombre: "Dr. María García", rol: "Vocal", email: "maria.garcia@uni.edu", esYo: true },
-            { id: 5, nombre: "Dr. Luis Fernández", rol: "Vocal", email: "luis.fernandez@uni.edu", esYo: false }
-          ],
-          calificaciones: {
-            originalidad: null,
-            metodologia: null,
-            implementacion: null,
-            presentacion: null,
-            final: null
-          },
-          acta: {
-            generada: false,
-            observaciones: ""
-          }
-        },
-        {
-          id: 3,
-          nombre: "Tribunal TFG - Completado",
-          descripcion: "Tribunal ya evaluado y finalizado",
-          fechaDefensa: "2025-01-20T09:00:00Z",
-          aula: "Aula 102",
-          estado: "Completado",
-          tfg: {
-            id: 2,
-            titulo: "Aplicación Móvil para Gestión de Entregas",
-            estudiante: "Carlos Ruiz"
-          },
-          miembros: [
-            { id: 1, nombre: "Dr. María García", rol: "Presidente", email: "maria.garcia@uni.edu", esYo: true },
-            { id: 6, nombre: "Dra. Isabel Moreno", rol: "Vocal", email: "isabel.moreno@uni.edu", esYo: false },
-            { id: 7, nombre: "Dr. Roberto Silva", rol: "Vocal", email: "roberto.silva@uni.edu", esYo: false }
-          ],
-          calificaciones: {
-            originalidad: 8,
-            metodologia: 7,
-            implementacion: 9,
-            presentacion: 8,
-            final: 8.0
-          },
-          acta: {
-            generada: true,
-            observaciones: "Excelente trabajo técnico. Presentación clara y bien estructurada."
-          }
+    const cargarDatos = async () => {
+      try {
+        const resultado = await obtenerTribunales()
+        if (resultado.success) {
+          setTribunales(resultado.data)
+        } else {
+          mostrarNotificacion(resultado.error, 'error')
         }
-      ]
-      
-      setTribunales(tribunalesData)
-      setLoading(false)
+      } catch (error) {
+        console.error('Error cargando tribunales:', error)
+        mostrarNotificacion('Error al cargar tribunales', 'error')
+      }
     }
 
-    cargarTribunales()
+    cargarDatos()
     cargarProfesoresDisponibles()
   }, [])
 
@@ -255,31 +170,31 @@ function Tribunales() {
   }
 
   const handleCrearTribunal = async () => {
-    // Simular creación de tribunal
-    const nuevoTribunalObj = {
-      id: Date.now(),
-      ...nuevoTribunal,
-      fechaDefensa: new Date(nuevoTribunal.fechaDefensa + 'T' + nuevoTribunal.horaDefensa).toISOString(),
-      estado: 'Pendiente',
-      miembros: [
-        { id: Date.now(), nombre: nuevoTribunal.presidente, rol: 'Presidente', esYo: true },
-        { id: Date.now() + 1, nombre: nuevoTribunal.vocal1, rol: 'Vocal', esYo: false },
-        { id: Date.now() + 2, nombre: nuevoTribunal.vocal2, rol: 'Vocal', esYo: false }
-      ],
-      calificaciones: {
-        originalidad: null,
-        metodologia: null,
-        implementacion: null,
-        presentacion: null,
-        final: null
-      },
-      acta: {
-        generada: false,
-        observaciones: ""
+    try {
+      const datosFormulario = {
+        ...nuevoTribunal,
+        fecha_defensa: nuevoTribunal.fechaDefensa,
+        hora_defensa: nuevoTribunal.horaDefensa
       }
+
+      const resultado = await crearTribunal(datosFormulario)
+      if (resultado.success) {
+        mostrarNotificacion(resultado.message, 'success')
+        setModalActivo(null)
+        // Recargar tribunales
+        const tribunalesActualizados = await obtenerTribunales()
+        if (tribunalesActualizados.success) {
+          setTribunales(tribunalesActualizados.data)
+        }
+      } else {
+        mostrarNotificacion(resultado.error, 'error')
+      }
+    } catch (error) {
+      console.error('Error creando tribunal:', error)
+      mostrarNotificacion('Error al crear tribunal', 'error')
     }
 
-    setTribunales(prev => [nuevoTribunalObj, ...prev])
+    // Limpiar formulario
     setNuevoTribunal({
       nombre: '',
       descripcion: '',
@@ -291,18 +206,39 @@ function Tribunales() {
       vocal1: '',
       vocal2: ''
     })
-    setModalActivo(null)
   }
 
-  const handleGenerarActa = (tribunalId) => {
-    setTribunales(prev => prev.map(tribunal => 
-      tribunal.id === tribunalId
-        ? { ...tribunal, acta: { ...tribunal.acta, generada: true } }
-        : tribunal
-    ))
+  const handleGenerarActa = async (tribunalId, calificaciones = null) => {
+    try {
+      const resultado = await generarActaDefensa(tribunalId, calificaciones)
+      if (resultado.success) {
+        mostrarNotificacion(resultado.message, 'success')
+        setModalActivo(null)
+
+        // Actualizar estado del tribunal localmente
+        setTribunales(prev => prev.map(tribunal =>
+          tribunal.id === tribunalId
+            ? { ...tribunal, acta: { ...tribunal.acta, generada: true } }
+            : tribunal
+        ))
+
+        // Si hay un archivo generado, descargarlo
+        if (resultado.data?.archivoGenerado) {
+          const link = document.createElement('a')
+          link.href = resultado.data.url || '#'
+          link.download = resultado.data.archivoGenerado
+          link.click()
+        }
+      } else {
+        mostrarNotificacion(resultado.error, 'error')
+      }
+    } catch (error) {
+      console.error('Error generando acta:', error)
+      mostrarNotificacion('Error al generar acta', 'error')
+    }
   }
 
-  if (loading) {
+  if (tribunalesLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
@@ -452,10 +388,10 @@ function Tribunales() {
                       <div className="bg-gray-50 rounded-lg p-4 mb-4">
                         <h4 className="font-medium text-gray-900 mb-2">TFG a evaluar:</h4>
                         <p className="text-sm text-gray-700">
-                          <strong>{tribunal.tfg.titulo}</strong>
+                          <strong>{tribunal.tfg?.titulo || 'TFG no asignado'}</strong>
                         </p>
                         <p className="text-sm text-gray-500">
-                          Estudiante: {tribunal.tfg.estudiante}
+                          Estudiante: {tribunal.tfg?.estudiante?.nombreCompleto || tribunal.tfg?.estudiante || 'No asignado'}
                         </p>
                       </div>
 
@@ -520,7 +456,7 @@ function Tribunales() {
                       
                       {esPresidente && tribunal.estado === 'Completado' && !tribunal.acta.generada && (
                         <button 
-                          onClick={() => handleGenerarActa(tribunal.id)}
+                          onClick={() => setModalActivo({ tipo: 'generar-acta', tribunal })}
                           className="bg-purple-600 text-white px-4 py-2 rounded-md text-sm hover:bg-purple-700"
                         >
                           📄 Generar Acta
@@ -582,7 +518,7 @@ function Tribunales() {
                     </div>
                     <div className="text-sm">
                       <span className="font-medium text-gray-500">Estudiante:</span>
-                      <p>{tribunal.tfg.estudiante}</p>
+                      <p>{tribunal.tfg?.estudiante?.nombreCompleto || tribunal.tfg?.estudiante || 'No asignado'}</p>
                     </div>
                   </div>
 
@@ -633,7 +569,7 @@ function Tribunales() {
                   <div className="flex justify-between items-start">
                     <div>
                       <h3 className="font-semibold text-gray-900">{tribunal.nombre}</h3>
-                      <p className="text-sm text-gray-600">{tribunal.tfg.titulo} - {tribunal.tfg.estudiante}</p>
+                      <p className="text-sm text-gray-600">{tribunal.tfg?.titulo || 'TFG no asignado'} - {tribunal.tfg?.estudiante?.nombreCompleto || tribunal.tfg?.estudiante || 'No asignado'}</p>
                       <p className="text-xs text-gray-500 mt-1">
                         Defendido el {new Date(tribunal.fechaDefensa).toLocaleDateString('es-ES')}
                       </p>
@@ -677,7 +613,7 @@ function Tribunales() {
                   defensa: parseFloat(form.defensa.value) || 0,
                   observaciones: form.observaciones.value
                 }
-                manejarGenerarActa(modalActivo.tribunal.id, calificaciones)
+                handleGenerarActa(modalActivo.tribunal.id, calificaciones)
               }}>
                 <div className="space-y-4">
                   <div>
@@ -779,6 +715,7 @@ function Tribunales() {
                     <label key={profesor.id} className="flex items-center space-x-3 p-3 border border-gray-200 rounded-md hover:bg-gray-50">
                       <input
                         type="checkbox"
+                        data-profesor-id={profesor.id}
                         disabled={!profesor.disponible}
                         className="rounded border-gray-300 text-blue-600 focus:ring-blue-500 disabled:opacity-50"
                       />
@@ -807,9 +744,16 @@ function Tribunales() {
                 </button>
                 <button
                   onClick={() => {
-                    // Simular asignación
-                    mostrarNotificacion('Profesores asignados correctamente', 'success')
-                    setModalActivo(null)
+                    const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked')
+                    const profesoresSeleccionados = Array.from(checkboxes)
+                      .filter(cb => !cb.disabled)
+                      .map(cb => ({ id: cb.dataset.profesorId }))
+
+                    if (profesoresSeleccionados.length > 0) {
+                      manejarAsignarProfesores(modalActivo.tribunal.id, profesoresSeleccionados)
+                    } else {
+                      mostrarNotificacion('Selecciona al menos un profesor', 'warning')
+                    }
                   }}
                   className="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700"
                 >
@@ -906,7 +850,7 @@ function Tribunales() {
                     </label>
                     <input
                       type="text"
-                      value="Dr. María García"
+                      value={user?.nombreCompleto || user?.nombre || 'Usuario actual'}
                       disabled
                       className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-100"
                     />

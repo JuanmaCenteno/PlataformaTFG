@@ -1,11 +1,21 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
+import { useTribunales } from '../../hooks/useTribunales'
+import { useNotificaciones } from '../../context/NotificacionesContext'
 
 function DetalleTribunal() {
   const { id } = useParams()
   const navigate = useNavigate()
   const [tribunal, setTribunal] = useState(null)
-  const [loading, setLoading] = useState(true)
+
+  const {
+    obtenerTribunal,
+    obtenerMiembrosTribunal,
+    loading,
+    error
+  } = useTribunales()
+
+  const { mostrarNotificacion } = useNotificaciones()
   const [activeTab, setActiveTab] = useState('evaluacion')
   const [calificaciones, setCalificaciones] = useState({
     originalidad: null,
@@ -17,145 +27,53 @@ function DetalleTribunal() {
   const [observaciones, setObservaciones] = useState('')
   const [guardandoCalificaciones, setGuardandoCalificaciones] = useState(false)
 
-  // Simular carga de datos del tribunal
+  // Cargar datos del tribunal desde el backend
   useEffect(() => {
-    const cargarTribunal = async () => {
-      setLoading(true)
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      
-      const tribunalData = {
-        id: parseInt(id),
-        nombre: "Tribunal TFG - Desarrollo Web",
-        descripcion: "Tribunal especializado en proyectos de desarrollo web y aplicaciones móviles",
-        fechaDefensa: "2025-02-15T10:00:00Z",
-        aula: "Aula 301",
-        estado: "Programado",
-        tfg: {
-          id: 1,
-          titulo: "Sistema de Gestión de TFGs con React y Symfony",
-          estudiante: {
-            nombre: "Juan Pérez",
-            email: "juan.perez@estudiante.edu",
-            curso: "4º Ingeniería Informática"
-          },
-          tutor: "Dr. Carlos López",
-          resumen: "Este trabajo presenta el desarrollo de una plataforma web completa para la gestión de Trabajos de Fin de Grado en instituciones educativas. La solución implementa un frontend moderno usando React y un backend robusto desarrollado en Symfony.",
-          archivo: "tfg_juan_perez_final.pdf"
-        },
-        miembros: [
-          { 
-            id: 1, 
-            nombre: "Dr. María García", 
-            rol: "Presidente", 
-            email: "maria.garcia@uni.edu", 
-            esYo: true,
-            calificaciones: {
-              originalidad: null,
-              metodologia: null,
-              implementacion: null,
-              presentacion: null,
-              defensa: null
-            }
-          },
-          { 
-            id: 2, 
-            nombre: "Dr. Carlos López", 
-            rol: "Vocal", 
-            email: "carlos.lopez@uni.edu", 
-            esYo: false,
-            calificaciones: {
-              originalidad: 8,
-              metodologia: 7,
-              implementacion: 9,
-              presentacion: null,
-              defensa: null
-            }
-          },
-          { 
-            id: 3, 
-            nombre: "Dra. Ana Martín", 
-            rol: "Vocal", 
-            email: "ana.martin@uni.edu", 
-            esYo: false,
-            calificaciones: {
-              originalidad: null,
-              metodologia: null,
-              implementacion: null,
-              presentacion: null,
-              defensa: null
-            }
-          }
-        ],
-        criteriosEvaluacion: [
-          {
-            id: 1,
-            nombre: "Originalidad y Creatividad",
-            descripcion: "Nivel de innovación y aporte original del trabajo",
-            peso: 20
-          },
-          {
-            id: 2,
-            nombre: "Metodología",
-            descripcion: "Rigor metodológico y enfoque sistemático del desarrollo",
-            peso: 20
-          },
-          {
-            id: 3,
-            nombre: "Implementación Técnica",
-            descripcion: "Calidad de la solución técnica y código desarrollado",
-            peso: 30
-          },
-          {
-            id: 4,
-            nombre: "Presentación Escrita",
-            descripcion: "Claridad, estructura y calidad de la documentación",
-            peso: 15
-          },
-          {
-            id: 5,
-            nombre: "Defensa Oral",
-            descripcion: "Capacidad de presentación y defensa del trabajo",
-            peso: 15
-          }
-        ],
-        acta: {
-          generada: false,
-          observaciones: "",
-          calificacionFinal: null,
-          fechaGeneracion: null
-        },
-        cronograma: [
-          { hora: "10:00", actividad: "Presentación del estudiante", duracion: "20 min" },
-          { hora: "10:20", actividad: "Preguntas del tribunal", duracion: "15 min" },
-          { hora: "10:35", actividad: "Deliberación privada", duracion: "10 min" },
-          { hora: "10:45", actividad: "Comunicación del resultado", duracion: "5 min" }
-        ]
+    const cargarDatos = async () => {
+      if (!id) return
+
+      try {
+        const resultado = await obtenerTribunal(id)
+        if (resultado.success) {
+          setTribunal(resultado.data)
+        } else {
+          mostrarNotificacion(resultado.error, 'error')
+          navigate('/profesor/tribunales')
+        }
+      } catch (error) {
+        console.error('Error cargando tribunal:', error)
+        mostrarNotificacion('Error al cargar el tribunal', 'error')
+        navigate('/profesor/tribunales')
       }
-      
-      setTribunal(tribunalData)
-      setLoading(false)
     }
 
-    cargarTribunal()
+    cargarDatos()
   }, [id])
 
   const handleGuardarCalificaciones = async () => {
     setGuardandoCalificaciones(true)
-    
-    // Simular guardado
-    await new Promise(resolve => setTimeout(resolve, 1500))
-    
-    // Actualizar las calificaciones del miembro actual
-    setTribunal(prev => ({
-      ...prev,
-      miembros: prev.miembros.map(miembro => 
-        miembro.esYo 
-          ? { ...miembro, calificaciones }
-          : miembro
-      )
-    }))
-    
-    setGuardandoCalificaciones(false)
+
+    try {
+      // Aquí iría la llamada al backend para guardar calificaciones
+      // const resultado = await guardarCalificaciones(id, calificaciones, observaciones)
+      mostrarNotificacion('Funcionalidad de calificaciones no implementada en el backend', 'info')
+
+      // Simulación temporal
+      setTribunal(prev => ({
+        ...prev,
+        miembros: prev.miembros.map(miembro =>
+          miembro.esYo
+            ? { ...miembro, calificaciones }
+            : miembro
+        )
+      }))
+
+    } catch (error) {
+      console.error('Error guardando calificaciones:', error)
+      mostrarNotificacion('Error al guardar calificaciones', 'error')
+    } finally {
+      setGuardandoCalificaciones(false)
+    }
   }
 
   const calcularCalificacionFinal = () => {

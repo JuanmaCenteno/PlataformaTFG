@@ -50,9 +50,17 @@ export const AuthProvider = ({ children }) => {
       
       return { success: true, user: userData }
     } catch (error) {
-      const errorMessage = error.response?.data?.message || 
-                          error.message || 
-                          'Error al iniciar sesión'
+      let errorMessage = 'Error al iniciar sesión'
+
+      // Personalizar mensaje para credenciales inválidas
+      if (error.response?.data?.message === 'Invalid credentials.') {
+        errorMessage = 'El usuario y/o contraseña son inválidos'
+      } else {
+        errorMessage = error.response?.data?.message ||
+                      error.message ||
+                      'Error al iniciar sesión'
+      }
+
       return { success: false, error: errorMessage }
     }
   }
@@ -64,7 +72,6 @@ export const AuthProvider = ({ children }) => {
       await authAPI.logout()
     } catch (error) {
       // Si falla, no importa, limpiamos local igualmente
-      console.log('Error al hacer logout:', error.message)
     } finally {
       // Limpiar todos los datos locales
       setUser(null)

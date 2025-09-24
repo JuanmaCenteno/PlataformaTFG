@@ -38,10 +38,13 @@ function GestionUsuarios() {
   const [formularioUsuario, setFormularioUsuario] = useState({
     nombre: '',
     email: '',
+    password: '',
     rol: 'estudiante',
     departamento: '',
-    curso: '',
+    especialidad: '', // Cambiar curso por especialidad para coincidir con BD
     telefono: '',
+    dni: '',
+    universidad: '',
     especialidades: [],
     permisos: []
   })
@@ -85,8 +88,34 @@ function GestionUsuarios() {
   // Manejar creación de usuario
   const manejarCrearUsuario = async (e) => {
     e.preventDefault()
-    const resultado = await crearUsuario(formularioUsuario)
-    
+
+    // Dividir el nombre completo en nombre y apellidos
+    const nombreCompleto = formularioUsuario.nombre.trim()
+    const partesNombre = nombreCompleto.split(/\s+/)
+
+    const nombre = partesNombre[0] || ''
+    const apellidos = partesNombre.slice(1).join(' ') || partesNombre[0] || ''
+
+    // Convertir rol simple a array de roles de Symfony
+    const roleMapping = {
+      'estudiante': ['ROLE_ESTUDIANTE'],
+      'profesor': ['ROLE_PROFESOR'],
+      'presidente': ['ROLE_PRESIDENTE_TRIBUNAL'],
+      'admin': ['ROLE_ADMIN']
+    }
+
+    const roles = roleMapping[formularioUsuario.rol] || ['ROLE_ESTUDIANTE']
+
+    // Preparar datos con nombre, apellidos y roles en formato correcto
+    const datosUsuario = {
+      ...formularioUsuario,
+      nombre,
+      apellidos,
+      roles
+    }
+
+    const resultado = await crearUsuario(datosUsuario)
+
     if (resultado.success) {
       mostrarNotificacion(resultado.message, 'success')
       setModalActivo(null)
@@ -101,8 +130,64 @@ function GestionUsuarios() {
   // Manejar edición de usuario
   const manejarEditarUsuario = async (e) => {
     e.preventDefault()
-    const resultado = await actualizarUsuario(usuarioSeleccionado.id, formularioUsuario)
-    
+
+    // Dividir el nombre completo en nombre y apellidos
+    const nombreCompleto = formularioUsuario.nombre.trim()
+    const partesNombre = nombreCompleto.split(/\s+/)
+
+    const nombre = partesNombre[0] || ''
+    const apellidos = partesNombre.slice(1).join(' ') || partesNombre[0] || ''
+
+    // Convertir rol simple a array de roles de Symfony
+    const roleMapping = {
+      'estudiante': ['ROLE_ESTUDIANTE'],
+      'profesor': ['ROLE_PROFESOR'],
+      'presidente': ['ROLE_PRESIDENTE_TRIBUNAL'],
+      'admin': ['ROLE_ADMIN']
+    }
+
+    const roles = roleMapping[formularioUsuario.rol] || ['ROLE_ESTUDIANTE']
+
+    // Preparar datos con nombre, apellidos y roles en formato correcto
+    const datosUsuario = {
+      ...formularioUsuario,
+      nombre,
+      apellidos,
+      roles
+    }
+
+    // En edición, excluir password si está vacío
+    if (!formularioUsuario.password.trim()) {
+      delete datosUsuario.password
+    }
+
+    // En edición, no enviar campos únicos que no han cambiado para evitar conflictos
+    // Email: nunca enviar en edición para evitar conflictos
+    delete datosUsuario.email
+
+    // DNI: solo enviar si ha cambiado y no está vacío
+    if (!formularioUsuario.dni ||
+        formularioUsuario.dni.trim() === '' ||
+        formularioUsuario.dni === usuarioSeleccionado.dni) {
+      delete datosUsuario.dni
+    }
+
+    // Limpiar campos vacíos para evitar problemas con el backend
+    Object.keys(datosUsuario).forEach(key => {
+      if (datosUsuario[key] === '' || datosUsuario[key] === null || datosUsuario[key] === undefined) {
+        delete datosUsuario[key]
+      }
+    })
+
+
+    // Verificar que tenemos un ID válido
+    if (!usuarioSeleccionado.id) {
+      mostrarNotificacion('Error: ID de usuario no válido', 'error')
+      return
+    }
+
+    const resultado = await actualizarUsuario(usuarioSeleccionado.id, datosUsuario)
+
     if (resultado.success) {
       mostrarNotificacion(resultado.message, 'success')
       setModalActivo(null)
@@ -129,13 +214,14 @@ function GestionUsuarios() {
     }
   }
 
-  // Manejar cambio de estado
-  const manejarCambiarEstado = async (usuarioId, nuevoEstado) => {
-    const resultado = await cambiarEstadoUsuario(usuarioId, nuevoEstado)
-    
+  // Manejar cambio de estado (activar/desactivar)
+  const manejarCambiarEstado = async (usuarioId) => {
+    const resultado = await cambiarEstadoUsuario(usuarioId)
+
     if (resultado.success) {
       mostrarNotificacion(resultado.message, 'success')
       cargarUsuarios()
+      cargarEstadisticas()
     } else {
       mostrarNotificacion(resultado.error, 'error')
     }
@@ -161,10 +247,13 @@ function GestionUsuarios() {
     setFormularioUsuario({
       nombre: '',
       email: '',
+      password: '',
       rol: 'estudiante',
       departamento: '',
-      curso: '',
+      especialidad: '', // Cambiar curso por especialidad
       telefono: '',
+      dni: '',
+      universidad: '',
       especialidades: [],
       permisos: []
     })
@@ -178,13 +267,33 @@ function GestionUsuarios() {
 
   const abrirModalEditar = (usuario) => {
     setUsuarioSeleccionado(usuario)
+    // Combinar nombre y apellidos para mostrar en el formulario
+    const nombreCompleto = usuario.apellidos
+      ? `${usuario.nombre} ${usuario.apellidos}`
+      : usuario.nombre
+
+    // Convertir array de roles de Symfony a rol simple para el formulario
+    const rolMapping = {
+      'ROLE_ADMIN': 'admin',
+      'ROLE_PRESIDENTE_TRIBUNAL': 'presidente',
+      'ROLE_PROFESOR': 'profesor',
+      'ROLE_ESTUDIANTE': 'estudiante'
+    }
+
+    const rolSimple = usuario.roles && usuario.roles.length > 0
+      ? rolMapping[usuario.roles[0]] || 'estudiante'
+      : usuario.rol || 'estudiante'
+
     setFormularioUsuario({
-      nombre: usuario.nombre,
+      nombre: nombreCompleto,
       email: usuario.email,
-      rol: usuario.rol,
+      password: '', // No cargamos el password en edición
+      rol: rolSimple,
       departamento: usuario.departamento || '',
-      curso: usuario.curso || '',
+      especialidad: usuario.especialidad || '', // Cambiar curso por especialidad
       telefono: usuario.telefono || '',
+      dni: usuario.dni || '',
+      universidad: usuario.universidad || '',
       especialidades: usuario.especialidades || [],
       permisos: usuario.permisos || []
     })
@@ -203,24 +312,42 @@ function GestionUsuarios() {
     }
   })
 
+  // Convertir roles de Symfony a texto legible
+  const obtenerRolPrincipal = (usuario) => {
+    if (!usuario.roles || usuario.roles.length === 0) return 'estudiante'
+
+    const rol = usuario.roles[0]
+    const roleMapping = {
+      'ROLE_ADMIN': 'admin',
+      'ROLE_PRESIDENTE_TRIBUNAL': 'presidente',
+      'ROLE_PROFESOR': 'profesor',
+      'ROLE_ESTUDIANTE': 'estudiante'
+    }
+
+    return roleMapping[rol] || 'estudiante'
+  }
+
   // Obtener icono y color por rol
-  const obtenerIconoRol = (rol) => {
-    switch (rol) {
+  const obtenerIconoRol = (rolTexto) => {
+    switch (rolTexto) {
       case 'admin': return { icono: '👑', color: 'text-red-600' }
+      case 'presidente': return { icono: '⚖️', color: 'text-purple-600' }
       case 'profesor': return { icono: '👨‍🏫', color: 'text-blue-600' }
       case 'estudiante': return { icono: '🎓', color: 'text-green-600' }
       default: return { icono: '👤', color: 'text-gray-600' }
     }
   }
 
-  // Obtener color por estado
-  const obtenerColorEstado = (estado) => {
-    switch (estado) {
-      case 'activo': return 'bg-green-100 text-green-800'
-      case 'inactivo': return 'bg-gray-100 text-gray-800'
-      case 'suspendido': return 'bg-red-100 text-red-800'
-      default: return 'bg-gray-100 text-gray-600'
-    }
+  // Obtener color por estado activo/inactivo
+  const obtenerColorEstado = (isActive) => {
+    return isActive
+      ? 'bg-green-100 text-green-800'
+      : 'bg-red-100 text-red-800'
+  }
+
+  // Obtener texto del estado
+  const obtenerTextoEstado = (isActive) => {
+    return isActive ? 'Activo' : 'Inactivo'
   }
 
   if (loading && usuarios.length === 0) {
@@ -248,21 +375,6 @@ function GestionUsuarios() {
             className={`px-4 py-2 rounded-md ${vistaActiva === 'lista' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
           >
             👥 Usuarios
-          </button>
-          <button
-            onClick={() => setVistaActiva('estadisticas')}
-            className={`px-4 py-2 rounded-md ${vistaActiva === 'estadisticas' ? 'bg-purple-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
-          >
-            📊 Estadísticas
-          </button>
-          <button
-            onClick={() => {
-              setVistaActiva('logs')
-              cargarLogs()
-            }}
-            className={`px-4 py-2 rounded-md ${vistaActiva === 'logs' ? 'bg-orange-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
-          >
-            📋 Logs
           </button>
           <button
             onClick={abrirModalCrear}
@@ -380,13 +492,6 @@ function GestionUsuarios() {
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Estado
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
-                      onClick={() => setOrdenamiento({
-                        campo: 'ultimoAcceso',
-                        direccion: ordenamiento.campo === 'ultimoAcceso' && ordenamiento.direccion === 'asc' ? 'desc' : 'asc'
-                      })}>
-                    Último Acceso {ordenamiento.campo === 'ultimoAcceso' && (ordenamiento.direccion === 'asc' ? '↑' : '↓')}
-                  </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Acciones
                   </th>
@@ -394,8 +499,9 @@ function GestionUsuarios() {
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {usuariosOrdenados.map((usuario) => {
-                  const { icono, color } = obtenerIconoRol(usuario.rol)
-                  
+                  const rolPrincipal = obtenerRolPrincipal(usuario)
+                  const { icono, color } = obtenerIconoRol(rolPrincipal)
+
                   return (
                     <tr key={usuario.id} className="hover:bg-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap">
@@ -416,19 +522,13 @@ function GestionUsuarios() {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${color} bg-gray-100`}>
-                          {usuario.rol}
+                          {rolPrincipal.charAt(0).toUpperCase() + rolPrincipal.slice(1)}
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${obtenerColorEstado(usuario.estado)}`}>
-                          {usuario.estado}
+                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${obtenerColorEstado(usuario.is_active)}`}>
+                          {obtenerTextoEstado(usuario.is_active)}
                         </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {usuario.ultimoAcceso 
-                          ? new Date(usuario.ultimoAcceso).toLocaleDateString('es-ES')
-                          : 'Nunca'
-                        }
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
                         <button
@@ -438,13 +538,10 @@ function GestionUsuarios() {
                           ✏️ Editar
                         </button>
                         <button
-                          onClick={() => manejarCambiarEstado(
-                            usuario.id, 
-                            usuario.estado === 'activo' ? 'inactivo' : 'activo'
-                          )}
-                          className={`${usuario.estado === 'activo' ? 'text-red-600 hover:text-red-900' : 'text-green-600 hover:text-green-900'}`}
+                          onClick={() => manejarCambiarEstado(usuario.id)}
+                          className={`${usuario.is_active ? 'text-red-600 hover:text-red-900' : 'text-green-600 hover:text-green-900'}`}
                         >
-                          {usuario.estado === 'activo' ? '⏸️ Desactivar' : '▶️ Activar'}
+                          {usuario.is_active ? '⏸️ Desactivar' : '▶️ Activar'}
                         </button>
                         <button
                           onClick={() => manejarResetPassword(usuario.id)}
@@ -732,6 +829,27 @@ function GestionUsuarios() {
                     />
                   </div>
 
+                  {/* Password - Solo en creación */}
+                  {modalActivo.tipo === 'crear' && (
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Contraseña *
+                      </label>
+                      <input
+                        type="password"
+                        value={formularioUsuario.password}
+                        onChange={(e) => setFormularioUsuario({...formularioUsuario, password: e.target.value})}
+                        className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder="Mínimo 6 caracteres"
+                        required
+                        minLength={6}
+                      />
+                      <p className="text-xs text-gray-500 mt-1">
+                        La contraseña debe tener al menos 6 caracteres
+                      </p>
+                    </div>
+                  )}
+
                   {/* Rol */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -763,6 +881,34 @@ function GestionUsuarios() {
                     />
                   </div>
 
+                  {/* DNI */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      DNI
+                    </label>
+                    <input
+                      type="text"
+                      value={formularioUsuario.dni}
+                      onChange={(e) => setFormularioUsuario({...formularioUsuario, dni: e.target.value})}
+                      className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="12345678X"
+                    />
+                  </div>
+
+                  {/* Universidad */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Universidad
+                    </label>
+                    <input
+                      type="text"
+                      value={formularioUsuario.universidad}
+                      onChange={(e) => setFormularioUsuario({...formularioUsuario, universidad: e.target.value})}
+                      className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      placeholder="Universidad de Cádiz"
+                    />
+                  </div>
+
                   {/* Departamento - Solo para profesores */}
                   {formularioUsuario.rol === 'profesor' && (
                     <div>
@@ -784,19 +930,19 @@ function GestionUsuarios() {
                     </div>
                   )}
 
-                  {/* Curso - Solo para estudiantes */}
+                  {/* Especialidad - Solo para estudiantes */}
                   {formularioUsuario.rol === 'estudiante' && (
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Curso *
+                        Especialidad *
                       </label>
                       <select
-                        value={formularioUsuario.curso}
-                        onChange={(e) => setFormularioUsuario({...formularioUsuario, curso: e.target.value})}
+                        value={formularioUsuario.especialidad}
+                        onChange={(e) => setFormularioUsuario({...formularioUsuario, especialidad: e.target.value})}
                         className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         required={formularioUsuario.rol === 'estudiante'}
                       >
-                        <option value="">Seleccionar curso</option>
+                        <option value="">Seleccionar especialidad</option>
                         <option value="1º Ingeniería Informática">1º Ingeniería Informática</option>
                         <option value="2º Ingeniería Informática">2º Ingeniería Informática</option>
                         <option value="3º Ingeniería Informática">3º Ingeniería Informática</option>

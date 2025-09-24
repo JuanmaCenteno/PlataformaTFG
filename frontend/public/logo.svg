@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Fondo circular más pequeño -->
+  <circle cx="100" cy="100" r="70" fill="#f4f6fb" stroke="#2c3e50" stroke-width="4"></circle>
+
+  <!-- Birrete -->
+  <!-- Parte superior (rombo) -->
+  <polygon points="100,50 150,70 100,90 50,70" fill="#2c3e50"></polygon>
+  <!-- Base del birrete -->
+  <rect x="85" y="90" width="30" height="12" fill="#2c3e50"></rect>
+  <!-- Borla -->
+  <line x1="150" y1="70" x2="150" y2="105" stroke="#2c3e50" stroke-width="3"></line>
+  <circle cx="150" cy="105" r="5" fill="#e67e22"></circle>
+
+  <!-- Libro más arriba -->
+  <path d="M60 115 Q80 95 100 115 Q120 95 140 115 L140 140 Q120 125 100 140 Q80 125 60 140 Z" fill="#3498db" stroke="#2c3e50" stroke-width="3"></path>
+</svg>

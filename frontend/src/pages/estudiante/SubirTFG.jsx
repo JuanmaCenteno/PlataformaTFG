@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTFGs } from '../../hooks/useTFGs'
+import { userAPI } from '../../services/api'
 
 function SubirTFG() {
   const navigate = useNavigate()
@@ -9,8 +10,10 @@ function SubirTFG() {
   // Estado del formulario
   const [formData, setFormData] = useState({
     titulo: '',
+    descripcion: '', // Campo que espera el backend
     resumen: '',
     palabrasClave: '',
+    tutorId: '',
     area: '',
     tipoTFG: '',
     idioma: 'español',
@@ -21,6 +24,8 @@ function SubirTFG() {
   const [uploadProgress, setUploadProgress] = useState(0)
   const [errors, setErrors] = useState({})
   const [dragActive, setDragActive] = useState(false)
+  const [profesores, setProfesores] = useState([])
+  const [loadingProfesores, setLoadingProfesores] = useState(false)
 
   // Opciones para los selects
   const areas = [
@@ -42,6 +47,38 @@ function SubirTFG() {
     'Estudio Comparativo',
     'Propuesta de Mejora'
   ]
+
+  // Cargar profesores al montar el componente
+  useEffect(() => {
+    let isMounted = true // Flag para evitar actualizaciones en componente desmontado
+
+    const cargarProfesores = async () => {
+      setLoadingProfesores(true)
+      try {
+        const response = await userAPI.getProfesores()
+        // Solo actualizar estado si el componente sigue montado
+        if (isMounted) {
+          setProfesores(response.data.data || response.data || [])
+        }
+      } catch (error) {
+        console.error('Error cargando profesores:', error)
+        if (isMounted) {
+          setErrors(prev => ({ ...prev, tutorId: 'Error al cargar la lista de profesores' }))
+        }
+      } finally {
+        if (isMounted) {
+          setLoadingProfesores(false)
+        }
+      }
+    }
+
+    cargarProfesores()
+
+    // Cleanup function
+    return () => {
+      isMounted = false
+    }
+  }, [])
 
   // Manejar cambios en inputs
   const handleInputChange = (e) => {
@@ -115,6 +152,7 @@ function SubirTFG() {
     if (!formData.resumen.trim()) newErrors.resumen = 'El resumen es obligatorio'
     if (formData.resumen.length < 100) newErrors.resumen = 'El resumen debe tener al menos 100 caracteres'
     if (!formData.palabrasClave.trim()) newErrors.palabrasClave = 'Las palabras clave son obligatorias'
+    if (!formData.tutorId) newErrors.tutorId = 'Debe seleccionar un tutor'
     if (!formData.area) newErrors.area = 'Debe seleccionar un área'
     if (!formData.tipoTFG) newErrors.tipoTFG = 'Debe seleccionar el tipo de TFG'
     if (!formData.archivo) newErrors.archivo = 'Debe subir el archivo PDF'
@@ -146,8 +184,6 @@ function SubirTFG() {
       const datosEnvio = {
         ...formData,
         palabrasClave: formData.palabrasClave.split(',').map(p => p.trim()),
-        // Campos adicionales que podría necesitar el backend
-        tutorId: 1, // TODO: obtener del contexto de usuario
         cotutorId: null
       }
 
@@ -211,6 +247,26 @@ function SubirTFG() {
               )}
             </div>
 
+            {/* Descripción */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Descripción
+              </label>
+              <textarea
+                name="descripcion"
+                value={formData.descripcion}
+                onChange={handleInputChange}
+                rows={3}
+                className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                  errors.descripcion ? 'border-red-300' : 'border-gray-300'
+                }`}
+                placeholder="Descripción adicional del proyecto (opcional)"
+              />
+              {errors.descripcion && (
+                <p className="mt-1 text-sm text-red-600">{errors.descripcion}</p>
+              )}
+            </div>
+
             {/* Área y Tipo */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -256,6 +312,37 @@ function SubirTFG() {
                   <p className="mt-1 text-sm text-red-600">{errors.tipoTFG}</p>
                 )}
               </div>
+            </div>
+
+            {/* Tutor */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Tutor *
+              </label>
+              <select
+                name="tutorId"
+                value={formData.tutorId}
+                onChange={handleInputChange}
+                disabled={loadingProfesores}
+                className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                  errors.tutorId ? 'border-red-300' : 'border-gray-300'
+                } ${loadingProfesores ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+              >
+                <option value="">
+                  {loadingProfesores ? 'Cargando profesores...' : 'Selecciona un tutor'}
+                </option>
+                {profesores.map(profesor => (
+                  <option key={profesor.id} value={profesor.id}>
+                    {profesor.nombre} {profesor.apellidos}
+                  </option>
+                ))}
+              </select>
+              {errors.tutorId && (
+                <p className="mt-1 text-sm text-red-600">{errors.tutorId}</p>
+              )}
+              <p className="mt-1 text-sm text-gray-500">
+                Selecciona el profesor que dirigirá tu TFG
+              </p>
             </div>
 
             {/* Resumen */}

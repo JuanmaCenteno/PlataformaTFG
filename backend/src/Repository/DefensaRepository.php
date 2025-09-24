@@ -478,4 +478,72 @@ class DefensaRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+
+    /**
+     * Obtiene estadísticas de defensas
+     */
+    public function getEstadisticasDefensas(): array
+    {
+        $qb = $this->createQueryBuilder('d');
+
+        // Defensas por estado
+        $estadosResult = $qb
+            ->select('d.estado', 'COUNT(d.id) as total')
+            ->groupBy('d.estado')
+            ->getQuery()
+            ->getResult();
+
+        $estadisticas = [
+            'por_estado' => [],
+            'total' => 0,
+            'programadas' => 0,
+            'completadas' => 0,
+            'canceladas' => 0,
+            'defensas_mes_actual' => 0,
+            'promedio_duracion' => 0
+        ];
+
+        foreach ($estadosResult as $estado) {
+            $estadisticas['por_estado'][$estado['estado']] = (int) $estado['total'];
+            $estadisticas['total'] += (int) $estado['total'];
+
+            switch ($estado['estado']) {
+                case 'programada':
+                    $estadisticas['programadas'] = (int) $estado['total'];
+                    break;
+                case 'completada':
+                    $estadisticas['completadas'] = (int) $estado['total'];
+                    break;
+                case 'cancelada':
+                    $estadisticas['canceladas'] = (int) $estado['total'];
+                    break;
+            }
+        }
+
+        // Defensas del mes actual
+        $mesActual = new \DateTime('first day of this month');
+        $finMes = new \DateTime('last day of this month');
+
+        $defensasMes = $this->createQueryBuilder('d2')
+            ->select('COUNT(d2.id)')
+            ->where('d2.fechaDefensa >= :inicio')
+            ->andWhere('d2.fechaDefensa <= :fin')
+            ->setParameter('inicio', $mesActual)
+            ->setParameter('fin', $finMes)
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        $estadisticas['defensas_mes_actual'] = (int) $defensasMes;
+
+        // Promedio de duración
+        $promedioDuracion = $this->createQueryBuilder('d3')
+            ->select('AVG(d3.duracionEstimada)')
+            ->where('d3.duracionEstimada IS NOT NULL')
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        $estadisticas['promedio_duracion'] = $promedioDuracion ? round($promedioDuracion, 2) : 0;
+
+        return $estadisticas;
+    }
 }

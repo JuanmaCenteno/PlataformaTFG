@@ -9,19 +9,43 @@ export const useTribunales = () => {
   const obtenerTribunales = async () => {
     setLoading(true)
     setError(null)
-    
+
     try {
       const response = await tribunalAPI.getAll()
-      
-      return { 
-        success: true, 
+
+      return {
+        success: true,
         data: response.data.data || response.data
       }
-      
+
     } catch (err) {
-      const errorMessage = err.response?.data?.message || 
-                          err.response?.data?.error || 
+      const errorMessage = err.response?.data?.message ||
+                          err.response?.data?.error ||
                           'Error al obtener tribunales'
+      setError(errorMessage)
+      return { success: false, error: errorMessage }
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Obtener tribunal específico por ID
+  const obtenerTribunal = async (tribunalId) => {
+    setLoading(true)
+    setError(null)
+
+    try {
+      const response = await tribunalAPI.getById(tribunalId)
+
+      return {
+        success: true,
+        data: response.data.data || response.data
+      }
+
+    } catch (err) {
+      const errorMessage = err.response?.data?.message ||
+                          err.response?.data?.error ||
+                          'Error al obtener tribunal'
       setError(errorMessage)
       return { success: false, error: errorMessage }
     } finally {
@@ -332,19 +356,49 @@ export const useTribunales = () => {
   const obtenerCalificaciones = async (defensaId) => {
     setLoading(true)
     setError(null)
-    
+
     try {
       const response = await calificacionAPI.get(defensaId)
-      
-      return { 
-        success: true, 
+
+      return {
+        success: true,
         data: response.data.data || response.data
       }
-      
+
     } catch (err) {
-      const errorMessage = err.response?.data?.message || 
-                          err.response?.data?.error || 
+      const errorMessage = err.response?.data?.message ||
+                          err.response?.data?.error ||
                           'Error al obtener calificaciones'
+      setError(errorMessage)
+      return { success: false, error: errorMessage }
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Obtener presidentes de tribunales (profesores con rol de presidente)
+  const obtenerPresidentes = async () => {
+    setLoading(true)
+    setError(null)
+
+    try {
+      const response = await userAPI.getProfesores()
+
+      // Filtrar profesores que pueden ser presidentes
+      const profesores = response.data.data || response.data || []
+      const presidentes = profesores.filter(profesor =>
+        profesor.rol === 'profesor' || profesor.rol === 'presidente'
+      )
+
+      return {
+        success: true,
+        data: presidentes
+      }
+
+    } catch (err) {
+      const errorMessage = err.response?.data?.message ||
+                          err.response?.data?.error ||
+                          'Error al obtener presidentes'
       setError(errorMessage)
       return { success: false, error: errorMessage }
     } finally {
@@ -380,6 +434,7 @@ export const useTribunales = () => {
     error,
     // Funciones principales
     obtenerTribunales,
+    obtenerTribunal,
     crearTribunal,
     actualizarTribunal,
     eliminarTribunal,
@@ -393,6 +448,7 @@ export const useTribunales = () => {
     guardarCalificaciones,
     actualizarCalificaciones,
     obtenerCalificaciones,
+    obtenerPresidentes,
     // Aliases para compatibilidad
     obtenerMisTribunales,
     modificarTribunal,

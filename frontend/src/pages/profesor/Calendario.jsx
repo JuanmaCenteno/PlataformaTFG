@@ -6,6 +6,7 @@ import interactionPlugin from '@fullcalendar/interaction'
 import listPlugin from '@fullcalendar/list'
 import esLocale from '@fullcalendar/core/locales/es'
 import { useCalendario } from '../../hooks/useCalendario'
+import { useTribunales } from '../../hooks/useTribunales'
 import { useNotificaciones } from '../../context/NotificacionesContext'
 import { AlertaConflicto, DisponibilidadAulas } from '../../components/calendario/EventoDefensa'
 
@@ -26,6 +27,8 @@ function Calendario() {
     clearError
   } = useCalendario()
 
+  const { obtenerTribunales: obtenerTribunalesApi } = useTribunales()
+
   const [defensas, setDefensas] = useState([])
   const [loadingLocal, setLoadingLocal] = useState(false)
   const [loadingModal, setLoadingModal] = useState(false)
@@ -35,6 +38,8 @@ function Calendario() {
   const [datosDefensaTemporal, setDatosDefensaTemporal] = useState(null)
   const [disponibilidadAulas, setDisponibilidadAulas] = useState([])
   const [tfgsDisponibles, setTfgsDisponibles] = useState([])
+  const [tribunalesDisponibles, setTribunalesDisponibles] = useState([])
+  const [aulasDisponibles, setAulasDisponibles] = useState([])
   const [filtros, setFiltros] = useState({
     miRol: 'todos', // todos, presidente, vocal
     estado: 'todos', // todos, programado, completado
@@ -55,122 +60,101 @@ function Calendario() {
   // Función para cargar defensas
   const cargarDefensas = async () => {
       setLoadingLocal(true)
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      
-      const defensasData = [
-        {
-          id: 1,
-          titulo: "Sistema de Gestión de TFGs con React y Symfony",
-          estudiante: {
-            nombre: "Juan Pérez",
-            email: "juan.perez@estudiante.edu"
-          },
-          fecha: "2025-02-15T10:00:00Z",
-          duracion: 60, // minutos
-          aula: "Aula 301",
-          estado: "Programado",
-          tribunal: {
-            id: 1,
-            nombre: "Tribunal TFG - Desarrollo Web",
-            presidente: "Dr. María García",
-            vocales: ["Dr. Carlos López", "Dra. Ana Martín"]
-          },
-          miRol: "Presidente",
-          tutor: "Dr. Carlos López",
-          tipo: "TFG",
-          observaciones: "",
-          documentos: [
-            { nombre: "TFG_Juan_Perez_Final.pdf", tipo: "documento" },
-            { nombre: "Presentacion_Defensa.pptx", tipo: "presentacion" }
-          ]
-        },
-        {
-          id: 2,
-          titulo: "Aplicación Móvil para Gestión de Entregas",
-          estudiante: {
-            nombre: "María Silva",
-            email: "maria.silva@estudiante.edu"
-          },
-          fecha: "2025-02-17T12:00:00Z",
-          duracion: 60,
-          aula: "Aula 205",
-          estado: "Programado",
-          tribunal: {
-            id: 2,
-            nombre: "Tribunal TFG - Desarrollo Móvil",
-            presidente: "Dr. Pedro Ruiz",
-            vocales: ["Dr. María García", "Dra. Isabel Moreno"]
-          },
-          miRol: "Vocal",
-          tutor: "Dra. Ana Martín",
-          tipo: "TFG",
-          observaciones: "",
-          documentos: [
-            { nombre: "TFG_Maria_Silva_Final.pdf", tipo: "documento" }
-          ]
-        },
-        {
-          id: 3,
-          titulo: "Sistema de Recomendación basado en IA",
-          estudiante: {
-            nombre: "Carlos Ruiz",
-            email: "carlos.ruiz@estudiante.edu"
-          },
-          fecha: "2025-02-20T09:00:00Z",
-          duracion: 60,
-          aula: "Aula 102",
-          estado: "Programado",
-          tribunal: {
-            id: 3,
-            nombre: "Tribunal TFG - Inteligencia Artificial",
-            presidente: "Dr. María García",
-            vocales: ["Dr. Luis Fernández", "Dr. Roberto Silva"]
-          },
-          miRol: "Presidente",
-          tutor: "Dr. Pedro Ruiz",
-          tipo: "TFG",
-          observaciones: "Revisión adicional de algoritmos solicitada",
-          documentos: [
-            { nombre: "TFG_Carlos_Ruiz_Final.pdf", tipo: "documento" },
-            { nombre: "Codigo_Fuente.zip", tipo: "codigo" }
-          ]
-        },
-        {
-          id: 4,
-          titulo: "Blockchain aplicado a Contratos Inteligentes",
-          estudiante: {
-            nombre: "Ana López",
-            email: "ana.lopez@estudiante.edu"
-          },
-          fecha: "2025-01-20T11:00:00Z",
-          duracion: 60,
-          aula: "Aula 301",
-          estado: "Completado",
-          tribunal: {
-            id: 4,
-            nombre: "Tribunal TFG - Blockchain",
-            presidente: "Dr. María García",
-            vocales: ["Dr. Carlos López", "Dra. Isabel Moreno"]
-          },
-          miRol: "Presidente",
-          tutor: "Dr. Luis Fernández",
-          tipo: "TFG",
-          observaciones: "Defensa exitosa. Calificación: 9.0",
-          calificacion: 9.0,
-          documentos: [
-            { nombre: "TFG_Ana_Lopez_Final.pdf", tipo: "documento" },
-            { nombre: "Acta_Defensa.pdf", tipo: "acta" }
-          ]
+      try {
+        // Crear fechas para el rango del calendario (mes actual ± 3 meses)
+        const now = new Date()
+        const fechaInicio = new Date(now.getFullYear(), now.getMonth() - 3, 1)
+        const fechaFin = new Date(now.getFullYear(), now.getMonth() + 3, 0)
+
+        const resultado = await obtenerDefensas(fechaInicio, fechaFin)
+        if (resultado.success) {
+          setDefensas(resultado.data || [])
+        } else {
+          mostrarNotificacion(resultado.error, 'error')
+          setDefensas([])
         }
-      ]
-      
-      setDefensas(defensasData)
+      } catch (error) {
+        console.error('Error cargando defensas:', error)
+        mostrarNotificacion('Error al cargar el calendario de defensas', 'error')
+        setDefensas([])
+      }
       setLoadingLocal(false)
     }
+
+  // Cargar TFGs disponibles para programar defensa
+  const cargarTFGsDisponibles = async () => {
+    try {
+      const resultado = await obtenerTFGsListosParaDefensa()
+      if (resultado.success) {
+        setTfgsDisponibles(resultado.data || [])
+      }
+    } catch (error) {
+      console.error('Error cargando TFGs disponibles:', error)
+      setTfgsDisponibles([])
+    }
+  }
+
+  // Cargar tribunales disponibles
+  const cargarTribunalesDisponibles = async () => {
+    try {
+      const resultado = await obtenerTribunalesApi()
+
+      if (resultado.success) {
+        setTribunalesDisponibles(resultado.data || [])
+      } else {
+        // Fallback con tribunales predefinidos
+        setTribunalesDisponibles([
+          { id: 1, nombre: 'Tribunal TFG - Desarrollo Web' },
+          { id: 2, nombre: 'Tribunal TFG - Inteligencia Artificial' },
+          { id: 3, nombre: 'Tribunal TFG - Desarrollo Móvil' }
+        ])
+      }
+    } catch (error) {
+      console.error('Error cargando tribunales disponibles:', error)
+      // Fallback con tribunales predefinidos
+      setTribunalesDisponibles([
+        { id: 1, nombre: 'Tribunal TFG - Desarrollo Web' },
+        { id: 2, nombre: 'Tribunal TFG - Inteligencia Artificial' },
+        { id: 3, nombre: 'Tribunal TFG - Desarrollo Móvil' }
+      ])
+    }
+  }
+
+  // Cargar aulas disponibles
+  const cargarAulasDisponibles = async () => {
+    try {
+      const resultado = await obtenerAulasDisponibles()
+      if (resultado.success) {
+        setAulasDisponibles(resultado.data || [])
+      } else {
+        // Fallback con aulas predefinidas si la API no está disponible
+        setAulasDisponibles([
+          { id: 'aula-101', nombre: 'Aula 101', capacidad: 30 },
+          { id: 'aula-102', nombre: 'Aula 102', capacidad: 25 },
+          { id: 'aula-205', nombre: 'Aula 205', capacidad: 40 },
+          { id: 'aula-301', nombre: 'Aula 301', capacidad: 50 },
+          { id: 'salon-actos', nombre: 'Salón de Actos', capacidad: 100 }
+        ])
+      }
+    } catch (error) {
+      console.error('Error cargando aulas disponibles:', error)
+      // Fallback con aulas predefinidas
+      setAulasDisponibles([
+        { id: 'aula-101', nombre: 'Aula 101', capacidad: 30 },
+        { id: 'aula-102', nombre: 'Aula 102', capacidad: 25 },
+        { id: 'aula-205', nombre: 'Aula 205', capacidad: 40 },
+        { id: 'aula-301', nombre: 'Aula 301', capacidad: 50 },
+        { id: 'salon-actos', nombre: 'Salón de Actos', capacidad: 100 }
+      ])
+    }
+  }
 
   // Cargar defensas al montar el componente
   useEffect(() => {
     cargarDefensas()
+    cargarTFGsDisponibles()
+    cargarTribunalesDisponibles()
+    cargarAulasDisponibles()
   }, [])
 
   // Filtrar defensas
@@ -339,7 +323,6 @@ function Calendario() {
     const defensa = resizeInfo.event.extendedProps.defensa
     const nuevaDuracion = Math.round((resizeInfo.event.end - resizeInfo.event.start) / (1000 * 60))
     
-    console.log(`Cambiando duración de defensa ${defensa.id} a ${nuevaDuracion} minutos`)
     
     setModalActivo({
       tipo: 'confirmar-redimension',
@@ -769,7 +752,8 @@ function Calendario() {
                     
                     if (resultado.success) {
                       mostrarNotificacion('Defensa reprogramada correctamente', 'success')
-                      // Recargar datos simulados (en una app real sería cargarDefensas())
+                      // Recargar datos del calendario
+                      cargarDefensas()
                       
                       // Enviar notificación automática
                       await enviarNotificacionDefensa(modalActivo.defensa.id, 'modificada', [
@@ -816,7 +800,6 @@ function Calendario() {
                 <button
                   onClick={() => {
                     // Aquí iría la lógica para confirmar el cambio
-                    console.log('Confirmando cambio de duración')
                     setModalActivo(null)
                   }}
                   className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
@@ -843,15 +826,17 @@ function Calendario() {
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     TFG a Defender
                   </label>
-                  <select 
+                  <select
                     value={formDefensa.tfgId}
                     onChange={(e) => setFormDefensa(prev => ({ ...prev, tfgId: e.target.value }))}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="">Seleccionar TFG...</option>
-                    <option value="1">Sistema de Gestión de TFGs - Juan Pérez</option>
-                    <option value="2">App Móvil de Entregas - María Silva</option>
-                    <option value="3">IA para Diagnóstico - Carlos Ruiz</option>
+                    {tfgsDisponibles.map((tfg) => (
+                      <option key={tfg.id} value={tfg.id}>
+                        {tfg.titulo} - {tfg.estudiante?.nombreCompleto || tfg.estudiante?.nombre}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
@@ -899,17 +884,17 @@ function Calendario() {
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Aula
                     </label>
-                    <select 
+                    <select
                       value={formDefensa.aula}
                       onChange={(e) => setFormDefensa(prev => ({ ...prev, aula: e.target.value }))}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
                       <option value="">Seleccionar aula...</option>
-                      <option value="Aula 101">Aula 101</option>
-                      <option value="Aula 102">Aula 102</option>
-                      <option value="Aula 205">Aula 205</option>
-                      <option value="Aula 301">Aula 301</option>
-                      <option value="Salón de Actos">Salón de Actos</option>
+                      {aulasDisponibles.map((aula) => (
+                        <option key={aula.id} value={aula.nombre}>
+                          {aula.nombre} {aula.capacidad && `(${aula.capacidad} plazas)`}
+                        </option>
+                      ))}
                     </select>
                   </div>
                 </div>
@@ -918,15 +903,17 @@ function Calendario() {
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Tribunal Asignado
                   </label>
-                  <select 
+                  <select
                     value={formDefensa.tribunal}
                     onChange={(e) => setFormDefensa(prev => ({ ...prev, tribunal: e.target.value }))}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="">Seleccionar tribunal...</option>
-                    <option value="1">Tribunal TFG - Desarrollo Web</option>
-                    <option value="2">Tribunal TFG - Inteligencia Artificial</option>
-                    <option value="3">Tribunal TFG - Desarrollo Móvil</option>
+                    {tribunalesDisponibles.map((tribunal) => (
+                      <option key={tribunal.id} value={tribunal.id}>
+                        {tribunal.nombre}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
@@ -978,64 +965,52 @@ function Calendario() {
                   onClick={async () => {
                     try {
                       // Validar campos requeridos
-                      if (!formDefensa.tfgId || !formDefensa.fecha || !formDefensa.hora || !formDefensa.aula) {
+                      if (!formDefensa.tfgId || !formDefensa.fecha || !formDefensa.hora || !formDefensa.aula || !formDefensa.tribunal) {
                         mostrarNotificacion('Por favor, completa todos los campos requeridos', 'error')
                         return
                       }
 
                       setLoadingModal(true)
-                      
-                      // Crear nueva defensa con los datos del formulario
-                      const nuevaDefensa = {
-                        id: Date.now(), // ID temporal
-                        titulo: formDefensa.tfgId === '1' ? "Sistema de Gestión de TFGs con React y Symfony" :
-                               formDefensa.tfgId === '2' ? "App Móvil de Entregas" :
-                               formDefensa.tfgId === '3' ? "IA para Diagnóstico" : "TFG Nuevo",
-                        estudiante: {
-                          nombre: formDefensa.tfgId === '1' ? "Juan Pérez" :
-                                 formDefensa.tfgId === '2' ? "María Silva" :
-                                 formDefensa.tfgId === '3' ? "Carlos Ruiz" : "Estudiante",
-                          email: `estudiante${formDefensa.tfgId}@uni.es`
-                        },
-                        fecha: `${formDefensa.fecha}T${formDefensa.hora}:00Z`,
+
+                      // Preparar datos para la API
+                      const datosDefensa = {
+                        tfgId: parseInt(formDefensa.tfgId),
+                        fechaCompleta: `${formDefensa.fecha}T${formDefensa.hora}:00`,
                         duracion: parseInt(formDefensa.duracion),
                         aula: formDefensa.aula,
-                        estado: "Programado",
-                        tribunal: {
-                          id: parseInt(formDefensa.tribunal) || 1,
-                          nombre: formDefensa.tribunal === '1' ? "Tribunal TFG - Desarrollo Web" :
-                                 formDefensa.tribunal === '2' ? "Tribunal TFG - Inteligencia Artificial" :
-                                 formDefensa.tribunal === '3' ? "Tribunal TFG - Desarrollo Móvil" : "Tribunal TFG",
-                          presidente: "Dr. María García",
-                          vocales: ["Dr. Carlos López", "Dra. Ana Martín"]
-                        },
-                        miRol: "Presidente",
-                        tutor: "Dr. Carlos López",
-                        tipo: "TFG",
-                        observaciones: formDefensa.observaciones,
-                        documentos: []
+                        tribunalId: parseInt(formDefensa.tribunal),
+                        observaciones: formDefensa.observaciones
                       }
-                      
-                      // Simular delay de API
-                      await new Promise(resolve => setTimeout(resolve, 1000))
-                      
-                      // Agregar la nueva defensa al estado actual
-                      setDefensas(prev => [...prev, nuevaDefensa])
-                      
-                      mostrarNotificacion('Defensa programada correctamente', 'success')
-                      
-                      // Resetear formulario
-                      setFormDefensa({
-                        tfgId: '',
-                        fecha: '',
-                        hora: '',
-                        duracion: '60',
-                        aula: '',
-                        tribunal: '',
-                        observaciones: ''
-                      })
-                      
-                      setModalActivo(null)
+
+                      // Llamar a la API para programar la defensa
+                      const resultado = await programarDefensa(datosDefensa)
+
+                      if (resultado.success) {
+                        mostrarNotificacion(resultado.message || 'Defensa programada correctamente', 'success')
+
+                        // Recargar datos del calendario
+                        await cargarDefensas()
+
+                        // Resetear formulario
+                        setFormDefensa({
+                          tfgId: '',
+                          fecha: '',
+                          hora: '10:00',
+                          duracion: '60',
+                          aula: '',
+                          tribunal: '',
+                          observaciones: ''
+                        })
+
+                        setModalActivo(null)
+
+                        // Enviar notificación automática si está disponible
+                        if (resultado.data?.defensaId) {
+                          await enviarNotificacionDefensa(resultado.data.defensaId, 'programada', [])
+                        }
+                      } else {
+                        mostrarNotificacion(resultado.error, 'error')
+                      }
                     } catch (error) {
                       console.error('Error al programar defensa:', error)
                       mostrarNotificacion('Error al programar la defensa', 'error')

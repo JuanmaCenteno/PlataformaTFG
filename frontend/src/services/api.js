@@ -20,6 +20,8 @@ api.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }
+
+
     return config
   },
   (error) => {
@@ -76,6 +78,8 @@ export const authAPI = {
 
 export const tfgAPI = {
   getMisTFGs: () => api.get('/tfgs/mis-tfgs'),
+  getTFGsAsignados: () => api.get('/tfgs/asignados'), // Para profesores
+  getById: (id) => api.get(`/tfgs/${id}`),
   create: (formData) => api.post('/tfgs', formData, {
     headers: { 'Content-Type': 'multipart/form-data' }
   }),
@@ -106,6 +110,7 @@ export const tfgAPI = {
 
 export const tribunalAPI = {
   getAll: () => api.get('/tribunales'),
+  getById: (id) => api.get(`/tribunales/${id}`),
   create: (data) => api.post('/tribunales', data),
   update: (id, data) => api.put(`/tribunales/${id}`, data),
   delete: (id) => api.delete(`/tribunales/${id}`),
@@ -116,6 +121,8 @@ export const defensaAPI = {
   getCalendario: (fechaInicio, fechaFin) => api.get('/defensas/calendario', {
     params: { fecha_inicio: fechaInicio, fecha_fin: fechaFin }
   }),
+  getMiDefensa: () => api.get('/defensas/mi-defensa'),
+  getById: (id) => api.get(`/defensas/${id}`),
   create: (data) => api.post('/defensas', data),
   update: (id, data) => api.put(`/defensas/${id}`, data),
   delete: (id) => api.delete(`/defensas/${id}`),
@@ -130,8 +137,9 @@ export const userAPI = {
   create: (data) => api.post('/users', data),
   update: (id, data) => api.put(`/users/${id}`, data),
   delete: (id) => api.delete(`/users/${id}`),
-  getProfesores: () => api.get('/users/profesores'),
+  getProfesores: () => api.get('/public/profesores'),
   getEstudiantes: () => api.get('/users/estudiantes'),
+  toggleStatus: (id) => api.put(`/users/${id}/toggle-status`),
 }
 
 export const notificacionAPI = {
@@ -145,12 +153,12 @@ export const reporteAPI = {
   getEstadisticas: () => api.get('/reportes/estadisticas'),
   getTFGsPorEstado: () => api.get('/reportes/tfgs-por-estado'),
   getTFGsPorArea: () => api.get('/reportes/tfgs-por-area'),
-  exportPDF: (tipo) => api.get(`/reportes/export/pdf/${tipo}`, {
-    responseType: 'blob'
-  }),
-  exportExcel: (tipo) => api.get(`/reportes/export/excel/${tipo}`, {
-    responseType: 'blob'
-  }),
+  exportPDF: (tipo) => api.get(`/reportes/export/pdf/${tipo}`),
+  exportExcel: (tipo) => api.get(`/reportes/export/excel/${tipo}`),
+  // Endpoints para datos detallados
+  getTFGsDetallados: (filtros) => api.get('/tfgs', { params: filtros }),
+  getUsuariosDetallados: (filtros) => api.get('/users', { params: filtros }),
+  getTribunalesDetallados: (filtros) => api.get('/tribunales', { params: filtros }),
 }
 
 export const calificacionAPI = {

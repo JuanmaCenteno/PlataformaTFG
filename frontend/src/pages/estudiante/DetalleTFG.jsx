@@ -1,140 +1,89 @@
 import { useState, useEffect } from "react"
 import { useParams, useNavigate } from "react-router-dom"
+import { useTFGs } from '../../hooks/useTFGs'
+import { useNotificaciones } from '../../context/NotificacionesContext'
 
 function DetalleTFG() {
 	const { id } = useParams()
 	const navigate = useNavigate()
 	const [tfg, setTfg] = useState(null)
-	const [loading, setLoading] = useState(true)
 	const [activeTab, setActiveTab] = useState("detalles")
+	const [comentarios, setComentarios] = useState([])
+	const { obtenerTFG, obtenerComentarios, descargarTFG, loading } = useTFGs()
+	const { mostrarNotificacion } = useNotificaciones()
 
-	// Simular carga de datos del TFG
+	// Cargar datos del TFG desde la API
 	useEffect(() => {
-		const cargarTFG = async () => {
-			setLoading(true)
+		const cargarDatos = async () => {
+			try {
+				// Cargar TFG
+				const resultadoTFG = await obtenerTFG(id)
+				if (resultadoTFG.success) {
+					setTfg(resultadoTFG.data)
 
-			// Simular llamada a API
-			await new Promise((resolve) => setTimeout(resolve, 1000))
-
-			// Datos simulados del TFG específico
-			const tfgData = {
-				id: parseInt(id),
-				titulo: "Sistema de Gestión de TFGs con React y Symfony",
-				resumen:
-					"Este trabajo presenta el desarrollo de una plataforma web completa para la gestión de Trabajos de Fin de Grado en instituciones educativas. La solución implementa un frontend moderno usando React con TypeScript y un backend robusto desarrollado en Symfony, permitiendo a estudiantes, profesores y administradores gestionar eficientemente todo el proceso académico desde la propuesta inicial hasta la defensa final.",
-				palabrasClave:
-					"React, Symfony, TFG, Sistema de gestión, Educación",
-				area: "Desarrollo Web",
-				tipoTFG: "Desarrollo de Software",
-				idioma: "Español",
-				estado: "En revisión",
-				fechaSubida: "2025-01-15T10:30:00Z",
-				fechaUltimaActualizacion: "2025-01-20T14:45:00Z",
-				tutor: {
-					nombre: "Dr. María García",
-					email: "maria.garcia@universidad.edu",
-					departamento: "Ingeniería Informática",
-				},
-				archivo: {
-					nombre: "tfg_juan_perez_v2.pdf",
-					tamaño: "2.5 MB",
-					fechaSubida: "2025-01-20T14:45:00Z",
-				},
-				comentarios: [
-					{
-						id: 1,
-						autor: "Dr. María García",
-						fecha: "2025-01-20T14:45:00Z",
-						tipo: "revision",
-						mensaje:
-							"El trabajo presenta una buena estructura general. Sin embargo, es necesario ampliar la sección de metodología y añadir más detalles sobre las pruebas realizadas.",
-						estado: "pendiente",
-					},
-					{
-						id: 2,
-						autor: "Dr. María García",
-						fecha: "2025-01-18T09:15:00Z",
-						tipo: "aprobacion",
-						mensaje:
-							"La propuesta inicial está bien fundamentada. Puedes proceder con el desarrollo completo del sistema.",
-						estado: "resuelto",
-					},
-				],
-				historial: [
-					{
-						id: 1,
-						fecha: "2025-01-20T14:45:00Z",
-						accion: "Comentario añadido",
-						descripcion:
-							"Dr. María García añadió comentarios de revisión",
-						tipo: "comentario",
-					},
-					{
-						id: 2,
-						fecha: "2025-01-20T14:40:00Z",
-						accion: "Archivo actualizado",
-						descripcion: "Subida nueva versión del documento (v2)",
-						tipo: "archivo",
-					},
-					{
-						id: 3,
-						fecha: "2025-01-18T09:15:00Z",
-						accion: "Estado cambiado",
-						descripcion:
-							"Estado cambiado de 'Borrador' a 'En revisión'",
-						tipo: "estado",
-					},
-					{
-						id: 4,
-						fecha: "2025-01-15T10:30:00Z",
-						accion: "TFG creado",
-						descripcion:
-							"Trabajo de Fin de Grado subido inicialmente",
-						tipo: "creacion",
-					},
-				],
-				progreso: {
-					actual: 60,
-					etapas: [
-						{
-							nombre: "Propuesta",
-							completada: true,
-							fecha: "2025-01-15",
-						},
-						{
-							nombre: "En revisión",
-							completada: true,
-							fecha: "2025-01-18",
-						},
-						{
-							nombre: "Aprobación",
-							completada: false,
-							fecha: null,
-						},
-						{ nombre: "Defensa", completada: false, fecha: null },
-					],
-				},
+					// Cargar comentarios
+					const resultadoComentarios = await obtenerComentarios(id)
+					if (resultadoComentarios.success) {
+						setComentarios(resultadoComentarios.data || [])
+					}
+				} else {
+					mostrarNotificacion(resultadoTFG.error || 'Error al cargar TFG', 'error')
+				}
+			} catch (error) {
+				console.error('Error cargando datos:', error)
+				mostrarNotificacion('Error al cargar los datos del TFG', 'error')
 			}
-
-			setTfg(tfgData)
-			setLoading(false)
 		}
 
-		cargarTFG()
+		if (id) {
+			cargarDatos()
+		}
 	}, [id])
+
+	// Función para manejar descarga de archivo
+	const handleDescargar = async () => {
+		try {
+			const resultado = await descargarTFG(tfg.id, tfg.archivoOriginalName)
+			if (!resultado.success) {
+				mostrarNotificacion(resultado.error || 'Error al descargar el archivo', 'error')
+			}
+		} catch (error) {
+			console.error('Error descargando archivo:', error)
+			mostrarNotificacion('Error al descargar el archivo', 'error')
+		}
+	}
 
 	const getEstadoColor = (estado) => {
 		switch (estado) {
-			case "Aprobado":
+			case "aprobado":
 				return "bg-green-100 text-green-800 border-green-200"
-			case "En revisión":
+			case "revision":
 				return "bg-yellow-100 text-yellow-800 border-yellow-200"
-			case "Rechazado":
+			case "rechazado":
 				return "bg-red-100 text-red-800 border-red-200"
-			case "Borrador":
+			case "borrador":
 				return "bg-gray-100 text-gray-800 border-gray-200"
+			case "defendido":
+				return "bg-blue-100 text-blue-800 border-blue-200"
 			default:
 				return "bg-gray-100 text-gray-800 border-gray-200"
+		}
+	}
+
+	const getEstadoLabel = (estado) => {
+		switch (estado) {
+			case "aprobado":
+				return "Aprobado"
+			case "revision":
+				return "En revisión"
+			case "rechazado":
+				return "Rechazado"
+			case "borrador":
+				return "Borrador"
+			case "defendido":
+				return "Defendido"
+			default:
+				return estado
 		}
 	}
 
@@ -218,18 +167,15 @@ function DetalleTFG() {
 						</h1>
 						<div className="flex items-center space-x-4 text-sm text-gray-600">
 							<span>
-								Tutor: <strong>{tfg.tutor.nombre}</strong>
-							</span>
-							<span>•</span>
-							<span>
-								Área: <strong>{tfg.area}</strong>
+								Tutor: <strong>{tfg.tutor?.nombreCompleto || 'No asignado'}</strong>
 							</span>
 							<span>•</span>
 							<span>
 								Subido:{" "}
-								{new Date(tfg.fechaSubida).toLocaleDateString(
-									"es-ES"
-								)}
+								{tfg.createdAt ?
+									new Date(tfg.createdAt).toLocaleDateString("es-ES") :
+									'No disponible'
+								}
 							</span>
 						</div>
 					</div>
@@ -240,7 +186,7 @@ function DetalleTFG() {
 								tfg.estado
 							)}`}
 						>
-							{tfg.estado}
+							{getEstadoLabel(tfg.estado)}
 						</span>
 					</div>
 				</div>
@@ -255,40 +201,63 @@ function DetalleTFG() {
 				<div className="mb-4">
 					<div className="flex justify-between text-sm text-gray-600 mb-2">
 						<span>Progreso general</span>
-						<span>{tfg.progreso.actual}%</span>
+						<span>{
+							tfg.estado === "borrador" ? "25%" :
+							tfg.estado === "revision" ? "50%" :
+							tfg.estado === "aprobado" ? "75%" :
+							tfg.estado === "defendido" ? "100%" :
+							"0%"
+						}</span>
 					</div>
 					<div className="w-full bg-gray-200 rounded-full h-3">
 						<div
 							className="bg-blue-600 h-3 rounded-full transition-all duration-300"
-							style={{ width: `${tfg.progreso.actual}%` }}
+							style={{
+								width: tfg.estado === "borrador" ? "25%" :
+									   tfg.estado === "revision" ? "50%" :
+									   tfg.estado === "aprobado" ? "75%" :
+									   tfg.estado === "defendido" ? "100%" :
+									   "0%"
+							}}
 						></div>
 					</div>
 				</div>
 
 				<div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-					{tfg.progreso.etapas.map((etapa, index) => (
-						<div key={index} className="text-center">
-							<div
-								className={`w-8 h-8 mx-auto rounded-full flex items-center justify-center text-sm font-medium ${
-									etapa.completada
-										? "bg-green-100 text-green-800"
-										: "bg-gray-100 text-gray-600"
-								}`}
-							>
-								{etapa.completada ? "✓" : index + 1}
-							</div>
-							<p className="text-sm font-medium text-gray-900 mt-2">
-								{etapa.nombre}
-							</p>
-							{etapa.fecha && (
-								<p className="text-xs text-gray-500">
-									{new Date(etapa.fecha).toLocaleDateString(
-										"es-ES"
-									)}
+					{[
+						{ nombre: "Propuesta", key: "borrador" },
+						{ nombre: "En revisión", key: "revision" },
+						{ nombre: "Aprobación", key: "aprobado" },
+						{ nombre: "Defensa", key: "defendido" }
+					].map((etapa, index) => {
+						const completada =
+							(etapa.key === "borrador" && ["revision", "aprobado", "defendido"].includes(tfg.estado)) ||
+							(etapa.key === "revision" && ["aprobado", "defendido"].includes(tfg.estado)) ||
+							(etapa.key === "aprobado" && tfg.estado === "defendido") ||
+							(etapa.key === "defendido" && tfg.estado === "defendido")
+
+						return (
+							<div key={index} className="text-center">
+								<div
+									className={`w-8 h-8 mx-auto rounded-full flex items-center justify-center text-sm font-medium ${
+										completada || tfg.estado === etapa.key
+											? "bg-green-100 text-green-800"
+											: "bg-gray-100 text-gray-600"
+									}`}
+								>
+									{completada ? "✓" : index + 1}
+								</div>
+								<p className="text-sm font-medium text-gray-900 mt-2">
+									{etapa.nombre}
 								</p>
-							)}
-						</div>
-					))}
+								{tfg.estado === etapa.key && (
+									<p className="text-xs text-gray-500">
+										Actual
+									</p>
+								)}
+							</div>
+						)
+					})}
 				</div>
 			</div>
 
@@ -302,11 +271,10 @@ function DetalleTFG() {
 								id: "comentarios",
 								name: "Comentarios",
 								icon: "💬",
-								badge: tfg.comentarios.filter(
+								badge: comentarios.filter(
 									(c) => c.estado === "pendiente"
 								).length,
 							},
-							{ id: "historial", name: "Historial", icon: "📝" },
 							{ id: "archivo", name: "Archivo", icon: "📎" },
 						].map((tab) => (
 							<button
@@ -341,26 +309,26 @@ function DetalleTFG() {
 								<dl className="grid grid-cols-1 md:grid-cols-2 gap-4">
 									<div>
 										<dt className="text-sm font-medium text-gray-500">
-											Tipo de TFG
+											Estado
 										</dt>
 										<dd className="text-sm text-gray-900">
-											{tfg.tipoTFG}
+											{getEstadoLabel(tfg.estado)}
 										</dd>
 									</div>
 									<div>
 										<dt className="text-sm font-medium text-gray-500">
-											Idioma
+											Progreso
 										</dt>
 										<dd className="text-sm text-gray-900">
-											{tfg.idioma}
+											{tfg.progreso || 0}%
 										</dd>
 									</div>
 									<div>
 										<dt className="text-sm font-medium text-gray-500">
-											Departamento
+											Archivo subido
 										</dt>
 										<dd className="text-sm text-gray-900">
-											{tfg.tutor.departamento}
+											{tfg.archivoOriginalName || 'No disponible'}
 										</dd>
 									</div>
 									<div>
@@ -368,16 +336,14 @@ function DetalleTFG() {
 											Última actualización
 										</dt>
 										<dd className="text-sm text-gray-900">
-											{new Date(
-												tfg.fechaUltimaActualizacion
-											).toLocaleDateString("es-ES")}{" "}
-											a las{" "}
-											{new Date(
-												tfg.fechaUltimaActualizacion
-											).toLocaleTimeString("es-ES", {
-												hour: "2-digit",
-												minute: "2-digit",
-											})}
+											{tfg.updatedAt ?
+												new Date(tfg.updatedAt).toLocaleDateString("es-ES") + " a las " +
+												new Date(tfg.updatedAt).toLocaleTimeString("es-ES", {
+													hour: "2-digit",
+													minute: "2-digit",
+												}) :
+												'No disponible'
+											}
 										</dd>
 									</div>
 								</dl>
@@ -397,16 +363,17 @@ function DetalleTFG() {
 									Palabras Clave
 								</h3>
 								<div className="flex flex-wrap gap-2">
-									{tfg.palabrasClave
-										.split(", ")
-										.map((palabra, index) => (
+									{tfg.palabrasClave && Array.isArray(tfg.palabrasClave) && tfg.palabrasClave.length > 0 ?
+										tfg.palabrasClave.map((palabra, index) => (
 											<span
 												key={index}
 												className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
 											>
-												{palabra}
+												{palabra.trim()}
 											</span>
-										))}
+										))
+										: <span className="text-gray-500 text-sm">No especificadas</span>
+									}
 								</div>
 							</div>
 
@@ -417,20 +384,17 @@ function DetalleTFG() {
 								<div className="bg-gray-50 rounded-lg p-4">
 									<div className="flex items-center space-x-3">
 										<div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-medium">
-											{tfg.tutor.nombre
-												.split(" ")
-												.map((n) => n[0])
-												.join("")}
+											{tfg.tutor?.iniciales || 'NA'}
 										</div>
 										<div>
 											<p className="text-sm font-medium text-gray-900">
-												{tfg.tutor.nombre}
+												{tfg.tutor?.nombreCompleto || 'No asignado'}
 											</p>
 											<p className="text-sm text-gray-500">
-												{tfg.tutor.email}
+												{tfg.tutor?.email || 'No disponible'}
 											</p>
 											<p className="text-sm text-gray-500">
-												{tfg.tutor.departamento}
+												{tfg.tutor?.rolPrincipal || 'Profesor'}
 											</p>
 										</div>
 									</div>
@@ -445,14 +409,14 @@ function DetalleTFG() {
 							<div className="flex justify-between items-center">
 								<h3 className="text-lg font-medium text-gray-900">
 									Comentarios del Tutor (
-									{tfg.comentarios.length})
+									{comentarios.length})
 								</h3>
-								{tfg.comentarios.filter(
+								{comentarios.filter(
 									(c) => c.estado === "pendiente"
 								).length > 0 && (
 									<span className="text-sm text-orange-600 font-medium">
 										{
-											tfg.comentarios.filter(
+											comentarios.filter(
 												(c) => c.estado === "pendiente"
 											).length
 										}{" "}
@@ -461,7 +425,7 @@ function DetalleTFG() {
 								)}
 							</div>
 
-							{tfg.comentarios.length === 0 ? (
+							{comentarios.length === 0 ? (
 								<div className="text-center py-12">
 									<div className="text-4xl mb-4">💬</div>
 									<h3 className="text-lg font-medium text-gray-900 mb-2">
@@ -473,7 +437,7 @@ function DetalleTFG() {
 								</div>
 							) : (
 								<div className="space-y-4">
-									{tfg.comentarios.map((comentario) => (
+									{comentarios.map((comentario) => (
 										<div
 											key={comentario.id}
 											className={`border rounded-lg p-4 ${getTipoComentarioColor(
@@ -483,24 +447,24 @@ function DetalleTFG() {
 											<div className="flex justify-between items-start mb-3">
 												<div className="flex items-center space-x-2">
 													<div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-medium">
-														{comentario.autor
+														{(comentario.autor_nombre || comentario.autor || 'NA')
 															.split(" ")
 															.map((n) => n[0])
 															.join("")}
 													</div>
 													<div>
 														<p className="text-sm font-medium text-gray-900">
-															{comentario.autor}
+															{comentario.autor_nombre || comentario.autor || 'Usuario'}
 														</p>
 														<p className="text-xs text-gray-500">
 															{new Date(
-																comentario.fecha
+																comentario.created_at || comentario.fecha
 															).toLocaleDateString(
 																"es-ES"
 															)}{" "}
 															a las{" "}
 															{new Date(
-																comentario.fecha
+																comentario.created_at || comentario.fecha
 															).toLocaleTimeString(
 																"es-ES",
 																{
@@ -534,7 +498,7 @@ function DetalleTFG() {
 												</div>
 											</div>
 											<p className="text-sm text-gray-700">
-												{comentario.mensaje}
+												{comentario.contenido || comentario.mensaje || comentario.texto || 'Sin contenido'}
 											</p>
 
 											{comentario.estado ===
@@ -552,80 +516,6 @@ function DetalleTFG() {
 						</div>
 					)}
 
-					{/* Tab: Historial */}
-					{activeTab === "historial" && (
-						<div className="space-y-6">
-							<h3 className="text-lg font-medium text-gray-900">
-								Historial de Cambios
-							</h3>
-
-							<div className="flow-root">
-								<ul className="-mb-8">
-									{tfg.historial.map((evento, eventoIdx) => (
-										<li key={evento.id}>
-											<div className="relative pb-8">
-												{eventoIdx !==
-												tfg.historial.length - 1 ? (
-													<span
-														className="absolute top-4 left-4 -ml-px h-full w-0.5 bg-gray-200"
-														aria-hidden="true"
-													/>
-												) : null}
-												<div className="relative flex space-x-3">
-													<div className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 text-sm">
-														{getIconoHistorial(
-															evento.tipo
-														)}
-													</div>
-													<div className="flex min-w-0 flex-1 justify-between space-x-4 pt-1.5">
-														<div>
-															<p className="text-sm font-medium text-gray-900">
-																{evento.accion}
-															</p>
-															<p className="text-sm text-gray-500">
-																{
-																	evento.descripcion
-																}
-															</p>
-														</div>
-														<div className="whitespace-nowrap text-right text-sm text-gray-500">
-															<time
-																dateTime={
-																	evento.fecha
-																}
-															>
-																{new Date(
-																	evento.fecha
-																).toLocaleDateString(
-																	"es-ES"
-																)}
-															</time>
-															<br />
-															<time
-																dateTime={
-																	evento.fecha
-																}
-															>
-																{new Date(
-																	evento.fecha
-																).toLocaleTimeString(
-																	"es-ES",
-																	{
-																		hour: "2-digit",
-																		minute: "2-digit",
-																	}
-																)}
-															</time>
-														</div>
-													</div>
-												</div>
-											</div>
-										</li>
-									))}
-								</ul>
-							</div>
-						</div>
-					)}
 
 					{/* Tab: Archivo */}
 					{activeTab === "archivo" && (
@@ -634,40 +524,51 @@ function DetalleTFG() {
 								Documento del TFG
 							</h3>
 
-							<div className="border-2 border-dashed border-gray-300 rounded-lg p-6">
-								<div className="text-center">
-									<div className="text-4xl mb-4">📄</div>
-									<h4 className="text-lg font-medium text-gray-900 mb-2">
-										{tfg.archivo.nombre}
-									</h4>
-									<p className="text-sm text-gray-500 mb-4">
-										Tamaño: {tfg.archivo.tamaño} • Subido:{" "}
-										{new Date(
-											tfg.archivo.fechaSubida
-										).toLocaleDateString("es-ES")}
-									</p>
+							{tfg.archivoOriginalName ? (
+								<div className="border-2 border-dashed border-gray-300 rounded-lg p-6">
+									<div className="text-center">
+										<div className="text-4xl mb-4">📄</div>
+										<h4 className="text-lg font-medium text-gray-900 mb-2">
+											{tfg.archivoOriginalName}
+										</h4>
+										<p className="text-sm text-gray-500 mb-4">
+											Subido: {new Date(tfg.createdAt).toLocaleDateString("es-ES")}
+											{tfg.archivoInfo?.size_formatted && (
+												<> • Tamaño: {tfg.archivoInfo.size_formatted}</>
+											)}
+										</p>
 
-									<div className="flex justify-center space-x-3">
-										<button className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 flex items-center space-x-2">
-											<span>👁️</span>
-											<span>Previsualizar</span>
-										</button>
-										<button className="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700 flex items-center space-x-2">
-											<span>⬇️</span>
-											<span>Descargar</span>
-										</button>
-									</div>
-
-									{tfg.estado === "Borrador" && (
-										<div className="mt-4 pt-4 border-t border-gray-200">
-											<button className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 flex items-center space-x-2 mx-auto">
-												<span>📎</span>
-												<span>Subir Nueva Versión</span>
+										<div className="flex justify-center space-x-3">
+											<button
+												onClick={handleDescargar}
+												className="bg-gray-600 text-white px-4 py-2 rounded-md hover:bg-gray-700 flex items-center space-x-2"
+											>
+												<span>⬇️</span>
+												<span>Descargar</span>
 											</button>
 										</div>
-									)}
+
+										{tfg.estado === "borrador" && (
+											<div className="mt-4 pt-4 border-t border-gray-200">
+												<button className="bg-green-600 text-white px-4 py-2 rounded-md hover:bg-green-700 flex items-center space-x-2 mx-auto">
+													<span>📎</span>
+													<span>Subir Nueva Versión</span>
+												</button>
+											</div>
+										)}
+									</div>
 								</div>
-							</div>
+							) : (
+								<div className="text-center py-12">
+									<div className="text-4xl mb-4">📎</div>
+									<h3 className="text-lg font-medium text-gray-900 mb-2">
+										Sin archivo
+									</h3>
+									<p className="text-gray-500">
+										No se ha subido ningún documento para este TFG
+									</p>
+								</div>
+							)}
 						</div>
 					)}
 				</div>

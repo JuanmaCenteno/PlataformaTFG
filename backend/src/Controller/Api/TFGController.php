@@ -18,6 +18,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Vich\UploaderBundle\Handler\UploadHandler;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 #[Route('/api/tfgs')]
 #[IsGranted('ROLE_USER')]
@@ -29,7 +31,8 @@ class TFGController extends AbstractController
         private EntityManagerInterface $entityManager,
         private SerializerInterface $serializer,
         private ValidatorInterface $validator,
-        private NotificacionService $notificacionService
+        private NotificacionService $notificacionService,
+        private UploadHandler $uploadHandler
     ) {}
 
     /**
@@ -104,6 +107,42 @@ class TFGController extends AbstractController
     }
 
     /**
+     * GET /api/tfgs/asignados
+     * Devuelve TFGs asignados como tutor o cotutor (para profesores)
+     */
+    #[Route('/asignados', name: 'api_tfgs_asignados', methods: ['GET'])]
+    #[IsGranted('ROLE_PROFESOR')]
+    public function asignados(Request $request): JsonResponse
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        // Parámetros de paginación
+        $page = max(1, $request->query->getInt('page', 1));
+        $perPage = min(50, max(1, $request->query->getInt('per_page', 10)));
+        $estado = $request->query->get('estado');
+        $search = $request->query->get('search');
+
+        // Buscar TFGs donde el usuario es tutor o cotutor
+        $result = $this->tfgRepository->findByTutorOrCotutor($user, $page, $perPage, $estado, $search);
+        $totalPages = ceil($result['total'] / $perPage);
+
+        return $this->json([
+            'data' => $result['data'],
+            'meta' => [
+                'current_page' => $page,
+                'per_page' => $perPage,
+                'total' => $result['total'],
+                'total_pages' => $totalPages,
+                'has_next' => $page < $totalPages,
+                'has_previous' => $page > 1,
+                'from' => (($page - 1) * $perPage) + 1,
+                'to' => min($page * $perPage, $result['total'])
+            ]
+        ], 200, [], ['groups' => ['tfg:read', 'user:basic']]);
+    }
+
+    /**
      * POST /api/tfgs
      * Crear nuevo TFG (solo estudiantes) con validación DTO
      */
@@ -111,10 +150,23 @@ class TFGController extends AbstractController
     #[IsGranted('ROLE_ESTUDIANTE')]
     public function create(Request $request): JsonResponse
     {
-        $data = json_decode($request->getContent(), true);
-        
-        if (!$data) {
-            return $this->json(['error' => 'Datos JSON inválidos'], 400);
+        // Manejar tanto JSON como multipart/form-data
+        if ($request->getContentTypeFormat() === 'json') {
+            $data = json_decode($request->getContent(), true);
+            if (!$data) {
+                return $this->json(['error' => 'Datos JSON inválidos'], 400);
+            }
+        } else {
+            // Para multipart/form-data, usar request->request->all()
+            $data = $request->request->all();
+
+            // Decodificar palabras_clave si viene como string JSON
+            if (isset($data['palabras_clave']) && is_string($data['palabras_clave'])) {
+                $palabrasClave = json_decode($data['palabras_clave'], true);
+                if ($palabrasClave !== null) {
+                    $data['palabras_clave'] = $palabrasClave;
+                }
+            }
         }
 
         // Crear DTO para validación
@@ -185,6 +237,24 @@ class TFGController extends AbstractController
                 return $this->json(['error' => 'Cotutor no válido'], 400);
             }
             $tfg->setCotutor($cotutor);
+        }
+
+        // Manejar archivo si se proporciona
+        $archivo = $request->files->get('archivo');
+        if ($archivo) {
+            try {
+                // Validar archivo
+                if (!$this->validateFile($archivo)) {
+                    return $this->json(['error' => 'Archivo no válido. Solo se permiten archivos PDF de hasta 50MB'], 400);
+                }
+
+                // Usar VichUploader para manejar el archivo
+                $tfg->setArchivoFile($archivo);
+                $this->uploadHandler->upload($tfg, 'archivoFile');
+                $tfg->setEstado('revision'); // Cambiar estado a revisión cuando se sube archivo
+            } catch (\Exception $e) {
+                return $this->json(['error' => 'Error al subir archivo: ' . $e->getMessage()], 400);
+            }
         }
 
         // Validar entidad final
@@ -440,5 +510,30 @@ class TFGController extends AbstractController
             'defendido' => 'success',
             default => 'info'
         };
+    }
+
+    /**
+     * Validar archivo PDF subido
+     */
+    private function validateFile(UploadedFile $file): bool
+    {
+        // Validar tamaño (máximo 50MB)
+        if ($file->getSize() > 50 * 1024 * 1024) {
+            return false;
+        }
+
+        // Validar tipo MIME
+        $allowedMimeTypes = ['application/pdf'];
+        if (!in_array($file->getMimeType(), $allowedMimeTypes)) {
+            return false;
+        }
+
+        // Validar extensión
+        $extension = strtolower($file->getClientOriginalExtension());
+        if ($extension !== 'pdf') {
+            return false;
+        }
+
+        return true;
     }
 }

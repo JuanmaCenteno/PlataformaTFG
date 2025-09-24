@@ -1,66 +1,95 @@
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { useTFGs } from '../../hooks/useTFGs'
+import { useDefensas } from '../../hooks/useDefensas'
+import { useTribunales } from '../../hooks/useTribunales'
 
 function DashboardProfesor({ user }) {
-  // Datos simulados del profesor
-  const estadisticas = {
-    tfgsAsignados: 8,
-    tfgsPendientes: 3,
-    tribunalesActivos: 2,
-    proximasDefensas: 4
-  }
+  const { obtenerTFGsAsignados, loading: loadingTFGs } = useTFGs()
+  const { obtenerCalendario, loading: loadingDefensas } = useDefensas()
+  const { obtenerMisTribunales, loading: loadingTribunales } = useTribunales()
 
-  const tfgsRecientes = [
-    { 
-      id: 1, 
-      titulo: "Sistema de Gestión de TFGs", 
-      estudiante: "Juan Pérez", 
-      estado: "En revisión",
-      fechaActualizacion: "Hace 2 días",
-      requiereAccion: true
-    },
-    { 
-      id: 2, 
-      titulo: "App Móvil para Delivery", 
-      estudiante: "María Silva", 
-      estado: "Aprobado",
-      fechaActualizacion: "Hace 1 semana",
-      requiereAccion: false
-    },
-    { 
-      id: 3, 
-      titulo: "IA para Diagnóstico Médico", 
-      estudiante: "Carlos Ruiz", 
-      estado: "Borrador",
-      fechaActualizacion: "Hace 3 días",
-      requiereAccion: false
-    }
-  ]
+  const [estadisticas, setEstadisticas] = useState({
+    tfgsAsignados: 0,
+    tfgsPendientes: 0,
+    tribunalesActivos: 0,
+    proximasDefensas: 0
+  })
 
-  const proximasDefensas = [
-    { 
-      id: 1, 
-      estudiante: "Ana López", 
-      fecha: "15 Feb 2025", 
-      hora: "10:00", 
-      rol: "Presidente",
-      sala: "Aula 301"
-    },
-    { 
-      id: 2, 
-      estudiante: "Pedro García", 
-      fecha: "17 Feb 2025", 
-      hora: "12:00", 
-      rol: "Vocal",
-      sala: "Aula 205"
+  const [tfgsRecientes, setTfgsRecientes] = useState([])
+  const [proximasDefensas, setProximasDefensas] = useState([])
+
+  // Cargar datos del dashboard
+  useEffect(() => {
+    const cargarDatos = async () => {
+      try {
+        // Cargar TFGs asignados
+        const tfgsResult = await obtenerTFGsAsignados()
+        if (tfgsResult.success && tfgsResult.data) {
+          const tfgs = tfgsResult.data
+          setTfgsRecientes(tfgs.slice(0, 3)) // Mostrar solo los 3 más recientes
+          setEstadisticas(prev => ({
+            ...prev,
+            tfgsAsignados: tfgs.length,
+            tfgsPendientes: tfgs.filter(tfg => tfg.estado === 'revision' || tfg.estado === 'borrador').length
+          }))
+        }
+
+        // Cargar tribunales
+        const tribunalesResult = await obtenerMisTribunales()
+        if (tribunalesResult.success && tribunalesResult.data) {
+          setEstadisticas(prev => ({
+            ...prev,
+            tribunalesActivos: tribunalesResult.data.filter(t => t.activo).length
+          }))
+        }
+
+        // Cargar defensas próximas
+        const fechaInicio = new Date()
+        const fechaFin = new Date()
+        fechaFin.setMonth(fechaFin.getMonth() + 2) // Próximos 2 meses
+
+        const defensasResult = await obtenerCalendario(
+          fechaInicio.toISOString().split('T')[0],
+          fechaFin.toISOString().split('T')[0]
+        )
+
+        if (defensasResult.success && defensasResult.data) {
+          const defensas = defensasResult.data.slice(0, 2) // Mostrar solo las 2 próximas
+          setProximasDefensas(defensas)
+          setEstadisticas(prev => ({
+            ...prev,
+            proximasDefensas: defensasResult.data.length
+          }))
+        }
+
+      } catch (error) {
+        console.error('Error cargando datos del dashboard profesor:', error)
+      }
     }
-  ]
+
+    cargarDatos()
+  }, [])
 
   const getEstadoColor = (estado) => {
     switch (estado) {
-      case 'Aprobado': return 'bg-green-100 text-green-800'
-      case 'En revisión': return 'bg-yellow-100 text-yellow-800'
-      case 'Borrador': return 'bg-gray-100 text-gray-800'
+      case 'aprobado': return 'bg-green-100 text-green-800'
+      case 'revision': return 'bg-yellow-100 text-yellow-800'
+      case 'borrador': return 'bg-gray-100 text-gray-800'
+      case 'rechazado': return 'bg-red-100 text-red-800'
+      case 'defendido': return 'bg-blue-100 text-blue-800'
       default: return 'bg-gray-100 text-gray-800'
+    }
+  }
+
+  const getEstadoLabel = (estado) => {
+    switch (estado) {
+      case 'aprobado': return 'Aprobado'
+      case 'revision': return 'En revisión'
+      case 'borrador': return 'Borrador'
+      case 'rechazado': return 'Rechazado'
+      case 'defendido': return 'Defendido'
+      default: return estado || 'Sin estado'
     }
   }
 
@@ -182,43 +211,58 @@ function DashboardProfesor({ user }) {
               </Link>
             </div>
             <div className="divide-y divide-gray-200">
-              {tfgsRecientes.map((tfg) => (
-                <div key={tfg.id} className="p-6 hover:bg-gray-50">
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center space-x-2 mb-2">
-                        <h3 className="text-base font-medium text-gray-900">
-                          {tfg.titulo}
-                        </h3>
-                        {tfg.requiereAccion && (
-                          <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                            Requiere atención
+              {tfgsRecientes.length > 0 ? (
+                tfgsRecientes.map((tfg) => (
+                  <div key={tfg.id} className="p-6 hover:bg-gray-50">
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center space-x-2 mb-2">
+                          <h3 className="text-base font-medium text-gray-900">
+                            {tfg.titulo}
+                          </h3>
+                          {(tfg.estado === 'revision' || tfg.estado === 'borrador') && (
+                            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                              Requiere atención
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-sm text-gray-600 mb-2">
+                          Estudiante: <span className="font-medium">{tfg.estudiante?.nombre || tfg.estudiante}</span>
+                        </p>
+                        <div className="flex items-center space-x-4">
+                          <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getEstadoColor(tfg.estado)}`}>
+                            {getEstadoLabel(tfg.estado)}
                           </span>
+                          <span className="text-xs text-gray-500">
+                            {new Date(tfg.updated_at).toLocaleDateString('es-ES')}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex space-x-2 ml-4">
+                        <Link
+                          to={`/profesor/tfg/${tfg.id}`}
+                          className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700"
+                        >
+                          Revisar
+                        </Link>
+                        {tfg.archivo_path && (
+                          <a
+                            href={tfg.archivo_path}
+                            download
+                            className="bg-gray-100 text-gray-700 px-3 py-1 rounded text-sm hover:bg-gray-200"
+                          >
+                            Descargar
+                          </a>
                         )}
                       </div>
-                      <p className="text-sm text-gray-600 mb-2">
-                        Estudiante: <span className="font-medium">{tfg.estudiante}</span>
-                      </p>
-                      <div className="flex items-center space-x-4">
-                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getEstadoColor(tfg.estado)}`}>
-                          {tfg.estado}
-                        </span>
-                        <span className="text-xs text-gray-500">
-                          {tfg.fechaActualizacion}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="flex space-x-2 ml-4">
-                      <button className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700">
-                        Revisar
-                      </button>
-                      <button className="bg-gray-100 text-gray-700 px-3 py-1 rounded text-sm hover:bg-gray-200">
-                        Descargar
-                      </button>
                     </div>
                   </div>
+                ))
+              ) : (
+                <div className="p-6 text-center text-gray-500">
+                  <p className="text-sm">No tienes TFGs asignados</p>
                 </div>
-              ))}
+              )}
             </div>
           </div>
         </div>
@@ -238,26 +282,32 @@ function DashboardProfesor({ user }) {
             </div>
             <div className="p-6">
               <div className="space-y-4">
-                {proximasDefensas.map((defensa) => (
-                  <div key={defensa.id} className="border-l-4 border-blue-400 pl-4">
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <p className="text-sm font-medium text-gray-900">
-                          {defensa.estudiante}
-                        </p>
-                        <p className="text-xs text-gray-500">
-                          {defensa.fecha} - {defensa.hora}
-                        </p>
-                        <p className="text-xs text-gray-500">
-                          {defensa.sala}
-                        </p>
+                {proximasDefensas.length > 0 ? (
+                  proximasDefensas.map((defensa) => (
+                    <div key={defensa.id} className="border-l-4 border-blue-400 pl-4">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <p className="text-sm font-medium text-gray-900">
+                            {defensa.tfg?.estudiante?.nombre || defensa.estudiante}
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            {new Date(defensa.fecha).toLocaleDateString('es-ES')} - {defensa.hora}
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            {defensa.sala || 'Sala por definir'}
+                          </p>
+                        </div>
+                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getRolColor(defensa.rol)}`}>
+                          {defensa.rol}
+                        </span>
                       </div>
-                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getRolColor(defensa.rol)}`}>
-                        {defensa.rol}
-                      </span>
                     </div>
+                  ))
+                ) : (
+                  <div className="text-center text-gray-500">
+                    <p className="text-sm">No tienes defensas próximas</p>
                   </div>
-                ))}
+                )}
               </div>
             </div>
           </div>

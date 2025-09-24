@@ -285,4 +285,78 @@ class TFGRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+
+    /**
+     * Obtiene estadísticas de TFGs por área de conocimiento
+     * Como no tenemos campo área, usamos palabras clave como proxy
+     */
+    public function getEstadisticasPorArea(): array
+    {
+        // Como no tenemos un campo específico para área, vamos a agrupar por las palabras clave más comunes
+        $qb = $this->createQueryBuilder('t');
+
+        $result = $qb
+            ->select('t.palabrasClave')
+            ->where('t.palabrasClave IS NOT NULL')
+            ->andWhere('t.palabrasClave != :empty')
+            ->setParameter('empty', '[]')
+            ->getQuery()
+            ->getResult();
+
+        $areaStats = [];
+
+        foreach ($result as $tfg) {
+            $palabrasClave = $tfg['palabrasClave'];
+
+            if (is_string($palabrasClave)) {
+                $palabrasClave = json_decode($palabrasClave, true) ?? [];
+            }
+
+            foreach ($palabrasClave as $palabra) {
+                $palabra = strtolower(trim($palabra));
+                if (!empty($palabra)) {
+                    $area = $this->mapToArea($palabra);
+                    $areaStats[$area] = ($areaStats[$area] ?? 0) + 1;
+                }
+            }
+        }
+
+        // Si no hay datos, devolver estadísticas por defecto
+        if (empty($areaStats)) {
+            $areaStats = [
+                'Ingeniería de Software' => 0,
+                'Inteligencia Artificial' => 0,
+                'Bases de Datos' => 0,
+                'Redes y Sistemas' => 0,
+                'Desarrollo Web' => 0,
+                'Otros' => 0
+            ];
+        }
+
+        return $areaStats;
+    }
+
+    /**
+     * Mapea palabras clave a áreas de conocimiento
+     */
+    private function mapToArea(string $palabra): string
+    {
+        $areas = [
+            'Ingeniería de Software' => ['software', 'desarrollo', 'programacion', 'aplicacion', 'sistema'],
+            'Inteligencia Artificial' => ['ia', 'inteligencia', 'artificial', 'machine', 'learning', 'deep'],
+            'Bases de Datos' => ['base', 'datos', 'database', 'mysql', 'postgresql', 'sql'],
+            'Redes y Sistemas' => ['red', 'redes', 'sistema', 'sistemas', 'server', 'servidor'],
+            'Desarrollo Web' => ['web', 'frontend', 'backend', 'javascript', 'react', 'angular', 'vue']
+        ];
+
+        foreach ($areas as $area => $keywords) {
+            foreach ($keywords as $keyword) {
+                if (str_contains($palabra, $keyword)) {
+                    return $area;
+                }
+            }
+        }
+
+        return 'Otros';
+    }
 }

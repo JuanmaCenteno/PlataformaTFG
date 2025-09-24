@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { useTFGs } from '../../hooks/useTFGs'
+import { useNotificaciones } from '../../context/NotificacionesContext'
 
 function TFGsAsignados() {
   const [tfgs, setTfgs] = useState([])
@@ -8,98 +10,28 @@ function TFGsAsignados() {
   const [modalActivo, setModalActivo] = useState(null)
   const [comentarioModal, setComentarioModal] = useState('')
   const [calificacionModal, setCalificacionModal] = useState('')
+  const { obtenerTFGsAsignados, cambiarEstado, añadirComentario, descargarTFG } = useTFGs()
+  const { mostrarNotificacion } = useNotificaciones()
 
-  // Simular carga de TFGs asignados
+  // Cargar TFGs asignados desde la API
   useEffect(() => {
     const cargarTFGs = async () => {
       setLoading(true)
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      
-      const tfgsData = [
-        {
-          id: 1,
-          titulo: 'Sistema de Gestión de TFGs con React y Symfony',
-          estudiante: {
-            nombre: 'Juan Pérez',
-            email: 'juan.perez@estudiante.edu',
-            curso: '4º Ingeniería Informática'
-          },
-          estado: 'En revisión',
-          fechaSubida: '2025-01-15T10:30:00Z',
-          fechaUltimaRevision: '2025-01-20T14:45:00Z',
-          area: 'Desarrollo Web',
-          tipoTFG: 'Desarrollo de Software',
-          archivo: 'tfg_juan_perez_v2.pdf',
-          tamaño: '2.5 MB',
-          comentariosCount: 2,
-          requiereAccion: true,
-          calificacion: null,
-          progreso: 60
-        },
-        {
-          id: 2,
-          titulo: 'Aplicación Móvil para Gestión de Entregas',
-          estudiante: {
-            nombre: 'María Silva',
-            email: 'maria.silva@estudiante.edu',
-            curso: '4º Ingeniería Informática'
-          },
-          estado: 'Aprobado',
-          fechaSubida: '2024-12-10T09:15:00Z',
-          fechaUltimaRevision: '2025-01-18T11:30:00Z',
-          area: 'Desarrollo Móvil',
-          tipoTFG: 'Desarrollo de Software',
-          archivo: 'tfg_maria_silva_final.pdf',
-          tamaño: '3.1 MB',
-          comentariosCount: 5,
-          requiereAccion: false,
-          calificacion: 8.5,
-          progreso: 90
-        },
-        {
-          id: 3,
-          titulo: 'Inteligencia Artificial para Diagnóstico Médico',
-          estudiante: {
-            nombre: 'Carlos Ruiz',
-            email: 'carlos.ruiz@estudiante.edu',
-            curso: '4º Ingeniería Informática'
-          },
-          estado: 'Borrador',
-          fechaSubida: '2025-01-22T16:20:00Z',
-          fechaUltimaRevision: null,
-          area: 'Inteligencia Artificial',
-          tipoTFG: 'Investigación',
-          archivo: 'tfg_carlos_ruiz_borrador.pdf',
-          tamaño: '1.8 MB',
-          comentariosCount: 0,
-          requiereAccion: true,
-          calificacion: null,
-          progreso: 30
-        },
-        {
-          id: 4,
-          titulo: 'Sistema de Seguridad con Blockchain',
-          estudiante: {
-            nombre: 'Ana López',
-            email: 'ana.lopez@estudiante.edu',
-            curso: '4º Ingeniería Informática'
-          },
-          estado: 'Rechazado',
-          fechaSubida: '2025-01-10T14:00:00Z',
-          fechaUltimaRevision: '2025-01-16T10:15:00Z',
-          area: 'Seguridad Informática',
-          tipoTFG: 'Investigación',
-          archivo: 'tfg_ana_lopez_v1.pdf',
-          tamaño: '2.2 MB',
-          comentariosCount: 3,
-          requiereAccion: false,
-          calificacion: null,
-          progreso: 20
+      try {
+        const resultado = await obtenerTFGsAsignados()
+        if (resultado.success) {
+          setTfgs(resultado.data || [])
+        } else {
+          mostrarNotificacion(resultado.error || 'Error al cargar TFGs asignados', 'error')
+          setTfgs([])
         }
-      ]
-      
-      setTfgs(tfgsData)
-      setLoading(false)
+      } catch (error) {
+        console.error('Error cargando TFGs asignados:', error)
+        mostrarNotificacion('Error al cargar TFGs asignados', 'error')
+        setTfgs([])
+      } finally {
+        setLoading(false)
+      }
     }
 
     cargarTFGs()
@@ -107,36 +39,47 @@ function TFGsAsignados() {
 
   const getEstadoColor = (estado) => {
     switch (estado) {
-      case 'Aprobado': return 'bg-green-100 text-green-800 border-green-200'
-      case 'En revisión': return 'bg-yellow-100 text-yellow-800 border-yellow-200'
-      case 'Rechazado': return 'bg-red-100 text-red-800 border-red-200'
-      case 'Borrador': return 'bg-gray-100 text-gray-800 border-gray-200'
-      case 'Defendido': return 'bg-blue-100 text-blue-800 border-blue-200'
+      case 'aprobado': return 'bg-green-100 text-green-800 border-green-200'
+      case 'revision': return 'bg-yellow-100 text-yellow-800 border-yellow-200'
+      case 'rechazado': return 'bg-red-100 text-red-800 border-red-200'
+      case 'borrador': return 'bg-gray-100 text-gray-800 border-gray-200'
+      case 'defendido': return 'bg-blue-100 text-blue-800 border-blue-200'
       default: return 'bg-gray-100 text-gray-800 border-gray-200'
     }
   }
 
   const getEstadoIcon = (estado) => {
     switch (estado) {
-      case 'Aprobado': return '✅'
-      case 'En revisión': return '⏳'
-      case 'Rechazado': return '❌'
-      case 'Borrador': return '📝'
-      case 'Defendido': return '🎯'
+      case 'aprobado': return '✅'
+      case 'revision': return '⏳'
+      case 'rechazado': return '❌'
+      case 'borrador': return '📝'
+      case 'defendido': return '🎯'
       default: return '📄'
+    }
+  }
+
+  const getEstadoLabel = (estado) => {
+    switch (estado) {
+      case 'aprobado': return 'Aprobado'
+      case 'revision': return 'En revisión'
+      case 'rechazado': return 'Rechazado'
+      case 'borrador': return 'Borrador'
+      case 'defendido': return 'Defendido'
+      default: return estado
     }
   }
 
   const tfgsFiltrados = tfgs.filter(tfg => {
     switch (filtro) {
       case 'revision':
-        return tfg.estado === 'En revisión'
+        return tfg.estado === 'revision'
       case 'aprobados':
-        return tfg.estado === 'Aprobado'
+        return tfg.estado === 'aprobado'
       case 'rechazados':
-        return tfg.estado === 'Rechazado'
+        return tfg.estado === 'rechazado'
       case 'borradores':
-        return tfg.estado === 'Borrador'
+        return tfg.estado === 'borrador'
       default:
         return true
     }
@@ -144,45 +87,66 @@ function TFGsAsignados() {
 
   const estadisticas = {
     total: tfgs.length,
-    enRevision: tfgs.filter(t => t.estado === 'En revisión').length,
-    aprobados: tfgs.filter(t => t.estado === 'Aprobado').length,
-    requierenAccion: tfgs.filter(t => t.requiereAccion).length
+    enRevision: tfgs.filter(t => t.estado === 'revision').length,
+    aprobados: tfgs.filter(t => t.estado === 'aprobado').length,
+    borradores: tfgs.filter(t => t.estado === 'borrador').length
   }
 
   const handleCambiarEstado = async (tfgId, nuevoEstado) => {
-    // Simular cambio de estado
-    setTfgs(prev => prev.map(tfg => 
-      tfg.id === tfgId 
-        ? { ...tfg, estado: nuevoEstado, requiereAccion: false }
-        : tfg
-    ))
+    try {
+      const resultado = await cambiarEstado(tfgId, nuevoEstado, comentarioModal)
+      if (resultado.success) {
+        // Recargar la lista de TFGs
+        const resultadoTFGs = await obtenerTFGsAsignados()
+        if (resultadoTFGs.success) {
+          setTfgs(resultadoTFGs.data || [])
+        }
+        mostrarNotificacion(`Estado cambiado a ${getEstadoLabel(nuevoEstado)}`, 'success')
+      } else {
+        mostrarNotificacion(resultado.error || 'Error al cambiar estado', 'error')
+      }
+    } catch (error) {
+      console.error('Error cambiando estado:', error)
+      mostrarNotificacion('Error al cambiar estado del TFG', 'error')
+    }
     setModalActivo(null)
+    setComentarioModal('')
   }
 
   const handleEnviarComentario = async (tfgId) => {
-    // Simular envío de comentario
-    console.log(`Enviando comentario a TFG ${tfgId}: ${comentarioModal}`)
-    
-    setTfgs(prev => prev.map(tfg => 
-      tfg.id === tfgId 
-        ? { ...tfg, comentariosCount: tfg.comentariosCount + 1 }
-        : tfg
-    ))
-    
+    if (!comentarioModal.trim()) return
+
+    try {
+      const resultado = await añadirComentario(tfgId, comentarioModal)
+      if (resultado.success) {
+        mostrarNotificacion('Comentario enviado correctamente', 'success')
+        // Recargar la lista para actualizar contadores
+        const resultadoTFGs = await obtenerTFGsAsignados()
+        if (resultadoTFGs.success) {
+          setTfgs(resultadoTFGs.data || [])
+        }
+      } else {
+        mostrarNotificacion(resultado.error || 'Error al enviar comentario', 'error')
+      }
+    } catch (error) {
+      console.error('Error enviando comentario:', error)
+      mostrarNotificacion('Error al enviar comentario', 'error')
+    }
+
     setComentarioModal('')
     setModalActivo(null)
   }
 
-  const handleAsignarCalificacion = async (tfgId) => {
-    // Simular asignación de calificación
-    setTfgs(prev => prev.map(tfg => 
-      tfg.id === tfgId 
-        ? { ...tfg, calificacion: parseFloat(calificacionModal) }
-        : tfg
-    ))
-    
-    setCalificacionModal('')
-    setModalActivo(null)
+  const handleDescargar = async (tfg) => {
+    try {
+      const resultado = await descargarTFG(tfg.id, tfg.archivoOriginalName || `tfg_${tfg.id}.pdf`)
+      if (!resultado.success) {
+        mostrarNotificacion(resultado.error || 'Error al descargar archivo', 'error')
+      }
+    } catch (error) {
+      console.error('Error descargando archivo:', error)
+      mostrarNotificacion('Error al descargar archivo', 'error')
+    }
   }
 
   if (loading) {
@@ -228,8 +192,8 @@ function TFGsAsignados() {
         </div>
         <div className="bg-white shadow rounded-lg p-6">
           <div className="text-center">
-            <div className="text-2xl font-bold text-red-600">{estadisticas.requierenAccion}</div>
-            <div className="text-sm text-gray-500">Requieren Acción</div>
+            <div className="text-2xl font-bold text-gray-600">{estadisticas.borradores}</div>
+            <div className="text-sm text-gray-500">Borradores</div>
           </div>
         </div>
       </div>
@@ -241,8 +205,8 @@ function TFGsAsignados() {
             { key: 'todos', label: 'Todos', count: tfgs.length },
             { key: 'revision', label: 'En Revisión', count: estadisticas.enRevision },
             { key: 'aprobados', label: 'Aprobados', count: estadisticas.aprobados },  
-            { key: 'borradores', label: 'Borradores', count: tfgs.filter(t => t.estado === 'Borrador').length },
-            { key: 'rechazados', label: 'Rechazados', count: tfgs.filter(t => t.estado === 'Rechazado').length }
+            { key: 'borradores', label: 'Borradores', count: estadisticas.borradores },
+            { key: 'rechazados', label: 'Rechazados', count: tfgs.filter(t => t.estado === 'rechazado').length }
           ].map((opcion) => (
             <button
               key={opcion.key}
@@ -293,13 +257,8 @@ function TFGsAsignados() {
                       </h3>
                       <span className={`inline-flex items-center px-3 py-1 text-sm font-medium rounded-full border ${getEstadoColor(tfg.estado)}`}>
                         <span className="mr-1">{getEstadoIcon(tfg.estado)}</span>
-                        {tfg.estado}
+                        {getEstadoLabel(tfg.estado)}
                       </span>
-                      {tfg.requiereAccion && (
-                        <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                          Requiere atención
-                        </span>
-                      )}
                     </div>
 
                     {/* Info del estudiante */}
@@ -307,23 +266,23 @@ function TFGsAsignados() {
                       <div>
                         <span className="font-medium">Estudiante:</span>
                         <br />
-                        <span className="text-gray-900">{tfg.estudiante.nombre}</span>
+                        <span className="text-gray-900">{tfg.estudiante?.nombreCompleto || 'No disponible'}</span>
                         <br />
-                        <span className="text-gray-500">{tfg.estudiante.email}</span>
+                        <span className="text-gray-500">{tfg.estudiante?.email || 'No disponible'}</span>
                       </div>
                       <div>
-                        <span className="font-medium">Área:</span> {tfg.area}
+                        <span className="font-medium">Progreso:</span> {tfg.progreso || 0}%
                         <br />
-                        <span className="font-medium">Tipo:</span> {tfg.tipoTFG}
+                        <span className="font-medium">Palabras clave:</span> {
+                          tfg.palabrasClave && Array.isArray(tfg.palabrasClave) ?
+                            tfg.palabrasClave.slice(0, 2).join(', ') + (tfg.palabrasClave.length > 2 ? '...' : '') :
+                            'No especificadas'
+                        }
                       </div>
                       <div>
-                        <span className="font-medium">Subido:</span> {new Date(tfg.fechaSubida).toLocaleDateString('es-ES')}
+                        <span className="font-medium">Subido:</span> {tfg.createdAt ? new Date(tfg.createdAt).toLocaleDateString('es-ES') : 'No disponible'}
                         <br />
-                        {tfg.fechaUltimaRevision && (
-                          <>
-                            <span className="font-medium">Última revisión:</span> {new Date(tfg.fechaUltimaRevision).toLocaleDateString('es-ES')}
-                          </>
-                        )}
+                        <span className="font-medium">Actualizado:</span> {tfg.updatedAt ? new Date(tfg.updatedAt).toLocaleDateString('es-ES') : 'No disponible'}
                       </div>
                     </div>
 
@@ -331,16 +290,16 @@ function TFGsAsignados() {
                     <div className="mb-4">
                       <div className="flex justify-between text-sm text-gray-600 mb-1">
                         <span>Progreso</span>
-                        <span>{tfg.progreso}%</span>
+                        <span>{tfg.progreso || 0}%</span>
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-2">
-                        <div 
+                        <div
                           className={`h-2 rounded-full ${
-                            tfg.estado === 'Aprobado' ? 'bg-green-500' :
-                            tfg.estado === 'En revisión' ? 'bg-yellow-500' :
-                            tfg.estado === 'Rechazado' ? 'bg-red-500' : 'bg-gray-400'
+                            tfg.estado === 'aprobado' ? 'bg-green-500' :
+                            tfg.estado === 'revision' ? 'bg-yellow-500' :
+                            tfg.estado === 'rechazado' ? 'bg-red-500' : 'bg-gray-400'
                           }`}
-                          style={{ width: `${tfg.progreso}%` }}
+                          style={{ width: `${tfg.progreso || 0}%` }}
                         ></div>
                       </div>
                     </div>
@@ -349,11 +308,7 @@ function TFGsAsignados() {
                     <div className="flex items-center space-x-4 text-sm">
                       <span className="flex items-center space-x-1">
                         <span>📎</span>
-                        <span>{tfg.archivo} ({tfg.tamaño})</span>
-                      </span>
-                      <span className="flex items-center space-x-1">
-                        <span>💬</span>
-                        <span>{tfg.comentariosCount} comentarios</span>
+                        <span>{tfg.archivoOriginalName || 'Sin archivo'} ({tfg.archivoInfo?.size_formatted || 'N/A'})</span>
                       </span>
                       {tfg.calificacion && (
                         <span className="flex items-center space-x-1">

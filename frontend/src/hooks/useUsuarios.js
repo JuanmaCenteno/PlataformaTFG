@@ -59,19 +59,20 @@ export const useUsuarios = () => {
   const actualizarUsuario = async (usuarioId, datosUsuario) => {
     setLoading(true)
     setError(null)
-    
+
     try {
       const response = await userAPI.update(usuarioId, datosUsuario)
-      
-      return { 
-        success: true, 
+
+      return {
+        success: true,
         data: response.data,
         message: 'Usuario actualizado correctamente'
       }
-      
+
     } catch (err) {
-      const errorMessage = err.response?.data?.message || 
-                          err.response?.data?.error || 
+      console.error('Error en actualización:', err.response?.data)
+      const errorMessage = err.response?.data?.message ||
+                          err.response?.data?.error ||
                           'Error al actualizar usuario'
       setError(errorMessage)
       return { success: false, error: errorMessage }
@@ -163,8 +164,28 @@ export const useUsuarios = () => {
   }
 
   // Cambiar estado de usuario (activo/inactivo)
-  const cambiarEstadoUsuario = async (usuarioId, activo) => {
-    return actualizarUsuario(usuarioId, { is_active: activo })
+  const cambiarEstadoUsuario = async (usuarioId) => {
+    setLoading(true)
+    setError(null)
+
+    try {
+      const response = await userAPI.toggleStatus(usuarioId)
+
+      return {
+        success: true,
+        data: response.data,
+        message: 'Estado del usuario cambiado correctamente'
+      }
+
+    } catch (err) {
+      const errorMessage = err.response?.data?.message ||
+                          err.response?.data?.error ||
+                          'Error al cambiar estado del usuario'
+      setError(errorMessage)
+      return { success: false, error: errorMessage }
+    } finally {
+      setLoading(false)
+    }
   }
 
   // Cambiar roles de usuario
@@ -211,9 +232,9 @@ export const useUsuarios = () => {
       const usuarios = todosLosUsuarios.data
       
       const estadisticas = {
-        total: usuarios.length,
-        activos: usuarios.filter(u => u.is_active).length,
-        inactivos: usuarios.filter(u => !u.is_active).length,
+        totalUsuarios: usuarios.length,
+        usuariosActivos: usuarios.filter(u => u.is_active).length,
+        usuariosInactivos: usuarios.filter(u => !u.is_active).length,
         porRol: usuarios.reduce((acc, usuario) => {
           const rol = usuario.roles?.[0] || 'ROLE_ESTUDIANTE'
           const rolSimple = {
@@ -227,10 +248,10 @@ export const useUsuarios = () => {
           return acc
         }, {}),
         registrosRecientes: usuarios
-          .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
           .slice(0, 5),
         nuevosUltimoMes: usuarios.filter(u => {
-          const fechaCreacion = new Date(u.created_at)
+          const fechaCreacion = new Date(u.createdAt)
           const haceMes = new Date()
           haceMes.setMonth(haceMes.getMonth() - 1)
           return fechaCreacion > haceMes

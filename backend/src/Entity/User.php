@@ -9,6 +9,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\DBAL\Types\Types;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
@@ -300,6 +301,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->isActive;
     }
 
+    #[Groups(['user:read', 'user:admin'])]
+    public function getIsActive(): ?bool
+    {
+        return $this->isActive;
+    }
+
     public function setIsActive(bool $isActive): static
     {
         $this->isActive = $isActive;
@@ -420,6 +427,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function isAdmin(): bool
     {
         return $this->hasRole('ROLE_ADMIN');
+    }
+
+    /**
+     * Getter para compatibilidad con frontend (is_active)
+     */
+    #[Groups(['user:read'])]
+    #[SerializedName('is_active')]
+    public function getActive(): bool
+    {
+        return $this->isActive ?? true;
     }
 
     /**

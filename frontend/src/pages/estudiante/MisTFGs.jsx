@@ -1,10 +1,15 @@
 import { useState, useEffect } from "react"
 import { Link, useLocation } from "react-router-dom"
+import { useTFGs } from '../../hooks/useTFGs'
+import { useNotificaciones } from '../../context/NotificacionesContext'
 
 function MisTFGs() {
 	const location = useLocation()
 	const [showMessage, setShowMessage] = useState(false)
 	const [message, setMessage] = useState("")
+	const { obtenerMisTFGs, loading } = useTFGs()
+	const { mostrarNotificacion } = useNotificaciones()
+	const [tfgs, setTfgs] = useState([])
 
 	// Mostrar mensaje de éxito si viene de subida
 	useEffect(() => {
@@ -15,43 +20,38 @@ function MisTFGs() {
 		}
 	}, [location.state])
 
-	// TFGs simulados del estudiante
-	const [tfgs] = useState([
-		{
-			id: 1,
-			titulo: "Sistema de Gestión de TFGs con React y Symfony",
-			estado: "En revisión",
-			fechaSubida: "2025-01-15",
-			tutor: "Dr. María García",
-			area: "Desarrollo Web",
-			comentarios: 2,
-			archivo: "tfg_juan_perez.pdf",
-			calificacion: null,
-		},
-		{
-			id: 2,
-			titulo: "Análisis de Algoritmos de Machine Learning",
-			estado: "Borrador",
-			fechaSubida: "2024-12-20",
-			tutor: "Dr. Carlos López",
-			area: "Inteligencia Artificial",
-			comentarios: 0,
-			archivo: "borrador_ml.pdf",
-			calificacion: null,
-		},
-	])
+	// Cargar TFGs del usuario desde la API
+	useEffect(() => {
+		const cargarTFGs = async () => {
+			try {
+				const resultado = await obtenerMisTFGs()
+				if (resultado.success) {
+					setTfgs(resultado.data || [])
+				} else {
+					mostrarNotificacion(resultado.error || 'Error al cargar TFGs', 'error')
+					setTfgs([])
+				}
+			} catch (error) {
+				console.error('Error cargando TFGs:', error)
+				mostrarNotificacion('Error al cargar TFGs', 'error')
+				setTfgs([])
+			}
+		}
+
+		cargarTFGs()
+	}, [])
 
 	const getEstadoColor = (estado) => {
 		switch (estado) {
-			case "Aprobado":
+			case "aprobado":
 				return "bg-green-100 text-green-800 border-green-200"
-			case "En revisión":
+			case "revision":
 				return "bg-yellow-100 text-yellow-800 border-yellow-200"
-			case "Rechazado":
+			case "rechazado":
 				return "bg-red-100 text-red-800 border-red-200"
-			case "Borrador":
+			case "borrador":
 				return "bg-gray-100 text-gray-800 border-gray-200"
-			case "Defendido":
+			case "defendido":
 				return "bg-blue-100 text-blue-800 border-blue-200"
 			default:
 				return "bg-gray-100 text-gray-800 border-gray-200"
@@ -60,19 +60,49 @@ function MisTFGs() {
 
 	const getEstadoIcon = (estado) => {
 		switch (estado) {
-			case "Aprobado":
+			case "aprobado":
 				return "✅"
-			case "En revisión":
+			case "revision":
 				return "⏳"
-			case "Rechazado":
+			case "rechazado":
 				return "❌"
-			case "Borrador":
+			case "borrador":
 				return "📝"
-			case "Defendido":
+			case "defendido":
 				return "🎯"
 			default:
 				return "📄"
 		}
+	}
+
+	const getEstadoLabel = (estado) => {
+		switch (estado) {
+			case "aprobado":
+				return "Aprobado"
+			case "revision":
+				return "En revisión"
+			case "rechazado":
+				return "Rechazado"
+			case "borrador":
+				return "Borrador"
+			case "defendido":
+				return "Defendido"
+			default:
+				return estado
+		}
+	}
+
+	if (loading) {
+		return (
+			<div className="max-w-6xl mx-auto">
+				<div className="flex justify-center items-center h-64">
+					<div className="text-center">
+						<div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+						<p className="text-gray-600">Cargando tus TFGs...</p>
+					</div>
+				</div>
+			</div>
+		)
 	}
 
 	return (
@@ -160,7 +190,7 @@ function MisTFGs() {
 												<span className="mr-1">
 													{getEstadoIcon(tfg.estado)}
 												</span>
-												{tfg.estado}
+												{getEstadoLabel(tfg.estado)}
 											</span>
 										</div>
 
@@ -169,26 +199,39 @@ function MisTFGs() {
 												<span className="font-medium">
 													Tutor:
 												</span>{" "}
-												{tfg.tutor}
+												{tfg.tutor?.nombreCompleto || 'No asignado'}
 											</div>
 											<div>
 												<span className="font-medium">
-													Área:
+													Palabras clave:
 												</span>{" "}
-												{tfg.area}
+												{tfg.palabrasClave && Array.isArray(tfg.palabrasClave) ?
+													tfg.palabrasClave.join(', ') :
+													'No especificadas'
+												}
 											</div>
 											<div>
 												<span className="font-medium">
-													Subido:
+													Creado:
 												</span>{" "}
-												{new Date(
-													tfg.fechaSubida
-												).toLocaleDateString("es-ES")}
+												{tfg.createdAt ?
+													new Date(tfg.createdAt).toLocaleDateString("es-ES") :
+													'No disponible'
+												}
 											</div>
 										</div>
 
+										{/* Información del resumen si existe */}
+										{tfg.resumen && (
+											<div className="mb-4">
+												<p className="text-sm text-gray-600 line-clamp-2">
+													<span className="font-medium">Resumen:</span> {tfg.resumen}
+												</p>
+											</div>
+										)}
+
 										{/* Información adicional según estado */}
-										{tfg.comentarios > 0 && (
+										{tfg.comentarios && tfg.comentarios > 0 && (
 											<div className="bg-blue-50 border border-blue-200 rounded-md p-3 mb-4">
 												<div className="flex items-center">
 													<span className="text-blue-400 mr-2">
@@ -231,10 +274,7 @@ function MisTFGs() {
 										>
 											Ver Detalles
 										</Link>
-										<button className="bg-gray-100 text-gray-700 px-4 py-2 rounded-md text-sm hover:bg-gray-200">
-											Descargar PDF
-										</button>
-										{tfg.estado === "Borrador" && (
+										{tfg.estado === "borrador" && (
 											<button className="bg-green-600 text-white px-4 py-2 rounded-md text-sm hover:bg-green-700">
 												Editar
 											</button>
@@ -252,15 +292,15 @@ function MisTFGs() {
 							</div>
 
 							{/* Progress bar para TFGs en proceso */}
-							{tfg.estado !== "Borrador" &&
-								tfg.estado !== "Defendido" && (
+							{tfg.estado !== "borrador" &&
+								tfg.estado !== "defendido" && (
 									<div className="px-6 pb-4">
 										<div className="flex justify-between text-sm text-gray-600 mb-2">
 											<span>Progreso del TFG</span>
 											<span>
-												{tfg.estado === "En revisión"
+												{tfg.estado === "revision"
 													? "60%"
-													: tfg.estado === "Aprobado"
+													: tfg.estado === "aprobado"
 													? "90%"
 													: "30%"}
 											</span>
@@ -268,20 +308,20 @@ function MisTFGs() {
 										<div className="w-full bg-gray-200 rounded-full h-2">
 											<div
 												className={`h-2 rounded-full ${
-													tfg.estado === "En revisión"
+													tfg.estado === "revision"
 														? "bg-yellow-500"
 														: tfg.estado ===
-														  "Aprobado"
+														  "aprobado"
 														? "bg-green-500"
 														: "bg-red-500"
 												}`}
 												style={{
 													width:
 														tfg.estado ===
-														"En revisión"
+														"revision"
 															? "60%"
 															: tfg.estado ===
-															  "Aprobado"
+															  "aprobado"
 															? "90%"
 															: "30%",
 												}}
@@ -314,7 +354,7 @@ function MisTFGs() {
 					<div className="bg-white shadow rounded-lg p-6 text-center">
 						<div className="text-2xl font-bold text-yellow-600">
 							{
-								tfgs.filter((t) => t.estado === "En revisión")
+								tfgs.filter((t) => t.estado === "revision")
 									.length
 							}
 						</div>
@@ -322,13 +362,13 @@ function MisTFGs() {
 					</div>
 					<div className="bg-white shadow rounded-lg p-6 text-center">
 						<div className="text-2xl font-bold text-green-600">
-							{tfgs.filter((t) => t.estado === "Aprobado").length}
+							{tfgs.filter((t) => t.estado === "aprobado").length}
 						</div>
 						<div className="text-sm text-gray-500">Aprobado</div>
 					</div>
 					<div className="bg-white shadow rounded-lg p-6 text-center">
 						<div className="text-2xl font-bold text-gray-600">
-							{tfgs.filter((t) => t.estado === "Borrador").length}
+							{tfgs.filter((t) => t.estado === "borrador").length}
 						</div>
 						<div className="text-sm text-gray-500">Borradores</div>
 					</div>
