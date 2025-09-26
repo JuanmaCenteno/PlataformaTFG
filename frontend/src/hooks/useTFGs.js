@@ -16,14 +16,19 @@ export const useTFGs = () => {
       dataToSend.append('titulo', formData.titulo)
       dataToSend.append('descripcion', formData.descripcion || '')
       dataToSend.append('resumen', formData.resumen)
-      
+
       // Convertir palabras clave a JSON si es array
       if (Array.isArray(formData.palabrasClave)) {
         dataToSend.append('palabras_clave', JSON.stringify(formData.palabrasClave))
       } else {
         dataToSend.append('palabras_clave', formData.palabrasClave)
       }
-      
+
+      // Añadir los campos faltantes
+      dataToSend.append('area_conocimiento', formData.area || '')
+      dataToSend.append('tipo_tfg', formData.tipoTFG || '')
+      dataToSend.append('idioma', formData.idioma || 'español')
+
       dataToSend.append('tutor_id', formData.tutorId || 1) // Usar el tutorId del formulario
       if (formData.cotutorId) {
         dataToSend.append('cotutor_id', formData.cotutorId)
@@ -303,22 +308,22 @@ export const useTFGs = () => {
   }
 
   // Añadir comentario a un TFG
-  const añadirComentario = async (tfgId, comentario) => {
+  const añadirComentario = async (tfgId, comentario, tipo = 'feedback') => {
     setLoading(true)
     setError(null)
-    
+
     try {
-      const response = await tfgAPI.addComentario(tfgId, comentario)
-      
-      return { 
-        success: true, 
+      const response = await tfgAPI.addComentario(tfgId, comentario, tipo)
+
+      return {
+        success: true,
         data: response.data,
-        message: 'Comentario añadido correctamente' 
+        message: 'Comentario añadido correctamente'
       }
-      
+
     } catch (err) {
-      const errorMessage = err.response?.data?.message || 
-                          err.response?.data?.error || 
+      const errorMessage = err.response?.data?.message ||
+                          err.response?.data?.error ||
                           'Error al añadir comentario'
       setError(errorMessage)
       return { success: false, error: errorMessage }

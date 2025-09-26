@@ -79,18 +79,18 @@ class TFG
         self::ESTADO_DEFENDIDO,
     ];
 
-    #[Groups(['tfg:read', 'tfg:write'])]
+    #[Groups(['tfg:read', 'tfg:write', 'tfg:basic'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['tfg:read'])]
+    #[Groups(['tfg:read', 'tfg:basic'])]
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?User $estudiante = null;
 
-    #[Groups(['tfg:read'])]
+    #[Groups(['tfg:read', 'tfg:basic'])]
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: true)]
     private ?User $tutor = null;
@@ -100,7 +100,7 @@ class TFG
     #[ORM\JoinColumn(nullable: true)]
     private ?User $cotutor = null;
 
-    #[Groups(['tfg:read', 'tfg:write'])]
+    #[Groups(['tfg:read', 'tfg:write', 'tfg:basic'])]
     #[Assert\NotBlank(message: 'El título es obligatorio')]
     #[Assert\Length(
         min: 10,
@@ -119,7 +119,7 @@ class TFG
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $descripcion = null;
 
-    #[Groups(['tfg:read', 'tfg:write'])]
+    #[Groups(['tfg:read', 'tfg:write', 'tfg:basic'])]
     #[Assert\Length(
         max: 2000,
         maxMessage: 'El resumen no puede superar los {{ limit }} caracteres'
@@ -127,13 +127,36 @@ class TFG
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $resumen = null;
 
-    #[Groups(['tfg:read', 'tfg:write'])]
+    #[Groups(['tfg:read', 'tfg:write', 'tfg:basic'])]
     #[Assert\Count(
         max: 10,
         maxMessage: 'No puede tener más de {{ limit }} palabras clave'
     )]
     #[ORM\Column(type: Types::JSON, nullable: true)]
     private ?array $palabrasClave = [];
+
+    #[Groups(['tfg:read', 'tfg:write'])]
+    #[Assert\NotBlank(message: 'El área de conocimiento es obligatoria')]
+    #[Assert\Length(
+        max: 100,
+        maxMessage: 'El área de conocimiento no puede superar los {{ limit }} caracteres'
+    )]
+    #[ORM\Column(length: 100, nullable: true)]
+    private ?string $areaConocimiento = null;
+
+    #[Groups(['tfg:read', 'tfg:write'])]
+    #[Assert\NotBlank(message: 'El tipo de TFG es obligatorio')]
+    #[Assert\Length(
+        max: 100,
+        maxMessage: 'El tipo de TFG no puede superar los {{ limit }} caracteres'
+    )]
+    #[ORM\Column(length: 100, nullable: true)]
+    private ?string $tipoTFG = null;
+
+    #[Groups(['tfg:read', 'tfg:write'])]
+    #[Assert\Choice(choices: ['español', 'inglés', 'catalán'], message: 'Idioma no válido')]
+    #[ORM\Column(length: 50, options: ['default' => 'español'])]
+    private ?string $idioma = 'español';
 
     #[Groups(['tfg:read'])]
     #[Assert\Choice(choices: self::ESTADOS_VALIDOS, message: 'Estado no válido')]
@@ -217,6 +240,7 @@ class TFG
         $this->comentarios = new ArrayCollection();
         $this->estado = self::ESTADO_BORRADOR;
         $this->palabrasClave = [];
+        $this->idioma = 'español';
         $this->createdAt = new \DateTime();
         $this->updatedAt = new \DateTime();
     }
@@ -310,6 +334,39 @@ class TFG
     public function setPalabrasClave(?array $palabrasClave): static
     {
         $this->palabrasClave = $palabrasClave ?? [];
+        return $this;
+    }
+
+    public function getAreaConocimiento(): ?string
+    {
+        return $this->areaConocimiento;
+    }
+
+    public function setAreaConocimiento(?string $areaConocimiento): static
+    {
+        $this->areaConocimiento = $areaConocimiento;
+        return $this;
+    }
+
+    public function getTipoTFG(): ?string
+    {
+        return $this->tipoTFG;
+    }
+
+    public function setTipoTFG(?string $tipoTFG): static
+    {
+        $this->tipoTFG = $tipoTFG;
+        return $this;
+    }
+
+    public function getIdioma(): ?string
+    {
+        return $this->idioma;
+    }
+
+    public function setIdioma(?string $idioma): static
+    {
+        $this->idioma = $idioma;
         return $this;
     }
 

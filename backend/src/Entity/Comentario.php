@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\ComentarioRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ComentarioRepository::class)]
 #[ORM\Table(name: 'comentarios')]
@@ -22,6 +23,7 @@ class Comentario
         self::TIPO_APROBACION,
     ];
 
+    #[Groups(['comentario:read'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -31,16 +33,20 @@ class Comentario
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?TFG $tfg = null;
 
+    #[Groups(['comentario:read'])]
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $autor = null;
 
+    #[Groups(['comentario:read'])]
     #[ORM\Column(type: Types::TEXT)]
     private ?string $comentario = null;
 
+    #[Groups(['comentario:read'])]
     #[ORM\Column(length: 50, options: ['default' => 'feedback'])]
     private ?string $tipo = self::TIPO_FEEDBACK;
 
+    #[Groups(['comentario:read'])]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
 

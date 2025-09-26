@@ -18,7 +18,16 @@
       "Bash(node:*)",
       "Bash(timeout 10s npm run dev)",
       "Bash(php:*)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(npm run dev:*)",
+      "Bash(ddev status:*)",
+      "Bash(ddev exec php bin/console doctrine:migrations:diff:*)",
+      "Bash(ddev exec php bin/console doctrine:migrations:migrate:*)",
+      "Bash(ddev exec php:*)",
+      "Bash(ddev exec:*)",
+      "Bash(npm run:*)",
+      "Read(//Users/juanariza/Juanma/**)",
+      "Bash(ddev composer:*)"
     ],
     "deny": [],
     "ask": []

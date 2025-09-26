@@ -24,10 +24,12 @@ class TribunalRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('t')
             ->leftJoin('t.presidente', 'p')
-            ->leftJoin('t.secretario', 's') 
+            ->leftJoin('t.secretario', 's')
             ->leftJoin('t.vocal', 'v')
+            ->leftJoin('t.suplente1', 'sup1')
+            ->leftJoin('t.suplente2', 'sup2')
             ->leftJoin('t.defensas', 'd')
-            ->addSelect('p', 's', 'v', 'd')
+            ->addSelect('p', 's', 'v', 'sup1', 'sup2', 'd')
             ->where('t.activo = :activo')
             ->setParameter('activo', $activo)
             ->orderBy('t.createdAt', 'DESC');
@@ -58,10 +60,12 @@ class TribunalRepository extends ServiceEntityRepository
             ->leftJoin('t.presidente', 'p')
             ->leftJoin('t.secretario', 's')
             ->leftJoin('t.vocal', 'v')
+            ->leftJoin('t.suplente1', 'sup1')
+            ->leftJoin('t.suplente2', 'sup2')
             ->leftJoin('t.defensas', 'd')
-            ->addSelect('p', 's', 'v', 'd')
+            ->addSelect('p', 's', 'v', 'sup1', 'sup2', 'd')
             ->where('t.activo = :activo')
-            ->andWhere('t.presidente = :usuario OR t.secretario = :usuario OR t.vocal = :usuario')
+            ->andWhere('t.presidente = :usuario OR t.secretario = :usuario OR t.vocal = :usuario OR t.suplente1 = :usuario OR t.suplente2 = :usuario')
             ->setParameter('activo', $activo)
             ->setParameter('usuario', $usuario)
             ->orderBy('t.createdAt', 'DESC');
@@ -91,7 +95,7 @@ class TribunalRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('t')
             ->select('COUNT(t.id)')
             ->where('t.activo = true')
-            ->andWhere('t.presidente = :profesor OR t.secretario = :profesor OR t.vocal = :profesor')
+            ->andWhere('t.presidente = :profesor OR t.secretario = :profesor OR t.vocal = :profesor OR t.suplente1 = :profesor OR t.suplente2 = :profesor')
             ->setParameter('profesor', $profesor)
             ->getQuery()
             ->getSingleScalarResult();

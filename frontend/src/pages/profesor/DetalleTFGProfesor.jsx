@@ -10,7 +10,7 @@ function DetalleTFGProfesor() {
   const [comentarios, setComentarios] = useState([])
   const [activeTab, setActiveTab] = useState('revision')
   const [nuevoComentario, setNuevoComentario] = useState('')
-  const [tipoComentario, setTipoComentario] = useState('revision')
+  const [tipoComentario, setTipoComentario] = useState('feedback')
 
   const {
     obtenerTFG,
@@ -62,10 +62,11 @@ function DetalleTFGProfesor() {
     setEnviandoComentario(true)
 
     try {
-      const resultado = await añadirComentario(id, nuevoComentario)
+      const resultado = await añadirComentario(id, nuevoComentario, tipoComentario)
       if (resultado.success) {
         mostrarNotificacion(resultado.message, 'success')
         setNuevoComentario('')
+        setTipoComentario('feedback') // Reset al tipo por defecto
 
         // Recargar comentarios
         const resultadoComentarios = await obtenerComentarios(id)
@@ -107,6 +108,7 @@ function DetalleTFGProfesor() {
     switch (tipo) {
       case 'aprobacion': return 'bg-green-50 border-green-200'
       case 'revision': return 'bg-yellow-50 border-yellow-200'
+      case 'feedback': return 'bg-blue-50 border-blue-200'
       case 'rechazo': return 'bg-red-50 border-red-200'
       default: return 'bg-gray-50 border-gray-200'
     }
@@ -124,7 +126,7 @@ function DetalleTFGProfesor() {
 
   const getEstadoTexto = (estado) => {
     switch (estado) {
-      case 'aprobado': return 'Aprobado'
+      case 'aprobado': return 'Aprobado para defensa'
       case 'revision': return 'En revisión'
       case 'rechazado': return 'Rechazado'
       case 'borrador': return 'Borrador'
@@ -188,7 +190,7 @@ function DetalleTFGProfesor() {
             <div className="flex items-center space-x-4 text-sm text-gray-600">
               <span>Estudiante: <strong>{tfg.estudiante?.nombreCompleto || 'No disponible'}</strong></span>
               <span>•</span>
-              <span>Área: <strong>{tfg.area || 'No especificada'}</strong></span>
+              <span>Área: <strong>{tfg.areaConocimiento || 'No especificada'}</strong></span>
               <span>•</span>
               <span>Subido: {tfg.createdAt ? new Date(tfg.createdAt).toLocaleDateString('es-ES') : 'No disponible'}</span>
             </div>
@@ -228,14 +230,20 @@ function DetalleTFGProfesor() {
           </div>
           <div>
             <p className="text-sm font-medium text-gray-500">Curso</p>
-            <p className="text-sm text-gray-900">{tfg.estudiante?.curso || 'No disponible'}</p>
+            <p className="text-sm text-gray-900">{tfg.estudiante?.especialidad || 'No disponible'}</p>
           </div>
         </div>
         <div className="mt-4 flex space-x-3">
-          <button className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm hover:bg-blue-700">
+          <a
+            href={`mailto:${tfg.estudiante?.email || ''}?subject=Consulta sobre TFG: ${tfg.titulo}`}
+            className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm hover:bg-blue-700 inline-block"
+          >
             📧 Enviar Email
-          </button>
-          <button className="bg-green-600 text-white px-4 py-2 rounded-md text-sm hover:bg-green-700">
+          </a>
+          <button
+            onClick={() => navigate('/profesor/calendario')}
+            className="bg-green-600 text-white px-4 py-2 rounded-md text-sm hover:bg-green-700"
+          >
             📅 Programar Reunión
           </button>
         </div>
@@ -249,7 +257,7 @@ function DetalleTFGProfesor() {
               { id: 'revision', name: 'Revisión', icon: '🔍' },
               { id: 'comentarios', name: 'Comentarios', icon: '💬', badge: comentarios.length },
               { id: 'evaluacion', name: 'Evaluación', icon: '⭐' },
-              { id: 'historial', name: 'Historial', icon: '📝' },
+              // { id: 'historial', name: 'Historial', icon: '📝' }, // Oculto temporalmente - no implementado
               { id: 'archivo', name: 'Archivo', icon: '📎' }
             ].map((tab) => (
               <button
@@ -290,11 +298,11 @@ function DetalleTFGProfesor() {
                   <dl className="space-y-2">
                     <div>
                       <dt className="text-sm font-medium text-gray-500">Tipo de TFG</dt>
-                      <dd className="text-sm text-gray-900">{tfg.tipo || 'No especificado'}</dd>
+                      <dd className="text-sm text-gray-900">{tfg.tipoTFG || 'No especificado'}</dd>
                     </div>
                     <div>
-                      <dt className="text-sm font-medium text-gray-500">Área</dt>
-                      <dd className="text-sm text-gray-900">{tfg.area || 'No especificada'}</dd>
+                      <dt className="text-sm font-medium text-gray-500">Área de Conocimiento</dt>
+                      <dd className="text-sm text-gray-900">{tfg.areaConocimiento || 'No especificada'}</dd>
                     </div>
                     <div>
                       <dt className="text-sm font-medium text-gray-500">Idioma</dt>
@@ -335,9 +343,9 @@ function DetalleTFGProfesor() {
                       onChange={(e) => setTipoComentario(e.target.value)}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     >
+                      <option value="feedback">Comentario General</option>
                       <option value="revision">Revisión/Sugerencia</option>
-                      <option value="aprobacion">Aprobación</option>
-                      <option value="rechazo">Rechazo</option>
+                      <option value="aprobacion">Aprobación para defensa</option>
                     </select>
                   </div>
                   <div>
@@ -395,10 +403,15 @@ function DetalleTFGProfesor() {
                       <div className="flex justify-between items-start mb-3">
                         <div className="flex items-center space-x-2">
                           <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-medium">
-                            MG
+                            {comentario.autor?.nombreCompleto ?
+                              comentario.autor.nombreCompleto.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() :
+                              'US'
+                            }
                           </div>
                           <div>
-                            <p className="text-sm font-medium text-gray-900">{comentario.autor || 'Usuario'}</p>
+                            <p className="text-sm font-medium text-gray-900">
+                              {comentario.autor?.nombreCompleto || comentario.autor?.nombre || 'Usuario'}
+                            </p>
                             <p className="text-xs text-gray-500">
                               {comentario.createdAt ? new Date(comentario.createdAt).toLocaleDateString('es-ES') : 'Fecha no disponible'} a las{' '}
                               {comentario.createdAt ? new Date(comentario.createdAt).toLocaleTimeString('es-ES', {hour: '2-digit', minute: '2-digit'}) : ''}
@@ -408,9 +421,13 @@ function DetalleTFGProfesor() {
                         <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
                           comentario.tipo === 'aprobacion' ? 'bg-green-100 text-green-800' :
                           comentario.tipo === 'revision' ? 'bg-yellow-100 text-yellow-800' :
+                          comentario.tipo === 'feedback' ? 'bg-blue-100 text-blue-800' :
                           'bg-red-100 text-red-800'
                         }`}>
-                          {comentario.tipo}
+                          {comentario.tipo === 'aprobacion' ? 'Aprobación para defensa' :
+                           comentario.tipo === 'revision' ? 'Revisión' :
+                           comentario.tipo === 'feedback' ? 'Comentario' :
+                           comentario.tipo}
                         </span>
                       </div>
                       <p className="text-sm text-gray-700">{comentario.comentario || comentario.mensaje}</p>
@@ -441,7 +458,7 @@ function DetalleTFGProfesor() {
                         <button
                           key={valor}
                           className={`w-8 h-8 rounded-full border ${
-                            tfg.criteriosEvaluacion[criterio.key] === valor
+                            (tfg.criteriosEvaluacion && tfg.criteriosEvaluacion[criterio.key] === valor)
                               ? 'bg-blue-500 text-white border-blue-500'
                               : 'border-gray-300 hover:border-blue-400'
                           }`}
@@ -449,7 +466,7 @@ function DetalleTFGProfesor() {
                             setTfg(prev => ({
                               ...prev,
                               criteriosEvaluacion: {
-                                ...prev.criteriosEvaluacion,
+                                ...(prev.criteriosEvaluacion || {}),
                                 [criterio.key]: valor
                               }
                             }))

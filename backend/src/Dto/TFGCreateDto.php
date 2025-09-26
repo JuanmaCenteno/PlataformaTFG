@@ -49,6 +49,23 @@ class TFGCreateDto
     #[Assert\Type(type: 'string', message: 'La fecha fin estimada debe ser una fecha válida')]
     public ?string $fecha_fin_estimada = null;
 
+    #[Assert\NotBlank(message: 'El área de conocimiento es obligatoria')]
+    #[Assert\Length(
+        max: 100,
+        maxMessage: 'El área de conocimiento no puede superar los {{ limit }} caracteres'
+    )]
+    public ?string $area_conocimiento = null;
+
+    #[Assert\NotBlank(message: 'El tipo de TFG es obligatorio')]
+    #[Assert\Length(
+        max: 100,
+        maxMessage: 'El tipo de TFG no puede superar los {{ limit }} caracteres'
+    )]
+    public ?string $tipo_tfg = null;
+
+    #[Assert\Choice(choices: ['español', 'inglés', 'catalán'], message: 'Idioma no válido')]
+    public string $idioma = 'español';
+
     public function __construct()
     {
         $this->palabras_clave = [];

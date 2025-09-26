@@ -25,7 +25,9 @@ class TFGRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('t')
             ->leftJoin('t.tutor', 'tutor')
             ->leftJoin('t.cotutor', 'cotutor')
-            ->addSelect('tutor', 'cotutor')
+            ->leftJoin('t.defensa', 'defensa')
+            ->leftJoin('defensa.tribunal', 'tribunal')
+            ->addSelect('tutor', 'cotutor', 'defensa', 'tribunal')
             ->where('t.estudiante = :estudiante')
             ->setParameter('estudiante', $estudiante)
             ->orderBy('t.createdAt', 'DESC');
@@ -56,7 +58,9 @@ class TFGRepository extends ServiceEntityRepository
             ->leftJoin('t.estudiante', 'estudiante')
             ->leftJoin('t.tutor', 'tutor')
             ->leftJoin('t.cotutor', 'cotutor')
-            ->addSelect('estudiante', 'tutor', 'cotutor')
+            ->leftJoin('t.defensa', 'defensa')
+            ->leftJoin('defensa.tribunal', 'tribunal')
+            ->addSelect('estudiante', 'tutor', 'cotutor', 'defensa', 'tribunal')
             ->where('t.tutor = :profesor OR t.cotutor = :profesor')
             ->setParameter('profesor', $profesor)
             ->orderBy('t.createdAt', 'DESC');
@@ -86,7 +90,7 @@ class TFGRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('t')
             ->leftJoin('t.estudiante', 'estudiante')
             ->leftJoin('t.tutor', 'tutor')
-            ->leftJoin('t.defensas', 'd')
+            ->leftJoin('t.defensa', 'd')
             ->leftJoin('d.tribunal', 'tr')
             ->addSelect('estudiante', 'tutor', 'd', 'tr')
             ->where('tr.presidente = :profesor OR tr.secretario = :profesor OR tr.vocal = :profesor')
@@ -121,7 +125,9 @@ class TFGRepository extends ServiceEntityRepository
             ->leftJoin('t.estudiante', 'estudiante')
             ->leftJoin('t.tutor', 'tutor')
             ->leftJoin('t.cotutor', 'cotutor')
-            ->addSelect('estudiante', 'tutor', 'cotutor')
+            ->leftJoin('t.defensa', 'defensa')
+            ->leftJoin('defensa.tribunal', 'tribunal')
+            ->addSelect('estudiante', 'tutor', 'cotutor', 'defensa', 'tribunal')
             ->orderBy('t.createdAt', 'DESC');
 
         // Total count
@@ -358,5 +364,26 @@ class TFGRepository extends ServiceEntityRepository
         }
 
         return 'Otros';
+    }
+
+    /**
+     * Encuentra un TFG por ID con todas las relaciones cargadas para voters
+     */
+    public function findWithAllRelations(int $id): ?TFG
+    {
+        return $this->createQueryBuilder('t')
+            ->leftJoin('t.estudiante', 'e')
+            ->leftJoin('t.tutor', 'tutor')
+            ->leftJoin('t.cotutor', 'cotutor')
+            ->leftJoin('t.defensa', 'd')
+            ->leftJoin('d.tribunal', 'tr')
+            ->leftJoin('tr.presidente', 'p')
+            ->leftJoin('tr.secretario', 's')
+            ->leftJoin('tr.vocal', 'v')
+            ->addSelect('e', 'tutor', 'cotutor', 'd', 'tr', 'p', 's', 'v')
+            ->where('t.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 }

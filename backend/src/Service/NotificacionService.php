@@ -333,6 +333,24 @@ class NotificacionService
     }
 
     /**
+     * Notificación cuando se genera el acta de defensa
+     */
+    public function notificarActaGenerada(User $estudiante, string $tituloTfg): void
+    {
+        $this->crearNotificacion(
+            $estudiante,
+            'Acta de Defensa Disponible',
+            "El acta de defensa de tu TFG '{$tituloTfg}' ya está disponible para descarga.",
+            'success',
+            [
+                'tipo_evento' => 'acta_generada',
+                'titulo_tfg' => $tituloTfg
+            ],
+            true
+        );
+    }
+
+    /**
      * Notificación cuando se solicitan cambios
      */
     public function notificarCambiosSolicitados(User $estudiante, string $tituloTfg, string $comentario): void

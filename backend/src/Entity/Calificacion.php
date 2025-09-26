@@ -36,7 +36,7 @@ class Calificacion
         max: 10,
         notInRangeMessage: 'La nota de presentación debe estar entre {{ min }} y {{ max }}'
     )]
-    #[ORM\Column(type: Types::DECIMAL, precision: 3, scale: 2, nullable: true)]
+    #[ORM\Column(type: Types::DECIMAL, precision: 4, scale: 2, nullable: true)]
     private ?string $notaPresentacion = null;
 
     #[Groups(['calificacion:read', 'calificacion:write'])]
@@ -45,7 +45,7 @@ class Calificacion
         max: 10,
         notInRangeMessage: 'La nota de contenido debe estar entre {{ min }} y {{ max }}'
     )]
-    #[ORM\Column(type: Types::DECIMAL, precision: 3, scale: 2, nullable: true)]
+    #[ORM\Column(type: Types::DECIMAL, precision: 4, scale: 2, nullable: true)]
     private ?string $notaContenido = null;
 
     #[Groups(['calificacion:read', 'calificacion:write'])]
@@ -54,7 +54,7 @@ class Calificacion
         max: 10,
         notInRangeMessage: 'La nota de defensa debe estar entre {{ min }} y {{ max }}'
     )]
-    #[ORM\Column(type: Types::DECIMAL, precision: 3, scale: 2, nullable: true)]
+    #[ORM\Column(type: Types::DECIMAL, precision: 4, scale: 2, nullable: true)]
     private ?string $notaDefensa = null;
 
     #[Groups(['calificacion:read'])]
@@ -63,7 +63,7 @@ class Calificacion
         max: 10,
         notInRangeMessage: 'La nota final debe estar entre {{ min }} y {{ max }}'
     )]
-    #[ORM\Column(type: Types::DECIMAL, precision: 3, scale: 2, nullable: true)]
+    #[ORM\Column(type: Types::DECIMAL, precision: 4, scale: 2, nullable: true)]
     private ?string $notaFinal = null;
 
     #[Groups(['calificacion:read', 'calificacion:write'])]

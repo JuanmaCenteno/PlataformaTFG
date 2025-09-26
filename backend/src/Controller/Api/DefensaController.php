@@ -12,10 +12,14 @@ use App\Repository\TFGRepository;
 use App\Repository\TribunalRepository;
 use App\Repository\CalificacionRepository;
 use App\Service\NotificacionService;
+use App\Service\ActaService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -33,7 +37,8 @@ class DefensaController extends AbstractController
         private EntityManagerInterface $entityManager,
         private SerializerInterface $serializer,
         private ValidatorInterface $validator,
-        private NotificacionService $notificacionService
+        private NotificacionService $notificacionService,
+        private ActaService $actaService
     ) {}
 
     /**
@@ -142,15 +147,46 @@ class DefensaController extends AbstractController
     }
 
     /**
+     * GET /api/defensas/mi-defensa
+     * Obtiene la defensa del TFG del estudiante autenticado
+     */
+    #[Route('/mi-defensa', name: 'api_defensas_mi_defensa', methods: ['GET'])]
+    #[IsGranted('ROLE_ESTUDIANTE')]
+    public function miDefensa(): JsonResponse
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        // Buscar el TFG del estudiante
+        $tfg = $this->tfgRepository->findOneBy(['estudiante' => $user]);
+
+        if (!$tfg) {
+            return $this->json(['error' => 'No tienes un TFG registrado'], 404);
+        }
+
+        // Buscar la defensa del TFG
+        $defensa = $tfg->getDefensa();
+
+        if (!$defensa) {
+            return $this->json(['error' => 'Tu TFG no tiene defensa programada'], 404);
+        }
+
+        return $this->json($defensa, 200, [], ['groups' => ['defensa:student', 'tribunal:basic', 'user:basic', 'tfg:basic']]);
+    }
+
+    /**
      * POST /api/defensas
      * Programar nueva defensa (solo presidentes de tribunal y admin)
      */
     #[Route('', name: 'api_defensas_create', methods: ['POST'])]
-    #[IsGranted('ROLE_PRESIDENTE_TRIBUNAL')]
     public function create(Request $request): JsonResponse
     {
+        /** @var User $user */
+        $user = $this->getUser();
+        $roles = $user->getRoles();
+
         $data = json_decode($request->getContent(), true);
-        
+
         if (!$data) {
             return $this->json(['error' => 'Datos JSON inválidos'], 400);
         }
@@ -169,6 +205,21 @@ class DefensaController extends AbstractController
             return $this->json(['error' => 'TFG no encontrado'], 404);
         }
 
+        // Buscar y validar tribunal
+        $tribunal = $this->tribunalRepository->find($data['tribunal_id']);
+        if (!$tribunal) {
+            return $this->json(['error' => 'Tribunal no encontrado'], 404);
+        }
+
+        // Verificar permisos: Admin o Presidente del tribunal específico
+        $esAdmin = in_array('ROLE_ADMIN', $roles);
+        $esPresidenteGlobal = in_array('ROLE_PRESIDENTE_TRIBUNAL', $roles);
+        $esPresidenteDelTribunal = $tribunal->getPresidente() === $user;
+
+        if (!$esAdmin && !$esPresidenteGlobal && !$esPresidenteDelTribunal) {
+            return $this->json(['error' => 'No tienes permisos para programar defensas con este tribunal'], 403);
+        }
+
         if ($tfg->getEstado() !== TFG::ESTADO_APROBADO) {
             return $this->json(['error' => 'El TFG debe estar aprobado para programar defensa'], 400);
         }
@@ -178,18 +229,9 @@ class DefensaController extends AbstractController
             return $this->json(['error' => 'El TFG ya tiene una defensa programada'], 400);
         }
 
-        // Buscar y validar tribunal
-        $tribunal = $this->tribunalRepository->find($data['tribunal_id']);
-        if (!$tribunal) {
-            return $this->json(['error' => 'Tribunal no encontrado'], 404);
-        }
-
         if (!$tribunal->isActivo()) {
             return $this->json(['error' => 'El tribunal no está activo'], 400);
         }
-
-        // Verificar permisos sobre el tribunal
-        $this->denyAccessUnlessGranted('tribunal_schedule_defense', $tribunal);
 
         // Validar fecha
         try {
@@ -245,6 +287,16 @@ class DefensaController extends AbstractController
         }
 
         $this->entityManager->persist($defensa);
+
+        // Cambiar estado del TFG a defendido ya que tiene defensa programada
+        // Esto refleja que el TFG está listo para la defensa
+        if ($tfg->getEstado() === TFG::ESTADO_APROBADO) {
+            // Nota: Mantenemos el estado como 'aprobado' ya que 'defendido'
+            // debería usarse solo después de la defensa real
+            // El frontend puede mostrar que tiene defensa programada basándose
+            // en la existencia de la relación defensa
+        }
+
         $this->entityManager->flush();
 
         // Notificaciones
@@ -281,6 +333,24 @@ class DefensaController extends AbstractController
     }
 
     /**
+     * GET /api/defensas/pendientes-calificar
+     * Obtener defensas pendientes de calificar para el usuario actual
+     */
+    #[Route('/pendientes-calificar', name: 'api_defensas_pendientes_calificar', methods: ['GET'])]
+    public function pendientesCalificar(): JsonResponse
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        $defensasPendientes = $this->defensaRepository->findPendientesDeCalificar($user);
+
+        return $this->json([
+            'data' => $defensasPendientes,
+            'total' => count($defensasPendientes)
+        ], 200, [], ['groups' => ['defensa:read', 'tfg:basic', 'tribunal:basic', 'user:basic']]);
+    }
+
+    /**
      * GET /api/defensas/{id}
      * Ver defensa específica
      */
@@ -296,7 +366,7 @@ class DefensaController extends AbstractController
         // Verificar permisos
         $this->denyAccessUnlessGranted('defensa_view', $defensa);
 
-        return $this->json($defensa, 200, [], ['groups' => ['defensa:read', 'tfg:read', 'tribunal:read', 'user:basic', 'calificacion:read']]);
+        return $this->json($defensa, 200, [], ['groups' => ['defensa:read', 'tfg:basic', 'tribunal:read', 'user:basic', 'calificacion:read']]);
     }
 
     /**
@@ -421,8 +491,20 @@ class DefensaController extends AbstractController
     #[Route('/{id}/estado', name: 'api_defensas_change_estado', methods: ['PUT'])]
     public function changeEstado(int $id, Request $request): JsonResponse
     {
-        $defensa = $this->defensaRepository->find($id);
-        
+        // Cargar la defensa con todas las relaciones necesarias para el voter
+        $defensa = $this->defensaRepository->createQueryBuilder('d')
+            ->leftJoin('d.tribunal', 't')
+            ->leftJoin('t.presidente', 'p')
+            ->leftJoin('t.secretario', 's')
+            ->leftJoin('t.vocal', 'v')
+            ->leftJoin('d.tfg', 'tfg')
+            ->leftJoin('tfg.estudiante', 'e')
+            ->addSelect('t', 'p', 's', 'v', 'tfg', 'e')
+            ->where('d.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult();
+
         if (!$defensa) {
             return $this->json(['error' => 'Defensa no encontrada'], 404);
         }
@@ -448,12 +530,9 @@ class DefensaController extends AbstractController
         $estadoAnterior = $defensa->getEstado();
         $defensa->setEstado($nuevoEstado);
 
-        // Si se marca como completada, actualizar el TFG a defendido
+        // Si se marca como completada, NO cambiar aún el TFG a defendido
+        // Eso ocurrirá cuando todos los miembros hayan calificado
         if ($nuevoEstado === 'completada') {
-            $tfg = $defensa->getTfg();
-            $tfg->setEstado(TFG::ESTADO_DEFENDIDO);
-            $tfg->setFechaFinReal(new \DateTime());
-            
             // Marcar acta como generada (lógica futura)
             $defensa->setActaGenerada(true);
         }
@@ -492,6 +571,39 @@ class DefensaController extends AbstractController
             'tfg_estado' => $defensa->getTfg()->getEstado(),
             'updated_at' => $defensa->getUpdatedAt()->format('c')
         ]);
+    }
+
+    /**
+     * GET /api/defensas/{id}/calificaciones
+     * Obtener calificaciones de la defensa
+     */
+    #[Route('/{id}/calificaciones', name: 'api_defensas_get_calificaciones', methods: ['GET'])]
+    public function getCalificaciones(int $id): JsonResponse
+    {
+        $defensa = $this->defensaRepository->find($id);
+
+        if (!$defensa) {
+            return $this->json(['error' => 'Defensa no encontrada'], 404);
+        }
+
+        $this->denyAccessUnlessGranted('defensa_view', $defensa);
+
+        /** @var User $evaluador */
+        $evaluador = $this->getUser();
+
+        // Verificar que el usuario es miembro del tribunal
+        $tribunal = $defensa->getTribunal();
+        if (!in_array($evaluador, [$tribunal->getPresidente(), $tribunal->getSecretario(), $tribunal->getVocal()])) {
+            return $this->json(['error' => 'Solo los miembros del tribunal pueden ver las calificaciones'], 403);
+        }
+
+        // Obtener todas las calificaciones de la defensa
+        $calificaciones = $this->calificacionRepository->findBy(['defensa' => $defensa]);
+
+        return $this->json([
+            'success' => true,
+            'data' => $calificaciones
+        ], 200, [], ['groups' => ['calificacion:read', 'user:basic']]);
     }
 
     /**
@@ -572,20 +684,41 @@ class DefensaController extends AbstractController
 
         $this->entityManager->persist($calificacion);
 
-        // Si todos los miembros han calificado, calcular nota final del TFG
+        // Si todos los miembros han calificado, calcular nota final del TFG y marcarlo como defendido
         $totalMiembros = 3;
         $calificacionesCount = $this->calificacionRepository->count(['defensa' => $defensa]) + 1; // +1 por la actual
 
         if ($calificacionesCount >= $totalMiembros) {
             $notaFinalTfg = $this->calificacionRepository->calcularNotaFinal($defensa);
-            $defensa->getTfg()->setCalificacion($notaFinalTfg);
+            $tfg = $defensa->getTfg();
 
-            // Notificar al estudiante
-            $this->notificacionService->notificarCalificacionPublicada(
-                $defensa->getTfg()->getEstudiante(),
-                $defensa->getTfg()->getTitulo(),
-                $notaFinalTfg
-            );
+            // Actualizar TFG: calificación y estado final
+            $tfg->setCalificacion($notaFinalTfg);
+            $tfg->setEstado(TFG::ESTADO_DEFENDIDO);
+            $tfg->setFechaFinReal(new \DateTime());
+
+            // Generar acta automáticamente
+            try {
+                $nombreActa = $this->actaService->generarActaDefensa($defensa);
+                $defensa->setActaGenerada(true);
+                $defensa->setActaPath($nombreActa);
+
+                // Notificar al estudiante que su calificación y acta están disponibles
+                $this->notificacionService->notificarActaGenerada(
+                    $tfg->getEstudiante(),
+                    $tfg->getTitulo()
+                );
+            } catch (\Exception $e) {
+                // Log del error pero no fallar la calificación
+                error_log('Error generando acta: ' . $e->getMessage());
+
+                // Notificar solo la calificación
+                $this->notificacionService->notificarCalificacionPublicada(
+                    $tfg->getEstudiante(),
+                    $tfg->getTitulo(),
+                    $notaFinalTfg
+                );
+            }
         }
 
         $this->entityManager->flush();
@@ -653,5 +786,87 @@ class DefensaController extends AbstractController
         $this->entityManager->flush();
 
         return $this->json(['message' => 'Defensa eliminada correctamente']);
+    }
+
+    /**
+     * GET /api/defensas/{id}/acta
+     * Descargar acta de defensa
+     */
+    #[Route('/{id}/acta', name: 'api_defensas_descargar_acta', methods: ['GET'])]
+    public function descargarActa(int $id): Response
+    {
+        $defensa = $this->defensaRepository->find($id);
+
+        if (!$defensa) {
+            return $this->json(['error' => 'Defensa no encontrada'], 404);
+        }
+
+        // Verificar permisos: solo estudiante del TFG y miembros del tribunal
+        $this->denyAccessUnlessGranted('defensa_ver_acta', $defensa);
+
+        if (!$defensa->isActaGenerada() || !$defensa->getActaPath()) {
+            return $this->json(['error' => 'Acta no disponible'], 404);
+        }
+
+        $nombreArchivo = $defensa->getActaPath();
+        $rutaCompleta = $this->actaService->obtenerRutaActa($nombreArchivo);
+
+        if (!$this->actaService->actaExiste($nombreArchivo)) {
+            return $this->json(['error' => 'Archivo del acta no encontrado'], 404);
+        }
+
+        // Crear respuesta de descarga
+        $response = new BinaryFileResponse($rutaCompleta);
+
+        // Configurar headers para descarga
+        $response->setContentDisposition(
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT,
+            $this->generarNombreDescarga($defensa)
+        );
+
+        return $response;
+    }
+
+    /**
+     * GET /api/defensas/{id}/acta/info
+     * Obtener información del acta sin descargarla
+     */
+    #[Route('/{id}/acta/info', name: 'api_defensas_info_acta', methods: ['GET'])]
+    public function infoActa(int $id): JsonResponse
+    {
+        $defensa = $this->defensaRepository->find($id);
+
+        if (!$defensa) {
+            return $this->json(['error' => 'Defensa no encontrada'], 404);
+        }
+
+        // Verificar permisos
+        $this->denyAccessUnlessGranted('defensa_ver_acta', $defensa);
+
+        $actaDisponible = $defensa->isActaGenerada() &&
+                         $defensa->getActaPath() &&
+                         $this->actaService->actaExiste($defensa->getActaPath());
+
+        return $this->json([
+            'actaDisponible' => $actaDisponible,
+            'nombreArchivo' => $defensa->getActaPath(),
+            'fechaGeneracion' => $defensa->getUpdatedAt()?->format('c'),
+            'urlDescarga' => $actaDisponible ? '/api/defensas/' . $id . '/acta' : null
+        ]);
+    }
+
+    /**
+     * Genera un nombre descriptivo para la descarga del acta
+     */
+    private function generarNombreDescarga(Defensa $defensa): string
+    {
+        $tfg = $defensa->getTfg();
+        $fecha = $defensa->getFechaDefensa()->format('Y-m-d');
+        $estudiante = $tfg->getEstudiante();
+
+        $nombreLimpio = preg_replace('/[^a-zA-Z0-9\-_\s]/', '', $estudiante->getNombre() . '_' . $estudiante->getApellidos());
+        $nombreLimpio = str_replace(' ', '_', $nombreLimpio);
+
+        return "Acta_Defensa_{$nombreLimpio}_{$fecha}.pdf";
     }
 }

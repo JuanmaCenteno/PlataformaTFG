@@ -2,8 +2,10 @@ import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useTribunales } from '../../hooks/useTribunales'
 import { useNotificaciones } from '../../context/NotificacionesContext'
+import { useAuth } from '../../context/AuthContext'
 
 function Tribunales() {
+  const { user } = useAuth()
   const { mostrarNotificacion } = useNotificaciones()
   const {
     loading: tribunalesLoading,
@@ -28,13 +30,12 @@ function Tribunales() {
   const [nuevoTribunal, setNuevoTribunal] = useState({
     nombre: '',
     descripcion: '',
-    fechaDefensa: '',
-    horaDefensa: '',
-    aula: '',
     tfgId: '',
     presidente: '',
-    vocal1: '',
-    vocal2: ''
+    vocal: '',
+    secretario: '',
+    suplente1: '',
+    suplente2: ''
   })
 
   // Cargar tribunales desde el backend
@@ -68,11 +69,15 @@ function Tribunales() {
   // Manejar creación de tribunal como presidente
   const manejarCrearTribunalPresidente = async (datosFormulario) => {
     const resultado = await crearTribunal(datosFormulario)
-    
+
     if (resultado.success) {
       mostrarNotificacion(resultado.message, 'success')
       setModalActivo(null)
-      cargarTribunales()
+      // Recargar tribunales
+      const tribunalesActualizados = await obtenerTribunales()
+      if (tribunalesActualizados.success) {
+        setTribunales(tribunalesActualizados.data)
+      }
     } else {
       mostrarNotificacion(resultado.error, 'error')
     }
@@ -98,11 +103,15 @@ function Tribunales() {
   // Manejar asignación de profesores
   const manejarAsignarProfesores = async (tribunalId, profesores) => {
     const resultado = await asignarProfesores(tribunalId, profesores)
-    
+
     if (resultado.success) {
       mostrarNotificacion(resultado.message, 'success')
       setModalActivo(null)
-      cargarTribunales()
+      // Recargar tribunales
+      const tribunalesActualizados = await obtenerTribunales()
+      if (tribunalesActualizados.success) {
+        setTribunales(tribunalesActualizados.data)
+      }
     } else {
       mostrarNotificacion(resultado.error, 'error')
     }
@@ -146,17 +155,24 @@ function Tribunales() {
   }
 
   const tribunalesFiltrados = tribunales.filter(tribunal => {
-    const esPresidente = tribunal.miembros.some(m => m.esYo && m.rol === 'Presidente')
-    const esVocal = tribunal.miembros.some(m => m.esYo && m.rol === 'Vocal')
-    const esProximo = new Date(tribunal.fechaDefensa) > new Date()
+    const miembros = tribunal.miembros || tribunal.miembrosConUsuario || []
+    const esPresidente = miembros.some(m => m.esYo && m.rol === 'Presidente')
+    const esVocal = miembros.some(m => m.esYo && m.rol === 'Vocal')
+    const esSecretario = miembros.some(m => m.esYo && m.rol === 'Secretario')
+    const esSuplente = miembros.some(m => m.esYo && (m.rol === 'Suplente1' || m.rol === 'Suplente2'))
+    const esProximo = tribunal.proximaDefensa !== null
 
     switch (filtro) {
       case 'presidente':
         return esPresidente
       case 'vocal':
         return esVocal
+      case 'secretario':
+        return esSecretario
+      case 'suplente':
+        return esSuplente
       case 'proximos':
-        return esProximo && tribunal.estado !== 'Completado'
+        return esProximo && tribunal.activo
       default:
         return true
     }
@@ -164,17 +180,29 @@ function Tribunales() {
 
   const estadisticas = {
     total: tribunales.length,
-    presidente: tribunales.filter(t => t.miembros.some(m => m.esYo && m.rol === 'Presidente')).length,
-    vocal: tribunales.filter(t => t.miembros.some(m => m.esYo && m.rol === 'Vocal')).length,
-    proximos: tribunales.filter(t => new Date(t.fechaDefensa) > new Date() && t.estado !== 'Completado').length
+    presidente: tribunales.filter(t => {
+      const miembros = t.miembros || t.miembrosConUsuario || []
+      return miembros.some(m => m.esYo && m.rol === 'Presidente')
+    }).length,
+    vocal: tribunales.filter(t => {
+      const miembros = t.miembros || t.miembrosConUsuario || []
+      return miembros.some(m => m.esYo && m.rol === 'Vocal')
+    }).length,
+    secretario: tribunales.filter(t => {
+      const miembros = t.miembros || t.miembrosConUsuario || []
+      return miembros.some(m => m.esYo && m.rol === 'Secretario')
+    }).length,
+    suplente: tribunales.filter(t => {
+      const miembros = t.miembros || t.miembrosConUsuario || []
+      return miembros.some(m => m.esYo && (m.rol === 'Suplente1' || m.rol === 'Suplente2'))
+    }).length,
+    proximos: tribunales.filter(t => t.proximaDefensa !== null && t.activo).length
   }
 
   const handleCrearTribunal = async () => {
     try {
       const datosFormulario = {
-        ...nuevoTribunal,
-        fecha_defensa: nuevoTribunal.fechaDefensa,
-        hora_defensa: nuevoTribunal.horaDefensa
+        ...nuevoTribunal
       }
 
       const resultado = await crearTribunal(datosFormulario)
@@ -198,13 +226,12 @@ function Tribunales() {
     setNuevoTribunal({
       nombre: '',
       descripcion: '',
-      fechaDefensa: '',
-      horaDefensa: '',
-      aula: '',
       tfgId: '',
       presidente: '',
-      vocal1: '',
-      vocal2: ''
+      vocal: '',
+      secretario: '',
+      suplente1: '',
+      suplente2: ''
     })
   }
 
@@ -285,7 +312,7 @@ function Tribunales() {
       </div>
 
       {/* Estadísticas */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-6 gap-6 mb-8">
         <div className="bg-white shadow rounded-lg p-6">
           <div className="text-center">
             <div className="text-2xl font-bold text-blue-600">{estadisticas.total}</div>
@@ -306,6 +333,18 @@ function Tribunales() {
         </div>
         <div className="bg-white shadow rounded-lg p-6">
           <div className="text-center">
+            <div className="text-2xl font-bold text-indigo-600">{estadisticas.secretario}</div>
+            <div className="text-sm text-gray-500">Como Secretario</div>
+          </div>
+        </div>
+        <div className="bg-white shadow rounded-lg p-6">
+          <div className="text-center">
+            <div className="text-2xl font-bold text-pink-600">{estadisticas.suplente}</div>
+            <div className="text-sm text-gray-500">Como Suplente</div>
+          </div>
+        </div>
+        <div className="bg-white shadow rounded-lg p-6">
+          <div className="text-center">
             <div className="text-2xl font-bold text-orange-600">{estadisticas.proximos}</div>
             <div className="text-sm text-gray-500">Próximas Defensas</div>
           </div>
@@ -319,6 +358,8 @@ function Tribunales() {
             { key: 'todos', label: 'Todos', count: tribunales.length },
             { key: 'presidente', label: 'Como Presidente', count: estadisticas.presidente },
             { key: 'vocal', label: 'Como Vocal', count: estadisticas.vocal },
+            { key: 'secretario', label: 'Como Secretario', count: estadisticas.secretario },
+            { key: 'suplente', label: 'Como Suplente', count: estadisticas.suplente },
             { key: 'proximos', label: 'Próximas Defensas', count: estadisticas.proximos }
           ].map((opcion) => (
             <button
@@ -359,7 +400,8 @@ function Tribunales() {
           </div>
         ) : (
           tribunalesFiltrados.map((tribunal) => {
-            const miRol = tribunal.miembros.find(m => m.esYo)?.rol || 'Vocal'
+            const miembros = tribunal.miembros || tribunal.miembrosConUsuario || []
+            const miRol = miembros.find(m => m.esYo)?.rol || 'Vocal'
             const esPresidente = miRol === 'Presidente'
             
             return (
@@ -372,9 +414,9 @@ function Tribunales() {
                         <h3 className="text-xl font-semibold text-gray-900">
                           {tribunal.nombre}
                         </h3>
-                        <span className={`inline-flex items-center px-3 py-1 text-sm font-medium rounded-full border ${getEstadoColor(tribunal.estado)}`}>
-                          <span className="mr-1">{getEstadoIcon(tribunal.estado)}</span>
-                          {tribunal.estado}
+                        <span className={`inline-flex items-center px-3 py-1 text-sm font-medium rounded-full border ${getEstadoColor(tribunal.estadoDisponibilidad)}`}>
+                          <span className="mr-1">{getEstadoIcon(tribunal.estadoDisponibilidad)}</span>
+                          {tribunal.estadoDisponibilidad}
                         </span>
                         <span className={`inline-flex items-center px-3 py-1 text-sm font-medium rounded-full border ${getRolColor(miRol, true)}`}>
                           {miRol === 'Presidente' ? '👑' : '👤'} {miRol}
@@ -384,40 +426,37 @@ function Tribunales() {
                       {/* Descripción */}
                       <p className="text-gray-600 mb-4">{tribunal.descripcion}</p>
 
-                      {/* Info del TFG */}
+                      {/* Info del Tribunal */}
                       <div className="bg-gray-50 rounded-lg p-4 mb-4">
-                        <h4 className="font-medium text-gray-900 mb-2">TFG a evaluar:</h4>
+                        <h4 className="font-medium text-gray-900 mb-2">Información del Tribunal:</h4>
                         <p className="text-sm text-gray-700">
-                          <strong>{tribunal.tfg?.titulo || 'TFG no asignado'}</strong>
+                          <strong>{tribunal.descripcion || 'Sin descripción'}</strong>
                         </p>
                         <p className="text-sm text-gray-500">
-                          Estudiante: {tribunal.tfg?.estudiante?.nombreCompleto || tribunal.tfg?.estudiante || 'No asignado'}
+                          Defensas programadas: {tribunal.defensasProgramadasCount || 0} |
+                          Defensas completadas: {tribunal.defensasCompletadasCount || 0}
                         </p>
                       </div>
 
-                      {/* Detalles de la defensa */}
+                      {/* Estadísticas del tribunal */}
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-gray-600 mb-4">
                         <div>
-                          <span className="font-medium">Fecha y hora:</span>
+                          <span className="font-medium">Creado:</span>
                           <br />
                           <span className="text-gray-900">
-                            {new Date(tribunal.fechaDefensa).toLocaleDateString('es-ES')}
-                          </span>
-                          <br />
-                          <span className="text-gray-900">
-                            {new Date(tribunal.fechaDefensa).toLocaleTimeString('es-ES', {hour: '2-digit', minute: '2-digit'})}
+                            {new Date(tribunal.createdAt).toLocaleDateString('es-ES')}
                           </span>
                         </div>
                         <div>
-                          <span className="font-medium">Aula:</span>
+                          <span className="font-medium">Estado:</span>
                           <br />
-                          <span className="text-gray-900">{tribunal.aula}</span>
+                          <span className="text-gray-900">{tribunal.activo ? 'Activo' : 'Inactivo'}</span>
                         </div>
                         <div>
-                          <span className="font-medium">Calificación:</span>
+                          <span className="font-medium">Carga:</span>
                           <br />
                           <span className="text-gray-900">
-                            {tribunal.calificaciones.final ? `${tribunal.calificaciones.final}/10` : 'Pendiente'}
+                            {tribunal.cargaTrabajo?.porcentaje_completadas || 0}% completado
                           </span>
                         </div>
                       </div>
@@ -426,7 +465,7 @@ function Tribunales() {
                       <div className="mb-4">
                         <h4 className="font-medium text-gray-900 mb-2">Miembros del Tribunal:</h4>
                         <div className="flex flex-wrap gap-2">
-                          {tribunal.miembros.map((miembro) => (
+                          {miembros.map((miembro) => (
                             <span 
                               key={miembro.id}
                               className={`inline-flex items-center px-3 py-1 text-sm rounded-full border ${getRolColor(miembro.rol, miembro.esYo)}`}
@@ -448,13 +487,16 @@ function Tribunales() {
                         📋 Ver Detalle
                       </Link>
                       
-                      {tribunal.estado === 'Programado' && (
-                        <button className="bg-green-600 text-white px-4 py-2 rounded-md text-sm hover:bg-green-700">
+                      {tribunal.proximaDefensa && (
+                        <Link
+                          to={`/profesor/tribunal/${tribunal.id}/evaluar`}
+                          className="bg-green-600 text-white px-4 py-2 rounded-md text-sm hover:bg-green-700 text-center block"
+                        >
                           ⭐ Evaluar TFG
-                        </button>
+                        </Link>
                       )}
-                      
-                      {esPresidente && tribunal.estado === 'Completado' && !tribunal.acta.generada && (
+
+                      {esPresidente && tribunal.defensasCompletadasCount > 0 && !tribunal.acta?.generada && (
                         <button 
                           onClick={() => setModalActivo({ tipo: 'generar-acta', tribunal })}
                           className="bg-purple-600 text-white px-4 py-2 rounded-md text-sm hover:bg-purple-700"
@@ -463,7 +505,7 @@ function Tribunales() {
                         </button>
                       )}
                       
-                      {tribunal.acta.generada && (
+                      {tribunal.acta?.generada && (
                         <button className="bg-gray-600 text-white px-4 py-2 rounded-md text-sm hover:bg-gray-700">
                           📄 Descargar Acta
                         </button>
@@ -495,30 +537,33 @@ function Tribunales() {
             
             {/* Tribunales donde soy presidente */}
             <div className="space-y-4">
-              {tribunales.filter(t => t.miembros.some(m => m.esYo && m.rol === 'Presidente')).map(tribunal => (
+              {tribunales.filter(t => {
+                const miembros = t.miembros || t.miembrosConUsuario || []
+                return miembros.some(m => m.esYo && m.rol === 'Presidente')
+              }).map(tribunal => (
                 <div key={tribunal.id} className="border border-gray-200 rounded-lg p-4">
                   <div className="flex justify-between items-start mb-3">
                     <div>
                       <h3 className="font-semibold text-gray-900">{tribunal.nombre}</h3>
                       <p className="text-sm text-gray-600">{tribunal.descripcion}</p>
                     </div>
-                    <span className={`px-2 py-1 text-xs rounded-full ${getEstadoColor(tribunal.estado)}`}>
-                      {tribunal.estado}
+                    <span className={`px-2 py-1 text-xs rounded-full ${getEstadoColor(tribunal.estadoDisponibilidad)}`}>
+                      {tribunal.estadoDisponibilidad}
                     </span>
                   </div>
                   
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                     <div className="text-sm">
-                      <span className="font-medium text-gray-500">Defensa:</span>
-                      <p>{new Date(tribunal.fechaDefensa).toLocaleDateString('es-ES')} - {tribunal.aula}</p>
+                      <span className="font-medium text-gray-500">Tribunal:</span>
+                      <p>{tribunal.nombre} - {tribunal.descripcion}</p>
                     </div>
                     <div className="text-sm">
-                      <span className="font-medium text-gray-500">TFG:</span>
-                      <p>{tribunal.tfg.titulo}</p>
+                      <span className="font-medium text-gray-500">Estado:</span>
+                      <p>{tribunal.estadoDisponibilidad || 'No definido'}</p>
                     </div>
                     <div className="text-sm">
-                      <span className="font-medium text-gray-500">Estudiante:</span>
-                      <p>{tribunal.tfg?.estudiante?.nombreCompleto || tribunal.tfg?.estudiante || 'No asignado'}</p>
+                      <span className="font-medium text-gray-500">Defensas:</span>
+                      <p>{tribunal.totalDefensas || 0} defensas</p>
                     </div>
                   </div>
 
@@ -541,7 +586,7 @@ function Tribunales() {
                     >
                       ⚙️ Configurar
                     </button>
-                    {tribunal.estado === 'Completado' && (
+                    {tribunal.defensasCompletadasCount > 0 && (
                       <button
                         onClick={() => setModalActivo({ tipo: 'generar-acta', tribunal })}
                         className="text-green-600 hover:text-green-800 text-sm"
@@ -564,18 +609,18 @@ function Tribunales() {
             <h2 className="text-xl font-semibold mb-6">📄 Gestión de Actas</h2>
             
             <div className="space-y-4">
-              {tribunales.filter(t => t.estado === 'Completado').map(tribunal => (
+              {tribunales.filter(t => t.defensasCompletadasCount > 0).map(tribunal => (
                 <div key={tribunal.id} className="border border-gray-200 rounded-lg p-4">
                   <div className="flex justify-between items-start">
                     <div>
                       <h3 className="font-semibold text-gray-900">{tribunal.nombre}</h3>
-                      <p className="text-sm text-gray-600">{tribunal.tfg?.titulo || 'TFG no asignado'} - {tribunal.tfg?.estudiante?.nombreCompleto || tribunal.tfg?.estudiante || 'No asignado'}</p>
+                      <p className="text-sm text-gray-600">{tribunal.descripcion} - {tribunal.totalDefensas || 0} defensas</p>
                       <p className="text-xs text-gray-500 mt-1">
-                        Defendido el {new Date(tribunal.fechaDefensa).toLocaleDateString('es-ES')}
+                        Creado el {new Date(tribunal.createdAt).toLocaleDateString('es-ES')}
                       </p>
                     </div>
                     <div className="flex space-x-3">
-                      {tribunal.acta.generada ? (
+                      {tribunal.acta?.generada ? (
                         <button className="text-green-600 hover:text-green-800 text-sm">
                           📄 Descargar Acta
                         </button>
@@ -774,32 +819,17 @@ function Tribunales() {
               </h3>
               
               <div className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Nombre del Tribunal
-                    </label>
-                    <input
-                      type="text"
-                      value={nuevoTribunal.nombre}
-                      onChange={(e) => setNuevoTribunal(prev => ({ ...prev, nombre: e.target.value }))}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="Ej: Tribunal TFG - Desarrollo Web"
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Aula
-                    </label>
-                    <input
-                      type="text"
-                      value={nuevoTribunal.aula}
-                      onChange={(e) => setNuevoTribunal(prev => ({ ...prev, aula: e.target.value }))}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="Ej: Aula 301"
-                    />
-                  </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Nombre del Tribunal
+                  </label>
+                  <input
+                    type="text"
+                    value={nuevoTribunal.nombre}
+                    onChange={(e) => setNuevoTribunal(prev => ({ ...prev, nombre: e.target.value }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder="Ej: Tribunal TFG - Desarrollo Web"
+                  />
                 </div>
 
                 <div>
@@ -815,31 +845,6 @@ function Tribunales() {
                   />
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Fecha de Defensa
-                    </label>
-                    <input
-                      type="date"
-                      value={nuevoTribunal.fechaDefensa}
-                      onChange={(e) => setNuevoTribunal(prev => ({ ...prev, fechaDefensa: e.target.value }))}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
-                  
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Hora de Defensa
-                    </label>
-                    <input
-                      type="time"
-                      value={nuevoTribunal.horaDefensa}
-                      onChange={(e) => setNuevoTribunal(prev => ({ ...prev, horaDefensa: e.target.value }))}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
-                </div>
 
                 <div className="space-y-4">
                   <h4 className="font-medium text-gray-900">Miembros del Tribunal</h4>
@@ -858,28 +863,94 @@ function Tribunales() {
                   
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Vocal 1
+                      Vocal
                     </label>
-                    <input
-                      type="text"
-                      value={nuevoTribunal.vocal1}
-                      onChange={(e) => setNuevoTribunal(prev => ({ ...prev, vocal1: e.target.value }))}
+                    <select
+                      value={nuevoTribunal.vocal}
+                      onChange={(e) => setNuevoTribunal(prev => ({ ...prev, vocal: e.target.value }))}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="Nombre del primer vocal"
-                    />
+                    >
+                      <option value="">Seleccionar profesor...</option>
+                      {profesoresDisponibles
+                        .filter(prof => prof.id !== user?.id &&
+                                       prof.id !== nuevoTribunal.secretario &&
+                                       prof.id !== nuevoTribunal.suplente1 &&
+                                       prof.id !== nuevoTribunal.suplente2)
+                        .map(profesor => (
+                        <option key={profesor.id} value={profesor.id}>
+                          {profesor.nombreCompleto || profesor.nombre_completo || `${profesor.nombre} ${profesor.apellidos}`.trim()}
+                        </option>
+                      ))}
+                    </select>
                   </div>
-                  
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Vocal 2
+                      Secretario
                     </label>
-                    <input
-                      type="text"
-                      value={nuevoTribunal.vocal2}
-                      onChange={(e) => setNuevoTribunal(prev => ({ ...prev, vocal2: e.target.value }))}
+                    <select
+                      value={nuevoTribunal.secretario}
+                      onChange={(e) => setNuevoTribunal(prev => ({ ...prev, secretario: e.target.value }))}
                       className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder="Nombre del segundo vocal"
-                    />
+                    >
+                      <option value="">Seleccionar profesor...</option>
+                      {profesoresDisponibles
+                        .filter(prof => prof.id !== user?.id &&
+                                       prof.id !== nuevoTribunal.vocal &&
+                                       prof.id !== nuevoTribunal.suplente1 &&
+                                       prof.id !== nuevoTribunal.suplente2)
+                        .map(profesor => (
+                        <option key={profesor.id} value={profesor.id}>
+                          {profesor.nombreCompleto || profesor.nombre_completo || `${profesor.nombre} ${profesor.apellidos}`.trim()}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Suplente 1
+                    </label>
+                    <select
+                      value={nuevoTribunal.suplente1}
+                      onChange={(e) => setNuevoTribunal(prev => ({ ...prev, suplente1: e.target.value }))}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                      <option value="">Seleccionar profesor...</option>
+                      {profesoresDisponibles
+                        .filter(prof => prof.id !== user?.id &&
+                                       prof.id !== nuevoTribunal.vocal &&
+                                       prof.id !== nuevoTribunal.secretario &&
+                                       prof.id !== nuevoTribunal.suplente2)
+                        .map(profesor => (
+                        <option key={profesor.id} value={profesor.id}>
+                          {profesor.nombreCompleto || profesor.nombre_completo || `${profesor.nombre} ${profesor.apellidos}`.trim()}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Suplente 2
+                    </label>
+                    <select
+                      value={nuevoTribunal.suplente2}
+                      onChange={(e) => setNuevoTribunal(prev => ({ ...prev, suplente2: e.target.value }))}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                      <option value="">Seleccionar profesor...</option>
+                      {profesoresDisponibles
+                        .filter(prof => prof.id !== user?.id &&
+                                       prof.id !== nuevoTribunal.vocal &&
+                                       prof.id !== nuevoTribunal.secretario &&
+                                       prof.id !== nuevoTribunal.suplente1)
+                        .map(profesor => (
+                        <option key={profesor.id} value={profesor.id}>
+                          {profesor.nombreCompleto || profesor.nombre_completo || `${profesor.nombre} ${profesor.apellidos}`.trim()}
+                        </option>
+                      ))}
+                    </select>
                   </div>
                 </div>
               </div>
@@ -893,7 +964,7 @@ function Tribunales() {
                 </button>
                 <button
                   onClick={handleCrearTribunal}
-                  disabled={!nuevoTribunal.nombre || !nuevoTribunal.fechaDefensa || !nuevoTribunal.vocal1 || !nuevoTribunal.vocal2}
+                  disabled={!nuevoTribunal.nombre || !nuevoTribunal.vocal || !nuevoTribunal.secretario}
                   className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-gray-400"
                 >
                   Crear Tribunal

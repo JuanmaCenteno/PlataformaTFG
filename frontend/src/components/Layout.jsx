@@ -81,7 +81,7 @@ function Layout({ children }) {
 								{userRole ? (
 									userRole.charAt(0).toUpperCase() + userRole.slice(1)
 								) : 'Usuario'}
-								: {user?.nombre || user?.nombreCompleto || 'Usuario'}
+								: {user?.apellidos ? `${user.nombre} ${user.apellidos}` : user?.nombre || 'Usuario'}
 							</span>
 							<button
 								onClick={() => {

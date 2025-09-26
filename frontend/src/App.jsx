@@ -89,6 +89,11 @@ function App() {
                 <Layout><DetalleTribunal /></Layout>
               </ProtectedRoute>
             } />
+            <Route path="/profesor/tribunal/:id/evaluar" element={
+              <ProtectedRoute requiredRole="profesor">
+                <Layout><DetalleTribunal /></Layout>
+              </ProtectedRoute>
+            } />
             <Route path="/profesor/calendario" element={
               <ProtectedRoute requiredRole="profesor">
                 <Layout><Calendario /></Layout>

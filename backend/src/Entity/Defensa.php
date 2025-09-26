@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
 use Symfony\Component\Validator\Constraints as Assert;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\GetCollection;
@@ -43,29 +44,29 @@ class Defensa
         self::ESTADO_CANCELADA,
     ];
 
-    #[Groups(['defensa:read', 'defensa:write'])]
+    #[Groups(['defensa:read', 'defensa:write', 'tfg:read', 'defensa:student'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[Groups(['defensa:read'])]
+    #[Groups(['defensa:read', 'tfg:read', 'defensa:student'])]
     #[ORM\OneToOne(targetEntity: TFG::class, inversedBy: 'defensa')]
     #[ORM\JoinColumn(nullable: false, unique: true, onDelete: 'CASCADE')]
     private ?TFG $tfg = null;
 
-    #[Groups(['defensa:read'])]
+    #[Groups(['defensa:read', 'tfg:read', 'defensa:student'])]
     #[ORM\ManyToOne(targetEntity: Tribunal::class, inversedBy: 'defensas')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Tribunal $tribunal = null;
 
-    #[Groups(['defensa:read', 'defensa:write'])]
+    #[Groups(['defensa:read', 'defensa:write', 'tfg:read', 'defensa:student'])]
     #[Assert\NotNull(message: 'La fecha de defensa es obligatoria')]
     #[Assert\GreaterThan('now', message: 'La fecha de defensa debe ser futura')]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $fechaDefensa = null;
 
-    #[Groups(['defensa:read', 'defensa:write'])]
+    #[Groups(['defensa:read', 'defensa:write', 'tfg:read', 'defensa:student'])]
     #[Assert\Length(
         max: 100,
         maxMessage: 'El aula no puede superar los {{ limit }} caracteres'
@@ -90,7 +91,7 @@ class Defensa
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $observaciones = null;
 
-    #[Groups(['defensa:read'])]
+    #[Groups(['defensa:read', 'tfg:read', 'defensa:student'])]
     #[Assert\Choice(choices: self::ESTADOS_VALIDOS, message: 'Estado no válido')]
     #[ORM\Column(length: 50, options: ['default' => 'programada'])]
     private ?string $estado = self::ESTADO_PROGRAMADA;

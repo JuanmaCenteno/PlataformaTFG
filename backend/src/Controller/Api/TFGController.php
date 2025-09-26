@@ -4,6 +4,7 @@ namespace App\Controller\Api;
 
 use App\Entity\TFG;
 use App\Entity\User;
+use App\Entity\Comentario;
 use App\Repository\TFGRepository;
 use App\Repository\UserRepository;
 use App\Service\NotificacionService;
@@ -179,6 +180,9 @@ class TFGController extends AbstractController
         $dto->cotutor_id = $data['cotutor_id'] ?? null;
         $dto->fecha_inicio = $data['fecha_inicio'] ?? null;
         $dto->fecha_fin_estimada = $data['fecha_fin_estimada'] ?? null;
+        $dto->area_conocimiento = $data['area_conocimiento'] ?? null;
+        $dto->tipo_tfg = $data['tipo_tfg'] ?? null;
+        $dto->idioma = $data['idioma'] ?? 'español';
 
         // Validar DTO
         $errors = $this->validator->validate($dto);
@@ -210,6 +214,9 @@ class TFGController extends AbstractController
         $tfg->setDescripcion($dto->descripcion);
         $tfg->setResumen($dto->resumen);
         $tfg->setPalabrasClave($dto->palabras_clave);
+        $tfg->setAreaConocimiento($dto->area_conocimiento);
+        $tfg->setTipoTFG($dto->tipo_tfg);
+        $tfg->setIdioma($dto->idioma);
         $tfg->setEstudiante($estudiante);
         $tfg->setEstado('borrador');
 
@@ -433,8 +440,9 @@ class TFGController extends AbstractController
     #[Route('/{id}', name: 'api_tfgs_show', methods: ['GET'])]
     public function show(int $id): JsonResponse
     {
-        $tfg = $this->tfgRepository->find($id);
-        
+        // Usar el método que carga todas las relaciones para que el voter funcione correctamente
+        $tfg = $this->tfgRepository->findWithAllRelations($id);
+
         if (!$tfg) {
             return $this->json(['error' => 'TFG no encontrado'], 404);
         }
@@ -510,6 +518,91 @@ class TFGController extends AbstractController
             'defendido' => 'success',
             default => 'info'
         };
+    }
+
+    /**
+     * GET /api/tfgs/{id}/comentarios
+     * Obtener comentarios de un TFG específico
+     */
+    #[Route('/{id}/comentarios', name: 'api_tfg_comentarios', methods: ['GET'])]
+    public function getComentarios(int $id): JsonResponse
+    {
+        // Usar el método que carga todas las relaciones para que el voter funcione correctamente
+        $tfg = $this->tfgRepository->findWithAllRelations($id);
+
+        if (!$tfg) {
+            return $this->json(['error' => 'TFG no encontrado'], 404);
+        }
+
+        // Verificar permisos
+        $this->denyAccessUnlessGranted('tfg_view', $tfg);
+
+        $comentarios = $tfg->getComentarios()->toArray();
+
+        return $this->json($comentarios, 200, [], ['groups' => ['comentario:read', 'user:basic']]);
+    }
+
+    /**
+     * POST /api/tfgs/{id}/comentarios
+     * Crear nuevo comentario para un TFG específico
+     */
+    #[Route('/{id}/comentarios', name: 'api_tfg_add_comentario', methods: ['POST'])]
+    public function addComentario(int $id, Request $request): JsonResponse
+    {
+        $tfg = $this->tfgRepository->find($id);
+
+        if (!$tfg) {
+            return $this->json(['error' => 'TFG no encontrado'], 404);
+        }
+
+        // Verificar permisos
+        $this->denyAccessUnlessGranted('tfg_view', $tfg);
+
+        $data = json_decode($request->getContent(), true);
+
+        if (!$data) {
+            return $this->json(['error' => 'Datos JSON inválidos'], 400);
+        }
+
+        if (empty($data['comentario'])) {
+            return $this->json(['error' => 'El comentario es obligatorio'], 400);
+        }
+
+        /** @var User $user */
+        $user = $this->getUser();
+
+        // Crear nuevo comentario
+        $comentario = new Comentario();
+        $comentario->setTfg($tfg);
+        $comentario->setAutor($user);
+        $comentario->setComentario($data['comentario']);
+
+        // Establecer tipo de comentario si se proporciona
+        if (!empty($data['tipo']) && in_array($data['tipo'], Comentario::TIPOS_VALIDOS)) {
+            $comentario->setTipo($data['tipo']);
+        }
+
+        // Validar comentario
+        $errors = $this->validator->validate($comentario);
+        if (count($errors) > 0) {
+            return $this->json([
+                'error' => 'Error de validación',
+                'violations' => $this->formatValidationErrors($errors)
+            ], 400);
+        }
+
+        $this->entityManager->persist($comentario);
+        $this->entityManager->flush();
+
+        // Crear notificación para el estudiante
+        $this->notificacionService->crearNotificacion(
+            $tfg->getEstudiante(),
+            'Nuevo comentario en tu TFG',
+            "Se ha añadido un comentario a tu TFG '{$tfg->getTitulo()}'",
+            'info'
+        );
+
+        return $this->json($comentario, 201, [], ['groups' => ['comentario:read', 'user:basic']]);
     }
 
     /**

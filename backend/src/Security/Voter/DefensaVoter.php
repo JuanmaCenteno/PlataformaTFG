@@ -16,6 +16,7 @@ class DefensaVoter extends Voter
     public const MANAGE_ESTADO = 'defensa_manage_estado';
     public const CALIFICAR = 'defensa_calificar';
     public const SCHEDULE = 'defensa_schedule';
+    public const VER_ACTA = 'defensa_ver_acta';
 
     protected function supports(string $attribute, mixed $subject): bool
     {
@@ -25,7 +26,8 @@ class DefensaVoter extends Voter
             self::DELETE,
             self::MANAGE_ESTADO,
             self::CALIFICAR,
-            self::SCHEDULE
+            self::SCHEDULE,
+            self::VER_ACTA
         ]) && $subject instanceof Defensa;
     }
 
@@ -47,6 +49,7 @@ class DefensaVoter extends Voter
             self::MANAGE_ESTADO => $this->canManageEstado($defensa, $user),
             self::CALIFICAR => $this->canCalificar($defensa, $user),
             self::SCHEDULE => $this->canSchedule($defensa, $user),
+            self::VER_ACTA => $this->canVerActa($defensa, $user),
             default => false,
         };
     }
@@ -129,9 +132,24 @@ class DefensaVoter extends Voter
             return true;
         }
 
-        // Presidente del tribunal puede gestionar estados
-        if (in_array('ROLE_PRESIDENTE_TRIBUNAL', $roles)) {
-            return $defensa->getTribunal()->getPresidente() === $user;
+        $tribunal = $defensa->getTribunal();
+        if (!$tribunal) {
+            return false;
+        }
+
+        // Presidente del tribunal puede gestionar todos los estados
+        if (in_array('ROLE_PRESIDENTE_TRIBUNAL', $roles) && $tribunal->getPresidente() === $user) {
+            return true;
+        }
+
+        // Cualquier miembro del tribunal puede cambiar de "programada" a "completada"
+        if ($defensa->getEstado() === 'programada' && $this->isUserInTribunal($defensa, $user)) {
+            return true;
+        }
+
+        // También permitir a cualquier miembro del tribunal gestionar estados de defensas completadas
+        if (in_array('ROLE_PROFESOR', $roles) && $defensa->getEstado() === 'completada') {
+            return $this->isUserInTribunal($defensa, $user);
         }
 
         return false;
@@ -193,7 +211,40 @@ class DefensaVoter extends Voter
         if ($defensa->getTfg()->getTutor() === $user || $defensa->getTfg()->getCotutor() === $user) {
             return 'tutor';
         }
-        
+
         return null;
+    }
+
+    private function canVerActa(Defensa $defensa, User $user): bool
+    {
+        $roles = $user->getRoles();
+
+        // Admin siempre puede
+        if (in_array('ROLE_ADMIN', $roles)) {
+            return true;
+        }
+
+        // Solo actas generadas pueden ser vistas
+        if (!$defensa->isActaGenerada()) {
+            return false;
+        }
+
+        // Estudiante del TFG puede ver su acta
+        if ($defensa->getTfg()->getEstudiante() === $user) {
+            return true;
+        }
+
+        // Miembros del tribunal pueden ver el acta
+        if ($this->isUserInTribunal($defensa, $user)) {
+            return true;
+        }
+
+        // Tutor y cotutor pueden ver el acta
+        $tfg = $defensa->getTfg();
+        if ($tfg->getTutor() === $user || ($tfg->getCotutor() && $tfg->getCotutor() === $user)) {
+            return true;
+        }
+
+        return false;
     }
 }

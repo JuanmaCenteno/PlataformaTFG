@@ -60,10 +60,10 @@ function GestionUsuarios() {
   useEffect(() => {
     cargarUsuarios()
     cargarEstadisticas()
-  }, [filtros])
+  }, [])
 
   const cargarUsuarios = async () => {
-    const resultado = await obtenerUsuarios(filtros)
+    const resultado = await obtenerUsuarios()
     if (resultado.success) {
       setUsuarios(resultado.data)
     } else {
@@ -300,18 +300,6 @@ function GestionUsuarios() {
     setModalActivo({ tipo: 'editar' })
   }
 
-  // Ordenar usuarios
-  const usuariosOrdenados = [...usuarios].sort((a, b) => {
-    const valorA = a[ordenamiento.campo]
-    const valorB = b[ordenamiento.campo]
-    
-    if (ordenamiento.direccion === 'asc') {
-      return valorA > valorB ? 1 : -1
-    } else {
-      return valorA < valorB ? 1 : -1
-    }
-  })
-
   // Convertir roles de Symfony a texto legible
   const obtenerRolPrincipal = (usuario) => {
     if (!usuario.roles || usuario.roles.length === 0) return 'estudiante'
@@ -326,6 +314,50 @@ function GestionUsuarios() {
 
     return roleMapping[rol] || 'estudiante'
   }
+
+  // Filtrar y ordenar usuarios
+  const usuariosFiltrados = usuarios.filter((usuario) => {
+    const rolPrincipal = obtenerRolPrincipal(usuario)
+
+    // Filtrar por rol
+    if (filtros.rol !== 'todos' && rolPrincipal !== filtros.rol) {
+      return false
+    }
+
+    // Filtrar por estado
+    if (filtros.estado === 'activo' && !usuario.is_active) return false
+    if (filtros.estado === 'inactivo' && usuario.is_active) return false
+
+    // Filtrar por departamento
+    if (filtros.departamento !== 'todos' && usuario.departamento !== filtros.departamento) {
+      return false
+    }
+
+    // Filtrar por búsqueda
+    if (filtros.busqueda) {
+      const termino = filtros.busqueda.toLowerCase()
+      const nombreCompleto = `${usuario.nombre} ${usuario.apellidos || ''}`.toLowerCase()
+      const email = usuario.email.toLowerCase()
+
+      if (!nombreCompleto.includes(termino) && !email.includes(termino)) {
+        return false
+      }
+    }
+
+    return true
+  })
+
+  // Ordenar usuarios filtrados
+  const usuariosOrdenados = [...usuariosFiltrados].sort((a, b) => {
+    const valorA = a[ordenamiento.campo]
+    const valorB = b[ordenamiento.campo]
+
+    if (ordenamiento.direccion === 'asc') {
+      return valorA > valorB ? 1 : -1
+    } else {
+      return valorA < valorB ? 1 : -1
+    }
+  })
 
   // Obtener icono y color por rol
   const obtenerIconoRol = (rolTexto) => {
@@ -479,20 +511,20 @@ function GestionUsuarios() {
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" style={{ width: '30%' }}
                       onClick={() => setOrdenamiento({
                         campo: 'nombre',
                         direccion: ordenamiento.campo === 'nombre' && ordenamiento.direccion === 'asc' ? 'desc' : 'asc'
                       })}>
                     Usuario {ordenamiento.campo === 'nombre' && (ordenamiento.direccion === 'asc' ? '↑' : '↓')}
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" style={{ width: '15%' }}>
                     Rol
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" style={{ width: '12%' }}>
                     Estado
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" style={{ width: '43%' }}>
                     Acciones
                   </th>
                 </tr>
@@ -504,7 +536,7 @@ function GestionUsuarios() {
 
                   return (
                     <tr key={usuario.id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-6 py-4 whitespace-nowrap" style={{ width: '30%' }}>
                         <div className="flex items-center">
                           <div className="flex-shrink-0 h-10 w-10">
                             <div className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
@@ -512,7 +544,9 @@ function GestionUsuarios() {
                             </div>
                           </div>
                           <div className="ml-4">
-                            <div className="text-sm font-medium text-gray-900">{usuario.nombre}</div>
+                            <div className="text-sm font-medium text-gray-900">
+                              {usuario.apellidos ? `${usuario.nombre} ${usuario.apellidos}` : usuario.nombre}
+                            </div>
                             <div className="text-sm text-gray-500">{usuario.email}</div>
                             {usuario.departamento && (
                               <div className="text-xs text-gray-400">{usuario.departamento}</div>
@@ -520,42 +554,44 @@ function GestionUsuarios() {
                           </div>
                         </div>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-6 py-4 whitespace-nowrap" style={{ width: '15%' }}>
                         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${color} bg-gray-100`}>
                           {rolPrincipal.charAt(0).toUpperCase() + rolPrincipal.slice(1)}
                         </span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-6 py-4 whitespace-nowrap" style={{ width: '12%' }}>
                         <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${obtenerColorEstado(usuario.is_active)}`}>
                           {obtenerTextoEstado(usuario.is_active)}
                         </span>
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
-                        <button
-                          onClick={() => abrirModalEditar(usuario)}
-                          className="text-blue-600 hover:text-blue-900"
-                        >
-                          ✏️ Editar
-                        </button>
-                        <button
-                          onClick={() => manejarCambiarEstado(usuario.id)}
-                          className={`${usuario.is_active ? 'text-red-600 hover:text-red-900' : 'text-green-600 hover:text-green-900'}`}
-                        >
-                          {usuario.is_active ? '⏸️ Desactivar' : '▶️ Activar'}
-                        </button>
-                        <button
-                          onClick={() => manejarResetPassword(usuario.id)}
-                          className="text-yellow-600 hover:text-yellow-900"
-                        >
-                          🔑 Reset Pass
-                        </button>
-                        <button
-                          onClick={() => manejarEliminarUsuario(usuario.id)}
-                          className="text-red-600 hover:text-red-900"
-                          disabled={usuario.id === 3} // No eliminar admin principal
-                        >
-                          🗑️ Eliminar
-                        </button>
+                      <td className="px-6 py-4 whitespace-nowrap" style={{ width: '43%' }}>
+                        <div className="flex items-center justify-start gap-2">
+                          <button
+                            onClick={() => abrirModalEditar(usuario)}
+                            className="text-blue-600 hover:text-blue-900 px-2 py-1 text-sm"
+                          >
+                            ✏️ Editar
+                          </button>
+                          <button
+                            onClick={() => manejarCambiarEstado(usuario.id)}
+                            className={`px-2 py-1 text-sm min-w-[100px] ${usuario.is_active ? 'text-red-600 hover:text-red-900' : 'text-green-600 hover:text-green-900'}`}
+                          >
+                            {usuario.is_active ? '⏸️ Desactivar' : '▶️ Activar'}
+                          </button>
+                          <button
+                            onClick={() => manejarResetPassword(usuario.id)}
+                            className="text-yellow-600 hover:text-yellow-900 px-2 py-1 text-sm"
+                          >
+                            🔑 Reset Pass
+                          </button>
+                          <button
+                            onClick={() => manejarEliminarUsuario(usuario.id)}
+                            className="text-red-600 hover:text-red-900 px-2 py-1 text-sm"
+                            disabled={usuario.id === 3} // No eliminar admin principal
+                          >
+                            🗑️ Eliminar
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   )
@@ -930,11 +966,11 @@ function GestionUsuarios() {
                     </div>
                   )}
 
-                  {/* Especialidad - Solo para estudiantes */}
+                  {/* Curso - Solo para estudiantes */}
                   {formularioUsuario.rol === 'estudiante' && (
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Especialidad *
+                        Curso *
                       </label>
                       <select
                         value={formularioUsuario.especialidad}
@@ -942,7 +978,7 @@ function GestionUsuarios() {
                         className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                         required={formularioUsuario.rol === 'estudiante'}
                       >
-                        <option value="">Seleccionar especialidad</option>
+                        <option value="">Seleccionar curso</option>
                         <option value="1º Ingeniería Informática">1º Ingeniería Informática</option>
                         <option value="2º Ingeniería Informática">2º Ingeniería Informática</option>
                         <option value="3º Ingeniería Informática">3º Ingeniería Informática</option>

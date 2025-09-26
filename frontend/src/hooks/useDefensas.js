@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { defensaAPI, tribunalAPI } from '../services/api'
+import { defensaAPI } from '../services/api'
 
 export const useDefensas = () => {
   const [loading, setLoading] = useState(false)
@@ -24,6 +24,30 @@ export const useDefensas = () => {
         : err.response?.data?.message ||
           err.response?.data?.error ||
           'Error al obtener información de la defensa'
+      setError(errorMessage)
+      return { success: false, error: errorMessage }
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Obtener defensas pendientes de calificar
+  const obtenerDefensasPendientesCalificar = async () => {
+    setLoading(true)
+    setError(null)
+
+    try {
+      const response = await defensaAPI.getPendientesCalificar()
+
+      return {
+        success: true,
+        data: response.data.data || response.data
+      }
+
+    } catch (err) {
+      const errorMessage = err.response?.data?.message ||
+                          err.response?.data?.error ||
+                          'Error al obtener defensas pendientes de calificar'
       setError(errorMessage)
       return { success: false, error: errorMessage }
     } finally {
@@ -206,10 +230,109 @@ export const useDefensas = () => {
     }
   }
 
+  // Obtener información del acta (si está disponible)
+  const obtenerInfoActa = async (defensaId) => {
+    setLoading(true)
+    setError(null)
+
+    try {
+      const response = await defensaAPI.getInfoActa(defensaId)
+
+      return {
+        success: true,
+        data: response.data
+      }
+
+    } catch (err) {
+      const errorMessage = err.response?.data?.message ||
+                          err.response?.data?.error ||
+                          'Error al obtener información del acta'
+      setError(errorMessage)
+      return { success: false, error: errorMessage }
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Calificar defensa (para miembros del tribunal)
+  const calificarDefensa = async (defensaId, datosCalificacion) => {
+    setLoading(true)
+    setError(null)
+
+    try {
+      const response = await defensaAPI.calificar(defensaId, datosCalificacion)
+
+      return {
+        success: true,
+        data: response.data,
+        message: 'Calificación guardada correctamente'
+      }
+
+    } catch (err) {
+      const errorMessage = err.response?.data?.message ||
+                          err.response?.data?.error ||
+                          'Error al guardar la calificación'
+      setError(errorMessage)
+      return { success: false, error: errorMessage }
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Obtener calificaciones de una defensa
+  const obtenerCalificacionesDefensa = async (defensaId) => {
+    setLoading(true)
+    setError(null)
+
+    try {
+      const response = await defensaAPI.getCalificaciones(defensaId)
+
+      return {
+        success: true,
+        data: response.data.data || response.data
+      }
+
+    } catch (err) {
+      const errorMessage = err.response?.data?.message ||
+                          err.response?.data?.error ||
+                          'Error al obtener las calificaciones'
+      setError(errorMessage)
+      return { success: false, error: errorMessage }
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  // Cambiar estado de defensa (completar, cancelar)
+  const cambiarEstadoDefensa = async (defensaId, nuevoEstado, comentario = '') => {
+    setLoading(true)
+    setError(null)
+
+    try {
+      const response = await defensaAPI.changeEstado(defensaId, { estado: nuevoEstado, comentario })
+
+      return {
+        success: true,
+        data: response.data,
+        message: `Defensa ${nuevoEstado === 'completada' ? 'completada' : 'cancelada'} correctamente`
+      }
+
+    } catch (err) {
+      const errorMessage = err.response?.data?.message ||
+                          err.response?.data?.error ||
+                          'Error al cambiar el estado de la defensa'
+      setError(errorMessage)
+      return { success: false, error: errorMessage }
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return {
     loading,
     error,
     obtenerMiDefensa,
+    obtenerDefensasPendientesCalificar,
     obtenerDefensa,
     obtenerCalendario,
     crearDefensa,
@@ -217,6 +340,10 @@ export const useDefensas = () => {
     eliminarDefensa,
     generarActa,
     descargarActa,
+    obtenerInfoActa,
+    calificarDefensa,
+    obtenerCalificacionesDefensa,
+    cambiarEstadoDefensa,
     clearError: () => setError(null)
   }
 }

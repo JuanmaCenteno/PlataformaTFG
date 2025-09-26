@@ -78,7 +78,7 @@ function MisTFGs() {
 	const getEstadoLabel = (estado) => {
 		switch (estado) {
 			case "aprobado":
-				return "Aprobado"
+				return "Aprobado para defensa"
 			case "revision":
 				return "En revisión"
 			case "rechazado":
@@ -301,7 +301,7 @@ function MisTFGs() {
 												{tfg.estado === "revision"
 													? "60%"
 													: tfg.estado === "aprobado"
-													? "90%"
+													? "75%"
 													: "30%"}
 											</span>
 										</div>
@@ -322,7 +322,7 @@ function MisTFGs() {
 															? "60%"
 															: tfg.estado ===
 															  "aprobado"
-															? "90%"
+															? "75%"
 															: "30%",
 												}}
 											></div>
@@ -330,7 +330,7 @@ function MisTFGs() {
 										<div className="flex justify-between text-xs text-gray-500 mt-1">
 											<span>Subido</span>
 											<span>En revisión</span>
-											<span>Aprobado</span>
+											<span>Aprobado para defensa</span>
 											<span>Defensa</span>
 										</div>
 									</div>
@@ -364,7 +364,7 @@ function MisTFGs() {
 						<div className="text-2xl font-bold text-green-600">
 							{tfgs.filter((t) => t.estado === "aprobado").length}
 						</div>
-						<div className="text-sm text-gray-500">Aprobado</div>
+						<div className="text-sm text-gray-500">Aprobado para defensa</div>
 					</div>
 					<div className="bg-white shadow rounded-lg p-6 text-center">
 						<div className="text-2xl font-bold text-gray-600">

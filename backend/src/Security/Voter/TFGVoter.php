@@ -195,13 +195,13 @@ class TFGVoter extends Voter
     private function isUserInTribunal(TFG $tfg, User $user): bool
     {
         $defensa = $tfg->getDefensa();
-        
+
         if (!$defensa) {
             return false;
         }
 
         $tribunal = $defensa->getTribunal();
-        
+
         if (!$tribunal) {
             return false;
         }

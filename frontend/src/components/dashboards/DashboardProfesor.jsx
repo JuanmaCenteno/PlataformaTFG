@@ -55,8 +55,30 @@ function DashboardProfesor({ user }) {
         )
 
         if (defensasResult.success && defensasResult.data) {
-          const defensas = defensasResult.data.slice(0, 2) // Mostrar solo las 2 próximas
-          setProximasDefensas(defensas)
+          // Transformar los datos del formato FullCalendar al formato esperado
+          const defensasTransformadas = defensasResult.data
+            .filter(defensa => {
+              // Filtrar solo las defensas futuras
+              const fechaDefensa = new Date(defensa.start)
+              return fechaDefensa >= new Date()
+            })
+            .map(defensa => ({
+              id: defensa.id,
+              fecha: defensa.start,
+              estudiante: defensa.extendedProps?.estudiante || 'Estudiante no disponible',
+              tfg: {
+                estudiante: {
+                  nombre: defensa.extendedProps?.estudiante || 'Estudiante no disponible'
+                }
+              },
+              sala: defensa.extendedProps?.aula || 'Sala por definir',
+              rol: 'Miembro', // Por defecto, ya que el profesor participa en el tribunal
+              estado: defensa.extendedProps?.estado || 'programada'
+            }))
+            .sort((a, b) => new Date(a.fecha) - new Date(b.fecha))
+            .slice(0, 2) // Mostrar solo las 2 próximas
+
+          setProximasDefensas(defensasTransformadas)
           setEstadisticas(prev => ({
             ...prev,
             proximasDefensas: defensasResult.data.length
@@ -84,7 +106,7 @@ function DashboardProfesor({ user }) {
 
   const getEstadoLabel = (estado) => {
     switch (estado) {
-      case 'aprobado': return 'Aprobado'
+      case 'aprobado': return 'Aprobado para defensa'
       case 'revision': return 'En revisión'
       case 'borrador': return 'Borrador'
       case 'rechazado': return 'Rechazado'
@@ -227,14 +249,22 @@ function DashboardProfesor({ user }) {
                           )}
                         </div>
                         <p className="text-sm text-gray-600 mb-2">
-                          Estudiante: <span className="font-medium">{tfg.estudiante?.nombre || tfg.estudiante}</span>
+                          Estudiante: <span className="font-medium">
+                            {tfg.estudiante?.apellidos
+                              ? `${tfg.estudiante.nombre} ${tfg.estudiante.apellidos}`
+                              : tfg.estudiante?.nombre || tfg.estudiante}
+                          </span>
                         </p>
                         <div className="flex items-center space-x-4">
                           <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getEstadoColor(tfg.estado)}`}>
                             {getEstadoLabel(tfg.estado)}
                           </span>
                           <span className="text-xs text-gray-500">
-                            {new Date(tfg.updated_at).toLocaleDateString('es-ES')}
+                            {(() => {
+                              if (!tfg.updatedAt) return 'Fecha no disponible'
+                              const date = new Date(tfg.updatedAt)
+                              return isNaN(date.getTime()) ? 'Fecha no disponible' : date.toLocaleDateString('es-ES')
+                            })()}
                           </span>
                         </div>
                       </div>
@@ -291,7 +321,15 @@ function DashboardProfesor({ user }) {
                             {defensa.tfg?.estudiante?.nombre || defensa.estudiante}
                           </p>
                           <p className="text-xs text-gray-500">
-                            {new Date(defensa.fecha).toLocaleDateString('es-ES')} - {defensa.hora}
+                            {(() => {
+                              try {
+                                const fecha = new Date(defensa.fecha)
+                                if (isNaN(fecha.getTime())) return 'Fecha no disponible'
+                                return `${fecha.toLocaleDateString('es-ES')} - ${fecha.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })}`
+                              } catch {
+                                return 'Fecha no disponible'
+                              }
+                            })()}
                           </p>
                           <p className="text-xs text-gray-500">
                             {defensa.sala || 'Sala por definir'}

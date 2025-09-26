@@ -9,7 +9,10 @@ function DetalleTFG() {
 	const [tfg, setTfg] = useState(null)
 	const [activeTab, setActiveTab] = useState("detalles")
 	const [comentarios, setComentarios] = useState([])
-	const { obtenerTFG, obtenerComentarios, descargarTFG, loading } = useTFGs()
+	const [nuevoComentario, setNuevoComentario] = useState('')
+	const [tipoComentario, setTipoComentario] = useState('feedback')
+	const [enviandoComentario, setEnviandoComentario] = useState(false)
+	const { obtenerTFG, obtenerComentarios, añadirComentario, descargarTFG, loading } = useTFGs()
 	const { mostrarNotificacion } = useNotificaciones()
 
 	// Cargar datos del TFG desde la API
@@ -53,6 +56,35 @@ function DetalleTFG() {
 		}
 	}
 
+	// Función para enviar comentarios
+	const handleEnviarComentario = async () => {
+		if (!nuevoComentario.trim()) return
+
+		setEnviandoComentario(true)
+
+		try {
+			const resultado = await añadirComentario(id, nuevoComentario, tipoComentario)
+			if (resultado.success) {
+				mostrarNotificacion('Comentario enviado correctamente', 'success')
+				setNuevoComentario('')
+				setTipoComentario('feedback')
+
+				// Recargar comentarios
+				const resultadoComentarios = await obtenerComentarios(id)
+				if (resultadoComentarios.success) {
+					setComentarios(resultadoComentarios.data || [])
+				}
+			} else {
+				mostrarNotificacion(resultado.error || 'Error al enviar comentario', 'error')
+			}
+		} catch (error) {
+			console.error('Error enviando comentario:', error)
+			mostrarNotificacion('Error al enviar comentario', 'error')
+		} finally {
+			setEnviandoComentario(false)
+		}
+	}
+
 	const getEstadoColor = (estado) => {
 		switch (estado) {
 			case "aprobado":
@@ -73,7 +105,7 @@ function DetalleTFG() {
 	const getEstadoLabel = (estado) => {
 		switch (estado) {
 			case "aprobado":
-				return "Aprobado"
+				return "Aprobado para defensa"
 			case "revision":
 				return "En revisión"
 			case "rechazado":
@@ -93,6 +125,8 @@ function DetalleTFG() {
 				return "bg-green-50 border-green-200"
 			case "revision":
 				return "bg-yellow-50 border-yellow-200"
+			case "feedback":
+				return "bg-blue-50 border-blue-200"
 			case "rechazo":
 				return "bg-red-50 border-red-200"
 			default:
@@ -227,7 +261,7 @@ function DetalleTFG() {
 					{[
 						{ nombre: "Propuesta", key: "borrador" },
 						{ nombre: "En revisión", key: "revision" },
-						{ nombre: "Aprobación", key: "aprobado" },
+						{ nombre: "Aprobación para defensa", key: "aprobado" },
 						{ nombre: "Defensa", key: "defendido" }
 					].map((etapa, index) => {
 						const completada =
@@ -259,6 +293,27 @@ function DetalleTFG() {
 						)
 					})}
 				</div>
+
+				{/* Calificación final */}
+				{tfg.estado === 'defendido' && tfg.calificacion && (
+					<div className="mt-6 bg-green-50 border border-green-200 rounded-lg p-4">
+						<div className="flex items-center justify-center">
+							<span className="text-green-400 text-2xl mr-3">🏆</span>
+							<div className="text-center">
+								<h3 className="text-lg font-semibold text-green-900 mb-1">
+									¡Felicitaciones! TFG Defendido
+								</h3>
+								<p className="text-sm text-green-700 mb-2">
+									Has completado exitosamente tu Trabajo de Fin de Grado
+								</p>
+								<div className="text-3xl font-bold text-green-800">
+									{tfg.calificacion}/10
+								</div>
+								<p className="text-xs text-green-600 mt-1">Calificación final</p>
+							</div>
+						</div>
+					</div>
+				)}
 			</div>
 
 			{/* Tabs */}
@@ -271,9 +326,7 @@ function DetalleTFG() {
 								id: "comentarios",
 								name: "Comentarios",
 								icon: "💬",
-								badge: comentarios.filter(
-									(c) => c.estado === "pendiente"
-								).length,
+								badge: comentarios.length,
 							},
 							{ id: "archivo", name: "Archivo", icon: "📎" },
 						].map((tab) => (
@@ -408,21 +461,53 @@ function DetalleTFG() {
 						<div className="space-y-6">
 							<div className="flex justify-between items-center">
 								<h3 className="text-lg font-medium text-gray-900">
-									Comentarios del Tutor (
-									{comentarios.length})
+									Historial de Comentarios ({comentarios.length})
 								</h3>
-								{comentarios.filter(
-									(c) => c.estado === "pendiente"
-								).length > 0 && (
-									<span className="text-sm text-orange-600 font-medium">
-										{
-											comentarios.filter(
-												(c) => c.estado === "pendiente"
-											).length
-										}{" "}
-										comentarios pendientes
-									</span>
-								)}
+							</div>
+
+							{/* Formulario para añadir comentario */}
+							<div className="bg-gray-50 rounded-lg p-6">
+								<h4 className="text-md font-medium text-gray-900 mb-4">Añadir Comentario</h4>
+								<div className="space-y-4">
+									<div>
+										<label className="block text-sm font-medium text-gray-700 mb-2">
+											Tipo de comentario
+										</label>
+										<select
+											value={tipoComentario}
+											onChange={(e) => setTipoComentario(e.target.value)}
+											className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+										>
+											<option value="feedback">Consulta General</option>
+											<option value="revision">Solicitar Revisión</option>
+										</select>
+									</div>
+									<div>
+										<label className="block text-sm font-medium text-gray-700 mb-2">
+											Comentario
+										</label>
+										<textarea
+											value={nuevoComentario}
+											onChange={(e) => setNuevoComentario(e.target.value)}
+											className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+											rows={4}
+											placeholder="Escribe tu consulta o comentario para tu tutor..."
+										/>
+									</div>
+									<div className="flex justify-end">
+										<button
+											onClick={handleEnviarComentario}
+											disabled={!nuevoComentario.trim() || enviandoComentario}
+											className={`px-6 py-2 rounded-md text-white font-medium ${
+												enviandoComentario || !nuevoComentario.trim()
+													? 'bg-gray-400 cursor-not-allowed'
+													: 'bg-blue-600 hover:bg-blue-700'
+											}`}
+										>
+											{enviandoComentario ? 'Enviando...' : 'Enviar Comentario'}
+										</button>
+									</div>
+								</div>
 							</div>
 
 							{comentarios.length === 0 ? (
@@ -447,68 +532,40 @@ function DetalleTFG() {
 											<div className="flex justify-between items-start mb-3">
 												<div className="flex items-center space-x-2">
 													<div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-medium">
-														{(comentario.autor_nombre || comentario.autor || 'NA')
-															.split(" ")
-															.map((n) => n[0])
-															.join("")}
+														{comentario.autor?.nombreCompleto ?
+															comentario.autor.nombreCompleto.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() :
+															'US'
+														}
 													</div>
 													<div>
 														<p className="text-sm font-medium text-gray-900">
-															{comentario.autor_nombre || comentario.autor || 'Usuario'}
+															{comentario.autor?.nombreCompleto || comentario.autor?.nombre || 'Usuario'}
 														</p>
 														<p className="text-xs text-gray-500">
-															{new Date(
-																comentario.created_at || comentario.fecha
-															).toLocaleDateString(
-																"es-ES"
-															)}{" "}
-															a las{" "}
-															{new Date(
-																comentario.created_at || comentario.fecha
-															).toLocaleTimeString(
-																"es-ES",
-																{
-																	hour: "2-digit",
-																	minute: "2-digit",
-																}
-															)}
+															{comentario.createdAt ? new Date(comentario.createdAt).toLocaleDateString('es-ES') : 'Fecha no disponible'} a las{' '}
+															{comentario.createdAt ? new Date(comentario.createdAt).toLocaleTimeString('es-ES', {hour: '2-digit', minute: '2-digit'}) : ''}
 														</p>
 													</div>
 												</div>
 												<div className="flex items-center space-x-2">
 													<span
 														className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-															comentario.tipo ===
-															"aprobacion"
-																? "bg-green-100 text-green-800"
-																: comentario.tipo ===
-																  "revision"
-																? "bg-yellow-100 text-yellow-800"
-																: "bg-red-100 text-red-800"
+															comentario.tipo === 'aprobacion' ? 'bg-green-100 text-green-800' :
+															comentario.tipo === 'revision' ? 'bg-yellow-100 text-yellow-800' :
+															comentario.tipo === 'feedback' ? 'bg-blue-100 text-blue-800' :
+															'bg-red-100 text-red-800'
 														}`}
 													>
-														{comentario.tipo}
+														{comentario.tipo === 'aprobacion' ? 'Aprobación para defensa' :
+														 comentario.tipo === 'revision' ? 'Revisión' :
+														 comentario.tipo === 'feedback' ? 'Comentario' :
+														 comentario.tipo}
 													</span>
-													{comentario.estado ===
-														"pendiente" && (
-														<span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800">
-															Nuevo
-														</span>
-													)}
 												</div>
 											</div>
 											<p className="text-sm text-gray-700">
-												{comentario.contenido || comentario.mensaje || comentario.texto || 'Sin contenido'}
+												{comentario.comentario}
 											</p>
-
-											{comentario.estado ===
-												"pendiente" && (
-												<div className="mt-3 pt-3 border-t border-gray-200">
-													<button className="text-sm text-blue-600 hover:text-blue-800 font-medium">
-														Marcar como leído
-													</button>
-												</div>
-											)}
 										</div>
 									))}
 								</div>

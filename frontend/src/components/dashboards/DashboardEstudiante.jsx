@@ -64,7 +64,7 @@ function DashboardEstudiante({ user }) {
 
   const getEstadoLabel = (estado) => {
     switch (estado) {
-      case 'aprobado': return 'Aprobado'
+      case 'aprobado': return 'Aprobado para defensa'
       case 'revision': return 'En revisión'
       case 'rechazado': return 'Rechazado'
       case 'borrador': return 'Borrador'
@@ -128,7 +128,9 @@ function DashboardEstudiante({ user }) {
                     Tutor Asignado
                   </dt>
                   <dd className="text-lg font-semibold text-gray-900">
-                    {tfgPrincipal?.tutor?.nombre || 'No asignado'}
+                    {tfgPrincipal?.tutor?.apellidos
+                      ? `${tfgPrincipal.tutor.nombre} ${tfgPrincipal.tutor.apellidos}`
+                      : tfgPrincipal?.tutor?.nombre || 'No asignado'}
                   </dd>
                 </dl>
               </div>
@@ -194,9 +196,15 @@ function DashboardEstudiante({ user }) {
                         {tfgPrincipal.titulo}
                       </h3>
                       <div className="flex items-center space-x-4 text-sm text-gray-500 mb-4">
-                        <span>Creado: {new Date(tfgPrincipal.created_at).toLocaleDateString('es-ES')}</span>
+                        <span>Creado: {(() => {
+                          if (!tfgPrincipal.createdAt) return 'Fecha no disponible'
+                          const date = new Date(tfgPrincipal.createdAt)
+                          return isNaN(date.getTime()) ? 'Fecha no disponible' : date.toLocaleDateString('es-ES')
+                        })()}</span>
                         <span>•</span>
-                        <span>Tutor: {tfgPrincipal.tutor?.nombre || 'No asignado'}</span>
+                        <span>Tutor: {tfgPrincipal.tutor?.apellidos
+                          ? `${tfgPrincipal.tutor.nombre} ${tfgPrincipal.tutor.apellidos}`
+                          : tfgPrincipal.tutor?.nombre || 'No asignado'}</span>
                       </div>
                       <span className={`inline-flex px-3 py-1 text-sm font-semibold rounded-full border ${getEstadoColor(tfgPrincipal.estado)}`}>
                         {getEstadoLabel(tfgPrincipal.estado)}
@@ -227,9 +235,6 @@ function DashboardEstudiante({ user }) {
                     >
                       Ver Detalles
                     </Link>
-                    <button className="bg-gray-100 text-gray-700 px-4 py-2 rounded-md text-sm hover:bg-gray-200">
-                      Descargar
-                    </button>
                   </div>
                 )}
               </div>

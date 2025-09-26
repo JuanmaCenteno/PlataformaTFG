@@ -53,23 +53,31 @@ class TribunalController extends AbstractController
                 $this->tribunalRepository->findByMiembro($user, $page, $perPage, $activo)
         };
 
+        // Transformar los tribunales para incluir información del usuario actual
+        $tribunalesTransformados = [];
+        foreach ($tribunales['data'] as $tribunal) {
+            $tribunalArray = $this->serializer->normalize($tribunal, null, ['groups' => ['tribunal:read', 'user:basic']]);
+            $tribunalArray['miembros'] = $tribunal->getMiembrosConUsuario($user);
+            $tribunalesTransformados[] = $tribunalArray;
+        }
+
         return $this->json([
-            'data' => $tribunales['data'],
+            'data' => $tribunalesTransformados,
             'meta' => [
                 'total' => $tribunales['total'],
                 'page' => $page,
                 'per_page' => $perPage,
                 'total_pages' => ceil($tribunales['total'] / $perPage)
             ]
-        ], 200, [], ['groups' => ['tribunal:read', 'user:basic']]);
+        ]);
     }
 
     /**
      * POST /api/tribunales
-     * Crear nuevo tribunal (solo presidentes de tribunal y admin)
+     * Crear nuevo tribunal (cualquier profesor puede crear un tribunal y se convierte en presidente)
      */
     #[Route('', name: 'api_tribunales_create', methods: ['POST'])]
-    #[IsGranted('ROLE_PRESIDENTE_TRIBUNAL')]
+    #[IsGranted('ROLE_PROFESOR')]
     public function create(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
@@ -79,32 +87,50 @@ class TribunalController extends AbstractController
         }
 
         // Validar campos requeridos
-        $requiredFields = ['nombre', 'presidente_id', 'secretario_id', 'vocal_id'];
+        $requiredFields = ['nombre', 'vocal', 'secretario'];
         foreach ($requiredFields as $field) {
             if (!isset($data[$field]) || empty($data[$field])) {
                 return $this->json(['error' => "Campo '{$field}' requerido"], 400);
             }
         }
 
-        // Validar que los IDs son diferentes
-        $ids = [$data['presidente_id'], $data['secretario_id'], $data['vocal_id']];
+        // Obtener el usuario actual como presidente
+        /** @var User $currentUser */
+        $currentUser = $this->getUser();
+
+        // Recoger todos los IDs de miembros (excluyendo valores vacíos para suplentes opcionales)
+        $ids = array_filter([
+            $currentUser->getId(), // presidente es el usuario actual
+            $data['vocal'],
+            $data['secretario'],
+            $data['suplente1'] ?? null,
+            $data['suplente2'] ?? null
+        ]);
+
         if (count($ids) !== count(array_unique($ids))) {
             return $this->json(['error' => 'Los miembros del tribunal deben ser diferentes'], 400);
         }
 
         // Buscar y validar usuarios
-        $presidente = $this->userRepository->find($data['presidente_id']);
-        $secretario = $this->userRepository->find($data['secretario_id']);
-        $vocal = $this->userRepository->find($data['vocal_id']);
+        $secretario = $this->userRepository->find($data['secretario']);
+        $vocal = $this->userRepository->find($data['vocal']);
 
-        if (!$presidente || (!in_array('ROLE_PROFESOR', $presidente->getRoles()) && !in_array('ROLE_PRESIDENTE_TRIBUNAL', $presidente->getRoles()))) {
-            return $this->json(['error' => 'Presidente no válido o no es profesor'], 400);
-        }
+        // Suplentes opcionales
+        $suplente1 = isset($data['suplente1']) && !empty($data['suplente1']) ? $this->userRepository->find($data['suplente1']) : null;
+        $suplente2 = isset($data['suplente2']) && !empty($data['suplente2']) ? $this->userRepository->find($data['suplente2']) : null;
+
         if (!$secretario || !in_array('ROLE_PROFESOR', $secretario->getRoles())) {
             return $this->json(['error' => 'Secretario no válido o no es profesor'], 400);
         }
         if (!$vocal || !in_array('ROLE_PROFESOR', $vocal->getRoles())) {
             return $this->json(['error' => 'Vocal no válido o no es profesor'], 400);
+        }
+
+        if ($suplente1 && !in_array('ROLE_PROFESOR', $suplente1->getRoles())) {
+            return $this->json(['error' => 'Suplente 1 no válido o no es profesor'], 400);
+        }
+        if ($suplente2 && !in_array('ROLE_PROFESOR', $suplente2->getRoles())) {
+            return $this->json(['error' => 'Suplente 2 no válido o no es profesor'], 400);
         }
 
         // Verificar que no existe tribunal con el mismo nombre activo
@@ -120,9 +146,15 @@ class TribunalController extends AbstractController
         // Crear tribunal
         $tribunal = new Tribunal();
         $tribunal->setNombre($data['nombre']);
-        $tribunal->setPresidente($presidente);
+        $tribunal->setPresidente($currentUser); // El usuario actual es el presidente
         $tribunal->setSecretario($secretario);
         $tribunal->setVocal($vocal);
+        if ($suplente1) {
+            $tribunal->setSuplente1($suplente1);
+        }
+        if ($suplente2) {
+            $tribunal->setSuplente2($suplente2);
+        }
         $tribunal->setDescripcion($data['descripcion'] ?? '');
         $tribunal->setActivo(true);
 
@@ -140,12 +172,14 @@ class TribunalController extends AbstractController
         $this->entityManager->flush();
 
         // Notificar a los miembros del tribunal
-        $miembros = [$presidente, $secretario, $vocal];
+        $miembros = array_filter([$currentUser, $secretario, $vocal, $suplente1, $suplente2]);
         foreach ($miembros as $miembro) {
             $rol = match($miembro) {
-                $presidente => 'Presidente',
-                $secretario => 'Secretario', 
+                $currentUser => 'Presidente',
+                $secretario => 'Secretario',
                 $vocal => 'Vocal',
+                $suplente1 => 'Suplente 1',
+                $suplente2 => 'Suplente 2',
                 default => 'Miembro'
             };
 
@@ -174,7 +208,7 @@ class TribunalController extends AbstractController
     public function show(int $id): JsonResponse
     {
         $tribunal = $this->tribunalRepository->find($id);
-        
+
         if (!$tribunal) {
             return $this->json(['error' => 'Tribunal no encontrado'], 404);
         }
@@ -182,7 +216,16 @@ class TribunalController extends AbstractController
         // Verificar permisos
         $this->denyAccessUnlessGranted('tribunal_view', $tribunal);
 
-        return $this->json($tribunal, 200, [], ['groups' => ['tribunal:read', 'user:basic', 'defensa:basic']]);
+        /** @var User $user */
+        $user = $this->getUser();
+
+        // Serializar el tribunal
+        $tribunalArray = $this->serializer->normalize($tribunal, null, ['groups' => ['tribunal:read', 'user:basic', 'defensa:basic']]);
+
+        // Añadir información adicional
+        $tribunalArray['miembrosConUsuario'] = $tribunal->getMiembrosConUsuario($user);
+
+        return $this->json($tribunalArray, 200);
     }
 
     /**
@@ -309,7 +352,13 @@ class TribunalController extends AbstractController
             ? "El tribunal '{$tribunal->getNombre()}' ha sido activado."
             : "El tribunal '{$tribunal->getNombre()}' ha sido desactivado.";
 
-        $miembros = [$tribunal->getPresidente(), $tribunal->getSecretario(), $tribunal->getVocal()];
+        $miembros = array_filter([
+            $tribunal->getPresidente(),
+            $tribunal->getSecretario(),
+            $tribunal->getVocal(),
+            $tribunal->getSuplente1(),
+            $tribunal->getSuplente2()
+        ]);
         foreach ($miembros as $miembro) {
             if ($miembro) {
                 $this->notificacionService->crearNotificacion(
@@ -399,7 +448,7 @@ class TribunalController extends AbstractController
      * Listar profesores disponibles para formar tribunales
      */
     #[Route('/profesores-disponibles', name: 'api_tribunales_profesores_disponibles', methods: ['GET'])]
-    #[IsGranted('ROLE_PRESIDENTE_TRIBUNAL')]
+    #[IsGranted('ROLE_PROFESOR')]
     public function profesoresDisponibles(): JsonResponse
     {
         $profesores = $this->userRepository->findByRole('ROLE_PROFESOR', true); // Activos

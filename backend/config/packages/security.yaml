@@ -45,10 +45,11 @@ security:
         - { path: ^/api/auth/login, roles: PUBLIC_ACCESS }
         - { path: ^/api/token/refresh, roles: PUBLIC_ACCESS }
         - { path: ^/api/docs, roles: PUBLIC_ACCESS }
-        
+
         # Protected API endpoints
         - { path: ^/api/users, roles: ROLE_ADMIN }
         - { path: ^/api/tribunales, roles: ROLE_PROFESOR }
+        - { path: ^/api/defensas/mi-defensa, roles: ROLE_ESTUDIANTE }
         - { path: ^/api/defensas, roles: ROLE_PROFESOR }
         - { path: ^/api, roles: ROLE_USER }
 

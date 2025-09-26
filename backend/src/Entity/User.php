@@ -121,7 +121,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 100, nullable: true)]
     private ?string $departamento = null;
 
-    #[Groups(['user:read', 'user:write', 'user:detailed'])]
+    #[Groups(['user:read', 'user:write', 'user:basic', 'user:detailed'])]
     #[Assert\Length(
         max: 100,
         maxMessage: 'La especialidad no puede superar los {{ limit }} caracteres'

@@ -9,6 +9,7 @@ function TFGsAsignados() {
   const [filtro, setFiltro] = useState('todos') // todos, revision, aprobados, rechazados
   const [modalActivo, setModalActivo] = useState(null)
   const [comentarioModal, setComentarioModal] = useState('')
+  const [tipoComentarioModal, setTipoComentarioModal] = useState('feedback')
   const [calificacionModal, setCalificacionModal] = useState('')
   const { obtenerTFGsAsignados, cambiarEstado, añadirComentario, descargarTFG } = useTFGs()
   const { mostrarNotificacion } = useNotificaciones()
@@ -117,7 +118,7 @@ function TFGsAsignados() {
     if (!comentarioModal.trim()) return
 
     try {
-      const resultado = await añadirComentario(tfgId, comentarioModal)
+      const resultado = await añadirComentario(tfgId, comentarioModal, tipoComentarioModal)
       if (resultado.success) {
         mostrarNotificacion('Comentario enviado correctamente', 'success')
         // Recargar la lista para actualizar contadores
@@ -134,6 +135,7 @@ function TFGsAsignados() {
     }
 
     setComentarioModal('')
+    setTipoComentarioModal('feedback')
     setModalActivo(null)
   }
 
@@ -147,6 +149,20 @@ function TFGsAsignados() {
       console.error('Error descargando archivo:', error)
       mostrarNotificacion('Error al descargar archivo', 'error')
     }
+  }
+
+  const handleAsignarCalificacion = async (tfgId) => {
+    if (!calificacionModal || calificacionModal < 0 || calificacionModal > 10) return
+
+    try {
+      // TODO: Implementar función de calificación en el hook
+      mostrarNotificacion('Función de calificación no implementada aún', 'info')
+    } catch (error) {
+      console.error('Error asignando calificación:', error)
+      mostrarNotificacion('Error al asignar calificación', 'error')
+    }
+    setModalActivo(null)
+    setCalificacionModal('')
   }
 
   if (loading) {
@@ -333,7 +349,12 @@ function TFGsAsignados() {
                     >
                       💬 Comentar
                     </button>
-                    <button className="bg-gray-600 text-white px-4 py-2 rounded-md text-sm hover:bg-gray-700">
+                    <button
+                      onClick={() => handleDescargar(tfg)}
+                      className="bg-gray-600 text-white px-4 py-2 rounded-md text-sm hover:bg-gray-700"
+                      disabled={!tfg.archivoInfo}
+                      title={tfg.archivoInfo ? `Descargar ${tfg.archivoInfo.nombre}` : 'No hay archivo disponible'}
+                    >
                       ⬇️ Descargar
                     </button>
                     <div className="relative">
@@ -371,16 +392,44 @@ function TFGsAsignados() {
               <p className="text-sm text-gray-600 mb-4">
                 TFG: {modalActivo.tfg.titulo}
               </p>
-              <textarea
-                value={comentarioModal}
-                onChange={(e) => setComentarioModal(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                rows={4}
-                placeholder="Escribe tu comentario para el estudiante..."
-              />
-              <div className="flex justify-end space-x-3 mt-4">
+
+              {/* Selector de tipo de comentario */}
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Tipo de comentario
+                </label>
+                <select
+                  value={tipoComentarioModal}
+                  onChange={(e) => setTipoComentarioModal(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="feedback">Comentario General</option>
+                  <option value="revision">Revisión/Sugerencia</option>
+                  <option value="aprobacion">Aprobación</option>
+                </select>
+              </div>
+
+              {/* Campo de comentario */}
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Comentario
+                </label>
+                <textarea
+                  value={comentarioModal}
+                  onChange={(e) => setComentarioModal(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  rows={4}
+                  placeholder="Escribe tu comentario detallado para el estudiante..."
+                />
+              </div>
+
+              <div className="flex justify-end space-x-3">
                 <button
-                  onClick={() => setModalActivo(null)}
+                  onClick={() => {
+                    setModalActivo(null)
+                    setComentarioModal('')
+                    setTipoComentarioModal('feedback')
+                  }}
                   className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400"
                 >
                   Cancelar
@@ -413,18 +462,22 @@ function TFGsAsignados() {
                 Estado actual: <span className="font-medium">{modalActivo.tfg.estado}</span>
               </p>
               <div className="space-y-2">
-                {['En revisión', 'Aprobado', 'Rechazado'].map((estado) => (
+                {[
+                  { key: 'revision', label: 'En revisión' },
+                  { key: 'aprobado', label: 'Aprobado' },
+                  { key: 'rechazado', label: 'Rechazado' }
+                ].map((estado) => (
                   <button
-                    key={estado}
-                    onClick={() => handleCambiarEstado(modalActivo.tfg.id, estado)}
+                    key={estado.key}
+                    onClick={() => handleCambiarEstado(modalActivo.tfg.id, estado.key)}
                     className={`w-full text-left px-4 py-2 rounded-md border ${
-                      estado === modalActivo.tfg.estado
+                      estado.key === modalActivo.tfg.estado
                         ? 'bg-gray-100 border-gray-300 cursor-not-allowed'
                         : 'hover:bg-gray-50 border-gray-200'
                     }`}
-                    disabled={estado === modalActivo.tfg.estado}
+                    disabled={estado.key === modalActivo.tfg.estado}
                   >
-                    {getEstadoIcon(estado)} {estado}
+                    {getEstadoIcon(estado.key)} {estado.label}
                   </button>
                 ))}
               </div>

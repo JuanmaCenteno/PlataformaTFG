@@ -7,6 +7,7 @@ import listPlugin from '@fullcalendar/list'
 import esLocale from '@fullcalendar/core/locales/es'
 import { useCalendario } from '../../hooks/useCalendario'
 import { useTribunales } from '../../hooks/useTribunales'
+import { useTFGs } from '../../hooks/useTFGs'
 import { useNotificaciones } from '../../context/NotificacionesContext'
 import { AlertaConflicto, DisponibilidadAulas } from '../../components/calendario/EventoDefensa'
 
@@ -23,11 +24,11 @@ function Calendario() {
     obtenerDisponibilidadProfesor,
     enviarNotificacionDefensa,
     obtenerAulasDisponibles,
-    obtenerTFGsListosParaDefensa,
     clearError
   } = useCalendario()
 
   const { obtenerTribunales: obtenerTribunalesApi } = useTribunales()
+  const { obtenerTFGsAsignados } = useTFGs()
 
   const [defensas, setDefensas] = useState([])
   const [loadingLocal, setLoadingLocal] = useState(false)
@@ -81,15 +82,21 @@ function Calendario() {
       setLoadingLocal(false)
     }
 
-  // Cargar TFGs disponibles para programar defensa
+  // Cargar TFGs disponibles para programar defensa (TFGs aprobados)
   const cargarTFGsDisponibles = async () => {
     try {
-      const resultado = await obtenerTFGsListosParaDefensa()
+      const resultado = await obtenerTFGsAsignados()
       if (resultado.success) {
-        setTfgsDisponibles(resultado.data || [])
+        // Filtrar solo los TFGs aprobados que están listos para defensa
+        const tfgsAprobados = (resultado.data || []).filter(tfg => tfg.estado === 'aprobado')
+        setTfgsDisponibles(tfgsAprobados)
+      } else {
+        mostrarNotificacion(resultado.error || 'Error al cargar TFGs disponibles', 'error')
+        setTfgsDisponibles([])
       }
     } catch (error) {
       console.error('Error cargando TFGs disponibles:', error)
+      mostrarNotificacion('Error al cargar TFGs disponibles para defensa', 'error')
       setTfgsDisponibles([])
     }
   }
@@ -157,21 +164,61 @@ function Calendario() {
     cargarAulasDisponibles()
   }, [])
 
+  // Pre-llenar formulario cuando se abre modal de programar
+  useEffect(() => {
+    if (modalActivo?.tipo === 'programar') {
+      if (modalActivo.fechaSugerida) {
+        // Si viene de hacer clic en una fecha, pre-llenar con esa fecha
+        setFormDefensa(prev => ({
+          ...prev,
+          fecha: modalActivo.fechaSugerida,
+          hora: modalActivo.horaSugerida || '10:00'
+        }))
+      }
+      // Si no hay fecha sugerida (ej: botón "Programar Defensa"), el formulario ya se resetea en el onClick
+    }
+  }, [modalActivo])
+
   // Filtrar defensas
   const defensasFiltradas = defensas.filter(defensa => {
-    const fechaDefensa = new Date(defensa.fecha)
+    const fechaDefensa = new Date(defensa.fecha || defensa.fechaDefensa)
     const ahora = new Date()
-    
+
     // Filtro por rol
-    if (filtros.miRol !== 'todos' && defensa.miRol.toLowerCase() !== filtros.miRol) {
-      return false
+    if (filtros.miRol !== 'todos') {
+      let esRol = false
+
+      // Buscar el rol en los miembros del tribunal
+      if (defensa.tribunal?.miembrosConUsuario) {
+        const miembro = defensa.tribunal.miembrosConUsuario.find(m => m.esYo)
+        if (miembro) {
+          esRol = miembro.rol?.toLowerCase() === filtros.miRol
+        }
+      }
+
+      // Fallback a propiedades directas
+      if (!esRol) {
+        esRol = defensa.miRol?.toLowerCase() === filtros.miRol || defensa.rol?.toLowerCase() === filtros.miRol
+      }
+
+      if (!esRol) {
+        return false
+      }
     }
-    
+
     // Filtro por estado
-    if (filtros.estado !== 'todos' && defensa.estado.toLowerCase() !== filtros.estado.toLowerCase()) {
-      return false
+    if (filtros.estado !== 'todos') {
+      const estadoDefensa = defensa.estado?.toLowerCase() || ''
+      const filtroEstado = filtros.estado.toLowerCase()
+
+      if (filtroEstado === 'programado' && !(estadoDefensa === 'programado' || estadoDefensa === 'programada')) {
+        return false
+      }
+      if (filtroEstado === 'completado' && !(estadoDefensa === 'completado' || estadoDefensa === 'completada' || estadoDefensa === 'defendido')) {
+        return false
+      }
     }
-    
+
     // Filtro por periodo
     if (filtros.periodo === 'proximo' && fechaDefensa <= ahora) {
       return false
@@ -179,50 +226,66 @@ function Calendario() {
     if (filtros.periodo === 'pasado' && fechaDefensa > ahora) {
       return false
     }
-    
+
     return true
   })
 
   // Colores según el estado
   const obtenerColorEstado = (estado) => {
-    switch (estado) {
-      case 'Programado': return '#10b981' // green-500
-      case 'En curso': return '#f59e0b' // yellow-500
-      case 'Completado': return '#6b7280' // gray-500
-      case 'Cancelado': return '#ef4444' // red-500
+    const estadoLower = estado?.toLowerCase() || ''
+    switch (estadoLower) {
+      case 'programado':
+      case 'programada': return '#10b981' // green-500
+      case 'en curso': return '#f59e0b' // yellow-500
+      case 'completado':
+      case 'completada':
+      case 'defendido': return '#6b7280' // gray-500
+      case 'cancelado':
+      case 'cancelada': return '#ef4444' // red-500
       default: return '#3b82f6' // blue-500
     }
   }
 
   // Colores según el rol (para el borde)
   const obtenerColorRol = (rol) => {
-    switch (rol) {
-      case 'Presidente': return '#1d4ed8' // blue-700
-      case 'Vocal': return '#7c3aed' // purple-600
+    const rolLower = rol?.toLowerCase() || ''
+    switch (rolLower) {
+      case 'presidente': return '#1d4ed8' // blue-700
+      case 'vocal': return '#7c3aed' // purple-600
+      case 'secretario': return '#059669' // emerald-600
       default: return '#374151' // gray-700
     }
   }
 
   // Convertir defensas a eventos de FullCalendar
   const eventos = defensasFiltradas.map(defensa => {
-    const fechaInicio = new Date(defensa.fecha)
-    const fechaFin = new Date(fechaInicio.getTime() + defensa.duracion * 60000)
-    
+    const fechaInicio = new Date(defensa.fecha || defensa.fechaDefensa)
+    const fechaFin = new Date(fechaInicio.getTime() + (defensa.duracion || 60) * 60000)
+
+    // Obtener el rol del usuario actual en el tribunal
+    let miRolEnTribunal = defensa.miRol || defensa.rol
+    if (defensa.tribunal?.miembrosConUsuario) {
+      const miembro = defensa.tribunal.miembrosConUsuario.find(m => m.esYo)
+      if (miembro) {
+        miRolEnTribunal = miembro.rol
+      }
+    }
+
     return {
       id: defensa.id.toString(),
-      title: `${defensa.estudiante.nombre} - ${defensa.aula}`,
+      title: `${defensa.estudiante?.nombre || defensa.tfg?.estudiante?.nombre || 'Estudiante'} - ${defensa.aula || 'Sin aula'}`,
       start: fechaInicio.toISOString(),
       end: fechaFin.toISOString(),
       backgroundColor: obtenerColorEstado(defensa.estado),
-      borderColor: obtenerColorRol(defensa.miRol),
+      borderColor: obtenerColorRol(miRolEnTribunal),
       textColor: '#ffffff',
       extendedProps: {
         defensa: defensa,
-        estudiante: defensa.estudiante.nombre,
-        aula: defensa.aula,
+        estudiante: defensa.estudiante?.nombre || defensa.tfg?.estudiante?.nombre || 'Estudiante',
+        aula: defensa.aula || 'Sin aula',
         estado: defensa.estado,
-        miRol: defensa.miRol,
-        tribunal: defensa.tribunal.nombre,
+        miRol: miRolEnTribunal,
+        tribunal: defensa.tribunal?.nombre || 'Sin tribunal',
         observaciones: defensa.observaciones
       }
     }
@@ -344,14 +407,21 @@ function Calendario() {
   // Estadísticas
   const estadisticas = {
     total: defensas.length,
-    programadas: defensas.filter(d => d.estado === 'Programado').length,
-    completadas: defensas.filter(d => d.estado === 'Completado').length,
-    comoPresidente: defensas.filter(d => d.miRol === 'Presidente').length,
+    programadas: defensas.filter(d => d.estado?.toLowerCase() === 'programada' || d.estado?.toLowerCase() === 'programado').length,
+    completadas: defensas.filter(d => d.estado?.toLowerCase() === 'completada' || d.estado?.toLowerCase() === 'completado' || d.estado?.toLowerCase() === 'defendido').length,
+    comoPresidente: defensas.filter(d => {
+      // Buscar si soy presidente en los miembros del tribunal
+      if (d.tribunal?.miembrosConUsuario) {
+        return d.tribunal.miembrosConUsuario.some(m => m.esYo && m.rol?.toLowerCase() === 'presidente')
+      }
+      // Fallback a las propiedades directas
+      return d.miRol?.toLowerCase() === 'presidente' || d.rol?.toLowerCase() === 'presidente'
+    }).length,
     proximaSemana: defensas.filter(d => {
-      const fecha = new Date(d.fecha)
+      const fecha = new Date(d.fecha || d.fechaDefensa)
       const ahora = new Date()
       const proximaSemana = new Date(ahora.getTime() + 7 * 24 * 60 * 60 * 1000)
-      return fecha >= ahora && fecha <= proximaSemana && d.estado === 'Programado'
+      return fecha >= ahora && fecha <= proximaSemana && (d.estado?.toLowerCase() === 'programada' || d.estado?.toLowerCase() === 'programado')
     }).length
   }
 
@@ -975,7 +1045,8 @@ function Calendario() {
                       // Preparar datos para la API
                       const datosDefensa = {
                         tfgId: parseInt(formDefensa.tfgId),
-                        fechaCompleta: `${formDefensa.fecha}T${formDefensa.hora}:00`,
+                        fecha: formDefensa.fecha,
+                        hora: formDefensa.hora,
                         duracion: parseInt(formDefensa.duracion),
                         aula: formDefensa.aula,
                         tribunalId: parseInt(formDefensa.tribunal),

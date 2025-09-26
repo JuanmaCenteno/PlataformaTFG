@@ -102,8 +102,9 @@ export const tfgAPI = {
     comentario
   }),
   guardarBorrador: (data) => api.post('/tfgs/borrador', data),
-  addComentario: (id, comentario) => api.post(`/tfgs/${id}/comentarios`, {
-    comentario
+  addComentario: (id, comentario, tipo) => api.post(`/tfgs/${id}/comentarios`, {
+    comentario,
+    tipo
   }),
   getComentarios: (id) => api.get(`/tfgs/${id}/comentarios`),
 }
@@ -122,14 +123,19 @@ export const defensaAPI = {
     params: { fecha_inicio: fechaInicio, fecha_fin: fechaFin }
   }),
   getMiDefensa: () => api.get('/defensas/mi-defensa'),
+  getPendientesCalificar: () => api.get('/defensas/pendientes-calificar'),
   getById: (id) => api.get(`/defensas/${id}`),
   create: (data) => api.post('/defensas', data),
   update: (id, data) => api.put(`/defensas/${id}`, data),
   delete: (id) => api.delete(`/defensas/${id}`),
+  changeEstado: (id, data) => api.put(`/defensas/${id}/estado`, data),
+  calificar: (id, data) => api.post(`/defensas/${id}/calificaciones`, data),
+  getCalificaciones: (id) => api.get(`/defensas/${id}/calificaciones`),
   generarActa: (id) => api.post(`/defensas/${id}/acta`),
   getActa: (id) => api.get(`/defensas/${id}/acta`, {
     responseType: 'blob'
   }),
+  getInfoActa: (id) => api.get(`/defensas/${id}/acta/info`),
 }
 
 export const userAPI = {

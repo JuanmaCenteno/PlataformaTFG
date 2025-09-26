@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useDefensas } from '../../hooks/useDefensas'
 import { useTFGs } from '../../hooks/useTFGs'
-import { useTribunales } from '../../hooks/useTribunales'
 import { useNotificaciones } from '../../context/NotificacionesContext'
 
 function MiDefensa() {
@@ -10,10 +9,13 @@ function MiDefensa() {
   const [tribunal, setTribunal] = useState(null)
   const [estadoDefensa, setEstadoDefensa] = useState('sin_programar')
 
-  const { obtenerMiDefensa, loading: loadingDefensa } = useDefensas()
+  const { obtenerMiDefensa, obtenerInfoActa, descargarActa, loading: loadingDefensa } = useDefensas()
   const { obtenerMisTFGs, loading: loadingTFG } = useTFGs()
-  const { obtenerMiembrosTribunal, loading: loadingTribunal } = useTribunales()
   const { mostrarNotificacion } = useNotificaciones()
+
+  // Estado para el acta
+  const [infoActa, setInfoActa] = useState(null)
+  const [cargandoActa, setCargandoActa] = useState(false)
 
   // Cargar datos al montar el componente
   useEffect(() => {
@@ -22,27 +24,45 @@ function MiDefensa() {
         // Primero obtenemos los TFGs del estudiante
         const resultadoTFGs = await obtenerMisTFGs()
         if (resultadoTFGs.success && resultadoTFGs.data.length > 0) {
-          // Tomamos el TFG más reciente o el aprobado
-          const tfgAprobado = resultadoTFGs.data.find(t => t.estado === 'aprobado') || resultadoTFGs.data[0]
-          setTfg(tfgAprobado)
+          // Buscar TFG en orden de prioridad: defendido > aprobado > más reciente
+          const tfgDefendido = resultadoTFGs.data.find(t => t.estado === 'defendido')
+          const tfgAprobado = resultadoTFGs.data.find(t => t.estado === 'aprobado')
+          const tfgActual = tfgDefendido || tfgAprobado || resultadoTFGs.data[0]
 
-          // Si el TFG está aprobado, intentamos obtener la defensa
-          if (tfgAprobado.estado === 'aprobado' || tfgAprobado.estado === 'defendido') {
+          setTfg(tfgActual)
+
+          // Si el TFG está aprobado o defendido, intentamos obtener la defensa
+          if (tfgActual.estado === 'aprobado' || tfgActual.estado === 'defendido') {
             const resultadoDefensa = await obtenerMiDefensa()
             if (resultadoDefensa.success) {
               setDefensa(resultadoDefensa.data)
-              setEstadoDefensa(resultadoDefensa.data.estado || 'programada')
 
-              // Si hay tribunal asignado, obtenemos los miembros
-              if (resultadoDefensa.data.tribunal_id) {
-                const resultadoTribunal = await obtenerMiembrosTribunal(resultadoDefensa.data.tribunal_id)
-                if (resultadoTribunal.success) {
-                  setTribunal(resultadoTribunal.data)
-                }
+              // Si la defensa incluye información del TFG actualizada, usarla
+              if (resultadoDefensa.data.tfg) {
+                setTfg(resultadoDefensa.data.tfg)
+                tfgActual = resultadoDefensa.data.tfg
+              }
+
+              // Determinar estado basándose tanto en TFG como en defensa
+              if (tfgActual.estado === 'defendido') {
+                setEstadoDefensa('defendido')
+              } else {
+                setEstadoDefensa(resultadoDefensa.data.estado || 'programada')
+              }
+
+              // Si hay tribunal asignado en la defensa, usamos esa información
+              if (resultadoDefensa.data.tribunal) {
+                setTribunal(resultadoDefensa.data.tribunal)
               }
             } else {
-              // No hay defensa programada pero el TFG está aprobado
-              setEstadoDefensa('pendiente_programacion')
+              // No hay defensa programada
+              if (tfgActual.estado === 'defendido') {
+                // Caso extraño: TFG defendido pero sin defensa encontrada
+                setEstadoDefensa('defendido')
+              } else {
+                // TFG aprobado pero sin defensa programada
+                setEstadoDefensa('pendiente_programacion')
+              }
             }
           } else {
             setEstadoDefensa('tfg_no_aprobado')
@@ -58,6 +78,46 @@ function MiDefensa() {
 
     cargarDatos()
   }, [])
+
+  // Función para cargar información del acta
+  const cargarInfoActa = async (defensaId) => {
+    if (!defensaId) return
+
+    setCargandoActa(true)
+    try {
+      const resultado = await obtenerInfoActa(defensaId)
+      if (resultado.success) {
+        setInfoActa(resultado.data)
+      }
+    } catch (error) {
+      console.warn('Error al cargar información del acta:', error)
+    } finally {
+      setCargandoActa(false)
+    }
+  }
+
+  // Función para descargar acta
+  const manejarDescargarActa = async () => {
+    if (!defensa?.id) return
+
+    try {
+      const resultado = await descargarActa(defensa.id)
+      if (resultado.success) {
+        mostrarNotificacion('Acta descargada correctamente', 'success')
+      } else {
+        mostrarNotificacion(resultado.error || 'Error al descargar el acta', 'error')
+      }
+    } catch (error) {
+      mostrarNotificacion('Error al descargar el acta', 'error')
+    }
+  }
+
+  // Cargar información del acta cuando la defensa esté lista
+  useEffect(() => {
+    if (defensa && defensa.id && estadoDefensa === 'defendido') {
+      cargarInfoActa(defensa.id)
+    }
+  }, [defensa, estadoDefensa])
 
   const getEstadoInfo = () => {
     switch (estadoDefensa) {
@@ -96,11 +156,13 @@ function MiDefensa() {
       case 'completada':
       case 'defendido':
         return {
-          color: 'bg-blue-50 border-blue-200',
-          icon: '🎯',
-          iconColor: 'text-blue-400',
-          titulo: 'Defensa Completada',
-          mensaje: 'Has defendido exitosamente tu TFG. ¡Felicitaciones!'
+          color: 'bg-green-50 border-green-200',
+          icon: '🏆',
+          iconColor: 'text-green-400',
+          titulo: '¡TFG Defendido Exitosamente!',
+          mensaje: tfg?.calificacion
+            ? `Has completado tu Trabajo de Fin de Grado con una calificación de ${tfg.calificacion}/10.`
+            : 'Has defendido exitosamente tu TFG. La calificación se publicará pronto.'
         }
       default:
         return {
@@ -127,7 +189,7 @@ function MiDefensa() {
 
   const estadoInfo = getEstadoInfo()
 
-  if (loadingDefensa || loadingTFG || loadingTribunal) {
+  if (loadingDefensa || loadingTFG) {
     return (
       <div className="max-w-4xl mx-auto">
         <div className="flex justify-center items-center h-64">
@@ -204,17 +266,20 @@ function MiDefensa() {
             </h3>
             {tribunal ? (
               <div className="text-sm text-gray-600 space-y-2">
-                {tribunal.presidente && (
-                  <p><strong>Presidente:</strong> {tribunal.presidente.nombre} {tribunal.presidente.apellidos}</p>
+                <div className="mb-3">
+                  <h4 className="font-medium text-gray-900 mb-2">{tribunal.nombre}</h4>
+                </div>
+                {tribunal.miembrosInfo?.presidente && (
+                  <p><strong>Presidente:</strong> {tribunal.miembrosInfo.presidente.nombre_completo}</p>
                 )}
-                {tribunal.secretario && (
-                  <p><strong>Secretario:</strong> {tribunal.secretario.nombre} {tribunal.secretario.apellidos}</p>
+                {tribunal.miembrosInfo?.secretario && (
+                  <p><strong>Secretario:</strong> {tribunal.miembrosInfo.secretario.nombre_completo}</p>
                 )}
-                {tribunal.vocal && (
-                  <p><strong>Vocal:</strong> {tribunal.vocal.nombre} {tribunal.vocal.apellidos}</p>
+                {tribunal.miembrosInfo?.vocal && (
+                  <p><strong>Vocal:</strong> {tribunal.miembrosInfo.vocal.nombre_completo}</p>
                 )}
-                {tribunal.suplente && (
-                  <p><strong>Suplente:</strong> {tribunal.suplente.nombre} {tribunal.suplente.apellidos}</p>
+                {tribunal.miembrosInfo?.suplente && (
+                  <p><strong>Suplente:</strong> {tribunal.miembrosInfo.suplente.nombre_completo}</p>
                 )}
               </div>
             ) : (
@@ -237,7 +302,7 @@ function MiDefensa() {
                 <div>
                   <dt className="text-sm font-medium text-gray-500">Fecha y Hora</dt>
                   <dd className="text-sm text-gray-900 font-medium">
-                    {formatearFecha(defensa.fecha_hora)}
+                    {formatearFecha(defensa.fechaDefensa)}
                   </dd>
                 </div>
                 <div>
@@ -309,6 +374,183 @@ function MiDefensa() {
                 <p className="text-sm font-medium text-gray-900">Posibles preguntas</p>
                 <p className="text-xs text-gray-500">Anticipa preguntas sobre metodología, resultados y conclusiones</p>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Resultados de la defensa */}
+      {(estadoDefensa === 'completada' || estadoDefensa === 'defendido' || tfg?.estado === 'defendido') && (
+        <div className="bg-white shadow rounded-lg p-6">
+          <h2 className="text-xl font-semibold mb-4 flex items-center">
+            <span className="text-green-500 mr-2">🎓</span>
+            Resultado de la Defensa
+          </h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Calificación Final */}
+            <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-lg p-6 text-center">
+              <div className="mb-4">
+                <span className="text-4xl">🏆</span>
+              </div>
+              <h3 className="text-lg font-semibold text-green-900 mb-2">Calificación Final</h3>
+              {tfg?.calificacion ? (
+                <div>
+                  <div className="text-3xl font-bold text-green-700 mb-2">
+                    {tfg.calificacion}/10
+                  </div>
+                  <div className="text-sm text-green-600">
+                    {parseFloat(tfg.calificacion) >= 9 ? 'Sobresaliente' :
+                     parseFloat(tfg.calificacion) >= 7 ? 'Notable' :
+                     parseFloat(tfg.calificacion) >= 5 ? 'Aprobado' : 'Suspenso'}
+                  </div>
+                </div>
+              ) : (
+                <div>
+                  <div className="text-lg text-green-600 mb-2">Pendiente</div>
+                  <div className="text-sm text-green-500">Se publicará pronto</div>
+                </div>
+              )}
+            </div>
+
+            {/* Información adicional */}
+            <div className="space-y-4">
+              <div className="flex items-center space-x-3">
+                <span className="text-green-500">✅</span>
+                <div>
+                  <p className="text-sm font-medium text-gray-900">Defensa completada</p>
+                  <p className="text-xs text-gray-500">
+                    {defensa?.fechaDefensa ? formatearFecha(defensa.fechaDefensa) : 'Fecha no disponible'}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center space-x-3">
+                <span className="text-green-500">🎯</span>
+                <div>
+                  <p className="text-sm font-medium text-gray-900">TFG finalizado</p>
+                  <p className="text-xs text-gray-500">Todos los requisitos académicos cumplidos</p>
+                </div>
+              </div>
+
+              {tribunal && (
+                <div className="flex items-center space-x-3">
+                  <span className="text-green-500">👥</span>
+                  <div>
+                    <p className="text-sm font-medium text-gray-900">Evaluado por</p>
+                    <p className="text-xs text-gray-500">{tribunal.nombre}</p>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Sección del Acta de Defensa */}
+          <div className="mt-6 pt-6 border-t border-gray-200">
+            <h3 className="text-lg font-semibold mb-4 flex items-center">
+              <span className="text-blue-500 mr-2">📋</span>
+              Acta de Defensa
+            </h3>
+
+            {cargandoActa ? (
+              <div className="flex items-center justify-center py-8">
+                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+                <span className="ml-3 text-gray-600">Verificando disponibilidad del acta...</span>
+              </div>
+            ) : infoActa?.actaDisponible ? (
+              <div className="bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-lg p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center space-x-3">
+                    <div className="flex-shrink-0">
+                      <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
+                        <span className="text-xl">✅</span>
+                      </div>
+                    </div>
+                    <div>
+                      <h4 className="text-lg font-semibold text-green-800">Acta Oficial Disponible</h4>
+                      <p className="text-green-600 text-sm">
+                        Tu acta de defensa ha sido generada y está lista para descarga
+                      </p>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={manejarDescargarActa}
+                    className="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors duration-200 text-sm"
+                  >
+                    <span className="mr-2">📄</span>
+                    Descargar PDF
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="bg-white rounded-lg p-4 border border-green-200">
+                    <h5 className="font-medium text-gray-900 mb-2">Información del Documento</h5>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Tipo:</span>
+                        <span className="text-gray-900 font-medium">Acta Oficial de Defensa</span>
+                      </div>
+                      {infoActa.fechaGeneracion && (
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Generada:</span>
+                          <span className="text-gray-900">
+                            {new Date(infoActa.fechaGeneracion).toLocaleDateString('es-ES', {
+                              year: 'numeric',
+                              month: 'long',
+                              day: 'numeric'
+                            })}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="bg-white rounded-lg p-4 border border-green-200">
+                    <h5 className="font-medium text-gray-900 mb-2">Contenido Incluido</h5>
+                    <div className="space-y-1 text-sm text-gray-600">
+                      <div>• Información completa del TFG</div>
+                      <div>• Datos del tribunal evaluador</div>
+                      <div>• Calificaciones detalladas</div>
+                      <div>• Comentarios y observaciones</div>
+                      <div>• Resultado oficial final</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-4 pt-4 border-t border-green-200">
+                  <p className="text-sm text-green-700">
+                    <span className="font-medium">💡 Importante:</span> Este documento es tu acta oficial de defensa.
+                    Consérvala como comprobante de haber completado exitosamente tu TFG.
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 text-center">
+                <div className="text-4xl mb-3">⏳</div>
+                <h4 className="text-lg font-medium text-gray-900 mb-2">Acta en proceso</h4>
+                <p className="text-gray-600 text-sm">
+                  El acta de defensa se generará automáticamente una vez que todos los miembros del tribunal hayan completado sus evaluaciones.
+                </p>
+              </div>
+            )}
+          </div>
+
+          {/* Mensaje final */}
+          <div className="mt-6 pt-6 border-t border-gray-200 text-center">
+            <div className="bg-blue-50 rounded-lg p-4">
+              <h4 className="font-semibold text-blue-900 mb-2">
+                🎉 ¡Felicitaciones por completar tu TFG!
+              </h4>
+              <p className="text-sm text-blue-700">
+                Has finalizado exitosamente una etapa importante de tu formación académica.
+                Este logro representa tu dedicación, esfuerzo y conocimientos adquiridos durante tus estudios.
+              </p>
+              {tfg?.calificacion && (
+                <p className="text-sm text-blue-600 mt-2 font-medium">
+                  Tu trabajo ha sido valorado con una puntuación de {tfg.calificacion}/10
+                </p>
+              )}
             </div>
           </div>
         </div>
