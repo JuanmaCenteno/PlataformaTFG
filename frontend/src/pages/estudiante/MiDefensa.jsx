@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useDefensas } from '../../hooks/useDefensas'
 import { useTFGs } from '../../hooks/useTFGs'
 import { useNotificaciones } from '../../context/NotificacionesContext'
+import ActaDownload from '../../components/ActaDownload'
 
 function MiDefensa() {
   const [defensa, setDefensa] = useState(null)
@@ -31,6 +32,7 @@ function MiDefensa() {
 
           setTfg(tfgActual)
 
+
           // Si el TFG está aprobado o defendido, intentamos obtener la defensa
           if (tfgActual.estado === 'aprobado' || tfgActual.estado === 'defendido') {
             const resultadoDefensa = await obtenerMiDefensa()
@@ -38,14 +40,24 @@ function MiDefensa() {
               setDefensa(resultadoDefensa.data)
 
               // Si la defensa incluye información del TFG actualizada, usarla
+              // pero mantener la del endpoint mis-tfgs que tiene la calificación
+              let tfgFinal = tfgActual
               if (resultadoDefensa.data.tfg) {
-                setTfg(resultadoDefensa.data.tfg)
-                tfgActual = resultadoDefensa.data.tfg
+                // Merge de datos: priorizar los datos de mis-tfgs (más completos)
+                tfgFinal = {
+                  ...tfgActual, // Usar como base los datos de mis-tfgs
+                  ...resultadoDefensa.data.tfg, // Sobrescribir con datos de defensa si existen
+                  calificacion: tfgActual.calificacion || resultadoDefensa.data.tfg.calificacion, // Priorizar calificación de mis-tfgs
+                  estado: tfgActual.estado || resultadoDefensa.data.tfg.estado // Priorizar estado de mis-tfgs
+                }
+                setTfg(tfgFinal)
               }
 
               // Determinar estado basándose tanto en TFG como en defensa
-              if (tfgActual.estado === 'defendido') {
+              if (tfgFinal.estado === 'defendido') {
                 setEstadoDefensa('defendido')
+              } else if (resultadoDefensa.data.estado === 'completada') {
+                setEstadoDefensa('defendido') // Si la defensa está completada, se considera defendido
               } else {
                 setEstadoDefensa(resultadoDefensa.data.estado || 'programada')
               }
@@ -119,6 +131,17 @@ function MiDefensa() {
     }
   }, [defensa, estadoDefensa])
 
+  const getEstadoTFGTexto = (estado) => {
+    const estadosTexto = {
+      'borrador': 'Borrador',
+      'en_revision': 'En Revisión',
+      'aprobado': 'Aprobado',
+      'defendido': 'Defendido',
+      'completado': 'Completado'
+    }
+    return estadosTexto[estado] || estado.charAt(0).toUpperCase() + estado.slice(1)
+  }
+
   const getEstadoInfo = () => {
     switch (estadoDefensa) {
       case 'sin_tfg':
@@ -155,12 +178,14 @@ function MiDefensa() {
         }
       case 'completada':
       case 'defendido':
+        // Si tenemos calificación disponible, mostrarla
+        const tieneCalificacion = tfg?.calificacion && tfg.calificacion.toString().trim() !== ''
         return {
           color: 'bg-green-50 border-green-200',
           icon: '🏆',
           iconColor: 'text-green-400',
           titulo: '¡TFG Defendido Exitosamente!',
-          mensaje: tfg?.calificacion
+          mensaje: tieneCalificacion
             ? `Has completado tu Trabajo de Fin de Grado con una calificación de ${tfg.calificacion}/10.`
             : 'Has defendido exitosamente tu TFG. La calificación se publicará pronto.'
         }
@@ -246,8 +271,8 @@ function MiDefensa() {
                 <dt className="text-sm font-medium text-gray-500">Estado</dt>
                 <dd className="text-sm text-gray-900">
                   {tfg?.estado ?
-                    tfg.estado.charAt(0).toUpperCase() + tfg.estado.slice(1) :
-                    'No disponible'
+                    getEstadoTFGTexto(tfg.estado) :
+                    (estadoDefensa === 'defendido' ? 'Defendido' : 'No disponible')
                   }
                 </dd>
               </div>
@@ -394,7 +419,7 @@ function MiDefensa() {
                 <span className="text-4xl">🏆</span>
               </div>
               <h3 className="text-lg font-semibold text-green-900 mb-2">Calificación Final</h3>
-              {tfg?.calificacion ? (
+              {(tfg?.calificacion && tfg.calificacion.toString().trim() !== '') ? (
                 <div>
                   <div className="text-3xl font-bold text-green-700 mb-2">
                     {tfg.calificacion}/10
@@ -452,88 +477,14 @@ function MiDefensa() {
               Acta de Defensa
             </h3>
 
-            {cargandoActa ? (
-              <div className="flex items-center justify-center py-8">
-                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
-                <span className="ml-3 text-gray-600">Verificando disponibilidad del acta...</span>
-              </div>
-            ) : infoActa?.actaDisponible ? (
-              <div className="bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-lg p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <div className="flex items-center space-x-3">
-                    <div className="flex-shrink-0">
-                      <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                        <span className="text-xl">✅</span>
-                      </div>
-                    </div>
-                    <div>
-                      <h4 className="text-lg font-semibold text-green-800">Acta Oficial Disponible</h4>
-                      <p className="text-green-600 text-sm">
-                        Tu acta de defensa ha sido generada y está lista para descarga
-                      </p>
-                    </div>
-                  </div>
-
-                  <button
-                    onClick={manejarDescargarActa}
-                    className="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors duration-200 text-sm"
-                  >
-                    <span className="mr-2">📄</span>
-                    Descargar PDF
-                  </button>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="bg-white rounded-lg p-4 border border-green-200">
-                    <h5 className="font-medium text-gray-900 mb-2">Información del Documento</h5>
-                    <div className="space-y-2 text-sm">
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">Tipo:</span>
-                        <span className="text-gray-900 font-medium">Acta Oficial de Defensa</span>
-                      </div>
-                      {infoActa.fechaGeneracion && (
-                        <div className="flex justify-between">
-                          <span className="text-gray-600">Generada:</span>
-                          <span className="text-gray-900">
-                            {new Date(infoActa.fechaGeneracion).toLocaleDateString('es-ES', {
-                              year: 'numeric',
-                              month: 'long',
-                              day: 'numeric'
-                            })}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  <div className="bg-white rounded-lg p-4 border border-green-200">
-                    <h5 className="font-medium text-gray-900 mb-2">Contenido Incluido</h5>
-                    <div className="space-y-1 text-sm text-gray-600">
-                      <div>• Información completa del TFG</div>
-                      <div>• Datos del tribunal evaluador</div>
-                      <div>• Calificaciones detalladas</div>
-                      <div>• Comentarios y observaciones</div>
-                      <div>• Resultado oficial final</div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-4 pt-4 border-t border-green-200">
-                  <p className="text-sm text-green-700">
-                    <span className="font-medium">💡 Importante:</span> Este documento es tu acta oficial de defensa.
-                    Consérvala como comprobante de haber completado exitosamente tu TFG.
-                  </p>
-                </div>
-              </div>
-            ) : (
-              <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 text-center">
-                <div className="text-4xl mb-3">⏳</div>
-                <h4 className="text-lg font-medium text-gray-900 mb-2">Acta en proceso</h4>
-                <p className="text-gray-600 text-sm">
-                  El acta de defensa se generará automáticamente una vez que todos los miembros del tribunal hayan completado sus evaluaciones.
-                </p>
-              </div>
-            )}
+            <ActaDownload
+              defensaId={defensa?.id}
+              defensa={defensa}
+              tfg={tfg}
+              userRole="estudiante"
+              showPreview={true}
+              size="md"
+            />
           </div>
 
           {/* Mensaje final */}
@@ -546,7 +497,7 @@ function MiDefensa() {
                 Has finalizado exitosamente una etapa importante de tu formación académica.
                 Este logro representa tu dedicación, esfuerzo y conocimientos adquiridos durante tus estudios.
               </p>
-              {tfg?.calificacion && (
+              {(tfg?.calificacion && tfg.calificacion.toString().trim() !== '') && (
                 <p className="text-sm text-blue-600 mt-2 font-medium">
                   Tu trabajo ha sido valorado con una puntuación de {tfg.calificacion}/10
                 </p>

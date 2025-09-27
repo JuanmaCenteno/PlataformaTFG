@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { defensaAPI } from '../services/api'
 
 export const useDefensas = () => {
@@ -32,7 +32,7 @@ export const useDefensas = () => {
   }
 
   // Obtener defensas pendientes de calificar
-  const obtenerDefensasPendientesCalificar = async () => {
+  const obtenerDefensasPendientesCalificar = useCallback(async () => {
     setLoading(true)
     setError(null)
 
@@ -53,7 +53,31 @@ export const useDefensas = () => {
     } finally {
       setLoading(false)
     }
-  }
+  }, [])
+
+  // Obtener defensas por tribunal
+  const obtenerDefensasPorTribunal = useCallback(async (tribunalId) => {
+    setLoading(true)
+    setError(null)
+
+    try {
+      const response = await defensaAPI.getByTribunal(tribunalId)
+
+      return {
+        success: true,
+        data: response.data.data || response.data
+      }
+
+    } catch (err) {
+      const errorMessage = err.response?.data?.message ||
+                          err.response?.data?.error ||
+                          'Error al obtener las defensas del tribunal'
+      setError(errorMessage)
+      return { success: false, error: errorMessage }
+    } finally {
+      setLoading(false)
+    }
+  }, [])
 
   // Obtener defensa por ID
   const obtenerDefensa = async (defensaId) => {
@@ -231,7 +255,7 @@ export const useDefensas = () => {
   }
 
   // Obtener información del acta (si está disponible)
-  const obtenerInfoActa = async (defensaId) => {
+  const obtenerInfoActa = useCallback(async (defensaId) => {
     setLoading(true)
     setError(null)
 
@@ -252,7 +276,7 @@ export const useDefensas = () => {
     } finally {
       setLoading(false)
     }
-  }
+  }, [])
 
   // Calificar defensa (para miembros del tribunal)
   const calificarDefensa = async (defensaId, datosCalificacion) => {
@@ -280,7 +304,7 @@ export const useDefensas = () => {
   }
 
   // Obtener calificaciones de una defensa
-  const obtenerCalificacionesDefensa = async (defensaId) => {
+  const obtenerCalificacionesDefensa = useCallback(async (defensaId) => {
     setLoading(true)
     setError(null)
 
@@ -301,7 +325,7 @@ export const useDefensas = () => {
     } finally {
       setLoading(false)
     }
-  }
+  }, [])
 
   // Cambiar estado de defensa (completar, cancelar)
   const cambiarEstadoDefensa = async (defensaId, nuevoEstado, comentario = '') => {
@@ -333,6 +357,7 @@ export const useDefensas = () => {
     error,
     obtenerMiDefensa,
     obtenerDefensasPendientesCalificar,
+    obtenerDefensasPorTribunal,
     obtenerDefensa,
     obtenerCalendario,
     crearDefensa,

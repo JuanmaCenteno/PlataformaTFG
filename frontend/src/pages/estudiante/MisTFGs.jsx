@@ -299,7 +299,7 @@ function MisTFGs() {
 											<span>Progreso del TFG</span>
 											<span>
 												{tfg.estado === "revision"
-													? "60%"
+													? "40%"
 													: tfg.estado === "aprobado"
 													? "75%"
 													: "30%"}
@@ -319,7 +319,7 @@ function MisTFGs() {
 													width:
 														tfg.estado ===
 														"revision"
-															? "60%"
+															? "40%"
 															: tfg.estado ===
 															  "aprobado"
 															? "75%"

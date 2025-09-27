@@ -17,6 +17,7 @@ class DefensaVoter extends Voter
     public const CALIFICAR = 'defensa_calificar';
     public const SCHEDULE = 'defensa_schedule';
     public const VER_ACTA = 'defensa_ver_acta';
+    public const INFO_ACTA = 'defensa_info_acta';
 
     protected function supports(string $attribute, mixed $subject): bool
     {
@@ -27,7 +28,8 @@ class DefensaVoter extends Voter
             self::MANAGE_ESTADO,
             self::CALIFICAR,
             self::SCHEDULE,
-            self::VER_ACTA
+            self::VER_ACTA,
+            self::INFO_ACTA
         ]) && $subject instanceof Defensa;
     }
 
@@ -50,6 +52,7 @@ class DefensaVoter extends Voter
             self::CALIFICAR => $this->canCalificar($defensa, $user),
             self::SCHEDULE => $this->canSchedule($defensa, $user),
             self::VER_ACTA => $this->canVerActa($defensa, $user),
+            self::INFO_ACTA => $this->canInfoActa($defensa, $user),
             default => false,
         };
     }
@@ -240,6 +243,34 @@ class DefensaVoter extends Voter
         }
 
         // Tutor y cotutor pueden ver el acta
+        $tfg = $defensa->getTfg();
+        if ($tfg->getTutor() === $user || ($tfg->getCotutor() && $tfg->getCotutor() === $user)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    private function canInfoActa(Defensa $defensa, User $user): bool
+    {
+        $roles = $user->getRoles();
+
+        // Admin siempre puede
+        if (in_array('ROLE_ADMIN', $roles)) {
+            return true;
+        }
+
+        // Estudiante del TFG puede ver información de su acta (sin importar si está generada)
+        if ($defensa->getTfg()->getEstudiante() === $user) {
+            return true;
+        }
+
+        // Miembros del tribunal pueden ver información del acta
+        if ($this->isUserInTribunal($defensa, $user)) {
+            return true;
+        }
+
+        // Tutor y cotutor pueden ver información del acta
         $tfg = $defensa->getTfg();
         if ($tfg->getTutor() === $user || ($tfg->getCotutor() && $tfg->getCotutor() === $user)) {
             return true;

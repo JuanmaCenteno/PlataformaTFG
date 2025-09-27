@@ -49,6 +49,7 @@ security:
         # Protected API endpoints
         - { path: ^/api/users, roles: ROLE_ADMIN }
         - { path: ^/api/tribunales, roles: ROLE_PROFESOR }
+        - { path: ^/api/defensas/\d+/acta, roles: ROLE_USER }
         - { path: ^/api/defensas/mi-defensa, roles: ROLE_ESTUDIANTE }
         - { path: ^/api/defensas, roles: ROLE_PROFESOR }
         - { path: ^/api, roles: ROLE_USER }

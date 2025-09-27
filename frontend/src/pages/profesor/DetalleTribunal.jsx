@@ -4,6 +4,7 @@ import { useTribunales } from '../../hooks/useTribunales'
 import { useDefensas } from '../../hooks/useDefensas'
 import { useNotificaciones } from '../../context/NotificacionesContext'
 import { useAuth } from '../../context/AuthContext'
+import ActaDownload from '../../components/ActaDownload'
 
 function DetalleTribunal() {
   const { id } = useParams()
@@ -24,8 +25,8 @@ function DetalleTribunal() {
     obtenerCalificacionesDefensa,
     cambiarEstadoDefensa,
     obtenerDefensasPendientesCalificar,
-    obtenerInfoActa,
-    descargarActa
+    obtenerDefensasPorTribunal,
+    obtenerInfoActa
   } = useDefensas()
 
   const { mostrarNotificacion } = useNotificaciones()
@@ -43,6 +44,8 @@ function DetalleTribunal() {
   const [cambiandoEstado, setCambiandoEstado] = useState(false)
   const [infoActa, setInfoActa] = useState(null)
   const [cargandoActa, setCargandoActa] = useState(false)
+  const [defensasTribunal, setDefensasTribunal] = useState([])
+  const [cargandoDefensas, setCargandoDefensas] = useState(false)
 
   // Cargar datos del tribunal y defensa desde el backend
   useEffect(() => {
@@ -141,9 +144,9 @@ function DetalleTribunal() {
                   if (miEvaluacion) {
                     setYaEvalue(true)
                     setCalificaciones({
-                      originalidad: miEvaluacion.notaPresentacion,
+                      originalidad: miEvaluacion.notaOriginalidad || miEvaluacion.notaPresentacion,
                       presentacion: miEvaluacion.notaPresentacion,
-                      implementacion: miEvaluacion.notaContenido,
+                      implementacion: miEvaluacion.notaImplementacion || miEvaluacion.notaContenido,
                       contenido: miEvaluacion.notaContenido,
                       defensa: miEvaluacion.notaDefensa
                     })
@@ -174,6 +177,8 @@ function DetalleTribunal() {
 
   // Función para cargar información del acta
   const cargarInfoActa = useCallback(async (defensaId) => {
+    if (cargandoActa || infoActa) return // Evitar múltiples llamadas
+
     setCargandoActa(true)
     try {
       const resultado = await obtenerInfoActa(defensaId)
@@ -185,30 +190,54 @@ function DetalleTribunal() {
     } finally {
       setCargandoActa(false)
     }
-  }, [obtenerInfoActa])
+  }, [obtenerInfoActa, cargandoActa, infoActa])
 
-  // Función para descargar acta
-  const manejarDescargarActa = async () => {
-    if (!defensa?.id) return
+  // Función para descargar acta (comentada porque no se usa actualmente)
+  // const manejarDescargarActa = async () => {
+  //   if (!defensa?.id) return
 
-    try {
-      const resultado = await descargarActa(defensa.id)
-      if (resultado.success) {
-        mostrarNotificacion('Acta descargada correctamente', 'success')
-      } else {
-        mostrarNotificacion(resultado.error || 'Error al descargar el acta', 'error')
-      }
-    } catch (error) {
-      mostrarNotificacion('Error al descargar el acta', 'error')
-    }
-  }
+  //   try {
+  //     const resultado = await descargarActa(defensa.id)
+  //     if (resultado.success) {
+  //       mostrarNotificacion('Acta descargada correctamente', 'success')
+  //     } else {
+  //       mostrarNotificacion(resultado.error || 'Error al descargar el acta', 'error')
+  //     }
+  //   } catch (error) {
+  //     mostrarNotificacion('Error al descargar el acta', 'error')
+  //   }
+  // }
 
   // Verificar si hay acta disponible cuando cambie la defensa
   useEffect(() => {
-    if (defensa && defensa.id && defensa.estado === 'completada') {
+    if (defensa && defensa.id && defensa.estado === 'completada' && !cargandoActa && !infoActa) {
       cargarInfoActa(defensa.id)
     }
-  }, [defensa, cargarInfoActa])
+  }, [defensa?.id, defensa?.estado, cargandoActa, infoActa])
+
+  // Cargar todas las defensas del tribunal
+  const cargarDefensasTribunal = useCallback(async (tribunalId) => {
+    if (cargandoDefensas) return
+
+    setCargandoDefensas(true)
+    try {
+      const resultado = await obtenerDefensasPorTribunal(tribunalId)
+      if (resultado.success) {
+        setDefensasTribunal(resultado.data)
+      }
+    } catch (error) {
+      console.warn('Error al cargar defensas del tribunal:', error)
+    } finally {
+      setCargandoDefensas(false)
+    }
+  }, [obtenerDefensasPorTribunal, cargandoDefensas])
+
+  // Cargar defensas del tribunal cuando se carga el tribunal
+  useEffect(() => {
+    if (tribunal?.id && !cargandoDefensas && defensasTribunal.length === 0) {
+      cargarDefensasTribunal(tribunal.id)
+    }
+  }, [tribunal?.id, cargandoDefensas, defensasTribunal.length, cargarDefensasTribunal])
 
   const handleMarcarCompletada = async () => {
     if (!defensa) {
@@ -269,8 +298,10 @@ function DetalleTribunal() {
     try {
       const datosEvaluacion = {
         calificaciones: {
-          nota_presentacion: (calificaciones.originalidad + calificaciones.presentacion) / 2,
-          nota_contenido: (calificaciones.implementacion + calificaciones.contenido) / 2,
+          nota_originalidad: calificaciones.originalidad,
+          nota_presentacion: calificaciones.presentacion,
+          nota_implementacion: calificaciones.implementacion,
+          nota_contenido: calificaciones.contenido,
           nota_defensa: calificaciones.defensa,
           comentarios: comentarios
         }
@@ -503,7 +534,8 @@ function DetalleTribunal() {
               { id: 'resumen', name: 'Resumen de Evaluaciones', icon: '📊' },
               { id: 'tfg', name: 'Información del TFG', icon: '📄' },
               { id: 'tribunal', name: 'Mi Tribunal', icon: '👥' },
-              ...(defensa?.estado === 'completada' ? [{ id: 'acta', name: 'Acta de Defensa', icon: '📋' }] : [])
+              { id: 'actas-tribunal', name: 'Actas del Tribunal', icon: '📋' },
+              ...(defensa?.estado === 'completada' ? [{ id: 'acta', name: 'Acta de Defensa', icon: '📄' }] : [])
             ].map((tab) => (
               <button
                 key={tab.id}
@@ -713,7 +745,13 @@ function DetalleTribunal() {
                         Rol
                       </th>
                       <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Originalidad
+                      </th>
+                      <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Presentación
+                      </th>
+                      <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Implementación
                       </th>
                       <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
                         Contenido
@@ -751,7 +789,17 @@ function DetalleTribunal() {
                           </td>
                           <td className="px-4 py-4 whitespace-nowrap text-center">
                             <span className="text-sm text-gray-900">
+                              {evaluacion?.notaOriginalidad ? parseFloat(evaluacion.notaOriginalidad).toFixed(1) : '-'}
+                            </span>
+                          </td>
+                          <td className="px-4 py-4 whitespace-nowrap text-center">
+                            <span className="text-sm text-gray-900">
                               {evaluacion?.notaPresentacion ? parseFloat(evaluacion.notaPresentacion).toFixed(1) : '-'}
+                            </span>
+                          </td>
+                          <td className="px-4 py-4 whitespace-nowrap text-center">
+                            <span className="text-sm text-gray-900">
+                              {evaluacion?.notaImplementacion ? parseFloat(evaluacion.notaImplementacion).toFixed(1) : '-'}
                             </span>
                           </td>
                           <td className="px-4 py-4 whitespace-nowrap text-center">
@@ -1001,6 +1049,136 @@ function DetalleTribunal() {
             </div>
           )}
 
+          {/* Tab: Actas del Tribunal */}
+          {activeTab === 'actas-tribunal' && (
+            <div className="space-y-6">
+              <div className="flex justify-between items-center">
+                <h3 className="text-lg font-medium text-gray-900">
+                  Actas del Tribunal
+                </h3>
+                <div className="flex items-center space-x-4">
+                  <div className="inline-flex items-center px-4 py-2 bg-blue-50 rounded-lg">
+                    <span className="text-blue-600 font-medium">
+                      Total defensas: {defensasTribunal.length}
+                    </span>
+                  </div>
+                  <button
+                    onClick={() => cargarDefensasTribunal(tribunal?.id)}
+                    disabled={cargandoDefensas}
+                    className="inline-flex items-center px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition-colors text-sm"
+                  >
+                    <span className="mr-1">🔄</span>
+                    {cargandoDefensas ? 'Actualizando...' : 'Actualizar'}
+                  </button>
+                </div>
+              </div>
+
+              {cargandoDefensas ? (
+                <div className="flex justify-center items-center h-32">
+                  <div className="text-center">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                    <p className="text-gray-600">Cargando defensas del tribunal...</p>
+                  </div>
+                </div>
+              ) : defensasTribunal.length === 0 ? (
+                <div className="text-center py-12">
+                  <div className="text-6xl mb-4">📋</div>
+                  <h4 className="text-lg font-medium text-gray-900 mb-2">No hay defensas en este tribunal</h4>
+                  <p className="text-gray-500">
+                    Las defensas aparecerán aquí cuando se programen para este tribunal
+                  </p>
+                </div>
+              ) : (
+                <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
+                  <div className="overflow-x-auto">
+                    <table className="min-w-full divide-y divide-gray-200">
+                      <thead className="bg-gray-50">
+                        <tr>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            TFG y Estudiante
+                          </th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Fecha de Defensa
+                          </th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Estado
+                          </th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Calificaciones
+                          </th>
+                          <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Acta
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="bg-white divide-y divide-gray-200">
+                        {defensasTribunal.map((defensaTribunal) => (
+                          <tr key={defensaTribunal.id} className="hover:bg-gray-50">
+                            <td className="px-6 py-4">
+                              <div>
+                                <div className="text-sm font-medium text-gray-900 max-w-xs">
+                                  {defensaTribunal.tfg?.titulo || 'Sin título'}
+                                </div>
+                                <div className="text-sm text-gray-500">
+                                  {defensaTribunal.tfg?.estudiante?.nombreCompleto || 'No disponible'}
+                                </div>
+                              </div>
+                            </td>
+                            <td className="px-6 py-4 text-sm text-gray-900">
+                              {defensaTribunal.fechaDefensa
+                                ? new Date(defensaTribunal.fechaDefensa).toLocaleDateString('es-ES', {
+                                    year: 'numeric',
+                                    month: 'short',
+                                    day: 'numeric',
+                                    hour: '2-digit',
+                                    minute: '2-digit'
+                                  })
+                                : 'No programada'
+                              }
+                            </td>
+                            <td className="px-6 py-4">
+                              <span className={`inline-flex px-2 py-1 text-xs font-medium rounded-full ${getEstadoColor(defensaTribunal.estado)}`}>
+                                {getEstadoLabel(defensaTribunal.estado)}
+                              </span>
+                            </td>
+                            <td className="px-6 py-4 text-sm text-gray-900">
+                              <div className="flex items-center">
+                                <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                  defensaTribunal.calificacionesCompletas
+                                    ? 'bg-green-100 text-green-800'
+                                    : 'bg-yellow-100 text-yellow-800'
+                                }`}>
+                                  {defensaTribunal.calificacionesCompletas ? '✅ Completas' : '⏳ Pendientes'}
+                                </span>
+                              </div>
+                            </td>
+                            <td className="px-6 py-4 text-right text-sm font-medium">
+                              {defensaTribunal.actaGenerada ? (
+                                <ActaDownload
+                                  defensaId={defensaTribunal.id}
+                                  defensa={defensaTribunal}
+                                  tfg={defensaTribunal.tfg}
+                                  userRole="profesor"
+                                  showPreview={false}
+                                  size="sm"
+                                />
+                              ) : (
+                                <span className="inline-flex items-center px-3 py-1 bg-gray-100 text-gray-600 text-xs rounded-md">
+                                  <span className="mr-1">⏳</span>
+                                  Sin generar
+                                </span>
+                              )}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Tab: Acta de Defensa */}
           {activeTab === 'acta' && (
             <div className="space-y-6">
@@ -1009,96 +1187,6 @@ function DetalleTribunal() {
                   Acta de Defensa
                 </h3>
                 <div className="flex items-center space-x-4">
-                  {infoActa?.actaDisponible && (
-                    <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">
-                      ✅ Acta disponible
-                    </span>
-                  )}
-                </div>
-              </div>
-
-              {cargandoActa ? (
-                <div className="flex items-center justify-center py-12">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-                  <span className="ml-3 text-gray-600">Cargando información del acta...</span>
-                </div>
-              ) : infoActa?.actaDisponible ? (
-                <div className="bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-lg p-6">
-                  <div className="flex items-center space-x-3 mb-4">
-                    <div className="flex-shrink-0">
-                      <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                        <span className="text-2xl">📋</span>
-                      </div>
-                    </div>
-                    <div>
-                      <h4 className="text-lg font-semibold text-green-800">Acta de Defensa Generada</h4>
-                      <p className="text-green-600">
-                        El acta oficial de la defensa ha sido generada automáticamente
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                    <div className="bg-white rounded-lg p-4 border border-green-200">
-                      <h5 className="font-medium text-gray-900 mb-2">Información del Acta</h5>
-                      <div className="space-y-2 text-sm">
-                        <div className="flex justify-between">
-                          <span className="text-gray-600">Archivo:</span>
-                          <span className="text-gray-900 font-medium">{infoActa.nombreArchivo}</span>
-                        </div>
-                        {infoActa.fechaGeneracion && (
-                          <div className="flex justify-between">
-                            <span className="text-gray-600">Generada:</span>
-                            <span className="text-gray-900">
-                              {new Date(infoActa.fechaGeneracion).toLocaleDateString('es-ES', {
-                                year: 'numeric',
-                                month: 'long',
-                                day: 'numeric',
-                                hour: '2-digit',
-                                minute: '2-digit'
-                              })}
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="bg-white rounded-lg p-4 border border-green-200">
-                      <h5 className="font-medium text-gray-900 mb-2">Contenido del Acta</h5>
-                      <div className="space-y-1 text-sm text-gray-600">
-                        <div>• Información completa del TFG</div>
-                        <div>• Composición del tribunal</div>
-                        <div>• Calificaciones de todos los miembros</div>
-                        <div>• Comentarios y observaciones</div>
-                        <div>• Resultado final oficial</div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex justify-center">
-                    <button
-                      onClick={manejarDescargarActa}
-                      className="inline-flex items-center px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors duration-200"
-                    >
-                      <span className="mr-2">📄</span>
-                      Descargar Acta PDF
-                    </button>
-                  </div>
-
-                  <div className="mt-6 pt-4 border-t border-green-200">
-                    <p className="text-sm text-green-700">
-                      <span className="font-medium">Nota:</span> El acta se generó automáticamente cuando todos los miembros
-                      del tribunal completaron sus evaluaciones. Contiene toda la información oficial de la defensa.
-                    </p>
-                  </div>
-                </div>
-              ) : (
-                <div className="text-center py-12">
-                  <div className="text-6xl mb-4">📋</div>
-                  <h4 className="text-lg font-medium text-gray-900 mb-2">Acta no disponible</h4>
-                  <p className="text-gray-500 mb-4">
-                    El acta se generará automáticamente cuando todos los miembros del tribunal hayan completado sus evaluaciones.
-                  </p>
                   {evaluaciones.length > 0 && (
                     <div className="inline-flex items-center px-4 py-2 bg-blue-50 rounded-lg">
                       <span className="text-blue-600 font-medium">
@@ -1107,7 +1195,16 @@ function DetalleTribunal() {
                     </div>
                   )}
                 </div>
-              )}
+              </div>
+
+              <ActaDownload
+                defensaId={defensa?.id}
+                defensa={defensa}
+                tfg={tfg}
+                userRole="profesor"
+                showPreview={true}
+                size="lg"
+              />
             </div>
           )}
         </div>

@@ -161,14 +161,21 @@ class DefensaController extends AbstractController
         $tfg = $this->tfgRepository->findOneBy(['estudiante' => $user]);
 
         if (!$tfg) {
-            return $this->json(['error' => 'No tienes un TFG registrado'], 404);
+            return $this->json(['error' => 'No tienes un TFG registrado', 'debug' => 'user_id: ' . $user->getId()], 404);
         }
 
-        // Buscar la defensa del TFG
-        $defensa = $tfg->getDefensa();
+        // Buscar la defensa del TFG - usar findOneBy para depurar
+        $defensa = $this->defensaRepository->findOneBy(['tfg' => $tfg]);
 
         if (!$defensa) {
-            return $this->json(['error' => 'Tu TFG no tiene defensa programada'], 404);
+            return $this->json([
+                'error' => 'Tu TFG no tiene defensa programada',
+                'debug' => [
+                    'tfg_id' => $tfg->getId(),
+                    'tfg_estado' => $tfg->getEstado(),
+                    'user_email' => $user->getEmail()
+                ]
+            ], 404);
         }
 
         return $this->json($defensa, 200, [], ['groups' => ['defensa:student', 'tribunal:basic', 'user:basic', 'tfg:basic']]);
@@ -655,22 +662,14 @@ class DefensaController extends AbstractController
         $calificacion = new Calificacion();
         $calificacion->setDefensa($defensa);
         $calificacion->setEvaluador($evaluador);
+        $calificacion->setNotaOriginalidad($calificacionData['nota_originalidad'] ?? null);
         $calificacion->setNotaPresentacion($calificacionData['nota_presentacion'] ?? null);
+        $calificacion->setNotaImplementacion($calificacionData['nota_implementacion'] ?? null);
         $calificacion->setNotaContenido($calificacionData['nota_contenido'] ?? null);
         $calificacion->setNotaDefensa($calificacionData['nota_defensa'] ?? null);
         $calificacion->setComentarios($calificacionData['comentarios'] ?? '');
 
-        // Calcular nota final (promedio)
-        $notas = array_filter([
-            $calificacion->getNotaPresentacion(),
-            $calificacion->getNotaContenido(),
-            $calificacion->getNotaDefensa()
-        ]);
-
-        if (!empty($notas)) {
-            $notaFinal = array_sum($notas) / count($notas);
-            $calificacion->setNotaFinal($notaFinal);
-        }
+        // La nota final se calcula automáticamente en la entidad
 
         // Validar
         $errors = $this->validator->validate($calificacion);
@@ -834,14 +833,28 @@ class DefensaController extends AbstractController
     #[Route('/{id}/acta/info', name: 'api_defensas_info_acta', methods: ['GET'])]
     public function infoActa(int $id): JsonResponse
     {
-        $defensa = $this->defensaRepository->find($id);
+        // Cargar la defensa con todas las relaciones necesarias para el voter
+        $defensa = $this->defensaRepository->createQueryBuilder('d')
+            ->leftJoin('d.tfg', 't')
+            ->leftJoin('t.estudiante', 'e')
+            ->leftJoin('t.tutor', 'tutor')
+            ->leftJoin('t.cotutor', 'cotutor')
+            ->leftJoin('d.tribunal', 'tribunal')
+            ->leftJoin('tribunal.presidente', 'p')
+            ->leftJoin('tribunal.secretario', 's')
+            ->leftJoin('tribunal.vocal', 'v')
+            ->addSelect('t', 'e', 'tutor', 'cotutor', 'tribunal', 'p', 's', 'v')
+            ->where('d.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult();
 
         if (!$defensa) {
             return $this->json(['error' => 'Defensa no encontrada'], 404);
         }
 
-        // Verificar permisos
-        $this->denyAccessUnlessGranted('defensa_ver_acta', $defensa);
+        // Verificar permisos (no requiere que el acta esté generada)
+        $this->denyAccessUnlessGranted('defensa_info_acta', $defensa);
 
         $actaDisponible = $defensa->isActaGenerada() &&
                          $defensa->getActaPath() &&

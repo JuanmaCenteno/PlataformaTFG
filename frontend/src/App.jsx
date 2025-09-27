@@ -21,6 +21,7 @@ import DetalleTribunal from './pages/profesor/DetalleTribunal'
 import Calendario from './pages/profesor/Calendario'
 import GestionUsuarios from './pages/admin/GestionUsuarios'
 import Reportes from './pages/admin/Reportes'
+import GestionActas from './pages/admin/GestionActas'
 
 function App() {
   return (
@@ -109,6 +110,11 @@ function App() {
             <Route path="/admin/reportes" element={
               <ProtectedRoute requiredRole="admin">
                 <Layout><Reportes /></Layout>
+              </ProtectedRoute>
+            } />
+            <Route path="/admin/actas" element={
+              <ProtectedRoute requiredRole="admin">
+                <Layout><GestionActas /></Layout>
               </ProtectedRoute>
             } />
             

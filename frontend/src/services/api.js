@@ -124,6 +124,7 @@ export const defensaAPI = {
   }),
   getMiDefensa: () => api.get('/defensas/mi-defensa'),
   getPendientesCalificar: () => api.get('/defensas/pendientes-calificar'),
+  getByTribunal: (tribunalId) => api.get(`/tribunales/${tribunalId}/defensas`),
   getById: (id) => api.get(`/defensas/${id}`),
   create: (data) => api.post('/defensas', data),
   update: (id, data) => api.put(`/defensas/${id}`, data),

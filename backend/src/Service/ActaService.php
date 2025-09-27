@@ -76,7 +76,7 @@ class ActaService
         $this->agregarDatosTribunal($pdf, $tribunal);
         $this->agregarCalificaciones($pdf, $calificaciones);
         $this->agregarResumenFinal($pdf, $tfg);
-        $this->agregarFirmas($pdf, $tribunal);
+        $this->agregarFirmas($pdf, $tribunal, $defensa);
 
         return $pdf;
     }
@@ -88,7 +88,7 @@ class ActaService
     {
         // Logo y título principal
         $pdf->SetFont('helvetica', 'B', 16);
-        $pdf->Cell(0, 15, 'UNIVERSIDAD - ACTA DE DEFENSA DE TFG', 0, 1, 'C');
+        $pdf->Cell(0, 15, 'UNIVERSIDAD DE CÁDIZ - ACTA DE DEFENSA DE TFG', 0, 1, 'C');
 
         $pdf->Ln(5);
 
@@ -207,28 +207,52 @@ class ActaService
         $pdf->Cell(0, 10, 'CALIFICACIONES', 0, 1, 'L');
         $pdf->Ln(5);
 
+        // Ordenar calificaciones por rol (Presidente, Secretario, Vocal)
+        $calificacionesOrdenadas = [];
         foreach ($calificaciones as $calificacion) {
-            $evaluador = $calificacion->getEvaluador();
-            $rolEvaluador = $calificacion->getRolEvaluador();
+            $rol = $calificacion->getRolEvaluador();
+            $calificacionesOrdenadas[$rol] = $calificacion;
+        }
 
-            $pdf->SetFont('helvetica', 'B', 12);
-            $pdf->Cell(0, 8, $rolEvaluador . ': ' . $evaluador->getNombreCompleto(), 0, 1, 'L');
+        // Orden específico para mostrar
+        $ordenRoles = ['Presidente', 'Secretario', 'Vocal'];
 
-            $pdf->SetFont('helvetica', '', 11);
-            $pdf->Cell(40, 6, 'Presentación: ', 0, 0, 'L');
-            $pdf->Cell(20, 6, $calificacion->getNotaPresentacion() . '/10', 0, 0, 'L');
-            $pdf->Cell(30, 6, 'Contenido: ', 0, 0, 'L');
-            $pdf->Cell(20, 6, $calificacion->getNotaContenido() . '/10', 0, 0, 'L');
-            $pdf->Cell(20, 6, 'Defensa: ', 0, 0, 'L');
-            $pdf->Cell(0, 6, $calificacion->getNotaDefensa() . '/10', 0, 1, 'L');
+        foreach ($ordenRoles as $rol) {
+            if (isset($calificacionesOrdenadas[$rol])) {
+                $calificacion = $calificacionesOrdenadas[$rol];
+                $evaluador = $calificacion->getEvaluador();
 
-            if ($calificacion->getComentarios()) {
-                $pdf->SetFont('helvetica', 'I', 10);
-                $pdf->Cell(20, 6, 'Comentarios: ', 0, 0, 'L');
-                $pdf->MultiCell(0, 6, $calificacion->getComentarios(), 0, 'L');
+                $pdf->SetFont('helvetica', 'B', 12);
+                $pdf->Cell(0, 8, $rol . ': ' . $evaluador->getNombreCompleto(), 0, 1, 'L');
+
+                $pdf->SetFont('helvetica', '', 11);
+
+                // Primera fila de calificaciones
+                $pdf->Cell(35, 6, 'Originalidad: ', 0, 0, 'L');
+                $pdf->Cell(20, 6, number_format((float)$calificacion->getNotaOriginalidad(), 2) . '/10', 0, 0, 'L');
+                $pdf->Cell(35, 6, 'Presentación: ', 0, 0, 'L');
+                $pdf->Cell(20, 6, number_format((float)$calificacion->getNotaPresentacion(), 2) . '/10', 0, 0, 'L');
+                $pdf->Cell(35, 6, 'Implementación: ', 0, 0, 'L');
+                $pdf->Cell(0, 6, number_format((float)$calificacion->getNotaImplementacion(), 2) . '/10', 0, 1, 'L');
+
+                // Segunda fila de calificaciones
+                $pdf->Cell(35, 6, 'Contenido: ', 0, 0, 'L');
+                $pdf->Cell(20, 6, number_format((float)$calificacion->getNotaContenido(), 2) . '/10', 0, 0, 'L');
+                $pdf->Cell(35, 6, 'Defensa: ', 0, 0, 'L');
+                $pdf->Cell(20, 6, number_format((float)$calificacion->getNotaDefensa(), 2) . '/10', 0, 0, 'L');
+                $pdf->Cell(35, 6, 'Nota Final: ', 0, 0, 'L');
+                $pdf->Cell(0, 6, number_format((float)$calificacion->getNotaFinal(), 2) . '/10', 0, 1, 'L');
+
+                if ($calificacion->getComentarios()) {
+                    $pdf->Ln(2);
+                    $pdf->SetFont('helvetica', 'B', 10);
+                    $pdf->Cell(0, 6, 'Comentarios: ', 0, 1, 'L');
+                    $pdf->SetFont('helvetica', 'I', 10);
+                    $pdf->MultiCell(0, 5, $calificacion->getComentarios(), 0, 'L');
+                }
+
+                $pdf->Ln(5);
             }
-
-            $pdf->Ln(5);
         }
     }
 
@@ -241,6 +265,8 @@ class ActaService
         $pdf->Cell(0, 10, 'RESULTADO DE LA EVALUACIÓN', 0, 1, 'L');
         $pdf->Ln(5);
 
+        // Configurar color de fondo para la calificación final
+        $pdf->SetFillColor(230, 230, 230);
         $pdf->SetFont('helvetica', 'B', 13);
         $notaFinal = number_format($tfg->getCalificacion(), 2);
         $pdf->Cell(0, 10, 'CALIFICACIÓN FINAL: ' . $notaFinal . '/10', 1, 1, 'C', true);
@@ -251,7 +277,7 @@ class ActaService
 
         $pdf->Ln(5);
 
-        $pdf->SetFont('helvetica', '', 11);
+        $pdf->SetFont('helvetica', 'B', 11);
         $resultado = $tfg->getCalificacion() >= 5.0 ? 'APROBADO' : 'SUSPENSO';
         $pdf->Cell(0, 8, 'RESULTADO: ' . $resultado, 0, 1, 'C');
 
@@ -261,43 +287,97 @@ class ActaService
     /**
      * Agrega las firmas del tribunal
      */
-    private function agregarFirmas(TCPDF $pdf, $tribunal): void
+    private function agregarFirmas(TCPDF $pdf, $tribunal, Defensa $defensa): void
     {
         $pdf->SetFont('helvetica', 'B', 12);
         $pdf->Cell(0, 10, 'FIRMAS DEL TRIBUNAL', 0, 1, 'L');
-        $pdf->Ln(15);
+        $pdf->Ln(10);
+
+        // Calcular ancho para tres columnas centradas
+        $anchoTotal = 170; // Ancho disponible (210 - márgenes)
+        $anchoColumna = 50;
+        $separacion = 10;
+
+        // Añadir firmas falsas usando curvas Bézier para simular escritura
+        $this->agregarFirmaFalsa($pdf, 35, $pdf->GetY(), 'Presidente');
+        $this->agregarFirmaFalsa($pdf, 95, $pdf->GetY(), 'Secretario');
+        $this->agregarFirmaFalsa($pdf, 155, $pdf->GetY(), 'Vocal');
+
+        $pdf->Ln(25);
 
         // Líneas para firmas
         $pdf->SetFont('helvetica', '', 10);
-
-        // Presidente
-        $pdf->Cell(50, 0, '', 'B', 0, 'C');
-        $pdf->Cell(20, 0, '', 0, 0, 'C');
-        $pdf->Cell(50, 0, '', 'B', 0, 'C');
-        $pdf->Cell(20, 0, '', 0, 0, 'C');
-        $pdf->Cell(50, 0, '', 'B', 1, 'C');
+        $pdf->Cell($anchoColumna, 0, '', 'B', 0, 'C');
+        $pdf->Cell($separacion, 0, '', 0, 0, 'C');
+        $pdf->Cell($anchoColumna, 0, '', 'B', 0, 'C');
+        $pdf->Cell($separacion, 0, '', 0, 0, 'C');
+        $pdf->Cell($anchoColumna, 0, '', 'B', 1, 'C');
 
         $pdf->Ln(3);
 
-        $pdf->Cell(50, 6, 'Presidente', 0, 0, 'C');
-        $pdf->Cell(20, 6, '', 0, 0, 'C');
-        $pdf->Cell(50, 6, 'Secretario', 0, 0, 'C');
-        $pdf->Cell(20, 6, '', 0, 0, 'C');
-        $pdf->Cell(50, 6, 'Vocal', 0, 1, 'C');
+        // Títulos de roles
+        $pdf->Cell($anchoColumna, 6, 'Presidente', 0, 0, 'C');
+        $pdf->Cell($separacion, 6, '', 0, 0, 'C');
+        $pdf->Cell($anchoColumna, 6, 'Secretario', 0, 0, 'C');
+        $pdf->Cell($separacion, 6, '', 0, 0, 'C');
+        $pdf->Cell($anchoColumna, 6, 'Vocal', 0, 1, 'C');
 
-        $pdf->Ln(5);
+        $pdf->Ln(3);
+
+        // Nombres de los miembros del tribunal
         $pdf->SetFont('helvetica', '', 8);
-        $pdf->Cell(50, 4, $tribunal->getPresidente()->getNombreCompleto(), 0, 0, 'C');
-        $pdf->Cell(20, 4, '', 0, 0, 'C');
-        $pdf->Cell(50, 4, $tribunal->getSecretario()->getNombreCompleto(), 0, 0, 'C');
-        $pdf->Cell(20, 4, '', 0, 0, 'C');
-        $pdf->Cell(50, 4, $tribunal->getVocal()->getNombreCompleto(), 0, 1, 'C');
+        $pdf->Cell($anchoColumna, 4, $tribunal->getPresidente()->getNombreCompleto(), 0, 0, 'C');
+        $pdf->Cell($separacion, 4, '', 0, 0, 'C');
+        $pdf->Cell($anchoColumna, 4, $tribunal->getSecretario()->getNombreCompleto(), 0, 0, 'C');
+        $pdf->Cell($separacion, 4, '', 0, 0, 'C');
+        $pdf->Cell($anchoColumna, 4, $tribunal->getVocal()->getNombreCompleto(), 0, 1, 'C');
 
         // Fecha y lugar
         $pdf->Ln(15);
         $pdf->SetFont('helvetica', '', 10);
-        $fechaHoy = date('d/m/Y');
-        $pdf->Cell(0, 8, 'En _______________________, a ' . $fechaHoy, 0, 1, 'C');
+        $fechaDefensa = $defensa->getFechaDefensa()->format('d/m/Y');
+        $pdf->Cell(0, 8, 'En Cádiz, a ' . $fechaDefensa, 0, 1, 'C');
+    }
+
+    /**
+     * Agrega una firma falsa usando gráficos vectoriales
+     */
+    private function agregarFirmaFalsa(TCPDF $pdf, float $x, float $y, string $tipo): void
+    {
+        // Guardar estado actual
+        $pdf->StartTransform();
+
+        // Configurar color y grosor de línea
+        $pdf->SetDrawColor(0, 0, 0);
+        $pdf->SetLineWidth(0.3);
+
+        // Diferentes estilos de firma según el tipo
+        switch ($tipo) {
+            case 'Presidente':
+                // Firma elegante con bucles
+                $pdf->Curve(25, $y + 5, 30, $y, 35, $y + 8, 40, $y + 3);
+                $pdf->Curve(40, $y + 3, 45, $y - 2, 50, $y + 5, 55, $y + 2);
+                $pdf->Line(25, $y + 8, 55, $y + 8);
+                break;
+
+            case 'Secretario':
+                // Firma con rúbrica más simple
+                $pdf->Curve(85, $y + 6, 90, $y + 2, 95, $y + 7, 100, $y + 4);
+                $pdf->Curve(100, $y + 4, 105, $y + 1, 110, $y + 6, 115, $y + 3);
+                $pdf->Line(85, $y + 9, 95, $y + 6);
+                $pdf->Line(105, $y + 6, 115, $y + 9);
+                break;
+
+            case 'Vocal':
+                // Firma más compacta
+                $pdf->Curve(145, $y + 5, 150, $y + 1, 155, $y + 6, 160, $y + 3);
+                $pdf->Curve(160, $y + 3, 165, $y, 170, $y + 5, 175, $y + 2);
+                $pdf->Line(145, $y + 7, 175, $y + 7);
+                break;
+        }
+
+        // Restaurar estado
+        $pdf->StopTransform();
     }
 
     /**

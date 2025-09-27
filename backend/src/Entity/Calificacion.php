@@ -34,10 +34,28 @@ class Calificacion
     #[Assert\Range(
         min: 0,
         max: 10,
+        notInRangeMessage: 'La nota de originalidad debe estar entre {{ min }} y {{ max }}'
+    )]
+    #[ORM\Column(type: Types::DECIMAL, precision: 4, scale: 2, nullable: true)]
+    private ?string $notaOriginalidad = null;
+
+    #[Groups(['calificacion:read', 'calificacion:write'])]
+    #[Assert\Range(
+        min: 0,
+        max: 10,
         notInRangeMessage: 'La nota de presentación debe estar entre {{ min }} y {{ max }}'
     )]
     #[ORM\Column(type: Types::DECIMAL, precision: 4, scale: 2, nullable: true)]
     private ?string $notaPresentacion = null;
+
+    #[Groups(['calificacion:read', 'calificacion:write'])]
+    #[Assert\Range(
+        min: 0,
+        max: 10,
+        notInRangeMessage: 'La nota de implementación debe estar entre {{ min }} y {{ max }}'
+    )]
+    #[ORM\Column(type: Types::DECIMAL, precision: 4, scale: 2, nullable: true)]
+    private ?string $notaImplementacion = null;
 
     #[Groups(['calificacion:read', 'calificacion:write'])]
     #[Assert\Range(
@@ -121,6 +139,18 @@ class Calificacion
         return $this;
     }
 
+    public function getNotaOriginalidad(): ?string
+    {
+        return $this->notaOriginalidad;
+    }
+
+    public function setNotaOriginalidad(?string $notaOriginalidad): static
+    {
+        $this->notaOriginalidad = $notaOriginalidad;
+        $this->recalcularNotaFinal();
+        return $this;
+    }
+
     public function getNotaPresentacion(): ?string
     {
         return $this->notaPresentacion;
@@ -129,6 +159,18 @@ class Calificacion
     public function setNotaPresentacion(?string $notaPresentacion): static
     {
         $this->notaPresentacion = $notaPresentacion;
+        $this->recalcularNotaFinal();
+        return $this;
+    }
+
+    public function getNotaImplementacion(): ?string
+    {
+        return $this->notaImplementacion;
+    }
+
+    public function setNotaImplementacion(?string $notaImplementacion): static
+    {
+        $this->notaImplementacion = $notaImplementacion;
         $this->recalcularNotaFinal();
         return $this;
     }
@@ -211,7 +253,9 @@ class Calificacion
     private function recalcularNotaFinal(): void
     {
         $notas = array_filter([
+            $this->notaOriginalidad ? (float) $this->notaOriginalidad : null,
             $this->notaPresentacion ? (float) $this->notaPresentacion : null,
+            $this->notaImplementacion ? (float) $this->notaImplementacion : null,
             $this->notaContenido ? (float) $this->notaContenido : null,
             $this->notaDefensa ? (float) $this->notaDefensa : null
         ]);
@@ -229,8 +273,10 @@ class Calificacion
      */
     public function isCompleta(): bool
     {
-        return $this->notaPresentacion !== null && 
-               $this->notaContenido !== null && 
+        return $this->notaOriginalidad !== null &&
+               $this->notaPresentacion !== null &&
+               $this->notaImplementacion !== null &&
+               $this->notaContenido !== null &&
                $this->notaDefensa !== null;
     }
 
@@ -314,7 +360,9 @@ class Calificacion
     public function getResumenNotas(): array
     {
         return [
+            'originalidad' => $this->notaOriginalidad ? (float) $this->notaOriginalidad : null,
             'presentacion' => $this->notaPresentacion ? (float) $this->notaPresentacion : null,
+            'implementacion' => $this->notaImplementacion ? (float) $this->notaImplementacion : null,
             'contenido' => $this->notaContenido ? (float) $this->notaContenido : null,
             'defensa' => $this->notaDefensa ? (float) $this->notaDefensa : null,
             'final' => $this->getNotaFinalAsFloat(),
@@ -331,7 +379,7 @@ class Calificacion
     {
         $errors = [];
 
-        foreach (['notaPresentacion', 'notaContenido', 'notaDefensa'] as $field) {
+        foreach (['notaOriginalidad', 'notaPresentacion', 'notaImplementacion', 'notaContenido', 'notaDefensa'] as $field) {
             $value = $this->$field;
             if ($value !== null) {
                 $floatValue = (float) $value;
@@ -352,11 +400,13 @@ class Calificacion
         $clone = new self();
         $clone->setDefensa($this->defensa);
         $clone->setEvaluador($this->evaluador);
+        $clone->setNotaOriginalidad($this->notaOriginalidad);
         $clone->setNotaPresentacion($this->notaPresentacion);
+        $clone->setNotaImplementacion($this->notaImplementacion);
         $clone->setNotaContenido($this->notaContenido);
         $clone->setNotaDefensa($this->notaDefensa);
         $clone->setComentarios($this->comentarios);
-        
+
         return $clone;
     }
 

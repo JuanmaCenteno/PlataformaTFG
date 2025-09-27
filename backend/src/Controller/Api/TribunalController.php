@@ -505,4 +505,58 @@ class TribunalController extends AbstractController
 
         return $this->json(['message' => 'Tribunal eliminado correctamente']);
     }
+
+    /**
+     * GET /api/tribunales/{id}/defensas
+     * Obtener todas las defensas de un tribunal
+     */
+    #[Route('/{id}/defensas', name: 'api_tribunales_defensas', methods: ['GET'])]
+    public function getDefensas(int $id): JsonResponse
+    {
+        $tribunal = $this->tribunalRepository->find($id);
+
+        if (!$tribunal) {
+            return $this->json(['error' => 'Tribunal no encontrado'], 404);
+        }
+
+        // Verificar permisos - el usuario debe ser miembro del tribunal
+        $this->denyAccessUnlessGranted('tribunal_view', $tribunal);
+
+        // Obtener todas las defensas del tribunal ordenadas por fecha
+        $defensas = $this->entityManager->getRepository('App\Entity\Defensa')
+            ->createQueryBuilder('d')
+            ->leftJoin('d.tfg', 't')
+            ->leftJoin('t.estudiante', 'e')
+            ->leftJoin('d.calificaciones', 'c')
+            ->where('d.tribunal = :tribunal')
+            ->setParameter('tribunal', $tribunal)
+            ->orderBy('d.fechaDefensa', 'DESC')
+            ->getQuery()
+            ->getResult();
+
+        // Serializar las defensas con información completa
+        $defensasData = [];
+        foreach ($defensas as $defensa) {
+            $defensaArray = $this->serializer->normalize($defensa, null, [
+                'groups' => ['defensa:read', 'tfg:basic', 'user:basic']
+            ]);
+
+            // Añadir información adicional del acta
+            $defensaArray['actaGenerada'] = $defensa->isActaGenerada();
+            $defensaArray['calificacionesCompletas'] = count($defensa->getCalificaciones()) >= 3;
+
+            $defensasData[] = $defensaArray;
+        }
+
+        return $this->json([
+            'data' => $defensasData,
+            'meta' => [
+                'total' => count($defensasData),
+                'tribunal' => [
+                    'id' => $tribunal->getId(),
+                    'nombre' => $tribunal->getNombre()
+                ]
+            ]
+        ]);
+    }
 }
